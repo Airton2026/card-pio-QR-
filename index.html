@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor da Casa — Cardápio</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            color: #212529;
+            padding-bottom: 100px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            color: white;
+            text-align: center;
+            padding: 30px 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            margin-top: 6px;
+            font-size: 15px;
+            opacity: 0.8;
+        }
+
+        .categorias {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 90px;
+            z-index: 40;
+        }
+
+        .categoria {
+            background: #f1f3f5;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .categoria.ativa {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+        }
+
+        .produtos {
+            padding: 15px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .produto {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            padding: 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .produto:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+        }
+
+        .produto h2 {
+            font-size: 19px;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+
+        .produto p {
+            color: #6c757d;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .preco {
+            font-size: 20px;
+            font-weight: 700;
+            color: #16a34a;
+        }
+
+        .area-botao {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .botao-adicionar {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .botao-adicionar:hover {
+            background: #1d4ed8;
+        }
+
+        .controle-quantidade {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f1f3f5;
+            border-radius: 10px;
+            padding: 6px;
+        }
+
+        .btn-qtd {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: white;
+            color: #2563eb;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .qtd-texto {
+            font-size: 16px;
+            font-weight: 600;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        /* CARRINHO FIXO */
+        .carrinho {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 14px 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .carrinho-conteudo {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .carrinho-texto {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .carrinho-total {
+            font-size: 18px;
+            font-weight: 700;
+            color: #16a34a;
+        }
+
+        /* MODAL */
+        .modal-fundo {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .modal {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 440px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: aparecer 0.3s ease;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: #1a1a1a;
+        }
+
+        .grupo-input {
+            margin-bottom: 18px;
+        }
+
+        .grupo-input label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .grupo-input input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .grupo-input input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .item-pedido {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f1f3f5;
+        }
+
+        .item-esq {
+            flex: 1;
+        }
+
+        .item-nome {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .item-qtd {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .item-dir {
+            text-align: right;
+        }
+
+        .item-valor {
+            font-weight: 700;
+            font-size: 15px;
+            color: #16a34a;
+            margin-bottom: 6px;
+        }
+
+        .item-botoes {
+            display: flex;
+            gap: 5px;
+            justify-content: flex-end;
+        }
+
+        .btn-mais, .btn-menos {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-mais {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .btn-menos {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .total-pedido {
+            font-size: 24px;
+            font-weight: 800;
+            text-align: right;
+            margin: 20px 0;
+            color: #16a34a;
+            padding-top: 15px;
+            border-top: 2px dashed #e5e7eb;
+        }
+
+        .botoes-modal {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-cinza {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-cinza:hover {
+            background: #d1d5db;
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+
+        .btn-whatsapp:hover {
+            background: #20bd5a;
+        }
+
+        .btn-voltar {
+            background: #f3f4f6;
+            color: #4b5563;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .vazio {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🍔 Sabor da Casa</h1>
+    <p>Cardápio Digital — Faça seu pedido</p>
+</header>
+
+<div class="categorias">
+    <button class="categoria ativa" onclick="filtrar('todos')">🍽️ Todos</button>
+    <button class="categoria" onclick="filtrar('lanche')">🍔 Lanches</button>
+    <button class="categoria" onclick="filtrar('pizza')">🍕 Pizzas</button>
+    <button class="categoria" onclick="filtrar('porcao')">🍟 Porções</button>
+    <button class="categoria" onclick="filtrar('bebida')">🥤 Bebidas</button>
+</div>
+
+<div class="produtos" id="areaProdutos">
+
+    <!-- LANCHES -->
+    <div class="produto" data-categoria="lanche">
+        <h2>X-Bacon</h2>
+        <p>Pão, hambúrguer, queijo, bacon e salada.</p>
+        <div class="area-botao">
+            <span class="preco">R$ 25,00</span>
+            <button class="botao-adicionar" onclick="adicionar('X-Bacon', 25, 'lanche')">Adicionar</button>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="lanche">
+        <h2>X-Salada</h2>
+        <p>Pão, hambúrguer, queijo, presunto e salada fresca.</p>
+        <div class="area-botao">
+            <span class="preco">R$ 22,00</span>
+            <button class="botao-adicionar" onclick="adicionar('X-Salada', 22, 'lanche')">Adicionar</button>
+        </div>
+    </div>
+
+    <!-- PORÇÕES -->
+    <div class="produto" data-categoria="porcao">
+        <h2>Batata Frita</h2>
+        <p>Porção de batata frita crocante e sequinha.</p>
+        <div class="area-botao">
+            <span class="preco">R$ 18,00</span>
+            <button class="botao-adicionar" onclick="adicionar('Batata Frita', 18, 'porcao')">Adicionar</button>
+        </div>
+    </div>
+
+    <!-- BEBIDAS -->
+    <div class="produto" data-categoria="bebida">
+        <h2>Coca-Cola</h2>
+        <p>Refrigerante lata 350 ml.</p>
+        <div class="area-botao">
+            <span class="preco">R$ 6,00</span>
+            <button class="botao-adicionar" onclick="adicionar('Coca-Cola', 6, 'bebida')">Adicionar</button>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="bebida">
+        <h2>Cerveja</h2>
+        <p>Garrafinha 355 ml — Gelada! 🍺</p>
+        <div class="area-botao">
+            <span class="preco">R$ 12,00</span>
+            <button class="botao-adicionar" onclick="adicionar('Cerveja', 12, 'bebida')">Adicionar</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- CARRINHO FIXO EMBAIXO -->
+<div class="carrinho" onclick="abrirPedido()">
+    <div class="carrinho-conteudo">
+        <div class="carrinho-texto">
+            🛒 Ver pedido — <span id="qtdCarrinho">0</span> item(ns)
+        </div>
+        <div class="carrinho-total">
+            R$ <span id="totalCarrinho">0,00</span>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DO PEDIDO -->
+<div class="modal-fundo" id="modalFundo">
+    <div class="modal">
+        <h2>📋 Seu Pedido</h2>
+
+        <div class="grupo-input">
+            <label for="mesa">🪑 Número da Mesa</label>
+            <input type="number" id="mesa" placeholder="Ex: 2" min="1">
+        </div>
+
+        <div id="listaItens">
+            <p class="vazio">Nenhum item adicionado ainda.</p>
+        </div>
+
+        <div class="total-pedido">
+            Total: R$ <span id="totalModal">0,00</span>
+        </div>
+
+        <div class="botoes-modal">
+            <button class="btn-voltar" onclick="fecharPedido()">← Voltar ao Cardápio</button>
+            <button class="btn-whatsapp" onclick="enviarWhatsApp()">
+                💵 Enviar pelo WhatsApp
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 📱 SEU NÚMERO DE WHATSAPP — JÁ CONFIGURADO!
+    const TELEFONE_WHATSAPP = "5549984121585"; // +55 49 98412-1585
+
+    let pedido = [];
+    let totalGeral = 0;
+
+    // Adicionar produto ao pedido
+    function adicionar(nome, preco, categoria) {
+        const itemExistente = pedido.find(i => i.nome === nome);
+        
+        if (itemExistente) {
+            itemExistente.quantidade++;
+        } else {
+            pedido.push({ nome, preco, quantidade: 1, categoria });
+        }
+
+        totalGeral += preco;
+        atualizarCarrinho();
+    }
+
+    // Atualizar carrinho fixo
+    function atualizarCarrinho() {
+        const qtdTotal = pedido.reduce((soma, item) => soma + item.quantidade, 0);
+        document.getElementById("qtdCarrinho").innerText = qtdTotal;
+        document.getElementById("totalCarrinho").innerText = totalGeral.toFixed(2).replace(".", ",");
+    }
+
+    // Abrir modal do pedido
+    function abrirPedido() {
+        document.getElementById("modalFundo").style.display = "flex";
+        atualizarListaPedido();
+    }
+
+    // Fechar modal
+    function fecharPedido() {
+        document.getElementById("modalFundo").style.display = "none";
+    }
+
+    // Atualizar lista dentro do modal
+    function atualizarListaPedido() {
+        const lista = document.getElementById("listaItens");
+        
+        if (pedido.length === 0) {
+            lista.innerHTML = `<p class="vazio">Nenhum item adicionado ainda.</p>`;
+            document.getElementById("totalModal").innerText = "0,00";
+            return;
+        }
+
+        lista.innerHTML = "";
+        pedido.forEach((item, indice) => {
+            const subtotal = (item.preco * item.quantidade).toFixed(2).replace(".", ",");
+            lista.innerHTML += `
+                <div class="item-pedido">
+                    <div class="item-esq">
+                        <div class="item-nome">${item.nome}</div>
+                        <div class="item-qtd">Preço unitário: R$ ${item.preco.toFixed(2).replace(".", ",")}</div>
+                    </div>
+                    <div class="item-dir">
+                        <div class="item-valor">${item.quantidade}x = R$ ${subtotal}</div>
+                        <div class="item-botoes">
+                            <button class="btn-menos" onclick="alterarQuantidade(${indice}, -1)">−</button>
+                            <button class="btn-mais" onclick="alterarQuantidade(${indice}, 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        document.getElementById("totalModal").innerText = totalGeral.toFixed(2).replace(".", ",");
+    }
+
+    // Aumentar ou diminuir quantidade (ou remover se chegar a zero)
+    function alterarQuantidade(indice, delta) {
+        pedido[indice].quantidade += delta;
+
+        if (delta > 0) {
+            totalGeral += pedido[indice].preco;
+        } else {
+            totalGeral -= pedido[indice].preco;
+        }
+
+        // Remover item se quantidade chegar a zero
+        if (pedido[indice].quantidade <= 0) {
+            pedido.splice(indice, 1);
+        }
+
+        atualizarCarrinho();
+        atualizarListaPedido();
+    }
+
+    // 📲 ENVIAR PEDIDO DIRETO NO WHATSAPP
+    function enviarWhatsApp() {
+        const mesa = document.getElementById("mesa").value;
+
+        if (!mesa) {
+            alert("⚠️ Digite o número da mesa antes de enviar!");
+            return;
+        }
+
+        if (pedido.length === 0) {
+            alert("⚠️ Adicione pelo menos um item ao pedido!");
+            return;
+        }
+
+        // Montar mensagem
+        let mensagem = `🍔 *NOVO PEDIDO — Sabor da Casa*\n\n`;
+        mensagem += `🪑 *Mesa:* ${mesa}\n`;
+        mensagem += `━━━━━━━━━━━━━━━━━━━\n`;
+
+        pedido.forEach(item => {
+            const subtotal = (item.preco * item.quantidade).toFixed(2).replace(".", ",");
+            mensagem += `${item.quantidade}x ${item.nome} — R$ ${subtotal}\n`;
+        });
+
+        mensagem += `━━━━━━━━━━━━━━━━━━━\n`;
+        mensagem += `💰 *TOTAL: R$ ${totalGeral.toFixed(2).replace(".", ",")}*\n\n`;
+        mensagem += `✅ Pedido enviado! Obrigado!`;
+
+        // Codificar mensagem para URL
+        const url = `https://wa.me/${TELEFONE_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
+        
+        // Abrir WhatsApp em nova aba
+        window.open(url, "_blank");
+    }
+
+    // Filtrar por categoria
+    function filtrar(categoria) {
+        // Marcar botão ativo
+        document.querySelectorAll(".categoria").forEach(btn => btn.classList.remove("ativa"));
+        event.target.classList.add("ativa");
+
+        // Mostrar/esconder produtos
+        document.querySelectorAll(".produto").forEach(prod => {
+            if (categoria === "todos" || prod.dataset.categoria === categoria) {
+                prod.style.display = "block";
+            } else {
+                prod.style.display = "none";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
