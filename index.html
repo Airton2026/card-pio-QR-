@@ -16,7 +16,7 @@
             font-family: 'Segoe UI', Arial, sans-serif;
             background: #f8f9fa;
             color: #212529;
-            padding-bottom: 95px; /* Espaço para o botão do carrinho embaixo */
+            padding-bottom: 95px;
         }
 
         header {
@@ -33,6 +33,12 @@
         header h1 {
             font-size: 26px;
             font-weight: 700;
+        }
+
+        header p {
+            margin-top: 5px;
+            font-size: 14px;
+            opacity: 0.8;
         }
 
         .categorias {
@@ -144,7 +150,6 @@
             text-align: center;
         }
 
-        /* 🛒 BOTÃO DO CARRINHO — EMBAIXO DA TELA */
         .botao-carrinho {
             position: fixed;
             bottom: 0;
@@ -178,7 +183,6 @@
             font-weight: 800;
         }
 
-        /* MODAL DO CARRINHO */
         .modal-fundo {
             display: none;
             position: fixed;
@@ -635,12 +639,21 @@
         document.getElementById("carrinhoValor").innerText = totalGeral.toFixed(2).replace(".", ",");
     }
 
-    // Abrir o carrinho
+    // Abrir o carrinho — ATUALIZA TODAS AS OBSERVAÇÕES ANTES DE MOSTRAR!
     function abrirCarrinho() {
         if (pedido.length === 0) {
             alert("⚠️ Adicione pelo menos um produto primeiro!");
             return;
         }
+        // ✅ CORREÇÃO IMPORTANTE: Atualiza TODAS as observações antes de abrir o carrinho!
+        pedido.forEach(item => {
+            const idObs = "obs-" + item.nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
+            const obsElement = document.getElementById(idObs);
+            if (obsElement) {
+                item.observacao = obsElement.value.trim();
+            }
+        });
+
         document.getElementById("modalFundo").style.display = "flex";
         atualizarListaCarrinho();
     }
@@ -675,7 +688,7 @@
         document.getElementById("totalModal").innerText = totalGeral.toFixed(2).replace(".", ",");
     }
 
-    // 📲 ENVIAR PARA O WHATSAPP — COM OBSERVAÇÃO!
+    // 📲 ENVIAR PARA O WHATSAPP — COM OBSERVAÇÃO ATUALIZADA!
     function enviarWhatsApp() {
         const mesa = document.getElementById("mesa").value;
 
@@ -683,6 +696,15 @@
             alert("⚠️ Digite o número da mesa!");
             return;
         }
+
+        // ✅ CORREÇÃO FINAL: PEGA A OBSERVAÇÃO NA HORA DE ENVIAR!
+        pedido.forEach(item => {
+            const idObs = "obs-" + item.nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
+            const obsElement = document.getElementById(idObs);
+            if (obsElement) {
+                item.observacao = obsElement.value.trim();
+            }
+        });
 
         let mensagem = `🍔 *NOVO PEDIDO — Sabor da Casa*\n\n`;
         mensagem += `🪑 *Mesa:* ${mesa}\n`;
