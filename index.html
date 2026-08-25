@@ -16,14 +16,15 @@
             font-family: 'Segoe UI', Arial, sans-serif;
             background: #f8f9fa;
             color: #212529;
-            padding-bottom: 100px;
+            padding-bottom: 40px;
+            padding-right: 95px;
         }
 
         header {
             background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
             color: white;
             text-align: center;
-            padding: 30px 15px;
+            padding: 25px 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
@@ -31,14 +32,13 @@
         }
 
         header h1 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
 
         header p {
-            margin-top: 6px;
-            font-size: 15px;
+            margin-top: 5px;
+            font-size: 14px;
             opacity: 0.8;
         }
 
@@ -46,30 +46,29 @@
             display: flex;
             gap: 10px;
             overflow-x: auto;
-            padding: 15px;
+            padding: 12px 15px;
             background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             position: sticky;
-            top: 90px;
+            top: 85px;
             z-index: 40;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .categoria {
             background: #f1f3f5;
             border: none;
-            padding: 10px 18px;
-            border-radius: 25px;
+            padding: 10px 16px;
+            border-radius: 20px;
             white-space: nowrap;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
-            transition: all 0.25s ease;
+            transition: all 0.2s;
         }
 
         .categoria.ativa {
             background: #2563eb;
             color: white;
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
         }
 
         .produtos {
@@ -80,76 +79,69 @@
 
         .produto {
             background: white;
-            border-radius: 16px;
-            margin-bottom: 16px;
-            padding: 18px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .produto:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+            border-radius: 14px;
+            margin-bottom: 14px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         .produto h2 {
-            font-size: 19px;
-            margin-bottom: 6px;
+            font-size: 18px;
+            margin-bottom: 5px;
             color: #1a1a1a;
         }
 
         .produto p {
             color: #6c757d;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             font-size: 14px;
             line-height: 1.5;
         }
 
+        .observacao {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .observacao:focus {
+            border-color: #2563eb;
+        }
+
         .preco {
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 700;
             color: #16a34a;
         }
 
-        .area-botao {
+        .area-controle {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
-        .botao-adicionar {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .botao-adicionar:hover {
-            background: #1d4ed8;
-        }
-
-        .controle-quantidade {
+        .contador {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             background: #f1f3f5;
             border-radius: 10px;
-            padding: 6px;
+            padding: 4px;
         }
 
         .btn-qtd {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border: none;
             background: white;
             color: #2563eb;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
@@ -160,42 +152,56 @@
         }
 
         .qtd-texto {
-            font-size: 16px;
-            font-weight: 600;
-            min-width: 24px;
+            font-size: 17px;
+            font-weight: 700;
+            min-width: 28px;
             text-align: center;
         }
 
-        /* CARRINHO FIXO */
-        .carrinho {
+        /* 🟢 CARRINHO VERDE — CANTO DIREITO */
+        .carrinho-lateral {
             position: fixed;
-            bottom: 0;
-            left: 0;
+            top: 50%;
             right: 0;
-            background: white;
-            padding: 14px 20px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
-            cursor: pointer;
+            transform: translateY(-50%);
+            background: #16a34a;
+            color: white;
+            padding: 18px 12px;
+            border-radius: 16px 0 0 16px;
+            box-shadow: -3px 0 15px rgba(22, 163, 74, 0.35);
             z-index: 100;
+            cursor: pointer;
+            min-width: 85px;
+            transition: all 0.3s ease;
         }
 
-        .carrinho-conteudo {
-            max-width: 720px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .carrinho-lateral:hover {
+            background: #15803d;
+            min-width: 90px;
+        }
+
+        .carrinho-qtd {
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            line-height: 1;
+            margin-bottom: 5px;
         }
 
         .carrinho-texto {
+            font-size: 11px;
+            text-align: center;
             font-weight: 600;
-            font-size: 16px;
+            margin-bottom: 8px;
         }
 
-        .carrinho-total {
-            font-size: 18px;
-            font-weight: 700;
-            color: #16a34a;
+        .carrinho-valor {
+            font-size: 15px;
+            font-weight: 800;
+            text-align: center;
+            background: rgba(255,255,255,0.25);
+            padding: 6px 4px;
+            border-radius: 8px;
         }
 
         /* MODAL */
@@ -211,7 +217,6 @@
             align-items: center;
             padding: 15px;
             z-index: 200;
-            overflow-y: auto;
         }
 
         .modal {
@@ -219,22 +224,15 @@
             padding: 25px;
             border-radius: 20px;
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
             max-height: 90vh;
             overflow-y: auto;
-            animation: aparecer 0.3s ease;
-        }
-
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .modal h2 {
             text-align: center;
             margin-bottom: 20px;
             font-size: 22px;
-            color: #1a1a1a;
         }
 
         .grupo-input {
@@ -246,7 +244,6 @@
             margin-bottom: 6px;
             font-weight: 600;
             font-size: 14px;
-            color: #495057;
         }
 
         .grupo-input input {
@@ -255,75 +252,37 @@
             border: 2px solid #e9ecef;
             border-radius: 10px;
             font-size: 16px;
-            transition: border-color 0.2s;
-        }
-
-        .grupo-input input:focus {
-            outline: none;
-            border-color: #2563eb;
         }
 
         .item-pedido {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
+            flex-direction: column;
+            padding: 12px 0;
             border-bottom: 1px solid #f1f3f5;
+            gap: 4px;
         }
 
-        .item-esq {
-            flex: 1;
+        .item-linha {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .item-nome {
             font-weight: 600;
             font-size: 15px;
-            margin-bottom: 4px;
         }
 
-        .item-qtd {
+        .item-obs {
             font-size: 13px;
-            color: #6c757d;
-        }
-
-        .item-dir {
-            text-align: right;
-        }
-
-        .item-valor {
-            font-weight: 700;
-            font-size: 15px;
-            color: #16a34a;
-            margin-bottom: 6px;
-        }
-
-        .item-botoes {
-            display: flex;
-            gap: 5px;
-            justify-content: flex-end;
-        }
-
-        .btn-mais, .btn-menos {
-            width: 28px;
-            height: 28px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-mais {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-
-        .btn-menos {
-            background: #fef3c7;
             color: #d97706;
+            font-style: italic;
+            padding-left: 4px;
+        }
+
+        .item-subtotal {
+            font-weight: 700;
+            color: #16a34a;
         }
 
         .total-pedido {
@@ -340,24 +299,25 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-top: 10px;
         }
 
-        .btn-cinza {
-            background: #e5e7eb;
-            color: #374151;
+        .btn-voltar {
+            background: #f3f4f6;
+            color: #4b5563;
+            font-weight: 600;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
         }
 
-        .btn-cinza:hover {
-            background: #d1d5db;
-        }
-
-        .btn-whatsapp {
+        .btn-finalizar {
             background: #25d366;
             color: white;
             font-weight: 700;
-            font-size: 16px;
-            padding: 14px;
+            font-size: 17px;
+            padding: 15px;
             border-radius: 10px;
             border: none;
             cursor: pointer;
@@ -365,22 +325,10 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: background 0.2s;
         }
 
-        .btn-whatsapp:hover {
+        .btn-finalizar:hover {
             background: #20bd5a;
-        }
-
-        .btn-voltar {
-            background: #f3f4f6;
-            color: #4b5563;
-            font-weight: 600;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
         }
 
         .vazio {
@@ -396,7 +344,7 @@
 
 <header>
     <h1>🍔 Sabor da Casa</h1>
-    <p>Cardápio Digital — Faça seu pedido</p>
+    <p>Faça seu pedido — escolha e finalize</p>
 </header>
 
 <div class="categorias">
@@ -409,72 +357,235 @@
 
 <div class="produtos" id="areaProdutos">
 
-    <!-- LANCHES -->
+    <!-- ==================== LANCHES ==================== -->
     <div class="produto" data-categoria="lanche">
-        <h2>X-Bacon</h2>
-        <p>Pão, hambúrguer, queijo, bacon e salada.</p>
-        <div class="area-botao">
-            <span class="preco">R$ 25,00</span>
-            <button class="botao-adicionar" onclick="adicionar('X-Bacon', 25, 'lanche')">Adicionar</button>
+        <h2>X-Bacon 🥓</h2>
+        <p>Pão, hambúrguer, queijo, bacon, presunto, ovo e salada.</p>
+        <input type="text" class="observacao" id="obs-X-Bacon" placeholder="✏️ Observação (ex: sem tomate, sem cebola...)">
+        <div class="area-controle">
+            <span class="preco">R$ 26,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('X-Bacon', 26, 'lanche', -1)">−</button>
+                <span class="qtd-texto" id="qtd-X-Bacon">0</span>
+                <button class="btn-qtd" onclick="alterarItem('X-Bacon', 26, 'lanche', 1)">+</button>
+            </div>
         </div>
     </div>
 
     <div class="produto" data-categoria="lanche">
-        <h2>X-Salada</h2>
-        <p>Pão, hambúrguer, queijo, presunto e salada fresca.</p>
-        <div class="area-botao">
-            <span class="preco">R$ 22,00</span>
-            <button class="botao-adicionar" onclick="adicionar('X-Salada', 22, 'lanche')">Adicionar</button>
+        <h2>X-Salada 🥗</h2>
+        <p>Pão, hambúrguer, queijo, presunto, ovo e salada fresca.</p>
+        <input type="text" class="observacao" id="obs-X-Salada" placeholder="✏️ Observação (ex: sem alface, sem tomate...)">
+        <div class="area-controle">
+            <span class="preco">R$ 23,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('X-Salada', 23, 'lanche', -1)">−</button>
+                <span class="qtd-texto" id="qtd-X-Salada">0</span>
+                <button class="btn-qtd" onclick="alterarItem('X-Salada', 23, 'lanche', 1)">+</button>
+            </div>
         </div>
     </div>
 
-    <!-- PORÇÕES -->
+    <div class="produto" data-categoria="lanche">
+        <h2>X-Calabresa 🌶️</h2>
+        <p>Pão, hambúrguer, queijo, calabresa, presunto, ovo e salada.</p>
+        <input type="text" class="observacao" id="obs-X-Calabresa" placeholder="✏️ Observação...">
+        <div class="area-controle">
+            <span class="preco">R$ 27,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('X-Calabresa', 27, 'lanche', -1)">−</button>
+                <span class="qtd-texto" id="qtd-X-Calabresa">0</span>
+                <button class="btn-qtd" onclick="alterarItem('X-Calabresa', 27, 'lanche', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="lanche">
+        <h2>X-Tudo 🏆</h2>
+        <p>Pão, 2x hambúrguer, queijo, bacon, calabresa, presunto, ovo, milho, ervilha e salada.</p>
+        <input type="text" class="observacao" id="obs-X-Tudo" placeholder="✏️ Observação (ex: sem milho, sem ervilha...)">
+        <div class="area-controle">
+            <span class="preco">R$ 34,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('X-Tudo', 34, 'lanche', -1)">−</button>
+                <span class="qtd-texto" id="qtd-X-Tudo">0</span>
+                <button class="btn-qtd" onclick="alterarItem('X-Tudo', 34, 'lanche', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PIZZAS ==================== -->
+    <div class="produto" data-categoria="pizza">
+        <h2>Pizza Calabresa 🌶️</h2>
+        <p>Molho, mussarela, calabresa e cebola — tamanho grande.</p>
+        <div class="area-controle">
+            <span class="preco">R$ 45,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Pizza Calabresa', 45, 'pizza', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Pizza-Calabresa">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Pizza Calabresa', 45, 'pizza', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="pizza">
+        <h2>Pizza Frango 🍗</h2>
+        <p>Molho, mussarela, frango desfiado e catupiry — tamanho grande.</p>
+        <div class="area-controle">
+            <span class="preco">R$ 48,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Pizza Frango', 48, 'pizza', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Pizza-Frango">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Pizza Frango', 48, 'pizza', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="pizza">
+        <h2>Pizza Mussarela 🧀</h2>
+        <p>Molho e mussarela — tamanho grande.</p>
+        <div class="area-controle">
+            <span class="preco">R$ 40,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Pizza Mussarela', 40, 'pizza', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Pizza-Mussarela">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Pizza Mussarela', 40, 'pizza', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="pizza">
+        <h2>Pizza Portuguesa 🇵🇹</h2>
+        <p>Molho, mussarela, presunto, ovo, cebola, pimentão e azeitona — tamanho grande.</p>
+        <div class="area-controle">
+            <span class="preco">R$ 52,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Pizza Portuguesa', 52, 'pizza', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Pizza-Portuguesa">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Pizza Portuguesa', 52, 'pizza', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PORÇÕES ==================== -->
     <div class="produto" data-categoria="porcao">
-        <h2>Batata Frita</h2>
-        <p>Porção de batata frita crocante e sequinha.</p>
-        <div class="area-botao">
+        <h2>Batata Frita 🍟</h2>
+        <p>Porção grande — crocante e sequinha.</p>
+        <div class="area-controle">
+            <span class="preco">R$ 20,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Batata Frita', 20, 'porcao', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Batata-Frita">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Batata Frita', 20, 'porcao', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="porcao">
+        <h2>Batata Frita c/ Queijo 🧀</h2>
+        <p>Porção grande com queijo derretido por cima.</p>
+        <div class="area-controle">
+            <span class="preco">R$ 26,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Batata c/ Queijo', 26, 'porcao', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Batata-c-Queijo">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Batata c/ Queijo', 26, 'porcao', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="porcao">
+        <h2>Porção de Tilápia 🐟</h2>
+        <p>Tilápia frita crocante — porção média.</p>
+        <div class="area-controle">
+            <span class="preco">R$ 38,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Tilápia Frita', 38, 'porcao', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Tilapia-Frita">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Tilápia Frita', 38, 'porcao', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="porcao">
+        <h2>Mandioca Frita 🌿</h2>
+        <p>Porção de mandioca sequinha e crocante.</p>
+        <div class="area-controle">
             <span class="preco">R$ 18,00</span>
-            <button class="botao-adicionar" onclick="adicionar('Batata Frita', 18, 'porcao')">Adicionar</button>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Mandioca Frita', 18, 'porcao', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Mandioca-Frita">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Mandioca Frita', 18, 'porcao', 1)">+</button>
+            </div>
         </div>
     </div>
 
-    <!-- BEBIDAS -->
+    <!-- ==================== BEBIDAS ==================== -->
     <div class="produto" data-categoria="bebida">
-        <h2>Coca-Cola</h2>
-        <p>Refrigerante lata 350 ml.</p>
-        <div class="area-botao">
-            <span class="preco">R$ 6,00</span>
-            <button class="botao-adicionar" onclick="adicionar('Coca-Cola', 6, 'bebida')">Adicionar</button>
+        <h2>Coca-Cola 🥤</h2>
+        <p>Refrigerante lata 350 ml — Gelada!</p>
+        <div class="area-controle">
+            <span class="preco">R$ 7,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Coca-Cola', 7, 'bebida', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Coca-Cola">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Coca-Cola', 7, 'bebida', 1)">+</button>
+            </div>
         </div>
     </div>
 
     <div class="produto" data-categoria="bebida">
-        <h2>Cerveja</h2>
-        <p>Garrafinha 355 ml — Gelada! 🍺</p>
-        <div class="area-botao">
-            <span class="preco">R$ 12,00</span>
-            <button class="botao-adicionar" onclick="adicionar('Cerveja', 12, 'bebida')">Adicionar</button>
+        <h2>Pepsi 🥤</h2>
+        <p>Refrigerante lata 350 ml — Gelada!</p>
+        <div class="area-controle">
+            <span class="preco">R$ 7,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Pepsi', 7, 'bebida', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Pepsi">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Pepsi', 7, 'bebida', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="bebida">
+        <h2>Cerveja 🍺</h2>
+        <p>Garrafinha 355 ml — Gelada!</p>
+        <div class="area-controle">
+            <span class="preco">R$ 13,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Cerveja', 13, 'bebida', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Cerveja">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Cerveja', 13, 'bebida', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="produto" data-categoria="bebida">
+        <h2>Chopp 🍺</h2>
+        <p>Copo de chopp — 300 ml — Bem gelado!</p>
+        <div class="area-controle">
+            <span class="preco">R$ 15,00</span>
+            <div class="contador">
+                <button class="btn-qtd" onclick="alterarItem('Chopp', 15, 'bebida', -1)">−</button>
+                <span class="qtd-texto" id="qtd-Chopp">0</span>
+                <button class="btn-qtd" onclick="alterarItem('Chopp', 15, 'bebida', 1)">+</button>
+            </div>
         </div>
     </div>
 
 </div>
 
-<!-- CARRINHO FIXO EMBAIXO -->
-<div class="carrinho" onclick="abrirPedido()">
-    <div class="carrinho-conteudo">
-        <div class="carrinho-texto">
-            🛒 Ver pedido — <span id="qtdCarrinho">0</span> item(ns)
-        </div>
-        <div class="carrinho-total">
-            R$ <span id="totalCarrinho">0,00</span>
-        </div>
-    </div>
+<!-- 🟢 CARRINHO VERDE — CANTO DIREITO -->
+<div class="carrinho-lateral" onclick="abrirPedido()">
+    <div class="carrinho-qtd" id="carrinhoQtd">0</div>
+    <div class="carrinho-texto">Itens</div>
+    <div class="carrinho-valor">R$ <span id="carrinhoValor">0,00</span></div>
 </div>
 
-<!-- MODAL DO PEDIDO -->
+<!-- MODAL — FINALIZAR PEDIDO -->
 <div class="modal-fundo" id="modalFundo">
     <div class="modal">
-        <h2>📋 Seu Pedido</h2>
+        <h2>✅ Finalizar Pedido</h2>
 
         <div class="grupo-input">
             <label for="mesa">🪑 Número da Mesa</label>
@@ -490,120 +601,102 @@
         </div>
 
         <div class="botoes-modal">
-            <button class="btn-voltar" onclick="fecharPedido()">← Voltar ao Cardápio</button>
-            <button class="btn-whatsapp" onclick="enviarWhatsApp()">
-                💵 Enviar pelo WhatsApp
+            <button class="btn-voltar" onclick="fecharPedido()">← Voltar e Adicionar Mais</button>
+            <button class="btn-finalizar" onclick="enviarWhatsApp()">
+                💚 Finalizar e Enviar pelo WhatsApp
             </button>
         </div>
     </div>
 </div>
 
 <script>
-    // 📱 SEU NÚMERO DE WHATSAPP — JÁ CONFIGURADO!
-    const TELEFONE_WHATSAPP = "5549984121585"; // +55 49 98412-1585
+    // 📱 SEU NÚMERO DE WHATSAPP
+    const TELEFONE_WHATSAPP = "5549984121585";
 
     let pedido = [];
     let totalGeral = 0;
 
-    // Adicionar produto ao pedido
-    function adicionar(nome, preco, categoria) {
+    // ➕➖ ALTERAR QUANTIDADE DIRETO NO PRODUTO
+    function alterarItem(nome, preco, categoria, delta) {
         const itemExistente = pedido.find(i => i.nome === nome);
-        
+        const idObs = "obs-" + nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
+        const obsElement = document.getElementById(idObs);
+        const observacao = obsElement ? obsElement.value.trim() : "";
+
         if (itemExistente) {
-            itemExistente.quantidade++;
-        } else {
-            pedido.push({ nome, preco, quantidade: 1, categoria });
+            itemExistente.quantidade += delta;
+            totalGeral += preco * delta;
+            if (observacao) itemExistente.observacao = observacao;
+
+            if (itemExistente.quantidade <= 0) {
+                pedido = pedido.filter(i => i.nome !== nome);
+                itemExistente.quantidade = 0;
+            }
+        } else if (delta > 0) {
+            pedido.push({ nome, preco, quantidade: 1, categoria, observacao });
+            totalGeral += preco;
         }
 
-        totalGeral += preco;
+        const idQtd = "qtd-" + nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
+        const elQtd = document.getElementById(idQtd);
+        if (elQtd) {
+            elQtd.innerText = itemExistente ? Math.max(0, itemExistente.quantidade) : 1;
+        }
+
         atualizarCarrinho();
     }
 
-    // Atualizar carrinho fixo
     function atualizarCarrinho() {
         const qtdTotal = pedido.reduce((soma, item) => soma + item.quantidade, 0);
-        document.getElementById("qtdCarrinho").innerText = qtdTotal;
-        document.getElementById("totalCarrinho").innerText = totalGeral.toFixed(2).replace(".", ",");
+        document.getElementById("carrinhoQtd").innerText = qtdTotal;
+        document.getElementById("carrinhoValor").innerText = totalGeral.toFixed(2).replace(".", ",");
     }
 
-    // Abrir modal do pedido
     function abrirPedido() {
+        if (pedido.length === 0) {
+            alert("⚠️ Adicione pelo menos um produto primeiro!");
+            return;
+        }
         document.getElementById("modalFundo").style.display = "flex";
         atualizarListaPedido();
     }
 
-    // Fechar modal
     function fecharPedido() {
         document.getElementById("modalFundo").style.display = "none";
     }
 
-    // Atualizar lista dentro do modal
     function atualizarListaPedido() {
         const lista = document.getElementById("listaItens");
-        
-        if (pedido.length === 0) {
-            lista.innerHTML = `<p class="vazio">Nenhum item adicionado ainda.</p>`;
-            document.getElementById("totalModal").innerText = "0,00";
-            return;
-        }
-
         lista.innerHTML = "";
-        pedido.forEach((item, indice) => {
+
+        pedido.forEach(item => {
             const subtotal = (item.preco * item.quantidade).toFixed(2).replace(".", ",");
-            lista.innerHTML += `
+            let linha = `
                 <div class="item-pedido">
-                    <div class="item-esq">
-                        <div class="item-nome">${item.nome}</div>
-                        <div class="item-qtd">Preço unitário: R$ ${item.preco.toFixed(2).replace(".", ",")}</div>
+                    <div class="item-linha">
+                        <span class="item-nome">${item.quantidade}x ${item.nome}</span>
+                        <span class="item-subtotal">R$ ${subtotal}</span>
                     </div>
-                    <div class="item-dir">
-                        <div class="item-valor">${item.quantidade}x = R$ ${subtotal}</div>
-                        <div class="item-botoes">
-                            <button class="btn-menos" onclick="alterarQuantidade(${indice}, -1)">−</button>
-                            <button class="btn-mais" onclick="alterarQuantidade(${indice}, 1)">+</button>
-                        </div>
-                    </div>
-                </div>
             `;
+            if (item.observacao) {
+                linha += `<span class="item-obs">📝 Obs: ${item.observacao}</span>`;
+            }
+            linha += `</div>`;
+            lista.innerHTML += linha;
         });
 
         document.getElementById("totalModal").innerText = totalGeral.toFixed(2).replace(".", ",");
     }
 
-    // Aumentar ou diminuir quantidade (ou remover se chegar a zero)
-    function alterarQuantidade(indice, delta) {
-        pedido[indice].quantidade += delta;
-
-        if (delta > 0) {
-            totalGeral += pedido[indice].preco;
-        } else {
-            totalGeral -= pedido[indice].preco;
-        }
-
-        // Remover item se quantidade chegar a zero
-        if (pedido[indice].quantidade <= 0) {
-            pedido.splice(indice, 1);
-        }
-
-        atualizarCarrinho();
-        atualizarListaPedido();
-    }
-
-    // 📲 ENVIAR PEDIDO DIRETO NO WHATSAPP
+    // 📲 ENVIAR PEDIDO COMPLETO NO WHATSAPP
     function enviarWhatsApp() {
         const mesa = document.getElementById("mesa").value;
 
         if (!mesa) {
-            alert("⚠️ Digite o número da mesa antes de enviar!");
+            alert("⚠️ Digite o número da mesa!");
             return;
         }
 
-        if (pedido.length === 0) {
-            alert("⚠️ Adicione pelo menos um item ao pedido!");
-            return;
-        }
-
-        // Montar mensagem
         let mensagem = `🍔 *NOVO PEDIDO — Sabor da Casa*\n\n`;
         mensagem += `🪑 *Mesa:* ${mesa}\n`;
         mensagem += `━━━━━━━━━━━━━━━━━━━\n`;
@@ -611,26 +704,23 @@
         pedido.forEach(item => {
             const subtotal = (item.preco * item.quantidade).toFixed(2).replace(".", ",");
             mensagem += `${item.quantidade}x ${item.nome} — R$ ${subtotal}\n`;
+            if (item.observacao) {
+                mensagem += `   📝 Obs: ${item.observacao}\n`;
+            }
         });
 
         mensagem += `━━━━━━━━━━━━━━━━━━━\n`;
         mensagem += `💰 *TOTAL: R$ ${totalGeral.toFixed(2).replace(".", ",")}*\n\n`;
-        mensagem += `✅ Pedido enviado! Obrigado!`;
+        mensagem += `✅ Pedido finalizado! Obrigado!`;
 
-        // Codificar mensagem para URL
         const url = `https://wa.me/${TELEFONE_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
-        
-        // Abrir WhatsApp em nova aba
         window.open(url, "_blank");
     }
 
-    // Filtrar por categoria
     function filtrar(categoria) {
-        // Marcar botão ativo
         document.querySelectorAll(".categoria").forEach(btn => btn.classList.remove("ativa"));
         event.target.classList.add("ativa");
 
-        // Mostrar/esconder produtos
         document.querySelectorAll(".produto").forEach(prod => {
             if (categoria === "todos" || prod.dataset.categoria === categoria) {
                 prod.style.display = "block";
