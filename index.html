@@ -16,8 +16,7 @@
             font-family: 'Segoe UI', Arial, sans-serif;
             background: #f8f9fa;
             color: #212529;
-            padding-bottom: 40px;
-            padding-right: 95px;
+            padding-bottom: 95px; /* Espaço para o botão do carrinho embaixo */
         }
 
         header {
@@ -34,12 +33,6 @@
         header h1 {
             font-size: 26px;
             font-weight: 700;
-        }
-
-        header p {
-            margin-top: 5px;
-            font-size: 14px;
-            opacity: 0.8;
         }
 
         .categorias {
@@ -95,7 +88,6 @@
             color: #6c757d;
             margin-bottom: 8px;
             font-size: 14px;
-            line-height: 1.5;
         }
 
         .observacao {
@@ -106,11 +98,6 @@
             font-size: 13px;
             margin-bottom: 10px;
             outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .observacao:focus {
-            border-color: #2563eb;
         }
 
         .preco {
@@ -148,7 +135,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            line-height: 1;
         }
 
         .qtd-texto {
@@ -158,53 +144,41 @@
             text-align: center;
         }
 
-        /* 🟢 CARRINHO VERDE — CANTO DIREITO */
-        .carrinho-lateral {
+        /* 🛒 BOTÃO DO CARRINHO — EMBAIXO DA TELA */
+        .botao-carrinho {
             position: fixed;
-            top: 50%;
+            bottom: 0;
+            left: 0;
             right: 0;
-            transform: translateY(-50%);
             background: #16a34a;
             color: white;
-            padding: 18px 12px;
-            border-radius: 16px 0 0 16px;
-            box-shadow: -3px 0 15px rgba(22, 163, 74, 0.35);
-            z-index: 100;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             cursor: pointer;
-            min-width: 85px;
-            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 -3px 15px rgba(22, 163, 74, 0.35);
+            font-weight: 700;
+            font-size: 17px;
+            border: none;
         }
 
-        .carrinho-lateral:hover {
+        .botao-carrinho:hover {
             background: #15803d;
-            min-width: 90px;
         }
 
-        .carrinho-qtd {
-            font-size: 28px;
+        .carrinho-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .carrinho-total {
+            font-size: 18px;
             font-weight: 800;
-            text-align: center;
-            line-height: 1;
-            margin-bottom: 5px;
         }
 
-        .carrinho-texto {
-            font-size: 11px;
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .carrinho-valor {
-            font-size: 15px;
-            font-weight: 800;
-            text-align: center;
-            background: rgba(255,255,255,0.25);
-            padding: 6px 4px;
-            border-radius: 8px;
-        }
-
-        /* MODAL */
+        /* MODAL DO CARRINHO */
         .modal-fundo {
             display: none;
             position: fixed;
@@ -327,10 +301,6 @@
             gap: 10px;
         }
 
-        .btn-finalizar:hover {
-            background: #20bd5a;
-        }
-
         .vazio {
             text-align: center;
             padding: 30px;
@@ -344,7 +314,7 @@
 
 <header>
     <h1>🍔 Sabor da Casa</h1>
-    <p>Faça seu pedido — escolha e finalize</p>
+    <p>Escolha seus pratos e monte seu pedido</p>
 </header>
 
 <div class="categorias">
@@ -357,7 +327,7 @@
 
 <div class="produtos" id="areaProdutos">
 
-    <!-- ==================== LANCHES ==================== -->
+    <!-- LANCHES -->
     <div class="produto" data-categoria="lanche">
         <h2>X-Bacon 🥓</h2>
         <p>Pão, hambúrguer, queijo, bacon, presunto, ovo e salada.</p>
@@ -414,7 +384,7 @@
         </div>
     </div>
 
-    <!-- ==================== PIZZAS ==================== -->
+    <!-- PIZZAS -->
     <div class="produto" data-categoria="pizza">
         <h2>Pizza Calabresa 🌶️</h2>
         <p>Molho, mussarela, calabresa e cebola — tamanho grande.</p>
@@ -429,7 +399,7 @@
     </div>
 
     <div class="produto" data-categoria="pizza">
-        <h2>Pizza Frango 🍗</h2>
+        <h2>Pizza Frango c/ Catupiry 🍗</h2>
         <p>Molho, mussarela, frango desfiado e catupiry — tamanho grande.</p>
         <div class="area-controle">
             <span class="preco">R$ 48,00</span>
@@ -467,7 +437,7 @@
         </div>
     </div>
 
-    <!-- ==================== PORÇÕES ==================== -->
+    <!-- PORÇÕES -->
     <div class="produto" data-categoria="porcao">
         <h2>Batata Frita 🍟</h2>
         <p>Porção grande — crocante e sequinha.</p>
@@ -520,7 +490,7 @@
         </div>
     </div>
 
-    <!-- ==================== BEBIDAS ==================== -->
+    <!-- BEBIDAS -->
     <div class="produto" data-categoria="bebida">
         <h2>Coca-Cola 🥤</h2>
         <p>Refrigerante lata 350 ml — Gelada!</p>
@@ -575,17 +545,19 @@
 
 </div>
 
-<!-- 🟢 CARRINHO VERDE — CANTO DIREITO -->
-<div class="carrinho-lateral" onclick="abrirPedido()">
-    <div class="carrinho-qtd" id="carrinhoQtd">0</div>
-    <div class="carrinho-texto">Itens</div>
-    <div class="carrinho-valor">R$ <span id="carrinhoValor">0,00</span></div>
-</div>
+<!-- 🛒 BOTÃO DO CARRINHO — EMBAIXO DA TELA -->
+<button class="botao-carrinho" onclick="abrirCarrinho()">
+    <span>🛒 Ir para o Carrinho</span>
+    <div class="carrinho-info">
+        <span id="carrinhoQtd">0 itens</span>
+        <span class="carrinho-total">R$ <span id="carrinhoValor">0,00</span></span>
+    </div>
+</button>
 
-<!-- MODAL — FINALIZAR PEDIDO -->
+<!-- MODAL DO CARRINHO → FINALIZAR PEDIDO -->
 <div class="modal-fundo" id="modalFundo">
     <div class="modal">
-        <h2>✅ Finalizar Pedido</h2>
+        <h2>🛒 Carrinho de Compras</h2>
 
         <div class="grupo-input">
             <label for="mesa">🪑 Número da Mesa</label>
@@ -593,7 +565,7 @@
         </div>
 
         <div id="listaItens">
-            <p class="vazio">Nenhum item adicionado ainda.</p>
+            <p class="vazio">Nenhum item no carrinho ainda.</p>
         </div>
 
         <div class="total-pedido">
@@ -601,9 +573,9 @@
         </div>
 
         <div class="botoes-modal">
-            <button class="btn-voltar" onclick="fecharPedido()">← Voltar e Adicionar Mais</button>
+            <button class="btn-voltar" onclick="fecharCarrinho()">← Voltar aos Produtos</button>
             <button class="btn-finalizar" onclick="enviarWhatsApp()">
-                💚 Finalizar e Enviar pelo WhatsApp
+                ✅ Finalizar Pedido — WhatsApp
             </button>
         </div>
     </div>
@@ -616,56 +588,70 @@
     let pedido = [];
     let totalGeral = 0;
 
-    // ➕➖ ALTERAR QUANTIDADE DIRETO NO PRODUTO
+    // ➕➖ ALTERAR QUANTIDADE E PEGAR OBSERVAÇÃO
     function alterarItem(nome, preco, categoria, delta) {
-        const itemExistente = pedido.find(i => i.nome === nome);
+        // Pegar a observação do campo de texto
         const idObs = "obs-" + nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
         const obsElement = document.getElementById(idObs);
         const observacao = obsElement ? obsElement.value.trim() : "";
 
+        const itemExistente = pedido.find(i => i.nome === nome);
+
         if (itemExistente) {
             itemExistente.quantidade += delta;
             totalGeral += preco * delta;
-            if (observacao) itemExistente.observacao = observacao;
+            // Atualizar a observação sempre que mudar a quantidade
+            itemExistente.observacao = observacao;
 
             if (itemExistente.quantidade <= 0) {
                 pedido = pedido.filter(i => i.nome !== nome);
                 itemExistente.quantidade = 0;
             }
         } else if (delta > 0) {
-            pedido.push({ nome, preco, quantidade: 1, categoria, observacao });
+            pedido.push({ 
+                nome, 
+                preco, 
+                quantidade: 1, 
+                categoria, 
+                observacao: observacao 
+            });
             totalGeral += preco;
         }
 
+        // Atualizar o número mostrado no produto
         const idQtd = "qtd-" + nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
         const elQtd = document.getElementById(idQtd);
         if (elQtd) {
             elQtd.innerText = itemExistente ? Math.max(0, itemExistente.quantidade) : 1;
         }
 
-        atualizarCarrinho();
+        atualizarBotaoCarrinho();
     }
 
-    function atualizarCarrinho() {
+    // Atualizar o botão do carrinho embaixo
+    function atualizarBotaoCarrinho() {
         const qtdTotal = pedido.reduce((soma, item) => soma + item.quantidade, 0);
-        document.getElementById("carrinhoQtd").innerText = qtdTotal;
+        document.getElementById("carrinhoQtd").innerText = qtdTotal + " itens";
         document.getElementById("carrinhoValor").innerText = totalGeral.toFixed(2).replace(".", ",");
     }
 
-    function abrirPedido() {
+    // Abrir o carrinho
+    function abrirCarrinho() {
         if (pedido.length === 0) {
             alert("⚠️ Adicione pelo menos um produto primeiro!");
             return;
         }
         document.getElementById("modalFundo").style.display = "flex";
-        atualizarListaPedido();
+        atualizarListaCarrinho();
     }
 
-    function fecharPedido() {
+    // Fechar o carrinho
+    function fecharCarrinho() {
         document.getElementById("modalFundo").style.display = "none";
     }
 
-    function atualizarListaPedido() {
+    // Atualizar a lista dentro do carrinho
+    function atualizarListaCarrinho() {
         const lista = document.getElementById("listaItens");
         lista.innerHTML = "";
 
@@ -678,6 +664,7 @@
                         <span class="item-subtotal">R$ ${subtotal}</span>
                     </div>
             `;
+            // ✅ A OBSERVAÇÃO APARECE AQUI TAMBÉM!
             if (item.observacao) {
                 linha += `<span class="item-obs">📝 Obs: ${item.observacao}</span>`;
             }
@@ -688,7 +675,7 @@
         document.getElementById("totalModal").innerText = totalGeral.toFixed(2).replace(".", ",");
     }
 
-    // 📲 ENVIAR PEDIDO COMPLETO NO WHATSAPP
+    // 📲 ENVIAR PARA O WHATSAPP — COM OBSERVAÇÃO!
     function enviarWhatsApp() {
         const mesa = document.getElementById("mesa").value;
 
@@ -704,6 +691,7 @@
         pedido.forEach(item => {
             const subtotal = (item.preco * item.quantidade).toFixed(2).replace(".", ",");
             mensagem += `${item.quantidade}x ${item.nome} — R$ ${subtotal}\n`;
+            // ✅ A OBSERVAÇÃO VAI NO WHATSAPP!
             if (item.observacao) {
                 mensagem += `   📝 Obs: ${item.observacao}\n`;
             }
@@ -717,6 +705,7 @@
         window.open(url, "_blank");
     }
 
+    // Filtrar categorias
     function filtrar(categoria) {
         document.querySelectorAll(".categoria").forEach(btn => btn.classList.remove("ativa"));
         event.target.classList.add("ativa");
