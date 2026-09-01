@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel do Proprietário — Sabor da Casa</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#111827;
+    color:#fff;
+    padding-bottom:30px;
+}
+
+header{
+    background:#1f2937;
+    padding:20px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 3px 12px rgba(0,0,0,.3);
+}
+
+header h1{
+    font-size:23px;
+}
+
+header p{
+    color:#9ca3af;
+    margin-top:5px;
+    font-size:14px;
+}
+
+.topo{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.btn-historico{
+    border:none;
+    background:#374151;
+    color:white;
+    padding:11px 15px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.configuracao{
+    background:#1f2937;
+    padding:18px;
+    border-radius:14px;
+    margin-bottom:20px;
+}
+
+.configuracao label{
+    display:block;
+    font-size:14px;
+    color:#d1d5db;
+    margin-bottom:7px;
+}
+
+.configuracao input{
+    width:100%;
+    max-width:180px;
+    padding:12px;
+    border-radius:8px;
+    border:2px solid #374151;
+    background:#111827;
+    color:white;
+    font-size:16px;
+}
+
+.btn-config{
+    margin-top:10px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:11px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* =========================
+   RESUMO
+========================= */
+
+.titulo-secao{
+    font-size:18px;
+    margin-bottom:12px;
+}
+
+.resumo{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+    margin-bottom:25px;
+}
+
+.resumo-card{
+    background:#1f2937;
+    padding:15px;
+    border-radius:12px;
+}
+
+.resumo-card span{
+    color:#9ca3af;
+    font-size:13px;
+}
+
+.resumo-card strong{
+    display:block;
+    font-size:24px;
+    margin-top:6px;
+}
+
+.resumo-total{
+    border:2px solid #16a34a;
+}
+
+.resumo-total strong{
+    color:#4ade80;
+}
+
+/* =========================
+   MESAS
+========================= */
+
+.mesas-titulo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.mesas-titulo h2{
+    font-size:20px;
+}
+
+.mesas{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:15px;
+}
+
+.mesa{
+    background:#1f2937;
+    border-radius:15px;
+    padding:17px;
+    border:2px solid #374151;
+}
+
+.mesa.livre{
+    border-color:#22c55e;
+}
+
+.mesa.ocupada{
+    border-color:#ef4444;
+}
+
+.mesa.preparo{
+    border-color:#f59e0b;
+}
+
+.mesa.pronto{
+    border-color:#3b82f6;
+}
+
+.mesa-topo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.mesa-nome{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.status{
+    padding:6px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.status-livre{
+    background:#14532d;
+    color:#86efac;
+}
+
+.status-ocupada{
+    background:#7f1d1d;
+    color:#fecaca;
+}
+
+.status-preparo{
+    background:#78350f;
+    color:#fde68a;
+}
+
+.status-pronto{
+    background:#1e3a8a;
+    color:#bfdbfe;
+}
+
+.responsavel{
+    background:#111827;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:12px;
+    color:#d1d5db;
+    font-size:14px;
+}
+
+.responsavel strong{
+    color:white;
+}
+
+.total-mesa{
+    font-size:23px;
+    font-weight:bold;
+    color:#4ade80;
+    margin:12px 0;
+}
+
+.info-pedido{
+    color:#9ca3af;
+    font-size:13px;
+    margin-bottom:12px;
+}
+
+.btn-abrir{
+    width:100%;
+    border:none;
+    background:#2563eb;
+    color:white;
+    padding:12px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-abrir:hover{
+    background:#1d4ed8;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-fundo{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    z-index:500;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
+}
+
+.modal{
+    background:#1f2937;
+    width:100%;
+    max-width:650px;
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:18px;
+    padding:20px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.btn-fechar{
+    border:none;
+    background:#374151;
+    color:white;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.comanda-responsavel{
+    background:#111827;
+    padding:12px;
+    border-radius:9px;
+    margin-bottom:15px;
+}
+
+.pedido-bloco{
+    background:#111827;
+    border-radius:10px;
+    padding:13px;
+    margin-bottom:12px;
+    border:1px solid #374151;
+}
+
+.pedido-cabecalho{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+    font-size:13px;
+    color:#9ca3af;
+}
+
+.pedido-status{
+    font-weight:bold;
+    padding:5px 8px;
+    border-radius:6px;
+}
+
+.status-recebido{
+    background:#7f1d1d;
+    color:#fecaca;
+}
+
+.status-preparo-pedido{
+    background:#78350f;
+    color:#fde68a;
+}
+
+.status-pronto-pedido{
+    background:#1e3a8a;
+    color:#bfdbfe;
+}
+
+.item{
+    padding:8px 0;
+    border-bottom:1px solid #374151;
+}
+
+.item:last-child{
+    border-bottom:none;
+}
+
+.item-linha{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.item-nome{
+    font-weight:bold;
+}
+
+.item-obs{
+    color:#fbbf24;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.botoes-status{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+    margin-top:12px;
+}
+
+.btn-status{
+    border:none;
+    padding:9px 5px;
+    border-radius:7px;
+    cursor:pointer;
+    color:white;
+    font-weight:bold;
+    font-size:12px;
+}
+
+.btn-recebido{
+    background:#b91c1c;
+}
+
+.btn-preparo{
+    background:#d97706;
+}
+
+.btn-pronto{
+    background:#2563eb;
+}
+
+.btn-status.ativo{
+    outline:3px solid white;
+}
+
+.comanda-total{
+    border-top:2px dashed #4b5563;
+    margin-top:15px;
+    padding-top:15px;
+    text-align:right;
+    font-size:27px;
+    font-weight:bold;
+    color:#4ade80;
+}
+
+.btn-finalizar{
+    width:100%;
+    margin-top:15px;
+    border:none;
+    background:#16a34a;
+    color:white;
+    padding:15px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.btn-finalizar:hover{
+    background:#15803d;
+}
+
+.sem-pedidos{
+    text-align:center;
+    color:#9ca3af;
+    padding:30px;
+}
+
+/* =========================
+   HISTÓRICO
+========================= */
+
+.historico-resumo{
+    background:#111827;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.historico-resumo strong{
+    display:block;
+    color:#4ade80;
+    font-size:25px;
+    margin-top:5px;
+}
+
+.historico-item{
+    background:#111827;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:10px;
+    border:1px solid #374151;
+}
+
+.historico-topo{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+
+.historico-total{
+    color:#4ade80;
+    font-weight:bold;
+}
+
+.historico-detalhes{
+    color:#9ca3af;
+    font-size:13px;
+    margin-top:5px;
+}
+
+@media(max-width:800px){
+
+    .resumo{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .resumo-card:last-child{
+        grid-column:span 2;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .resumo{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .mesas{
+        grid-template-columns:1fr;
+    }
+
+    .botoes-status{
+        grid-template-columns:1fr;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="topo">
+
+        <div>
+            <h1>🍔 Sabor da Casa</h1>
+            <p>Painel do Proprietário</p>
+        </div>
+
+        <button
+            class="btn-historico"
+            onclick="abrirHistorico()"
+        >
+            📜 Histórico
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <!-- CONFIGURAÇÃO -->
+
+    <div class="configuracao">
+
+        <label>
+            🪑 Quantidade de mesas
+        </label>
+
+        <input
+            type="number"
+            id="quantidadeMesas"
+            min="1"
+            max="100"
+            value="8"
+        >
+
+        <br>
+
+        <button
+            class="btn-config"
+            onclick="salvarQuantidadeMesas()"
+        >
+            💾 Salvar Mesas
+        </button>
+
+    </div>
+
+
+    <!-- RESUMO -->
+
+    <h2 class="titulo-secao">
+        📊 Resumo do Dia
+    </h2>
+
+    <div class="resumo">
+
+        <div class="resumo-card">
+            <span>🟢 Mesas livres</span>
+            <strong id="totalLivres">0</strong>
+        </div>
+
+        <div class="resumo-card">
+            <span>🔴 Mesas ocupadas</span>
+            <strong id="totalOcupadas">0</strong>
+        </div>
+
+        <div class="resumo-card">
+            <span>🍽️ Pedidos abertos</span>
+            <strong id="totalPedidosAbertos">0</strong>
+        </div>
+
+        <div class="resumo-card">
+            <span>✅ Mesas finalizadas</span>
+            <strong id="totalMesasFinalizadas">0</strong>
+        </div>
+
+        <div class="resumo-card resumo-total">
+            <span>💰 Total vendido hoje</span>
+            <strong id="totalVendidoHoje">
+                R$ 0,00
+            </strong>
+        </div>
+
+    </div>
+
+
+    <!-- MESAS -->
+
+    <div class="mesas-titulo">
+
+        <h2>
+            🪑 Mesas
+        </h2>
+
+    </div>
+
+    <div
+        class="mesas"
+        id="areaMesas"
+    ></div>
+
+</div>
+
+
+<!-- =========================
+     MODAL COMANDA
+========================= -->
+
+<div
+    class="modal-fundo"
+    id="modalComanda"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2 id="tituloComanda">
+                🪑 Mesa
+            </h2>
+
+            <button
+                class="btn-fechar"
+                onclick="fecharComanda()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            class="comanda-responsavel"
+            id="responsavelComanda"
+        ></div>
+
+
+        <div id="listaComanda"></div>
+
+
+        <div class="comanda-total">
+
+            Total:
+            R$ <span id="totalComanda">0,00</span>
+
+        </div>
+
+
+        <button
+            class="btn-finalizar"
+            onclick="finalizarMesa()"
+        >
+            ✅ Finalizar Comanda e Liberar Mesa
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL HISTÓRICO
+========================= -->
+
+<div
+    class="modal-fundo"
+    id="modalHistorico"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>
+                📜 Histórico
+            </h2>
+
+            <button
+                class="btn-fechar"
+                onclick="fecharHistorico()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div id="listaHistorico"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const CHAVE_PEDIDOS = "pedidosCardapio";
+const CHAVE_MESAS = "quantidadeMesas";
+const CHAVE_HISTORICO = "historicoComandas";
+
+let mesaSelecionada = null;
+let ultimoNumeroPedidos = 0;
+
+
+/* =========================
+   PEDIDOS
+========================= */
+
+function obterPedidos(){
+
+    return JSON.parse(
+        localStorage.getItem(CHAVE_PEDIDOS) || "[]"
+    );
+
+}
+
+
+function salvarPedidos(pedidos){
+
+    localStorage.setItem(
+        CHAVE_PEDIDOS,
+        JSON.stringify(pedidos)
+    );
+
+}
+
+
+/* =========================
+   HISTÓRICO
+========================= */
+
+function obterHistorico(){
+
+    return JSON.parse(
+        localStorage.getItem(CHAVE_HISTORICO) || "[]"
+    );
+
+}
+
+
+function salvarHistorico(historico){
+
+    localStorage.setItem(
+        CHAVE_HISTORICO,
+        JSON.stringify(historico)
+    );
+
+}
+
+
+/* =========================
+   UTILITÁRIOS
+========================= */
+
+function formatarDinheiro(valor){
+
+    return Number(valor || 0)
+        .toFixed(2)
+        .replace(".",",");
+
+}
+
+
+function obterQuantidadeMesas(){
+
+    return Number(
+        localStorage.getItem(CHAVE_MESAS) || 8
+    );
+
+}
+
+
+function mesmaData(data){
+
+    const hoje =
+        new Date().toLocaleDateString("pt-BR");
+
+    return data === hoje;
+
+}
+
+
+/* =========================
+   MESAS
+========================= */
+
+function salvarQuantidadeMesas(){
+
+    let quantidade =
+        Number(
+            document.getElementById(
+                "quantidadeMesas"
+            ).value
+        );
+
+    if(quantidade < 1)
+        quantidade = 1;
+
+    if(quantidade > 100)
+        quantidade = 100;
+
+    localStorage.setItem(
+        CHAVE_MESAS,
+        quantidade
+    );
+
+    document.getElementById(
+        "quantidadeMesas"
+    ).value = quantidade;
+
+    renderizarMesas();
+
+}
+
+
+function pedidosDaMesa(numeroMesa){
+
+    return obterPedidos().filter(
+        pedido =>
+            String(pedido.mesa) ===
+            String(numeroMesa) &&
+            pedido.status !== "finalizado"
+    );
+
+}
+
+
+function obterStatusMesa(numeroMesa){
+
+    const pedidos =
+        pedidosDaMesa(numeroMesa);
+
+    if(!pedidos.length)
+        return "livre";
+
+    if(
+        pedidos.some(
+            p => p.status === "pronto"
+        )
+    )
+        return "pronto";
+
+    if(
+        pedidos.some(
+            p => p.status === "preparo"
+        )
+    )
+        return "preparo";
+
+    return "ocupada";
+
+}
+
+
+function obterResponsavel(pedidos){
+
+    if(!pedidos.length)
+        return "—";
+
+    const pedido =
+        pedidos.find(
+            p =>
+                p.responsavel ||
+                p.nomeCliente
+        );
+
+    if(!pedido)
+        return "Não informado";
+
+    return (
+        pedido.responsavel ||
+        pedido.nomeCliente
+    );
+
+}
+
+
+function calcularTotalMesa(pedidos){
+
+    return pedidos.reduce(
+        (total,pedido) =>
+            total +
+            Number(pedido.total || 0),
+        0
+    );
+
+}
+
+
+/* =========================
+   RESUMO DO DIA
+========================= */
+
+function atualizarResumo(){
+
+    const quantidade =
+        obterQuantidadeMesas();
+
+    let livres = 0;
+    let ocupadas = 0;
+    let pedidosAbertos = 0;
+
+    for(
+        let mesa = 1;
+        mesa <= quantidade;
+        mesa++
+    ){
+
+        const pedidos =
+            pedidosDaMesa(mesa);
+
+        if(pedidos.length === 0)
+            livres++;
+        else
+            ocupadas++;
+
+        pedidosAbertos +=
+            pedidos.length;
+
+    }
+
+
+    const historico =
+        obterHistorico();
+
+
+    const hoje =
+        new Date().toLocaleDateString(
+            "pt-BR"
+        );
+
+
+    const historicoHoje =
+        historico.filter(
+            item => item.data === hoje
+        );
+
+
+    const totalVendido =
+        historicoHoje.reduce(
+            (total,item) =>
+                total +
+                Number(item.total || 0),
+            0
+        );
+
+
+    document.getElementById(
+        "totalLivres"
+    ).innerText = livres;
+
+
+    document.getElementById(
+        "totalOcupadas"
+    ).innerText = ocupadas;
+
+
+    document.getElementById(
+        "totalPedidosAbertos"
+    ).innerText =
+        pedidosAbertos;
+
+
+    document.getElementById(
+        "totalMesasFinalizadas"
+    ).innerText =
+        historicoHoje.length;
+
+
+    document.getElementById(
+        "totalVendidoHoje"
+    ).innerText =
+        "R$ " +
+        formatarDinheiro(totalVendido);
+
+}
+
+
+/* =========================
+   RENDERIZAR MESAS
+========================= */
+
+function renderizarMesas(){
+
+    const quantidade =
+        obterQuantidadeMesas();
+
+    const area =
+        document.getElementById(
+            "areaMesas"
+        );
+
+    area.innerHTML = "";
+
+
+    for(
+        let mesa = 1;
+        mesa <= quantidade;
+        mesa++
+    ){
+
+        const pedidos =
+            pedidosDaMesa(mesa);
+
+        const status =
+            obterStatusMesa(mesa);
+
+        const total =
+            calcularTotalMesa(pedidos);
+
+        const responsavel =
+            obterResponsavel(pedidos);
+
+
+        let textoStatus =
+            "Livre";
+
+        if(status === "ocupada")
+            textoStatus = "Ocupada";
+
+        if(status === "preparo")
+            textoStatus = "Em preparo";
+
+        if(status === "pronto")
+            textoStatus = "Pronto";
+
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "mesa " + status;
+
+
+        card.innerHTML = `
+
+            <div class="mesa-topo">
+
+                <span class="mesa-nome">
+                    🪑 Mesa ${mesa}
+                </span>
+
+                <span
+                    class="status status-${status}"
+                >
+                    ${textoStatus}
+                </span>
+
+            </div>
+
+
+            <div class="responsavel">
+
+                👤 <strong>Responsável:</strong>
+                ${responsavel}
+
+            </div>
+
+
+            <div class="info-pedido">
+
+                ${
+                    pedidos.length
+                    ?
+                    pedidos.length +
+                    (
+                        pedidos.length === 1
+                        ? " pedido aberto"
+                        : " pedidos abertos"
+                    )
+                    :
+                    "Nenhum pedido"
+                }
+
+            </div>
+
+
+            <div class="total-mesa">
+
+                R$ ${formatarDinheiro(total)}
+
+            </div>
+
+
+            <button
+                class="btn-abrir"
+                onclick="abrirComanda(${mesa})"
+            >
+
+                ${
+                    pedidos.length
+                    ?
+                    "📋 Abrir Comanda"
+                    :
+                    "👀 Ver Mesa"
+                }
+
+            </button>
+
+        `;
+
+
+        area.appendChild(card);
+
+    }
+
+
+    atualizarResumo();
+
+}
+
+
+/* =========================
+   ABRIR COMANDA
+========================= */
+
+function abrirComanda(numeroMesa){
+
+    mesaSelecionada =
+        numeroMesa;
+
+
+    document.getElementById(
+        "tituloComanda"
+    ).innerText =
+        "🪑 Mesa " + numeroMesa;
+
+
+    renderizarComanda();
+
+    document.getElementById(
+        "modalComanda"
+    ).style.display =
+        "flex";
+
+}
+
+
+function renderizarComanda(){
+
+    if(!mesaSelecionada)
+        return;
+
+
+    const pedidos =
+        pedidosDaMesa(
+            mesaSelecionada
+        );
+
+
+    const total =
+        calcularTotalMesa(pedidos);
+
+
+    const responsavel =
+        obterResponsavel(pedidos);
+
+
+    document.getElementById(
+        "responsavelComanda"
+    ).innerHTML = `
+
+        👤 <strong>Responsável:</strong>
+        ${responsavel}
+
+    `;
+
+
+    const lista =
+        document.getElementById(
+            "listaComanda"
+        );
+
+
+    lista.innerHTML = "";
+
+
+    if(!pedidos.length){
+
+        lista.innerHTML = `
+
+            <div class="sem-pedidos">
+
+                🟢 Esta mesa está livre.
+
+            </div>
+
+        `;
+
+    }else{
+
+
+        pedidos.forEach(
+            (pedido,index) => {
+
+                const bloco =
+                    document.createElement(
+                        "div"
+                    );
+
+                bloco.className =
+                    "pedido-bloco";
+
+
+                let classeStatus =
+                    "status-recebido";
+
+                let textoStatus =
+                    "🟢 Recebido";
+
+
+                if(
+                    pedido.status ===
+                    "preparo"
+                ){
+
+                    classeStatus =
+                        "status-preparo-pedido";
+
+                    textoStatus =
+                        "🟠 Em preparo";
+
+                }
+
+
+                if(
+                    pedido.status ===
+                    "pronto"
+                ){
+
+                    classeStatus =
+                        "status-pronto-pedido";
+
+                    textoStatus =
+                        "🔵 Pronto";
+
+                }
+
+
+                let itensHTML = "";
+
+
+                (
+                    pedido.itens || []
+                ).forEach(
+                    item => {
+
+                        itensHTML += `
+
+                            <div class="item">
+
+                                <div class="item-linha">
+
+                                    <span class="item-nome">
+
+                                        ${item.quantidade}x
+                                        ${item.nome}
+
+                                    </span>
+
+                                    <span>
+
+                                        R$
+                                        ${
+                                            formatarDinheiro(
+                                                item.preco *
+                                                item.quantidade
+                                            )
+                                        }
+
+                                    </span>
+
+                                </div>
+
+
+                                ${
+                                    item.observacao
+                                    ?
+                                    `
+                                    <div class="item-obs">
+
+                                        📝 OBS:
+                                        ${item.observacao}
+
+                                    </div>
+                                    `
+                                    :
+                                    ""
+                                }
+
+                            </div>
+
+                        `;
+
+                    }
+                );
+
+
+                bloco.innerHTML = `
+
+                    <div class="pedido-cabecalho">
+
+                        <span>
+
+                            <strong>
+                                Pedido #${
+                                    String(
+                                        pedido.numero ||
+                                        index + 1
+                                    ).padStart(
+                                        3,
+                                        "0"
+                                    )
+                                }
+                            </strong>
+
+                            <br>
+
+                            🕐 ${
+                                pedido.horario ||
+                                "--:--"
+                            }
+
+                        </span>
+
+
+                        <span
+                            class="
+                                pedido-status
+                                ${classeStatus}
+                            "
+                        >
+                            ${textoStatus}
+                        </span>
+
+                    </div>
+
+
+                    ${itensHTML}
+
+
+                    <div class="botoes-status">
+
+                        <button
+                            class="
+                                btn-status
+                                btn-recebido
+                                ${
+                                    pedido.status ===
+                                    "recebido"
+                                    ? "ativo"
+                                    : ""
+                                }
+                            "
+                            onclick="
+                                alterarStatusPedido(
+                                    '${pedido.id}',
+                                    'recebido'
+                                )
+                            "
+                        >
+                            🟢 Recebido
+                        </button>
+
+
+                        <button
+                            class="
+                                btn-status
+                                btn-preparo
+                                ${
+                                    pedido.status ===
+                                    "preparo"
+                                    ? "ativo"
+                                    : ""
+                                }
+                            "
+                            onclick="
+                                alterarStatusPedido(
+                                    '${pedido.id}',
+                                    'preparo'
+                                )
+                            "
+                        >
+                            🟠 Em preparo
+                        </button>
+
+
+                        <button
+                            class="
+                                btn-status
+                                btn-pronto
+                                ${
+                                    pedido.status ===
+                                    "pronto"
+                                    ? "ativo"
+                                    : ""
+                                }
+                            "
+                            onclick="
+                                alterarStatusPedido(
+                                    '${pedido.id}',
+                                    'pronto'
+                                )
+                            "
+                        >
+                            🔵 Pronto
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                lista.appendChild(bloco);
+
+            }
+        );
+
+    }
+
+
+    document.getElementById(
+        "totalComanda"
+    ).innerText =
+        formatarDinheiro(total);
+
+}
+
+
+/* =========================
+   ALTERAR STATUS
+========================= */
+
+function alterarStatusPedido(
+    id,
+    novoStatus
+){
+
+    const pedidos =
+        obterPedidos();
+
+
+    const pedido =
+        pedidos.find(
+            p => String(p.id) === String(id)
+        );
+
+
+    if(!pedido)
+        return;
+
+
+    pedido.status =
+        novoStatus;
+
+
+    if(novoStatus === "pronto"){
+
+        pedido.dataPronto =
+            new Date().toISOString();
+
+    }
+
+
+    salvarPedidos(pedidos);
+
+
+    renderizarComanda();
+
+    renderizarMesas();
+
+}
+
+
+/* =========================
+   FECHAR COMANDA
+========================= */
+
+function fecharComanda(){
+
+    document.getElementById(
+        "modalComanda"
+    ).style.display =
+        "none";
+
+    mesaSelecionada =
+        null;
+
+}
+
+
+/* =========================
+   FINALIZAR COMANDA
+========================= */
+
+function finalizarMesa(){
+
+    if(!mesaSelecionada)
+        return;
+
+
+    const pedidos =
+        pedidosDaMesa(
+            mesaSelecionada
+        );
+
+
+    if(!pedidos.length){
+
+        alert(
+            "Esta mesa não possui pedidos."
+        );
+
+        return;
+
+    }
+
+
+    const total =
+        calcularTotalMesa(pedidos);
+
+
+    const responsavel =
+        obterResponsavel(pedidos);
+
+
+    const confirmar =
+        confirm(
+
+            "Finalizar Comanda da Mesa " +
+            mesaSelecionada +
+            "?\n\n" +
+
+            "Responsável: " +
+            responsavel +
+            "\n" +
+
+            "Total: R$ " +
+            formatarDinheiro(total) +
+            "\n\n" +
+
+            "A mesa será liberada."
+
+        );
+
+
+    if(!confirmar)
+        return;
+
+
+    /* =========================
+       SALVAR HISTÓRICO
+    ========================= */
+
+    const historico =
+        obterHistorico();
+
+
+    const agora =
+        new Date();
+
+
+    const comandaFinalizada = {
+
+        id:
+            Date.now().toString(),
+
+        mesa:
+            mesaSelecionada,
+
+        responsavel:
+            responsavel,
+
+        total:
+            Number(
+                total.toFixed(2)
+            ),
+
+        data:
+            agora.toLocaleDateString(
+                "pt-BR"
+            ),
+
+        horarioFinalizacao:
+            agora.toLocaleTimeString(
+                "pt-BR",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            ),
+
+        pedidos:
+            JSON.parse(
+                JSON.stringify(pedidos)
+            )
+
+    };
+
+
+    historico.push(
+        comandaFinalizada
+    );
+
+
+    salvarHistorico(
+        historico
+    );
+
+
+    /* =========================
+       FINALIZAR PEDIDOS
+    ========================= */
+
+    const todosPedidos =
+        obterPedidos();
+
+
+    todosPedidos.forEach(
+        pedido => {
+
+            if(
+
+                String(pedido.mesa) ===
+                String(mesaSelecionada)
+
+                &&
+
+                pedido.status !==
+                "finalizado"
+
+            ){
+
+                pedido.status =
+                    "finalizado";
+
+                pedido.dataFinalizacao =
+                    new Date().toISOString();
+
+            }
+
+        }
+    );
+
+
+    salvarPedidos(
+        todosPedidos
+    );
+
+
+    const mesaFinalizada =
+        mesaSelecionada;
+
+
+    fecharComanda();
+
+    renderizarMesas();
+
+
+    alert(
+
+        "✅ Comanda finalizada!\n\n" +
+
+        "Mesa " +
+        mesaFinalizada +
+        " liberada.\n\n" +
+
+        "Total: R$ " +
+        formatarDinheiro(total)
+
+    );
+
+}
+
+
+/* =========================
+   HISTÓRICO
+========================= */
+
+function abrirHistorico(){
+
+    const historico =
+        obterHistorico();
+
+
+    const lista =
+        document.getElementById(
+            "listaHistorico"
+        );
+
+
+    lista.innerHTML = "";
+
+
+    const hoje =
+        new Date().toLocaleDateString(
+            "pt-BR"
+        );
+
+
+    const historicoHoje =
+        historico.filter(
+            item =>
+                item.data === hoje
+        );
+
+
+    const totalHoje =
+        historicoHoje.reduce(
+            (total,item) =>
+                total +
+                Number(item.total || 0),
+            0
+        );
+
+
+    lista.innerHTML += `
+
+        <div class="historico-resumo">
+
+            📊 <strong>Resumo de hoje</strong>
+
+            <div style="
+                color:#9ca3af;
+                margin-top:5px;
+            ">
+
+                ${historicoHoje.length}
+                comandas finalizadas
+
+            </div>
+
+            <strong>
+
+                R$
+                ${formatarDinheiro(totalHoje)}
+
+            </strong>
+
+        </div>
+
+    `;
+
+
+    if(!historico.length){
+
+        lista.innerHTML += `
+
+            <div class="sem-pedidos">
+
+                📜 Nenhuma comanda
+                finalizada ainda.
+
+            </div>
+
+        `;
+
+    }else{
+
+
+        [...historico]
+        .reverse()
+        .forEach(
+            comanda => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "historico-item";
+
+
+                item.innerHTML = `
+
+                    <div class="historico-topo">
+
+                        <strong>
+
+                            🪑 Mesa
+                            ${comanda.mesa}
+
+                        </strong>
+
+
+                        <span
+                            class="historico-total"
+                        >
+
+                            R$
+                            ${
+                                formatarDinheiro(
+                                    comanda.total
+                                )
+                            }
+
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        👤 ${
+                            comanda.responsavel ||
+                            "Não informado"
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="historico-detalhes"
+                    >
+
+                        📅 ${comanda.data}
+
+                        —
+                        🕐 ${
+                            comanda.horarioFinalizacao
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="historico-detalhes"
+                    >
+
+                        🍽️ ${
+                            comanda.pedidos.length
+                        }
+                        pedidos nesta comanda
+
+                    </div>
+
+                `;
+
+
+                lista.appendChild(item);
+
+            }
+        );
+
+    }
+
+
+    document.getElementById(
+        "modalHistorico"
+    ).style.display =
+        "flex";
+
+}
+
+
+function fecharHistorico(){
+
+    document.getElementById(
+        "modalHistorico"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =========================
+   ALERTA DE NOVOS PEDIDOS
+========================= */
+
+function verificarNovosPedidos(){
+
+    const pedidos =
+        obterPedidos();
+
+
+    const quantidadeAtual =
+        pedidos.length;
+
+
+    if(
+        quantidadeAtual >
+        ultimoNumeroPedidos
+    ){
+
+        if(
+            ultimoNumeroPedidos !== 0
+        ){
+
+            tocarAlerta();
+
+        }
+
+    }
+
+
+    ultimoNumeroPedidos =
+        quantidadeAtual;
+
+
+    renderizarMesas();
+
+}
+
+
+function tocarAlerta(){
+
+    try{
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        const audio =
+            new AudioContext();
+
+
+        const oscillator =
+            audio.createOscillator();
+
+
+        const gain =
+            audio.createGain();
+
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audio.destination
+        );
+
+
+        oscillator.frequency.value =
+            880;
+
+        oscillator.type =
+            "sine";
+
+
+        gain.gain.setValueAtTime(
+            0.3,
+            audio.currentTime
+        );
+
+
+        oscillator.start();
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audio.currentTime + 0.8
+        );
+
+
+        oscillator.stop(
+            audio.currentTime + 0.8
+        );
+
+
+    }catch(e){
+
+        console.log(
+            "Som indisponível"
+        );
+
+    }
+
+}
+
+
+/* =========================
+   FECHAR MODAIS
+========================= */
+
+document.getElementById(
+    "modalComanda"
+).addEventListener(
+    "click",
+    function(event){
+
+        if(event.target === this){
+
+            fecharComanda();
+
+        }
+
+    }
+);
+
+
+document.getElementById(
+    "modalHistorico"
+).addEventListener(
+    "click",
+    function(event){
+
+        if(event.target === this){
+
+            fecharHistorico();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   INICIAR
+========================= */
+
+document.getElementById(
+    "quantidadeMesas"
+).value =
+    obterQuantidadeMesas();
+
+
+ultimoNumeroPedidos =
+    obterPedidos().length;
+
+
+renderizarMesas();
+
+
+setInterval(
+    verificarNovosPedidos,
+    2000
+);
+
+</script>
+
+</body>
+</html>
