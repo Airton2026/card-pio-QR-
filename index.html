@@ -1,745 +1,3124 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sabor da Casa — Cardápio</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<meta charset="UTF-8">
 
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f8f9fa;
-            color: #212529;
-            padding-bottom: 95px;
-        }
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-        header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
-            color: white;
-            text-align: center;
-            padding: 25px 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
+<title>Sabor da Casa — Cardápio</title>
 
-        header h1 {
-            font-size: 26px;
-            font-weight: 700;
-        }
+<style>
 
-        header p {
-            margin-top: 5px;
-            font-size: 14px;
-            opacity: 0.8;
-        }
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-        .categorias {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 12px 15px;
-            background: white;
-            position: sticky;
-            top: 85px;
-            z-index: 40;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
+body{
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:#f8f9fa;
+    color:#212529;
+    padding-bottom:95px;
+}
 
-        .categoria {
-            background: #f1f3f5;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 20px;
-            white-space: nowrap;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
+header{
+    background:linear-gradient(
+        135deg,
+        #1a1a1a 0%,
+        #333 100%
+    );
 
-        .categoria.ativa {
-            background: #2563eb;
-            color: white;
-        }
+    color:white;
+    text-align:center;
+    padding:25px 15px;
 
-        .produtos {
-            padding: 15px;
-            max-width: 720px;
-            margin: 0 auto;
-        }
+    box-shadow:
+        0 2px 10px rgba(0,0,0,.15);
 
-        .produto {
-            background: white;
-            border-radius: 14px;
-            margin-bottom: 14px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
+    position:sticky;
+    top:0;
+    z-index:50;
+}
 
-        .produto h2 {
-            font-size: 18px;
-            margin-bottom: 5px;
-            color: #1a1a1a;
-        }
+header h1{
+    font-size:26px;
+}
 
-        .produto p {
-            color: #6c757d;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
+header p{
+    margin-top:5px;
+    font-size:14px;
+    opacity:.8;
+}
 
-        .observacao {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 10px;
-            outline: none;
-        }
 
-        .preco {
-            font-size: 19px;
-            font-weight: 700;
-            color: #16a34a;
-        }
+/* =========================
+   CATEGORIAS
+========================= */
 
-        .area-controle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 8px;
-        }
+.categorias{
 
-        .contador {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #f1f3f5;
-            border-radius: 10px;
-            padding: 4px;
-        }
+    display:flex;
+    gap:10px;
 
-        .btn-qtd {
-            width: 34px;
-            height: 34px;
-            border: none;
-            background: white;
-            color: #2563eb;
-            font-size: 20px;
-            font-weight: 700;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    overflow-x:auto;
 
-        .qtd-texto {
-            font-size: 17px;
-            font-weight: 700;
-            min-width: 28px;
-            text-align: center;
-        }
+    padding:12px 15px;
 
-        .botao-carrinho {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #16a34a;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            z-index: 100;
-            box-shadow: 0 -3px 15px rgba(22, 163, 74, 0.35);
-            font-weight: 700;
-            font-size: 17px;
-            border: none;
-        }
+    background:white;
 
-        .botao-carrinho:hover {
-            background: #15803d;
-        }
+    position:sticky;
 
-        .carrinho-info {
-            display: flex;
-            flex-direction: column;
-        }
+    top:85px;
 
-        .carrinho-total {
-            font-size: 18px;
-            font-weight: 800;
-        }
+    z-index:40;
 
-        .modal-fundo {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            z-index: 200;
-        }
+    box-shadow:
+        0 1px 3px rgba(0,0,0,.05);
 
-        .modal {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 420px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
+}
 
-        .modal h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
+.categoria{
 
-        .grupo-input {
-            margin-bottom: 18px;
-        }
+    background:#f1f3f5;
 
-        .grupo-input label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 14px;
-        }
+    border:none;
 
-        .grupo-input input {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            font-size: 16px;
-        }
+    padding:10px 16px;
 
-        .item-pedido {
-            display: flex;
-            flex-direction: column;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f3f5;
-            gap: 4px;
-        }
+    border-radius:20px;
 
-        .item-linha {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    white-space:nowrap;
 
-        .item-nome {
-            font-weight: 600;
-            font-size: 15px;
-        }
+    cursor:pointer;
 
-        .item-obs {
-            font-size: 13px;
-            color: #d97706;
-            font-style: italic;
-            padding-left: 4px;
-        }
+    font-size:14px;
 
-        .item-subtotal {
-            font-weight: 700;
-            color: #16a34a;
-        }
+    font-weight:500;
 
-        .total-pedido {
-            font-size: 24px;
-            font-weight: 800;
-            text-align: right;
-            margin: 20px 0;
-            color: #16a34a;
-            padding-top: 15px;
-            border-top: 2px dashed #e5e7eb;
-        }
+}
 
-        .botoes-modal {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+.categoria.ativa{
 
-        .btn-voltar {
-            background: #f3f4f6;
-            color: #4b5563;
-            font-weight: 600;
-            padding: 13px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
-        }
+    background:#2563eb;
 
-        .btn-finalizar {
-            background: #25d366;
-            color: white;
-            font-weight: 700;
-            font-size: 17px;
-            padding: 15px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+    color:white;
 
-        .vazio {
-            text-align: center;
-            padding: 30px;
-            color: #6c757d;
-            font-size: 16px;
-        }
-    </style>
+}
+
+
+/* =========================
+   PRODUTOS
+========================= */
+
+.produtos{
+
+    padding:15px;
+
+    max-width:720px;
+
+    margin:0 auto;
+
+}
+
+.produto{
+
+    background:white;
+
+    border-radius:14px;
+
+    margin-bottom:14px;
+
+    padding:16px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.06);
+
+}
+
+.produto h2{
+
+    font-size:18px;
+
+    margin-bottom:5px;
+
+}
+
+.produto p{
+
+    color:#6c757d;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+}
+
+.observacao{
+
+    width:100%;
+
+    padding:10px 12px;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    margin-bottom:10px;
+
+    outline:none;
+
+}
+
+.observacao:focus{
+
+    border-color:#2563eb;
+
+}
+
+.preco{
+
+    font-size:19px;
+
+    font-weight:700;
+
+    color:#16a34a;
+
+}
+
+.area-controle{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-top:8px;
+
+}
+
+.contador{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:#f1f3f5;
+
+    border-radius:10px;
+
+    padding:4px;
+
+}
+
+.btn-qtd{
+
+    width:34px;
+
+    height:34px;
+
+    border:none;
+
+    background:white;
+
+    color:#2563eb;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+.qtd-texto{
+
+    font-size:17px;
+
+    font-weight:700;
+
+    min-width:28px;
+
+    text-align:center;
+
+}
+
+
+/* =========================
+   BOTÃO CARRINHO
+========================= */
+
+.botao-carrinho{
+
+    position:fixed;
+
+    bottom:0;
+
+    left:0;
+
+    right:0;
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:15px 20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    z-index:100;
+
+    box-shadow:
+        0 -3px 15px rgba(22,163,74,.35);
+
+    font-weight:700;
+
+    font-size:17px;
+
+    border:none;
+
+}
+
+.botao-carrinho:hover{
+
+    background:#15803d;
+
+}
+
+.carrinho-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    text-align:right;
+
+}
+
+.carrinho-total{
+
+    font-size:18px;
+
+    font-weight:800;
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-fundo{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.6);
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:15px;
+
+    z-index:200;
+
+}
+
+.modal{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    width:100%;
+
+    max-width:430px;
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+}
+
+.modal h2{
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+    font-size:22px;
+
+}
+
+
+/* =========================
+   DADOS DA MESA
+========================= */
+
+.identificacao{
+
+    background:#f3f4f6;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    margin-bottom:18px;
+
+}
+
+.identificacao-titulo{
+
+    font-weight:bold;
+
+    margin-bottom:12px;
+
+}
+
+.grupo-input{
+
+    margin-bottom:14px;
+
+}
+
+.grupo-input:last-child{
+
+    margin-bottom:0;
+
+}
+
+.grupo-input label{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
+    font-size:14px;
+
+}
+
+.grupo-input input{
+
+    width:100%;
+
+    padding:13px;
+
+    border:2px solid #e9ecef;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+}
+
+.grupo-input input:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+}
+
+
+/* =========================
+   ITENS
+========================= */
+
+.item-pedido{
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #f1f3f5;
+
+    gap:4px;
+
+}
+
+.item-linha{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.item-nome{
+
+    font-weight:600;
+
+    font-size:15px;
+
+}
+
+.item-obs{
+
+    font-size:13px;
+
+    color:#d97706;
+
+    background:#fff7ed;
+
+    padding:6px 8px;
+
+    border-radius:6px;
+
+}
+
+.item-subtotal{
+
+    font-weight:700;
+
+    color:#16a34a;
+
+}
+
+
+/* =========================
+   TOTAL
+========================= */
+
+.total-pedido{
+
+    font-size:24px;
+
+    font-weight:800;
+
+    text-align:right;
+
+    margin:20px 0;
+
+    color:#16a34a;
+
+    padding-top:15px;
+
+    border-top:2px dashed #e5e7eb;
+
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+.botoes-modal{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.btn-voltar{
+
+    background:#f3f4f6;
+
+    color:#4b5563;
+
+    font-weight:600;
+
+    padding:13px;
+
+    border-radius:10px;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+}
+
+.btn-finalizar{
+
+    background:#25d366;
+
+    color:white;
+
+    font-weight:700;
+
+    font-size:17px;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    border:none;
+
+    cursor:pointer;
+
+}
+
+.btn-finalizar:hover{
+
+    background:#1ebe5d;
+
+}
+
+
+/* =========================
+   AVISO
+========================= */
+
+.aviso-pedido{
+
+    display:none;
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    border:2px solid #22c55e;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:15px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+}
+
+.aviso-mesa{
+
+    display:none;
+
+    background:#eff6ff;
+
+    color:#1d4ed8;
+
+    border:1px solid #93c5fd;
+
+    padding:10px;
+
+    border-radius:9px;
+
+    margin-top:10px;
+
+    font-size:13px;
+
+}
+
+.vazio{
+
+    text-align:center;
+
+    padding:30px;
+
+    color:#6c757d;
+
+    font-size:16px;
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
 <header>
+
     <h1>🍔 Sabor da Casa</h1>
-    <p>Escolha seus pratos e monte seu pedido</p>
+
+    <p>
+        Escolha seus pratos e monte seu pedido
+    </p>
+
 </header>
 
+
+<!-- =========================
+     CATEGORIAS
+========================= -->
+
 <div class="categorias">
-    <button class="categoria ativa" onclick="filtrar('todos')">🍽️ Todos</button>
-    <button class="categoria" onclick="filtrar('lanche')">🍔 Lanches</button>
-    <button class="categoria" onclick="filtrar('pizza')">🍕 Pizzas</button>
-    <button class="categoria" onclick="filtrar('porcao')">🍟 Porções</button>
-    <button class="categoria" onclick="filtrar('bebida')">🥤 Bebidas</button>
+
+    <button
+        class="categoria ativa"
+        onclick="filtrar('todos',this)"
+    >
+        🍽️ Todos
+    </button>
+
+    <button
+        class="categoria"
+        onclick="filtrar('lanche',this)"
+    >
+        🍔 Lanches
+    </button>
+
+    <button
+        class="categoria"
+        onclick="filtrar('pizza',this)"
+    >
+        🍕 Pizzas
+    </button>
+
+    <button
+        class="categoria"
+        onclick="filtrar('porcao',this)"
+    >
+        🍟 Porções
+    </button>
+
+    <button
+        class="categoria"
+        onclick="filtrar('bebida',this)"
+    >
+        🥤 Bebidas
+    </button>
+
 </div>
 
-<div class="produtos" id="areaProdutos">
 
-    <!-- LANCHES -->
-    <div class="produto" data-categoria="lanche">
-        <h2>X-Bacon 🥓</h2>
-        <p>Pão, hambúrguer, queijo, bacon, presunto, ovo e salada.</p>
-        <input type="text" class="observacao" id="obs-X-Bacon" placeholder="✏️ Observação (ex: sem tomate, sem cebola...)">
-        <div class="area-controle">
-            <span class="preco">R$ 26,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('X-Bacon', 26, 'lanche', -1)">−</button>
-                <span class="qtd-texto" id="qtd-X-Bacon">0</span>
-                <button class="btn-qtd" onclick="alterarItem('X-Bacon', 26, 'lanche', 1)">+</button>
-            </div>
-        </div>
-    </div>
+<!-- =========================
+     PRODUTOS
+========================= -->
 
-    <div class="produto" data-categoria="lanche">
-        <h2>X-Salada 🥗</h2>
-        <p>Pão, hambúrguer, queijo, presunto, ovo e salada fresca.</p>
-        <input type="text" class="observacao" id="obs-X-Salada" placeholder="✏️ Observação (ex: sem alface, sem tomate...)">
-        <div class="area-controle">
-            <span class="preco">R$ 23,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('X-Salada', 23, 'lanche', -1)">−</button>
-                <span class="qtd-texto" id="qtd-X-Salada">0</span>
-                <button class="btn-qtd" onclick="alterarItem('X-Salada', 23, 'lanche', 1)">+</button>
-            </div>
-        </div>
-    </div>
+<div
+    class="produtos"
+    id="areaProdutos"
+>
 
-    <div class="produto" data-categoria="lanche">
-        <h2>X-Calabresa 🌶️</h2>
-        <p>Pão, hambúrguer, queijo, calabresa, presunto, ovo e salada.</p>
-        <input type="text" class="observacao" id="obs-X-Calabresa" placeholder="✏️ Observação...">
-        <div class="area-controle">
-            <span class="preco">R$ 27,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('X-Calabresa', 27, 'lanche', -1)">−</button>
-                <span class="qtd-texto" id="qtd-X-Calabresa">0</span>
-                <button class="btn-qtd" onclick="alterarItem('X-Calabresa', 27, 'lanche', 1)">+</button>
-            </div>
-        </div>
-    </div>
 
-    <div class="produto" data-categoria="lanche">
-        <h2>X-Tudo 🏆</h2>
-        <p>Pão, 2x hambúrguer, queijo, bacon, calabresa, presunto, ovo, milho, ervilha e salada.</p>
-        <input type="text" class="observacao" id="obs-X-Tudo" placeholder="✏️ Observação (ex: sem milho, sem ervilha...)">
-        <div class="area-controle">
-            <span class="preco">R$ 34,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('X-Tudo', 34, 'lanche', -1)">−</button>
-                <span class="qtd-texto" id="qtd-X-Tudo">0</span>
-                <button class="btn-qtd" onclick="alterarItem('X-Tudo', 34, 'lanche', 1)">+</button>
-            </div>
-        </div>
-    </div>
+<!-- LANCHES -->
 
-    <!-- PIZZAS -->
-    <div class="produto" data-categoria="pizza">
-        <h2>Pizza Calabresa 🌶️</h2>
-        <p>Molho, mussarela, calabresa e cebola — tamanho grande.</p>
-        <div class="area-controle">
-            <span class="preco">R$ 45,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Pizza Calabresa', 45, 'pizza', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Pizza-Calabresa">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Pizza Calabresa', 45, 'pizza', 1)">+</button>
-            </div>
-        </div>
-    </div>
+<div
+    class="produto"
+    data-categoria="lanche"
+>
 
-    <div class="produto" data-categoria="pizza">
-        <h2>Pizza Frango c/ Catupiry 🍗</h2>
-        <p>Molho, mussarela, frango desfiado e catupiry — tamanho grande.</p>
-        <div class="area-controle">
-            <span class="preco">R$ 48,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Pizza Frango', 48, 'pizza', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Pizza-Frango">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Pizza Frango', 48, 'pizza', 1)">+</button>
-            </div>
-        </div>
-    </div>
+    <h2>
+        X-Bacon 🥓
+    </h2>
 
-    <div class="produto" data-categoria="pizza">
-        <h2>Pizza Mussarela 🧀</h2>
-        <p>Molho e mussarela — tamanho grande.</p>
-        <div class="area-controle">
-            <span class="preco">R$ 40,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Pizza Mussarela', 40, 'pizza', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Pizza-Mussarela">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Pizza Mussarela', 40, 'pizza', 1)">+</button>
-            </div>
-        </div>
-    </div>
+    <p>
+        Pão, hambúrguer, queijo, bacon,
+        presunto, ovo e salada.
+    </p>
 
-    <div class="produto" data-categoria="pizza">
-        <h2>Pizza Portuguesa 🇵🇹</h2>
-        <p>Molho, mussarela, presunto, ovo, cebola, pimentão e azeitona — tamanho grande.</p>
-        <div class="area-controle">
-            <span class="preco">R$ 52,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Pizza Portuguesa', 52, 'pizza', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Pizza-Portuguesa">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Pizza Portuguesa', 52, 'pizza', 1)">+</button>
-            </div>
-        </div>
-    </div>
+    <input
+        type="text"
+        class="observacao"
+        id="obs-X-Bacon"
+        placeholder="✏️ Observação (ex: sem tomate, sem cebola...)"
+    >
 
-    <!-- PORÇÕES -->
-    <div class="produto" data-categoria="porcao">
-        <h2>Batata Frita 🍟</h2>
-        <p>Porção grande — crocante e sequinha.</p>
-        <div class="area-controle">
-            <span class="preco">R$ 20,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Batata Frita', 20, 'porcao', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Batata-Frita">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Batata Frita', 20, 'porcao', 1)">+</button>
-            </div>
-        </div>
-    </div>
+    <div class="area-controle">
 
-    <div class="produto" data-categoria="porcao">
-        <h2>Batata Frita c/ Queijo 🧀</h2>
-        <p>Porção grande com queijo derretido por cima.</p>
-        <div class="area-controle">
-            <span class="preco">R$ 26,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Batata c/ Queijo', 26, 'porcao', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Batata-c-Queijo">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Batata c/ Queijo', 26, 'porcao', 1)">+</button>
-            </div>
-        </div>
-    </div>
+        <span class="preco">
+            R$ 26,00
+        </span>
 
-    <div class="produto" data-categoria="porcao">
-        <h2>Porção de Tilápia 🐟</h2>
-        <p>Tilápia frita crocante — porção média.</p>
-        <div class="area-controle">
-            <span class="preco">R$ 38,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Tilápia Frita', 38, 'porcao', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Tilapia-Frita">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Tilápia Frita', 38, 'porcao', 1)">+</button>
-            </div>
-        </div>
-    </div>
+        <div class="contador">
 
-    <div class="produto" data-categoria="porcao">
-        <h2>Mandioca Frita 🌿</h2>
-        <p>Porção de mandioca sequinha e crocante.</p>
-        <div class="area-controle">
-            <span class="preco">R$ 18,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Mandioca Frita', 18, 'porcao', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Mandioca-Frita">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Mandioca Frita', 18, 'porcao', 1)">+</button>
-            </div>
-        </div>
-    </div>
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'X-Bacon',
+                    26,
+                    'lanche',
+                    -1
+                )"
+            >
+                −
+            </button>
 
-    <!-- BEBIDAS -->
-    <div class="produto" data-categoria="bebida">
-        <h2>Coca-Cola 🥤</h2>
-        <p>Refrigerante lata 350 ml — Gelada!</p>
-        <div class="area-controle">
-            <span class="preco">R$ 7,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Coca-Cola', 7, 'bebida', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Coca-Cola">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Coca-Cola', 7, 'bebida', 1)">+</button>
-            </div>
-        </div>
-    </div>
+            <span
+                class="qtd-texto"
+                id="qtd-X-Bacon"
+            >
+                0
+            </span>
 
-    <div class="produto" data-categoria="bebida">
-        <h2>Pepsi 🥤</h2>
-        <p>Refrigerante lata 350 ml — Gelada!</p>
-        <div class="area-controle">
-            <span class="preco">R$ 7,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Pepsi', 7, 'bebida', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Pepsi">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Pepsi', 7, 'bebida', 1)">+</button>
-            </div>
-        </div>
-    </div>
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'X-Bacon',
+                    26,
+                    'lanche',
+                    1
+                )"
+            >
+                +
+            </button>
 
-    <div class="produto" data-categoria="bebida">
-        <h2>Cerveja 🍺</h2>
-        <p>Garrafinha 355 ml — Gelada!</p>
-        <div class="area-controle">
-            <span class="preco">R$ 13,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Cerveja', 13, 'bebida', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Cerveja">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Cerveja', 13, 'bebida', 1)">+</button>
-            </div>
         </div>
-    </div>
 
-    <div class="produto" data-categoria="bebida">
-        <h2>Chopp 🍺</h2>
-        <p>Copo de chopp — 300 ml — Bem gelado!</p>
-        <div class="area-controle">
-            <span class="preco">R$ 15,00</span>
-            <div class="contador">
-                <button class="btn-qtd" onclick="alterarItem('Chopp', 15, 'bebida', -1)">−</button>
-                <span class="qtd-texto" id="qtd-Chopp">0</span>
-                <button class="btn-qtd" onclick="alterarItem('Chopp', 15, 'bebida', 1)">+</button>
-            </div>
-        </div>
     </div>
 
 </div>
 
-<!-- 🛒 BOTÃO DO CARRINHO — EMBAIXO DA TELA -->
-<button class="botao-carrinho" onclick="abrirCarrinho()">
-    <span>🛒 Ir para o Carrinho</span>
+
+<div
+    class="produto"
+    data-categoria="lanche"
+>
+
+    <h2>
+        X-Salada 🥗
+    </h2>
+
+    <p>
+        Pão, hambúrguer, queijo,
+        presunto, ovo e salada fresca.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-X-Salada"
+        placeholder="✏️ Observação (ex: sem alface, sem tomate...)"
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 23,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'X-Salada',
+                    23,
+                    'lanche',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-X-Salada"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'X-Salada',
+                    23,
+                    'lanche',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="lanche"
+>
+
+    <h2>
+        X-Calabresa 🌶️
+    </h2>
+
+    <p>
+        Pão, hambúrguer, queijo,
+        calabresa, presunto, ovo e salada.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-X-Calabresa"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 27,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'X-Calabresa',
+                    27,
+                    'lanche',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-X-Calabresa"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'X-Calabresa',
+                    27,
+                    'lanche',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="lanche"
+>
+
+    <h2>
+        X-Tudo 🏆
+    </h2>
+
+    <p>
+        Pão, 2x hambúrguer, queijo,
+        bacon, calabresa, presunto,
+        ovo, milho, ervilha e salada.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-X-Tudo"
+        placeholder="✏️ Observação (ex: sem milho, sem ervilha...)"
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 34,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'X-Tudo',
+                    34,
+                    'lanche',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-X-Tudo"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'X-Tudo',
+                    34,
+                    'lanche',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PIZZAS -->
+
+<div
+    class="produto"
+    data-categoria="pizza"
+>
+
+    <h2>
+        Pizza Calabresa 🌶️
+    </h2>
+
+    <p>
+        Molho, mussarela, calabresa
+        e cebola — tamanho grande.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Pizza-Calabresa"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 45,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pizza Calabresa',
+                    45,
+                    'pizza',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Pizza-Calabresa"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pizza Calabresa',
+                    45,
+                    'pizza',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="pizza"
+>
+
+    <h2>
+        Pizza Frango c/ Catupiry 🍗
+    </h2>
+
+    <p>
+        Molho, mussarela, frango
+        desfiado e catupiry —
+        tamanho grande.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Pizza-Frango"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 48,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pizza Frango',
+                    48,
+                    'pizza',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Pizza-Frango"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pizza Frango',
+                    48,
+                    'pizza',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="pizza"
+>
+
+    <h2>
+        Pizza Mussarela 🧀
+    </h2>
+
+    <p>
+        Molho e mussarela —
+        tamanho grande.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Pizza-Mussarela"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 40,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pizza Mussarela',
+                    40,
+                    'pizza',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Pizza-Mussarela"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pizza Mussarela',
+                    40,
+                    'pizza',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="pizza"
+>
+
+    <h2>
+        Pizza Portuguesa 🇵🇹
+    </h2>
+
+    <p>
+        Molho, mussarela, presunto,
+        ovo, cebola, pimentão e
+        azeitona — tamanho grande.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Pizza-Portuguesa"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 52,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pizza Portuguesa',
+                    52,
+                    'pizza',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Pizza-Portuguesa"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pizza Portuguesa',
+                    52,
+                    'pizza',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PORÇÕES -->
+
+<div
+    class="produto"
+    data-categoria="porcao"
+>
+
+    <h2>
+        Batata Frita 🍟
+    </h2>
+
+    <p>
+        Porção grande —
+        crocante e sequinha.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Batata-Frita"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 20,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Batata Frita',
+                    20,
+                    'porcao',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Batata-Frita"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Batata Frita',
+                    20,
+                    'porcao',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="porcao"
+>
+
+    <h2>
+        Batata Frita c/ Queijo 🧀
+    </h2>
+
+    <p>
+        Porção grande com
+        queijo derretido por cima.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Batata-c-Queijo"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 26,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Batata c/ Queijo',
+                    26,
+                    'porcao',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Batata-c-Queijo"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Batata c/ Queijo',
+                    26,
+                    'porcao',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="porcao"
+>
+
+    <h2>
+        Porção de Tilápia 🐟
+    </h2>
+
+    <p>
+        Tilápia frita crocante —
+        porção média.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Tilapia-Frita"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 38,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Tilápia Frita',
+                    38,
+                    'porcao',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Tilapia-Frita"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Tilápia Frita',
+                    38,
+                    'porcao',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="porcao"
+>
+
+    <h2>
+        Mandioca Frita 🌿
+    </h2>
+
+    <p>
+        Porção de mandioca
+        sequinha e crocante.
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Mandioca-Frita"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 18,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Mandioca Frita',
+                    18,
+                    'porcao',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Mandioca-Frita"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Mandioca Frita',
+                    18,
+                    'porcao',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- BEBIDAS -->
+
+<div
+    class="produto"
+    data-categoria="bebida"
+>
+
+    <h2>
+        Coca-Cola 🥤
+    </h2>
+
+    <p>
+        Refrigerante lata 350 ml —
+        Gelada!
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Coca-Cola"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 7,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Coca-Cola',
+                    7,
+                    'bebida',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Coca-Cola"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Coca-Cola',
+                    7,
+                    'bebida',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="bebida"
+>
+
+    <h2>
+        Pepsi 🥤
+    </h2>
+
+    <p>
+        Refrigerante lata 350 ml —
+        Gelada!
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Pepsi"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 7,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pepsi',
+                    7,
+                    'bebida',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Pepsi"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Pepsi',
+                    7,
+                    'bebida',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="bebida"
+>
+
+    <h2>
+        Cerveja 🍺
+    </h2>
+
+    <p>
+        Garrafinha 355 ml —
+        Gelada!
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Cerveja"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 13,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Cerveja',
+                    13,
+                    'bebida',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Cerveja"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Cerveja',
+                    13,
+                    'bebida',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="produto"
+    data-categoria="bebida"
+>
+
+    <h2>
+        Chopp 🍺
+    </h2>
+
+    <p>
+        Copo de chopp —
+        300 ml — Bem gelado!
+    </p>
+
+    <input
+        type="text"
+        class="observacao"
+        id="obs-Chopp"
+        placeholder="✏️ Observação..."
+    >
+
+    <div class="area-controle">
+
+        <span class="preco">
+            R$ 15,00
+        </span>
+
+        <div class="contador">
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Chopp',
+                    15,
+                    'bebida',
+                    -1
+                )"
+            >
+                −
+            </button>
+
+            <span
+                class="qtd-texto"
+                id="qtd-Chopp"
+            >
+                0
+            </span>
+
+            <button
+                class="btn-qtd"
+                onclick="alterarItem(
+                    'Chopp',
+                    15,
+                    'bebida',
+                    1
+                )"
+            >
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     BOTÃO CARRINHO
+========================= -->
+
+<button
+    class="botao-carrinho"
+    onclick="abrirCarrinho()"
+>
+
+    <span>
+        🛒 Ir para o Carrinho
+    </span>
+
     <div class="carrinho-info">
-        <span id="carrinhoQtd">0 itens</span>
-        <span class="carrinho-total">R$ <span id="carrinhoValor">0,00</span></span>
+
+        <span id="carrinhoQtd">
+            0 itens
+        </span>
+
+        <span class="carrinho-total">
+
+            R$
+            <span id="carrinhoValor">
+                0,00
+            </span>
+
+        </span>
+
     </div>
+
 </button>
 
-<!-- MODAL DO CARRINHO → FINALIZAR PEDIDO -->
-<div class="modal-fundo" id="modalFundo">
-    <div class="modal">
-        <h2>🛒 Carrinho de Compras</h2>
+
+<!-- =========================
+     MODAL
+========================= -->
+
+<div
+    class="modal-fundo"
+    id="modalFundo"
+>
+
+<div class="modal">
+
+    <h2>
+        🛒 Seu Pedido
+    </h2>
+
+
+    <div
+        class="aviso-pedido"
+        id="avisoPedido"
+    ></div>
+
+
+    <!-- IDENTIFICAÇÃO -->
+
+    <div class="identificacao">
+
+        <div class="identificacao-titulo">
+
+            🪑 Identificação da Mesa
+
+        </div>
+
 
         <div class="grupo-input">
-            <label for="mesa">🪑 Número da Mesa</label>
-            <input type="number" id="mesa" placeholder="Ex: 2" min="1">
+
+            <label for="mesa">
+
+                Número da Mesa
+
+            </label>
+
+            <input
+                type="number"
+                id="mesa"
+                placeholder="Ex: 2"
+                min="1"
+            >
+
         </div>
 
-        <div id="listaItens">
-            <p class="vazio">Nenhum item no carrinho ainda.</p>
+
+        <div class="grupo-input">
+
+            <label for="responsavel">
+
+                👤 Nome do responsável
+
+            </label>
+
+            <input
+                type="text"
+                id="responsavel"
+                placeholder="Ex: Marcelo"
+                maxlength="60"
+            >
+
         </div>
 
-        <div class="total-pedido">
-            Total: R$ <span id="totalModal">0,00</span>
+
+        <div
+            class="aviso-mesa"
+            id="avisoMesa"
+        >
         </div>
 
-        <div class="botoes-modal">
-            <button class="btn-voltar" onclick="fecharCarrinho()">← Voltar aos Produtos</button>
-            <button class="btn-finalizar" onclick="enviarWhatsApp()">
-                ✅ Finalizar Pedido — WhatsApp
-            </button>
-        </div>
     </div>
+
+
+    <!-- LISTA -->
+
+    <div id="listaItens">
+
+        <p class="vazio">
+
+            Nenhum item no carrinho ainda.
+
+        </p>
+
+    </div>
+
+
+    <!-- TOTAL -->
+
+    <div class="total-pedido">
+
+        Total:
+
+        R$
+
+        <span id="totalModal">
+            0,00
+        </span>
+
+    </div>
+
+
+    <!-- BOTÕES -->
+
+    <div class="botoes-modal">
+
+        <button
+            class="btn-voltar"
+            onclick="fecharCarrinho()"
+        >
+
+            ← Voltar aos Produtos
+
+        </button>
+
+
+        <button
+            class="btn-finalizar"
+            onclick="enviarPedido()"
+        >
+
+            ✅ Enviar Pedido
+
+        </button>
+
+    </div>
+
 </div>
 
+</div>
+
+
 <script>
-    // 📱 SEU NÚMERO DE WHATSAPP
-    const TELEFONE_WHATSAPP = "5549984121585";
 
-    let pedido = [];
-    let totalGeral = 0;
+/* =========================
+   CONFIGURAÇÃO
+========================= */
 
-    // ➕➖ ALTERAR QUANTIDADE E PEGAR OBSERVAÇÃO
-    function alterarItem(nome, preco, categoria, delta) {
-        // Pegar a observação do campo de texto
-        const idObs = "obs-" + nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
-        const obsElement = document.getElementById(idObs);
-        const observacao = obsElement ? obsElement.value.trim() : "";
+const TELEFONE_WHATSAPP =
+    "5549984121585";
 
-        const itemExistente = pedido.find(i => i.nome === nome);
+const CHAVE_PEDIDOS =
+    "pedidosCardapio";
 
-        if (itemExistente) {
-            itemExistente.quantidade += delta;
-            totalGeral += preco * delta;
-            // Atualizar a observação sempre que mudar a quantidade
-            itemExistente.observacao = observacao;
+const CHAVE_IDENTIFICACAO =
+    "identificacaoMesa";
 
-            if (itemExistente.quantidade <= 0) {
-                pedido = pedido.filter(i => i.nome !== nome);
-                itemExistente.quantidade = 0;
+
+let pedido = [];
+
+let totalGeral = 0;
+
+
+/* =========================
+   ID
+========================= */
+
+function gerarIdPedido(){
+
+    return (
+        Date.now().toString() +
+        Math.random()
+            .toString(36)
+            .substring(2,8)
+    );
+
+}
+
+
+/* =========================
+   NÚMERO DO PEDIDO
+========================= */
+
+function obterNumeroPedido(){
+
+    const pedidosSalvos =
+        JSON.parse(
+            localStorage.getItem(
+                CHAVE_PEDIDOS
+            ) || "[]"
+        );
+
+
+    let maiorNumero = 0;
+
+
+    pedidosSalvos.forEach(
+        p => {
+
+            if(
+                Number(p.numero) >
+                maiorNumero
+            ){
+
+                maiorNumero =
+                    Number(p.numero);
+
             }
-        } else if (delta > 0) {
-            pedido.push({ 
-                nome, 
-                preco, 
-                quantidade: 1, 
-                categoria, 
-                observacao: observacao 
-            });
-            totalGeral += preco;
+
         }
+    );
 
-        // Atualizar o número mostrado no produto
-        const idQtd = "qtd-" + nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
-        const elQtd = document.getElementById(idQtd);
-        if (elQtd) {
-            elQtd.innerText = itemExistente ? Math.max(0, itemExistente.quantidade) : 1;
-        }
 
-        atualizarBotaoCarrinho();
-    }
+    return maiorNumero + 1;
 
-    // Atualizar o botão do carrinho embaixo
-    function atualizarBotaoCarrinho() {
-        const qtdTotal = pedido.reduce((soma, item) => soma + item.quantidade, 0);
-        document.getElementById("carrinhoQtd").innerText = qtdTotal + " itens";
-        document.getElementById("carrinhoValor").innerText = totalGeral.toFixed(2).replace(".", ",");
-    }
+}
 
-    // Abrir o carrinho — ATUALIZA TODAS AS OBSERVAÇÕES ANTES DE MOSTRAR!
-    function abrirCarrinho() {
-        if (pedido.length === 0) {
-            alert("⚠️ Adicione pelo menos um produto primeiro!");
-            return;
-        }
-        // ✅ CORREÇÃO IMPORTANTE: Atualiza TODAS as observações antes de abrir o carrinho!
-        pedido.forEach(item => {
-            const idObs = "obs-" + item.nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
-            const obsElement = document.getElementById(idObs);
-            if (obsElement) {
-                item.observacao = obsElement.value.trim();
+
+/* =========================
+   DATA
+========================= */
+
+function obterData(){
+
+    return new Date()
+        .toLocaleDateString(
+            "pt-BR"
+        );
+
+}
+
+
+function obterHorario(){
+
+    return new Date()
+        .toLocaleTimeString(
+            "pt-BR",
+            {
+                hour:"2-digit",
+                minute:"2-digit"
             }
+        );
+
+}
+
+
+/* =========================
+   DINHEIRO
+========================= */
+
+function formatarDinheiro(valor){
+
+    return Number(valor || 0)
+        .toFixed(2)
+        .replace(".",",");
+
+}
+
+
+/* =========================
+   ID PRODUTO
+========================= */
+
+function criarIdProduto(nome){
+
+    return nome
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+        .replace(
+            /\s+/g,
+            "-"
+        )
+        .replace(
+            /\//g,
+            "-"
+        )
+        .replace(
+            /[^a-zA-Z0-9-]/g,
+            ""
+        );
+
+}
+
+
+/* =========================
+   ALTERAR ITEM
+========================= */
+
+function alterarItem(
+    nome,
+    preco,
+    categoria,
+    delta
+){
+
+    const itemExistente =
+        pedido.find(
+            item =>
+                item.nome === nome
+        );
+
+
+    const idProduto =
+        criarIdProduto(nome);
+
+
+    const obsElement =
+        document.getElementById(
+            "obs-" + idProduto
+        );
+
+
+    const observacao =
+        obsElement
+        ?
+        obsElement.value.trim()
+        :
+        "";
+
+
+    if(itemExistente){
+
+        itemExistente.quantidade +=
+            delta;
+
+        itemExistente.observacao =
+            observacao;
+
+
+        totalGeral +=
+            preco * delta;
+
+
+        if(
+            itemExistente.quantidade <= 0
+        ){
+
+            pedido =
+                pedido.filter(
+                    item =>
+                        item.nome !== nome
+                );
+
+            itemExistente.quantidade =
+                0;
+
+        }
+
+    }else if(delta > 0){
+
+        pedido.push({
+
+            nome:
+                nome,
+
+            preco:
+                preco,
+
+            quantidade:
+                1,
+
+            categoria:
+                categoria,
+
+            observacao:
+                observacao
+
         });
 
-        document.getElementById("modalFundo").style.display = "flex";
-        atualizarListaCarrinho();
+
+        totalGeral +=
+            preco;
+
     }
 
-    // Fechar o carrinho
-    function fecharCarrinho() {
-        document.getElementById("modalFundo").style.display = "none";
+
+    const elementoQuantidade =
+        document.getElementById(
+            "qtd-" + idProduto
+        );
+
+
+    const itemAtual =
+        pedido.find(
+            item =>
+                item.nome === nome
+        );
+
+
+    if(elementoQuantidade){
+
+        elementoQuantidade.innerText =
+            itemAtual
+            ?
+            itemAtual.quantidade
+            :
+            0;
+
     }
 
-    // Atualizar a lista dentro do carrinho
-    function atualizarListaCarrinho() {
-        const lista = document.getElementById("listaItens");
-        lista.innerHTML = "";
 
-        pedido.forEach(item => {
-            const subtotal = (item.preco * item.quantidade).toFixed(2).replace(".", ",");
-            let linha = `
+    atualizarBotaoCarrinho();
+
+}
+
+
+/* =========================
+   OBSERVAÇÕES
+========================= */
+
+function atualizarObservacoes(){
+
+    pedido.forEach(
+        item => {
+
+            const id =
+                "obs-" +
+                criarIdProduto(
+                    item.nome
+                );
+
+
+            const campo =
+                document.getElementById(
+                    id
+                );
+
+
+            if(campo){
+
+                item.observacao =
+                    campo.value.trim();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================
+   CARRINHO
+========================= */
+
+function atualizarBotaoCarrinho(){
+
+    const quantidade =
+        pedido.reduce(
+            (soma,item) =>
+                soma + item.quantidade,
+            0
+        );
+
+
+    document.getElementById(
+        "carrinhoQtd"
+    ).innerText =
+        quantidade +
+        (
+            quantidade === 1
+            ?
+            " item"
+            :
+            " itens"
+        );
+
+
+    document.getElementById(
+        "carrinhoValor"
+    ).innerText =
+        formatarDinheiro(
+            totalGeral
+        );
+
+}
+
+
+/* =========================
+   IDENTIFICAÇÃO
+========================= */
+
+function salvarIdentificacao(){
+
+    const mesa =
+        document.getElementById(
+            "mesa"
+        ).value.trim();
+
+
+    const responsavel =
+        document.getElementById(
+            "responsavel"
+        ).value.trim();
+
+
+    if(
+        mesa &&
+        responsavel
+    ){
+
+        localStorage.setItem(
+
+            CHAVE_IDENTIFICACAO,
+
+            JSON.stringify({
+
+                mesa:
+                    mesa,
+
+                responsavel:
+                    responsavel
+
+            })
+
+        );
+
+    }
+
+}
+
+
+function carregarIdentificacao(){
+
+    const dados =
+        JSON.parse(
+            localStorage.getItem(
+                CHAVE_IDENTIFICACAO
+            ) || "null"
+        );
+
+
+    if(!dados)
+        return;
+
+
+    document.getElementById(
+        "mesa"
+    ).value =
+        dados.mesa || "";
+
+
+    document.getElementById(
+        "responsavel"
+    ).value =
+        dados.responsavel || "";
+
+
+}
+
+
+/* =========================
+   ABRIR CARRINHO
+========================= */
+
+function abrirCarrinho(){
+
+    if(
+        pedido.length === 0
+    ){
+
+        alert(
+            "⚠️ Adicione pelo menos um produto primeiro!"
+        );
+
+        return;
+
+    }
+
+
+    atualizarObservacoes();
+
+    atualizarListaCarrinho();
+
+    verificarMesaAtual();
+
+
+    document.getElementById(
+        "modalFundo"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* =========================
+   VERIFICAR MESA
+========================= */
+
+function verificarMesaAtual(){
+
+    const mesa =
+        document.getElementById(
+            "mesa"
+        ).value.trim();
+
+
+    const aviso =
+        document.getElementById(
+            "avisoMesa"
+        );
+
+
+    if(!mesa){
+
+        aviso.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    const pedidos =
+        JSON.parse(
+            localStorage.getItem(
+                CHAVE_PEDIDOS
+            ) || "[]"
+        );
+
+
+    const pedidosAbertos =
+        pedidos.filter(
+            pedido =>
+                String(pedido.mesa) ===
+                String(mesa) &&
+                pedido.status !==
+                "finalizado"
+        );
+
+
+    if(
+        pedidosAbertos.length > 0
+    ){
+
+        const totalMesa =
+            pedidosAbertos.reduce(
+                (
+                    total,
+                    pedido
+                ) =>
+                    total +
+                    Number(
+                        pedido.total || 0
+                    ),
+                0
+            );
+
+
+        aviso.innerHTML = `
+
+            📋 Esta mesa já possui
+            <strong>
+                ${pedidosAbertos.length}
+                pedido(s) aberto(s)
+            </strong>.
+
+            <br>
+
+            Total atual da mesa:
+            <strong>
+                R$ ${formatarDinheiro(totalMesa)}
+            </strong>
+
+            <br><br>
+
+            Este novo pedido será
+            acrescentado à mesma comanda.
+
+        `;
+
+
+        aviso.style.display =
+            "block";
+
+    }else{
+
+        aviso.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================
+   FECHAR CARRINHO
+========================= */
+
+function fecharCarrinho(){
+
+    document.getElementById(
+        "modalFundo"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =========================
+   LISTA
+========================= */
+
+function atualizarListaCarrinho(){
+
+    const lista =
+        document.getElementById(
+            "listaItens"
+        );
+
+
+    lista.innerHTML = "";
+
+
+    pedido.forEach(
+        item => {
+
+            const subtotal =
+                item.preco *
+                item.quantidade;
+
+
+            let html = `
+
                 <div class="item-pedido">
-                    <div class="item-linha">
-                        <span class="item-nome">${item.quantidade}x ${item.nome}</span>
-                        <span class="item-subtotal">R$ ${subtotal}</span>
-                    </div>
-            `;
-            // ✅ A OBSERVAÇÃO APARECE AQUI TAMBÉM!
-            if (item.observacao) {
-                linha += `<span class="item-obs">📝 Obs: ${item.observacao}</span>`;
-            }
-            linha += `</div>`;
-            lista.innerHTML += linha;
-        });
 
-        document.getElementById("totalModal").innerText = totalGeral.toFixed(2).replace(".", ",");
+                    <div class="item-linha">
+
+                        <span class="item-nome">
+
+                            ${item.quantidade}x
+                            ${item.nome}
+
+                        </span>
+
+                        <span class="item-subtotal">
+
+                            R$
+                            ${
+                                formatarDinheiro(
+                                    subtotal
+                                )
+                            }
+
+                        </span>
+
+                    </div>
+
+            `;
+
+
+            if(item.observacao){
+
+                html += `
+
+                    <span class="item-obs">
+
+                        📝 Obs:
+                        ${item.observacao}
+
+                    </span>
+
+                `;
+
+            }
+
+
+            html += `
+                </div>
+            `;
+
+
+            lista.innerHTML +=
+                html;
+
+        }
+    );
+
+
+    document.getElementById(
+        "totalModal"
+    ).innerText =
+        formatarDinheiro(
+            totalGeral
+        );
+
+}
+
+
+/* =========================
+   SALVAR PEDIDO
+========================= */
+
+function salvarPedidoNoSistema(
+    mesa,
+    responsavel
+){
+
+    atualizarObservacoes();
+
+
+    const pedidosSalvos =
+        JSON.parse(
+            localStorage.getItem(
+                CHAVE_PEDIDOS
+            ) || "[]"
+        );
+
+
+    const numero =
+        obterNumeroPedido();
+
+
+    const novoPedido = {
+
+        id:
+            gerarIdPedido(),
+
+        numero:
+            numero,
+
+        mesa:
+            mesa,
+
+        responsavel:
+            responsavel,
+
+        nomeCliente:
+            responsavel,
+
+        horario:
+            obterHorario(),
+
+        data:
+            obterData(),
+
+        status:
+            "recebido",
+
+        itens:
+
+            pedido.map(
+                item => ({
+
+                    nome:
+                        item.nome,
+
+                    preco:
+                        Number(
+                            item.preco
+                        ),
+
+                    quantidade:
+                        Number(
+                            item.quantidade
+                        ),
+
+                    categoria:
+                        item.categoria,
+
+                    observacao:
+                        item.observacao ||
+                        ""
+
+                })
+            ),
+
+        total:
+            Number(
+                totalGeral.toFixed(2)
+            ),
+
+        dataCriacao:
+            new Date().toISOString()
+
+    };
+
+
+    pedidosSalvos.push(
+        novoPedido
+    );
+
+
+    localStorage.setItem(
+
+        CHAVE_PEDIDOS,
+
+        JSON.stringify(
+            pedidosSalvos
+        )
+
+    );
+
+
+    return novoPedido;
+
+}
+
+
+/* =========================
+   WHATSAPP
+========================= */
+
+function enviarWhatsApp(
+    pedidoSistema
+){
+
+    let mensagem =
+
+        `🍔 *NOVO PEDIDO — Sabor da Casa*\n\n`;
+
+
+    mensagem +=
+
+        `🆔 *Pedido:* #${
+            String(
+                pedidoSistema.numero
+            ).padStart(3,"0")
+        }\n`;
+
+
+    mensagem +=
+
+        `🪑 *Mesa:* ${
+            pedidoSistema.mesa
+        }\n`;
+
+
+    mensagem +=
+
+        `👤 *Responsável:* ${
+            pedidoSistema.responsavel
+        }\n`;
+
+
+    mensagem +=
+
+        `🕐 *Horário:* ${
+            pedidoSistema.horario
+        }\n`;
+
+
+    mensagem +=
+
+        `━━━━━━━━━━━━━━━━━━━\n`;
+
+
+    pedidoSistema.itens.forEach(
+        item => {
+
+            const subtotal =
+                item.preco *
+                item.quantidade;
+
+
+            mensagem +=
+
+                `${item.quantidade}x ${
+                    item.nome
+                } — R$ ${
+                    formatarDinheiro(
+                        subtotal
+                    )
+                }\n`;
+
+
+            if(item.observacao){
+
+                mensagem +=
+
+                    `   📝 *OBS:* ${
+                        item.observacao
+                    }\n`;
+
+            }
+
+        }
+    );
+
+
+    mensagem +=
+
+        `━━━━━━━━━━━━━━━━━━━\n`;
+
+
+    mensagem +=
+
+        `💰 *TOTAL: R$ ${
+            formatarDinheiro(
+                pedidoSistema.total
+            )
+        }*`;
+
+
+    const url =
+
+        `https://wa.me/${
+            TELEFONE_WHATSAPP
+        }?text=${
+            encodeURIComponent(
+                mensagem
+            )
+        }`;
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+/* =========================
+   ENVIAR PEDIDO
+========================= */
+
+function enviarPedido(){
+
+    const mesa =
+        document.getElementById(
+            "mesa"
+        ).value.trim();
+
+
+    const responsavel =
+        document.getElementById(
+            "responsavel"
+        ).value.trim();
+
+
+    if(!mesa){
+
+        alert(
+            "⚠️ Digite o número da mesa!"
+        );
+
+        return;
+
     }
 
-    // 📲 ENVIAR PARA O WHATSAPP — COM OBSERVAÇÃO ATUALIZADA!
-    function enviarWhatsApp() {
-        const mesa = document.getElementById("mesa").value;
 
-        if (!mesa) {
-            alert("⚠️ Digite o número da mesa!");
-            return;
+    if(!responsavel){
+
+        alert(
+            "⚠️ Digite o nome do responsável pela mesa!"
+        );
+
+        document.getElementById(
+            "responsavel"
+        ).focus();
+
+        return;
+
+    }
+
+
+    if(
+        pedido.length === 0
+    ){
+
+        alert(
+            "⚠️ O carrinho está vazio!"
+        );
+
+        return;
+
+    }
+
+
+    atualizarObservacoes();
+
+
+    salvarIdentificacao();
+
+
+    const pedidoSistema =
+        salvarPedidoNoSistema(
+            mesa,
+            responsavel
+        );
+
+
+    const aviso =
+        document.getElementById(
+            "avisoPedido"
+        );
+
+
+    aviso.innerHTML = `
+
+        ✅ Pedido #${
+            String(
+                pedidoSistema.numero
+            ).padStart(3,"0")
+        }
+        enviado com sucesso!
+
+        <br>
+
+        <small>
+
+            Mesa ${mesa}
+            —
+            ${responsavel}
+
+        </small>
+
+    `;
+
+
+    aviso.style.display =
+        "block";
+
+
+    /* WhatsApp */
+
+    enviarWhatsApp(
+        pedidoSistema
+    );
+
+
+    /*
+       Limpa somente o pedido atual.
+       A identificação da mesa continua
+       salva para facilitar o próximo pedido.
+    */
+
+    setTimeout(
+        () => {
+
+            pedido = [];
+
+            totalGeral = 0;
+
+
+            document
+                .querySelectorAll(
+                    ".qtd-texto"
+                )
+                .forEach(
+                    el => {
+
+                        el.innerText =
+                            "0";
+
+                    }
+                );
+
+
+            document
+                .querySelectorAll(
+                    ".observacao"
+                )
+                .forEach(
+                    el => {
+
+                        el.value =
+                            "";
+
+                    }
+                );
+
+
+            atualizarBotaoCarrinho();
+
+
+            fecharCarrinho();
+
+
+            aviso.style.display =
+                "none";
+
+
+        },
+        1000
+    );
+
+}
+
+
+/* =========================
+   FILTRO
+========================= */
+
+function filtrar(
+    categoria,
+    botao
+){
+
+    document
+        .querySelectorAll(
+            ".categoria"
+        )
+        .forEach(
+            btn =>
+                btn.classList.remove(
+                    "ativa"
+                )
+        );
+
+
+    botao.classList.add(
+        "ativa"
+    );
+
+
+    document
+        .querySelectorAll(
+            ".produto"
+        )
+        .forEach(
+            produto => {
+
+                if(
+
+                    categoria ===
+                    "todos"
+
+                    ||
+
+                    produto.dataset
+                        .categoria ===
+                    categoria
+
+                ){
+
+                    produto.style.display =
+                        "block";
+
+                }else{
+
+                    produto.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================
+   MESA DIGITADA
+========================= */
+
+document.getElementById(
+    "mesa"
+).addEventListener(
+    "input",
+    verificarMesaAtual
+);
+
+
+/* =========================
+   FECHAR FORA
+========================= */
+
+document.getElementById(
+    "modalFundo"
+).addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target === this
+        ){
+
+            fecharCarrinho();
+
         }
 
-        // ✅ CORREÇÃO FINAL: PEGA A OBSERVAÇÃO NA HORA DE ENVIAR!
-        pedido.forEach(item => {
-            const idObs = "obs-" + item.nome.replace(/\s+/g, '-').replace(/ç/g, 'c').replace(/á/g, 'a');
-            const obsElement = document.getElementById(idObs);
-            if (obsElement) {
-                item.observacao = obsElement.value.trim();
-            }
-        });
-
-        let mensagem = `🍔 *NOVO PEDIDO — Sabor da Casa*\n\n`;
-        mensagem += `🪑 *Mesa:* ${mesa}\n`;
-        mensagem += `━━━━━━━━━━━━━━━━━━━\n`;
-
-        pedido.forEach(item => {
-            const subtotal = (item.preco * item.quantidade).toFixed(2).replace(".", ",");
-            mensagem += `${item.quantidade}x ${item.nome} — R$ ${subtotal}\n`;
-            // ✅ A OBSERVAÇÃO VAI NO WHATSAPP!
-            if (item.observacao) {
-                mensagem += `   📝 Obs: ${item.observacao}\n`;
-            }
-        });
-
-        mensagem += `━━━━━━━━━━━━━━━━━━━\n`;
-        mensagem += `💰 *TOTAL: R$ ${totalGeral.toFixed(2).replace(".", ",")}*\n\n`;
-        mensagem += `✅ Pedido finalizado! Obrigado!`;
-
-        const url = `https://wa.me/${TELEFONE_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
-        window.open(url, "_blank");
     }
+);
 
-    // Filtrar categorias
-    function filtrar(categoria) {
-        document.querySelectorAll(".categoria").forEach(btn => btn.classList.remove("ativa"));
-        event.target.classList.add("ativa");
 
-        document.querySelectorAll(".produto").forEach(prod => {
-            if (categoria === "todos" || prod.dataset.categoria === categoria) {
-                prod.style.display = "block";
-            } else {
-                prod.style.display = "none";
-            }
-        });
-    }
+/* =========================
+   INICIAR
+========================= */
+
+carregarIdentificacao();
+
+atualizarBotaoCarrinho();
+
 </script>
 
 </body>
