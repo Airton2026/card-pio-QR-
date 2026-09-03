@@ -1,16 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sabor da Casa — Cardápio</title>
 
-<style>
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+    authDomain: "sistema-digital-f9df1.firebaseapp.com",
+    projectId: "sistema-digital-f9df1",
+    storageBucket: "sistema-digital-f9df1.firebasestorage.app",
+    messagingSenderId: "783545984661",
+    appId: "1:783545984661:web:5d0945907ad9db3990dd9c"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  window.db = getFirestore(app);
+  window.addDoc = addDoc;
+  window.collection = collection;
+  window.serverTimestamp = serverTimestamp;
+</script>
+
+<style>
 *{
     box-sizing:border-box;
     margin:0;
@@ -25,11 +41,7 @@ body{
 }
 
 header{
-    background:linear-gradient(
-        135deg,
-        #1a1a1a 0%,
-        #333 100%
-    );
+    background:linear-gradient(135deg, #1a1a1a 0%, #333 100%);
     color:white;
     text-align:center;
     padding:25px 15px;
@@ -39,15 +51,8 @@ header{
     z-index:50;
 }
 
-header h1{
-    font-size:26px;
-}
-
-header p{
-    margin-top:5px;
-    font-size:14px;
-    opacity:.8;
-}
+header h1{font-size:26px;}
+header p{margin-top:5px; font-size:14px; opacity:.8;}
 
 .categorias{
     display:flex;
@@ -72,16 +77,9 @@ header p{
     font-weight:500;
 }
 
-.categoria.ativa{
-    background:#2563eb;
-    color:white;
-}
+.categoria.ativa{background:#2563eb; color:white;}
 
-.produtos{
-    padding:15px;
-    max-width:720px;
-    margin:0 auto;
-}
+.produtos{padding:15px; max-width:720px; margin:0 auto;}
 
 .produto{
     background:white;
@@ -91,16 +89,8 @@ header p{
     box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.produto h2{
-    font-size:18px;
-    margin-bottom:5px;
-}
-
-.produto p{
-    color:#6c757d;
-    margin-bottom:8px;
-    font-size:14px;
-}
+.produto h2{font-size:18px; margin-bottom:5px;}
+.produto p{color:#6c757d; margin-bottom:8px; font-size:14px;}
 
 .observacao{
     width:100%;
@@ -111,16 +101,9 @@ header p{
     margin-bottom:10px;
     outline:none;
 }
+.observacao:focus{border-color:#2563eb;}
 
-.observacao:focus{
-    border-color:#2563eb;
-}
-
-.preco{
-    font-size:19px;
-    font-weight:700;
-    color:#16a34a;
-}
+.preco{font-size:19px; font-weight:700; color:#16a34a;}
 
 .area-controle{
     display:flex;
@@ -176,20 +159,10 @@ header p{
     border:none;
 }
 
-.botao-carrinho:hover{
-    background:#15803d;
-}
+.botao-carrinho:hover{background:#15803d;}
 
-.carrinho-info{
-    display:flex;
-    flex-direction:column;
-    text-align:right;
-}
-
-.carrinho-total{
-    font-size:18px;
-    font-weight:800;
-}
+.carrinho-info{display:flex; flex-direction:column; text-align:right;}
+.carrinho-total{font-size:18px; font-weight:800;}
 
 .modal-fundo{
     display:none;
@@ -212,11 +185,7 @@ header p{
     overflow-y:auto;
 }
 
-.modal h2{
-    text-align:center;
-    margin-bottom:20px;
-    font-size:22px;
-}
+.modal h2{text-align:center; margin-bottom:20px; font-size:22px;}
 
 .identificacao{
     background:#f3f4f6;
@@ -225,26 +194,11 @@ header p{
     margin-bottom:18px;
 }
 
-.identificacao-titulo{
-    font-weight:bold;
-    margin-bottom:12px;
-}
+.identificacao-titulo{font-weight:bold; margin-bottom:12px;}
 
-.grupo-input{
-    margin-bottom:14px;
-}
-
-.grupo-input:last-child{
-    margin-bottom:0;
-}
-
-.grupo-input label{
-    display:block;
-    margin-bottom:6px;
-    font-weight:600;
-    font-size:14px;
-}
-
+.grupo-input{margin-bottom:14px;}
+.grupo-input:last-child{margin-bottom:0;}
+.grupo-input label{display:block; margin-bottom:6px; font-weight:600; font-size:14px;}
 .grupo-input input{
     width:100%;
     padding:13px;
@@ -252,11 +206,7 @@ header p{
     border-radius:10px;
     font-size:16px;
 }
-
-.grupo-input input:focus{
-    outline:none;
-    border-color:#2563eb;
-}
+.grupo-input input:focus{outline:none; border-color:#2563eb;}
 
 .item-pedido{
     display:flex;
@@ -266,30 +216,10 @@ header p{
     gap:4px;
 }
 
-.item-linha{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-}
-
-.item-nome{
-    font-weight:600;
-    font-size:15px;
-}
-
-.item-obs{
-    font-size:13px;
-    color:#d97706;
-    background:#fff7ed;
-    padding:6px 8px;
-    border-radius:6px;
-}
-
-.item-subtotal{
-    font-weight:700;
-    color:#16a34a;
-}
+.item-linha{display:flex; justify-content:space-between; align-items:center; gap:10px;}
+.item-nome{font-weight:600; font-size:15px;}
+.item-obs{font-size:13px; color:#d97706; background:#fff7ed; padding:6px 8px; border-radius:6px;}
+.item-subtotal{font-weight:700; color:#16a34a;}
 
 .total-pedido{
     font-size:24px;
@@ -301,11 +231,7 @@ header p{
     border-top:2px dashed #e5e7eb;
 }
 
-.botoes-modal{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
+.botoes-modal{display:flex; flex-direction:column; gap:12px;}
 
 .btn-voltar{
     background:#f3f4f6;
@@ -328,10 +254,7 @@ header p{
     border:none;
     cursor:pointer;
 }
-
-.btn-finalizar:hover{
-    background:#1ebe5d;
-}
+.btn-finalizar:hover{background:#1ebe5d;}
 
 .aviso-pedido{
     display:none;
@@ -356,2373 +279,475 @@ header p{
     font-size:13px;
 }
 
-.vazio{
-    text-align:center;
-    padding:30px;
-    color:#6c757d;
-    font-size:16px;
-}
-
+.vazio{text-align:center; padding:30px; color:#6c757d; font-size:16px;}
 </style>
-
 </head>
 
 <body>
-
 <header>
-
     <h1>🍔 Sabor da Casa</h1>
-
-    <p>
-        Escolha seus pratos e monte seu pedido
-    </p>
-
+    <p>Escolha seus pratos e monte seu pedido</p>
 </header>
 
 <div class="categorias">
-
-    <button
-        class="categoria ativa"
-        onclick="filtrar('todos',this)"
-    >
-        🍽️ Todos
-    </button>
-
-    <button
-        class="categoria"
-        onclick="filtrar('lanche',this)"
-    >
-        🍔 Lanches
-    </button>
-
-    <button
-        class="categoria"
-        onclick="filtrar('pizza',this)"
-    >
-        🍕 Pizzas
-    </button>
-
-    <button
-        class="categoria"
-        onclick="filtrar('porcao',this)"
-    >
-        🍟 Porções
-    </button>
-
-    <button
-        class="categoria"
-        onclick="filtrar('bebida',this)"
-    >
-        🥤 Bebidas
-    </button>
-
+    <button class="categoria ativa" onclick="filtrar('todos',this)">🍽️ Todos</button>
+    <button class="categoria" onclick="filtrar('lanche',this)">🍔 Lanches</button>
+    <button class="categoria" onclick="filtrar('pizza',this)">🍕 Pizzas</button>
+    <button class="categoria" onclick="filtrar('porcao',this)">🍟 Porções</button>
+    <button class="categoria" onclick="filtrar('bebida',this)">🥤 Bebidas</button>
 </div>
 
-<div
-    class="produtos"
-    id="areaProdutos"
->
-
+<div class="produtos" id="areaProdutos">
 <!-- LANCHES -->
-
 <div class="produto" data-categoria="lanche">
-
     <h2>X-Bacon 🥓</h2>
-
-    <p>
-        Pão, hambúrguer, queijo, bacon,
-        presunto, ovo e salada.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-X-Bacon"
-        placeholder="✏️ Observação (ex: sem tomate, sem cebola...)"
-    >
-
+    <p>Pão, hambúrguer, queijo, bacon, presunto, ovo e salada.</p>
+    <input type="text" class="observacao" id="obs-X-Bacon" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 26,00
-        </span>
-
+        <span class="preco">R$ 26,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('X-Bacon',26,'lanche',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-X-Bacon"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('X-Bacon',26,'lanche',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('X-Bacon',26,'lanche',-1)">−</button>
+            <span class="qtd-texto" id="qtd-X-Bacon">0</span>
+            <button class="btn-qtd" onclick="alterarItem('X-Bacon',26,'lanche',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="lanche">
-
     <h2>X-Salada 🥗</h2>
-
-    <p>
-        Pão, hambúrguer, queijo,
-        presunto, ovo e salada fresca.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-X-Salada"
-        placeholder="✏️ Observação (ex: sem alface, sem tomate...)"
-    >
-
+    <p>Pão, hambúrguer, queijo, presunto, ovo e salada fresca.</p>
+    <input type="text" class="observacao" id="obs-X-Salada" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 23,00
-        </span>
-
+        <span class="preco">R$ 23,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('X-Salada',23,'lanche',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-X-Salada"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('X-Salada',23,'lanche',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('X-Salada',23,'lanche',-1)">−</button>
+            <span class="qtd-texto" id="qtd-X-Salada">0</span>
+            <button class="btn-qtd" onclick="alterarItem('X-Salada',23,'lanche',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="lanche">
-
     <h2>X-Calabresa 🌶️</h2>
-
-    <p>
-        Pão, hambúrguer, queijo,
-        calabresa, presunto, ovo e salada.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-X-Calabresa"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Pão, hambúrguer, queijo, calabresa, presunto, ovo e salada.</p>
+    <input type="text" class="observacao" id="obs-X-Calabresa" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 27,00
-        </span>
-
+        <span class="preco">R$ 27,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('X-Calabresa',27,'lanche',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-X-Calabresa"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('X-Calabresa',27,'lanche',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('X-Calabresa',27,'lanche',-1)">−</button>
+            <span class="qtd-texto" id="qtd-X-Calabresa">0</span>
+            <button class="btn-qtd" onclick="alterarItem('X-Calabresa',27,'lanche',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="lanche">
-
     <h2>X-Tudo 🏆</h2>
-
-    <p>
-        Pão, 2x hambúrguer, queijo,
-        bacon, calabresa, presunto,
-        ovo, milho, ervilha e salada.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-X-Tudo"
-        placeholder="✏️ Observação (ex: sem milho, sem ervilha...)"
-    >
-
+    <p>Pão, 2x hambúrguer, queijo, bacon, calabresa, presunto, ovo, milho, ervilha e salada.</p>
+    <input type="text" class="observacao" id="obs-X-Tudo" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 34,00
-        </span>
-
+        <span class="preco">R$ 34,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('X-Tudo',34,'lanche',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-X-Tudo"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('X-Tudo',34,'lanche',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('X-Tudo',34,'lanche',-1)">−</button>
+            <span class="qtd-texto" id="qtd-X-Tudo">0</span>
+            <button class="btn-qtd" onclick="alterarItem('X-Tudo',34,'lanche',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <!-- PIZZAS -->
-
 <div class="produto" data-categoria="pizza">
-
     <h2>Pizza Calabresa 🌶️</h2>
-
-    <p>
-        Molho, mussarela, calabresa
-        e cebola — tamanho grande.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Pizza-Calabresa"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Molho, mussarela, calabresa e cebola — tamanho grande.</p>
+    <input type="text" class="observacao" id="obs-Pizza-Calabresa" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 45,00
-        </span>
-
+        <span class="preco">R$ 45,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pizza Calabresa',45,'pizza',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Pizza-Calabresa"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pizza Calabresa',45,'pizza',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Pizza Calabresa',45,'pizza',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Pizza-Calabresa">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Pizza Calabresa',45,'pizza',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="pizza">
-
     <h2>Pizza Frango c/ Catupiry 🍗</h2>
-
-    <p>
-        Molho, mussarela, frango
-        desfiado e catupiry —
-        tamanho grande.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Pizza-Frango"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Molho, mussarela, frango desfiado e catupiry — tamanho grande.</p>
+    <input type="text" class="observacao" id="obs-Pizza-Frango" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 48,00
-        </span>
-
+        <span class="preco">R$ 48,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pizza Frango',48,'pizza',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Pizza-Frango"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pizza Frango',48,'pizza',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Pizza Frango',48,'pizza',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Pizza-Frango">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Pizza Frango',48,'pizza',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="pizza">
-
     <h2>Pizza Mussarela 🧀</h2>
-
-    <p>
-        Molho e mussarela —
-        tamanho grande.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Pizza-Mussarela"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Molho e mussarela — tamanho grande.</p>
+    <input type="text" class="observacao" id="obs-Pizza-Mussarela" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 40,00
-        </span>
-
+        <span class="preco">R$ 40,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pizza Mussarela',40,'pizza',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Pizza-Mussarela"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pizza Mussarela',40,'pizza',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Pizza Mussarela',40,'pizza',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Pizza-Mussarela">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Pizza Mussarela',40,'pizza',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="pizza">
-
     <h2>Pizza Portuguesa 🇵🇹</h2>
-
-    <p>
-        Molho, mussarela, presunto,
-        ovo, cebola, pimentão e
-        azeitona — tamanho grande.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Pizza-Portuguesa"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Molho, mussarela, presunto, ovo, cebola, pimentão e azeitona — tamanho grande.</p>
+    <input type="text" class="observacao" id="obs-Pizza-Portuguesa" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 52,00
-        </span>
-
+        <span class="preco">R$ 52,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pizza Portuguesa',52,'pizza',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Pizza-Portuguesa"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pizza Portuguesa',52,'pizza',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Pizza Portuguesa',52,'pizza',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Pizza-Portuguesa">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Pizza Portuguesa',52,'pizza',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <!-- PORÇÕES -->
-
 <div class="produto" data-categoria="porcao">
-
     <h2>Batata Frita 🍟</h2>
-
-    <p>
-        Porção grande —
-        crocante e sequinha.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Batata-Frita"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Porção grande — crocante e sequinha.</p>
+    <input type="text" class="observacao" id="obs-Batata-Frita" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 20,00
-        </span>
-
+        <span class="preco">R$ 20,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Batata Frita',20,'porcao',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Batata-Frita"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Batata Frita',20,'porcao',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Batata Frita',20,'porcao',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Batata-Frita">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Batata Frita',20,'porcao',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="porcao">
-
     <h2>Batata Frita c/ Queijo 🧀</h2>
-
-    <p>
-        Porção grande com
-        queijo derretido por cima.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Batata-c-Queijo"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Porção grande com queijo derretido por cima.</p>
+    <input type="text" class="observacao" id="obs-Batata-c-Queijo" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 26,00
-        </span>
-
+        <span class="preco">R$ 26,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Batata c/ Queijo',26,'porcao',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Batata-c-Queijo"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Batata c/ Queijo',26,'porcao',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Batata c/ Queijo',26,'porcao',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Batata-c-Queijo">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Batata c/ Queijo',26,'porcao',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="porcao">
-
     <h2>Porção de Tilápia 🐟</h2>
-
-    <p>
-        Tilápia frita crocante —
-        porção média.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Tilapia-Frita"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Tilápia frita crocante — porção média.</p>
+    <input type="text" class="observacao" id="obs-Tilapia-Frita" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 38,00
-        </span>
-
+        <span class="preco">R$ 38,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Tilápia Frita',38,'porcao',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Tilapia-Frita"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Tilápia Frita',38,'porcao',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Tilápia Frita',38,'porcao',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Tilapia-Frita">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Tilápia Frita',38,'porcao',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="porcao">
-
     <h2>Mandioca Frita 🌿</h2>
-
-    <p>
-        Porção de mandioca
-        sequinha e crocante.
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Mandioca-Frita"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Porção de mandioca sequinha e crocante.</p>
+    <input type="text" class="observacao" id="obs-Mandioca-Frita" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 18,00
-        </span>
-
+        <span class="preco">R$ 18,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Mandioca Frita',18,'porcao',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Mandioca-Frita"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Mandioca Frita',18,'porcao',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Mandioca Frita',18,'porcao',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Mandioca-Frita">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Mandioca Frita',18,'porcao',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <!-- BEBIDAS -->
-
 <div class="produto" data-categoria="bebida">
-
     <h2>Coca-Cola 🥤</h2>
-
-    <p>
-        Refrigerante lata 350 ml —
-        Gelada!
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Coca-Cola"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Refrigerante lata 350 ml — Gelada!</p>
+    <input type="text" class="observacao" id="obs-Coca-Cola" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 7,00
-        </span>
-
+        <span class="preco">R$ 7,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Coca-Cola',7,'bebida',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Coca-Cola"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Coca-Cola',7,'bebida',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Coca-Cola',7,'bebida',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Coca-Cola">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Coca-Cola',7,'bebida',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="bebida">
-
     <h2>Pepsi 🥤</h2>
-
-    <p>
-        Refrigerante lata 350 ml —
-        Gelada!
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Pepsi"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Refrigerante lata 350 ml — Gelada!</p>
+    <input type="text" class="observacao" id="obs-Pepsi" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 7,00
-        </span>
-
+        <span class="preco">R$ 7,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pepsi',7,'bebida',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Pepsi"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Pepsi',7,'bebida',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Pepsi',7,'bebida',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Pepsi">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Pepsi',7,'bebida',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="bebida">
-
     <h2>Cerveja 🍺</h2>
-
-    <p>
-        Garrafinha 355 ml —
-        Gelada!
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Cerveja"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Garrafinha 355 ml — Gelada!</p>
+    <input type="text" class="observacao" id="obs-Cerveja" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 13,00
-        </span>
-
+        <span class="preco">R$ 13,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Cerveja',13,'bebida',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Cerveja"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Cerveja',13,'bebida',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Cerveja',13,'bebida',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Cerveja">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Cerveja',13,'bebida',1)">+</button>
         </div>
-
     </div>
-
 </div>
 
 <div class="produto" data-categoria="bebida">
-
     <h2>Chopp 🍺</h2>
-
-    <p>
-        Copo de chopp —
-        300 ml — Bem gelado!
-    </p>
-
-    <input
-        type="text"
-        class="observacao"
-        id="obs-Chopp"
-        placeholder="✏️ Observação..."
-    >
-
+    <p>Copo de chopp — 300 ml — Bem gelado!</p>
+    <input type="text" class="observacao" id="obs-Chopp" placeholder="✏️ Observação...">
     <div class="area-controle">
-
-        <span class="preco">
-            R$ 15,00
-        </span>
-
+        <span class="preco">R$ 15,00</span>
         <div class="contador">
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Chopp',15,'bebida',-1)"
-            >
-                −
-            </button>
-
-            <span
-                class="qtd-texto"
-                id="qtd-Chopp"
-            >0</span>
-
-            <button
-                class="btn-qtd"
-                onclick="alterarItem('Chopp',15,'bebida',1)"
-            >
-                +
-            </button>
-
+            <button class="btn-qtd" onclick="alterarItem('Chopp',15,'bebida',-1)">−</button>
+            <span class="qtd-texto" id="qtd-Chopp">0</span>
+            <button class="btn-qtd" onclick="alterarItem('Chopp',15,'bebida',1)">+</button>
         </div>
-
     </div>
-
+</div>
 </div>
 
-</div>
-
-<button
-    class="botao-carrinho"
-    onclick="abrirCarrinho()"
->
-
-    <span>
-        🛒 Ir para o Carrinho
-    </span>
-
+<button class="botao-carrinho" onclick="abrirCarrinho()">
+    <span>🛒 Ir para o Carrinho</span>
     <div class="carrinho-info">
-
-        <span id="carrinhoQtd">
-            0 itens
-        </span>
-
-        <span class="carrinho-total">
-            R$
-            <span id="carrinhoValor">
-                0,00
-            </span>
-        </span>
-
+        <span id="carrinhoQtd">0 itens</span>
+        <span class="carrinho-total">R$ <span id="carrinhoValor">0,00</span></span>
     </div>
-
 </button>
 
-<div
-    class="modal-fundo"
-    id="modalFundo"
->
-
+<div class="modal-fundo" id="modalFundo">
 <div class="modal">
-
-    <h2>
-        🛒 Seu Pedido
-    </h2>
-
-    <div
-        class="aviso-pedido"
-        id="avisoPedido"
-    ></div>
+    <h2>🛒 Seu Pedido</h2>
+    <div class="aviso-pedido" id="avisoPedido"></div>
 
     <div class="identificacao">
-
-        <div class="identificacao-titulo">
-            🪑 Identificação da Mesa
-        </div>
-
+        <div class="identificacao-titulo">🪑 Identificação da Mesa</div>
         <div class="grupo-input">
-
-            <label for="mesa">
-                Número da Mesa
-            </label>
-
-            <input
-                type="number"
-                id="mesa"
-                placeholder="Ex: 2"
-                min="1"
-            >
-
+            <label for="mesa">Número da Mesa</label>
+            <input type="number" id="mesa" placeholder="Ex: 2" min="1">
         </div>
-
         <div class="grupo-input">
-
-            <label for="responsavel">
-                👤 Nome do responsável
-            </label>
-
-            <input
-                type="text"
-                id="responsavel"
-                placeholder="Ex: Marcelo"
-                maxlength="60"
-            >
-
+            <label for="responsavel">👤 Nome do responsável</label>
+            <input type="text" id="responsavel" placeholder="Ex: Marcelo" maxlength="60">
         </div>
-
-        <div
-            class="aviso-mesa"
-            id="avisoMesa"
-        ></div>
-
+        <div class="aviso-mesa" id="avisoMesa"></div>
     </div>
 
-    <div id="listaItens">
+    <div id="listaItens"><p class="vazio">Nenhum item no carrinho ainda.</p></div>
 
-        <p class="vazio">
-            Nenhum item no carrinho ainda.
-        </p>
-
-    </div>
-
-    <div class="total-pedido">
-
-        Total:
-
-        R$
-
-        <span id="totalModal">
-            0,00
-        </span>
-
-    </div>
+    <div class="total-pedido">Total: R$ <span id="totalModal">0,00</span></div>
 
     <div class="botoes-modal">
-
-        <button
-            class="btn-voltar"
-            onclick="fecharCarrinho()"
-        >
-            ← Voltar aos Produtos
-        </button>
-
-        <button
-            class="btn-finalizar"
-            id="btnEnviarPedido"
-            onclick="enviarPedido()"
-        >
-            ✅ Enviar Pedido
-        </button>
-
+        <button class="btn-voltar" onclick="fecharCarrinho()">← Voltar aos Produtos</button>
+        <button class="btn-finalizar" onclick="enviarPedido()">✅ Enviar Pedido</button>
     </div>
-
 </div>
-
 </div>
-
-
-<!-- =====================================================
-     FIREBASE
-===================================================== -->
-
-<script type="module">
-
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-
-const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
-
-    authDomain:
-        "sistema-digital-f9df1.firebaseapp.com",
-
-    projectId:
-        "sistema-digital-f9df1",
-
-    storageBucket:
-        "sistema-digital-f9df1.firebasestorage.app",
-
-    messagingSenderId:
-        "783545984661",
-
-    appId:
-        "1:783545984661:web:5d0945907ad9db3990dd9c"
-
-};
-
-
-const app =
-    initializeApp(
-        firebaseConfig
-    );
-
-
-const db =
-    getFirestore(app);
-
-
-/*
-=========================================================
-FUNÇÃO GLOBAL PARA SALVAR PEDIDO NO FIRESTORE
-=========================================================
-*/
-
-window.salvarPedidoFirebase =
-    async function(pedidoSistema){
-
-        const observacoes =
-            pedidoSistema.itens
-                .filter(
-                    item =>
-                        item.observacao
-                )
-                .map(
-                    item =>
-                        `${item.nome}: ${item.observacao}`
-                )
-                .join(" | ");
-
-
-        const dadosPedido = {
-
-            id:
-                pedidoSistema.id,
-
-            numero:
-                Number(
-                    pedidoSistema.numero
-                ),
-
-            nomeCliente:
-                pedidoSistema.nomeCliente,
-
-            responsavel:
-                pedidoSistema.responsavel,
-
-            mesa:
-                String(
-                    pedidoSistema.mesa
-                ),
-
-            horario:
-                pedidoSistema.horario,
-
-            itens:
-                pedidoSistema.itens,
-
-            total:
-                Number(
-                    pedidoSistema.total
-                ),
-
-            observacao:
-                observacoes,
-
-            status:
-                "recebido",
-
-            data:
-                serverTimestamp(),
-
-            dataCriacao:
-                serverTimestamp()
-
-        };
-
-
-        const documento =
-            await addDoc(
-
-                collection(
-                    db,
-                    "pedidos"
-                ),
-
-                dadosPedido
-
-            );
-
-
-        console.log(
-            "✅ Pedido salvo no Firebase:",
-            documento.id
-        );
-
-
-        return documento.id;
-
-    };
-
-</script>
-
-
-<!-- =====================================================
-     SISTEMA DO CARDÁPIO
-===================================================== -->
 
 <script>
-
-/* =========================
-   CONFIGURAÇÃO
-========================= */
-
-const TELEFONE_WHATSAPP =
-    "5549984121585";
-
-const CHAVE_PEDIDOS =
-    "pedidosCardapio";
-
-const CHAVE_IDENTIFICACAO =
-    "identificacaoMesa";
-
+const TELEFONE_WHATSAPP = "5549984121585";
+const CHAVE_PEDIDOS = "pedidosCardapio";
+const CHAVE_IDENTIFICACAO = "identificacaoMesa";
 
 let pedido = [];
-
 let totalGeral = 0;
 
-
-/* =========================
-   ID
-========================= */
-
-function gerarIdPedido(){
-
-    return (
-        Date.now().toString() +
-        Math.random()
-            .toString(36)
-            .substring(2,8)
-    );
-
-}
-
-
-/* =========================
-   NÚMERO DO PEDIDO
-========================= */
-
-function obterNumeroPedido(){
-
-    const pedidosSalvos =
-        JSON.parse(
-            localStorage.getItem(
-                CHAVE_PEDIDOS
-            ) || "[]"
-        );
-
-
-    let maiorNumero = 0;
-
-
-    pedidosSalvos.forEach(
-        p => {
-
-            if(
-                Number(p.numero) >
-                maiorNumero
-            ){
-
-                maiorNumero =
-                    Number(p.numero);
-
-            }
-
-        }
-    );
-
-
-    return maiorNumero + 1;
-
-}
-
-
-/* =========================
-   DATA
-========================= */
-
-function obterData(){
-
-    return new Date()
-        .toLocaleDateString(
-            "pt-BR"
-        );
-
-}
-
-
-function obterHorario(){
-
-    return new Date()
-        .toLocaleTimeString(
-            "pt-BR",
-            {
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        );
-
-}
-
-
-/* =========================
-   DINHEIRO
-========================= */
-
-function formatarDinheiro(valor){
-
-    return Number(valor || 0)
-        .toFixed(2)
-        .replace(".",",");
-
-}
-
-
-/* =========================
-   ID PRODUTO
-========================= */
+function gerarIdPedido(){ return Date.now().toString() + Math.random().toString(36).substring(2,8); }
+function obterData(){ return new Date().toLocaleDateString("pt-BR"); }
+function obterHorario(){ return new Date().toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"}); }
+function formatarDinheiro(valor){ return Number(valor||0).toFixed(2).replace(".",","); }
 
 function criarIdProduto(nome){
-
-    return nome
-        .normalize("NFD")
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        )
-        .replace(
-            /\s+/g,
-            "-"
-        )
-        .replace(
-            /\//g,
-            "-"
-        )
-        .replace(
-            /[^a-zA-Z0-9-]/g,
-            ""
-        );
-
+    return nome.normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+        .replace(/\s+/g,"-").replace(/\//g,"-").replace(/[^a-zA-Z0-9-]/g,"");
 }
 
-
-/* =========================
-   ALTERAR ITEM
-========================= */
-
-function alterarItem(
-    nome,
-    preco,
-    categoria,
-    delta
-){
-
-    const itemExistente =
-        pedido.find(
-            item =>
-                item.nome === nome
-        );
-
-
-    const idProduto =
-        criarIdProduto(nome);
-
-
-    const obsElement =
-        document.getElementById(
-            "obs-" + idProduto
-        );
-
-
-    const observacao =
-        obsElement
-        ?
-        obsElement.value.trim()
-        :
-        "";
-
+function alterarItem(nome, preco, categoria, delta){
+    const itemExistente = pedido.find(item => item.nome === nome);
+    const idProduto = criarIdProduto(nome);
+    const obsElement = document.getElementById("obs-" + idProduto);
+    const observacao = obsElement ? obsElement.value.trim() : "";
 
     if(itemExistente){
-
-        itemExistente.quantidade +=
-            delta;
-
-        itemExistente.observacao =
-            observacao;
-
-
-        totalGeral +=
-            preco * delta;
-
-
-        if(
-            itemExistente.quantidade <= 0
-        ){
-
-            pedido =
-                pedido.filter(
-                    item =>
-                        item.nome !== nome
-                );
-
-            itemExistente.quantidade =
-                0;
-
+        itemExistente.quantidade += delta;
+        itemExistente.observacao = observacao;
+        totalGeral += preco * delta;
+        if(itemExistente.quantidade <= 0){
+            pedido = pedido.filter(item => item.nome !== nome);
+            itemExistente.quantidade = 0;
         }
-
-    }else if(delta > 0){
-
-        pedido.push({
-
-            nome:
-                nome,
-
-            preco:
-                preco,
-
-            quantidade:
-                1,
-
-            categoria:
-                categoria,
-
-            observacao:
-                observacao
-
-        });
-
-
-        totalGeral +=
-            preco;
-
+    } else if(delta > 0){
+        pedido.push({nome, preco, quantidade:1, categoria, observacao});
+        totalGeral += preco;
     }
 
-
-    const elementoQuantidade =
-        document.getElementById(
-            "qtd-" + idProduto
-        );
-
-
-    const itemAtual =
-        pedido.find(
-            item =>
-                item.nome === nome
-        );
-
-
-    if(elementoQuantidade){
-
-        elementoQuantidade.innerText =
-            itemAtual
-            ?
-            itemAtual.quantidade
-            :
-            0;
-
-    }
-
-
+    const elementoQuantidade = document.getElementById("qtd-" + idProduto);
+    const itemAtual = pedido.find(item => item.nome === nome);
+    if(elementoQuantidade) elementoQuantidade.innerText = itemAtual ? itemAtual.quantidade : 0;
     atualizarBotaoCarrinho();
-
 }
-
-
-/* =========================
-   OBSERVAÇÕES
-========================= */
 
 function atualizarObservacoes(){
-
-    pedido.forEach(
-        item => {
-
-            const id =
-                "obs-" +
-                criarIdProduto(
-                    item.nome
-                );
-
-
-            const campo =
-                document.getElementById(
-                    id
-                );
-
-
-            if(campo){
-
-                item.observacao =
-                    campo.value.trim();
-
-            }
-
-        }
-    );
-
+    pedido.forEach(item => {
+        const campo = document.getElementById("obs-" + criarIdProduto(item.nome));
+        if(campo) item.observacao = campo.value.trim();
+    });
 }
-
-
-/* =========================
-   CARRINHO
-========================= */
 
 function atualizarBotaoCarrinho(){
-
-    const quantidade =
-        pedido.reduce(
-            (soma,item) =>
-                soma + item.quantidade,
-            0
-        );
-
-
-    document.getElementById(
-        "carrinhoQtd"
-    ).innerText =
-        quantidade +
-        (
-            quantidade === 1
-            ?
-            " item"
-            :
-            " itens"
-        );
-
-
-    document.getElementById(
-        "carrinhoValor"
-    ).innerText =
-        formatarDinheiro(
-            totalGeral
-        );
-
+    const qtd = pedido.reduce((soma,item) => soma + item.quantidade, 0);
+    document.getElementById("carrinhoQtd").innerText = qtd + (qtd===1 ? " item" : " itens");
+    document.getElementById("carrinhoValor").innerText = formatarDinheiro(totalGeral);
 }
-
-
-/* =========================
-   IDENTIFICAÇÃO
-========================= */
 
 function salvarIdentificacao(){
-
-    const mesa =
-        document.getElementById(
-            "mesa"
-        ).value.trim();
-
-
-    const responsavel =
-        document.getElementById(
-            "responsavel"
-        ).value.trim();
-
-
-    if(
-        mesa &&
-        responsavel
-    ){
-
-        localStorage.setItem(
-
-            CHAVE_IDENTIFICACAO,
-
-            JSON.stringify({
-
-                mesa:
-                    mesa,
-
-                responsavel:
-                    responsavel
-
-            })
-
-        );
-
-    }
-
+    const mesa = document.getElementById("mesa").value.trim();
+    const responsavel = document.getElementById("responsavel").value.trim();
+    if(mesa && responsavel) localStorage.setItem(CHAVE_IDENTIFICACAO, JSON.stringify({mesa, responsavel}));
 }
-
 
 function carregarIdentificacao(){
-
-    const dados =
-        JSON.parse(
-            localStorage.getItem(
-                CHAVE_IDENTIFICACAO
-            ) || "null"
-        );
-
-
-    if(!dados)
-        return;
-
-
-    document.getElementById(
-        "mesa"
-    ).value =
-        dados.mesa || "";
-
-
-    document.getElementById(
-        "responsavel"
-    ).value =
-        dados.responsavel || "";
-
+    const dados = JSON.parse(localStorage.getItem(CHAVE_IDENTIFICACAO) || "null");
+    if(!dados) return;
+    document.getElementById("mesa").value = dados.mesa || "";
+    document.getElementById("responsavel").value = dados.responsavel || "";
 }
-
-
-/* =========================
-   ABRIR CARRINHO
-========================= */
 
 function abrirCarrinho(){
-
-    if(
-        pedido.length === 0
-    ){
-
-        alert(
-            "⚠️ Adicione pelo menos um produto primeiro!"
-        );
-
-        return;
-
-    }
-
-
+    if(pedido.length === 0){ alert("⚠️ Adicione pelo menos um produto primeiro!"); return; }
     atualizarObservacoes();
-
     atualizarListaCarrinho();
-
-    verificarMesaAtual();
-
-
-    document.getElementById(
-        "modalFundo"
-    ).style.display =
-        "flex";
-
+    document.getElementById("modalFundo").style.display = "flex";
 }
 
-
-/* =========================
-   VERIFICAR MESA
-========================= */
-
-function verificarMesaAtual(){
-
-    const mesa =
-        document.getElementById(
-            "mesa"
-        ).value.trim();
-
-
-    const aviso =
-        document.getElementById(
-            "avisoMesa"
-        );
-
-
-    if(!mesa){
-
-        aviso.style.display =
-            "none";
-
-        return;
-
-    }
-
-
-    const pedidos =
-        JSON.parse(
-            localStorage.getItem(
-                CHAVE_PEDIDOS
-            ) || "[]"
-        );
-
-
-    const pedidosAbertos =
-        pedidos.filter(
-            pedido =>
-                String(pedido.mesa) ===
-                String(mesa) &&
-                pedido.status !==
-                "finalizado"
-        );
-
-
-    if(
-        pedidosAbertos.length > 0
-    ){
-
-        const totalMesa =
-            pedidosAbertos.reduce(
-                (
-                    total,
-                    pedido
-                ) =>
-                    total +
-                    Number(
-                        pedido.total || 0
-                    ),
-                0
-            );
-
-
-        aviso.innerHTML = `
-
-            📋 Esta mesa já possui
-            <strong>
-                ${pedidosAbertos.length}
-                pedido(s) aberto(s)
-            </strong>.
-
-            <br>
-
-            Total atual da mesa:
-            <strong>
-                R$ ${formatarDinheiro(totalMesa)}
-            </strong>
-
-            <br><br>
-
-            Este novo pedido será
-            acrescentado à mesma comanda.
-
-        `;
-
-
-        aviso.style.display =
-            "block";
-
-    }else{
-
-        aviso.style.display =
-            "none";
-
-    }
-
-}
-
-
-/* =========================
-   FECHAR CARRINHO
-========================= */
-
-function fecharCarrinho(){
-
-    document.getElementById(
-        "modalFundo"
-    ).style.display =
-        "none";
-
-}
-
-
-/* =========================
-   LISTA
-========================= */
+function fecharCarrinho(){ document.getElementById("modalFundo").style.display = "none"; }
 
 function atualizarListaCarrinho(){
-
-    const lista =
-        document.getElementById(
-            "listaItens"
-        );
-
-
+    const lista = document.getElementById("listaItens");
     lista.innerHTML = "";
-
-
-    pedido.forEach(
-        item => {
-
-            const subtotal =
-                item.preco *
-                item.quantidade;
-
-
-            let html = `
-
-                <div class="item-pedido">
-
-                    <div class="item-linha">
-
-                        <span class="item-nome">
-
-                            ${item.quantidade}x
-                            ${item.nome}
-
-                        </span>
-
-                        <span class="item-subtotal">
-
-                            R$
-                            ${
-                                formatarDinheiro(
-                                    subtotal
-                                )
-                            }
-
-                        </span>
-
-                    </div>
-
-            `;
-
-
-            if(item.observacao){
-
-                html += `
-
-                    <span class="item-obs">
-
-                        📝 Obs:
-                        ${item.observacao}
-
-                    </span>
-
-                `;
-
-            }
-
-
-            html += `
-                </div>
-            `;
-
-
-            lista.innerHTML +=
-                html;
-
-        }
-    );
-
-
-    document.getElementById(
-        "totalModal"
-    ).innerText =
-        formatarDinheiro(
-            totalGeral
-        );
-
+    pedido.forEach(item => {
+        const subtotal = item.preco * item.quantidade;
+        let html = `<div class="item-pedido"><div class="item-linha"><span class="item-nome">${item.quantidade}x ${item.nome}</span><span class="item-subtotal">R$ ${formatarDinheiro(subtotal)}</span></div>`;
+        if(item.observacao) html += `<span class="item-obs">📝 Obs: ${item.observacao}</span>`;
+        html += `</div>`;
+        lista.innerHTML += html;
+    });
+    document.getElementById("totalModal").innerText = formatarDinheiro(totalGeral);
 }
 
+async function salvarNoFirestore(pedidoSistema){
+    try {
+        await window.addDoc(
+            window.collection(window.db, "pedidos"),
+            {
+                ...pedidoSistema,
+                status: "recebido",
+                createdAt: window.serverTimestamp()
+            }
+        );
+        console.log("✅ Pedido salvo no Firestore!");
+    } catch(e) {
+        console.error("Erro ao salvar no Firestore:", e);
+    }
+}
 
-/* =========================
-   CRIAR PEDIDO
-========================= */
-
-function criarPedido(
-    mesa,
-    responsavel
-){
-
+function salvarPedidoNoSistema(mesa, responsavel){
     atualizarObservacoes();
-
-
-    const numero =
-        obterNumeroPedido();
-
-
-    return {
-
-        id:
-            gerarIdPedido(),
-
-        numero:
-            numero,
-
-        mesa:
-            mesa,
-
-        responsavel:
-            responsavel,
-
-        nomeCliente:
-            responsavel,
-
-        horario:
-            obterHorario(),
-
-        data:
-            obterData(),
-
-        status:
-            "recebido",
-
-        itens:
-
-            pedido.map(
-                item => ({
-
-                    nome:
-                        item.nome,
-
-                    preco:
-                        Number(
-                            item.preco
-                        ),
-
-                    quantidade:
-                        Number(
-                            item.quantidade
-                        ),
-
-                    categoria:
-                        item.categoria,
-
-                    observacao:
-                        item.observacao ||
-                        ""
-
-                })
-            ),
-
-        total:
-            Number(
-                totalGeral.toFixed(2)
-            ),
-
-        dataCriacao:
-            new Date().toISOString()
-
+    const pedidosSalvos = JSON.parse(localStorage.getItem(CHAVE_PEDIDOS) || "[]");
+    const numero = pedidosSalvos.length + 1;
+    const novoPedido = {
+        id: gerarIdPedido(),
+        numero,
+        mesa,
+        responsavel,
+        nomeCliente: responsavel,
+        horario: obterHorario(),
+        data: obterData(),
+        status: "recebido",
+        itens: pedido.map(i => ({nome:i.nome, preco:Number(i.preco), quantidade:Number(i.quantidade), categoria:i.categoria, observacao:i.observacao||""})),
+        total: Number(totalGeral.toFixed(2)),
+        dataCriacao: new Date().toISOString()
     };
-
+    pedidosSalvos.push(novoPedido);
+    localStorage.setItem(CHAVE_PEDIDOS, JSON.stringify(pedidosSalvos));
+    salvarNoFirestore(novoPedido);
+    return novoPedido;
 }
 
-
-/* =========================
-   SALVAR LOCAL
-========================= */
-
-function salvarPedidoLocal(
-    pedidoSistema
-){
-
-    const pedidosSalvos =
-        JSON.parse(
-            localStorage.getItem(
-                CHAVE_PEDIDOS
-            ) || "[]"
-        );
-
-
-    pedidosSalvos.push(
-        pedidoSistema
-    );
-
-
-    localStorage.setItem(
-
-        CHAVE_PEDIDOS,
-
-        JSON.stringify(
-            pedidosSalvos
-        )
-
-    );
-
+function enviarWhatsApp(pedidoSistema){
+    let mensagem = `🍔 *NOVO PEDIDO — Sabor da Casa*\n\n`;
+    mensagem += `🆔 *Pedido:* #${String(pedidoSistema.numero).padStart(3,"0")}\n`;
+    mensagem += `🪑 *Mesa:* ${pedidoSistema.mesa}\n`;
+    mensagem += `👤 *Responsável:* ${pedidoSistema.responsavel}\n`;
+    mensagem += `🕐 *Horário:* ${pedidoSistema.horario}\n`;
+    mensagem += `━━━━━━━━━━━━━━━━━━━\n`;
+    pedidoSistema.itens.forEach(item => {
+        mensagem += `${item.quantidade}x ${item.nome} — R$ ${formatarDinheiro(item.preco * item.quantidade)}\n`;
+        if(item.observacao) mensagem += `   📝 *OBS:* ${item.observacao}\n`;
+    });
+    mensagem += `━━━━━━━━━━━━━━━━━━━\n💰 *TOTAL: R$ ${formatarDinheiro(pedidoSistema.total)}*`;
+    window.open(`https://wa.me/${TELEFONE_WHATSAPP}?text=${encodeURIComponent(mensagem)}`, "_blank");
 }
-
-
-/* =========================
-   WHATSAPP
-========================= */
-
-function enviarWhatsApp(
-    pedidoSistema
-){
-
-    let mensagem =
-
-        `🍔 *NOVO PEDIDO — Sabor da Casa*\n\n`;
-
-
-    mensagem +=
-
-        `🆔 *Pedido:* #${
-            String(
-                pedidoSistema.numero
-            ).padStart(3,"0")
-        }\n`;
-
-
-    mensagem +=
-
-        `🪑 *Mesa:* ${
-            pedidoSistema.mesa
-        }\n`;
-
-
-    mensagem +=
-
-        `👤 *Responsável:* ${
-            pedidoSistema.responsavel
-        }\n`;
-
-
-    mensagem +=
-
-        `🕐 *Horário:* ${
-            pedidoSistema.horario
-        }\n`;
-
-
-    mensagem +=
-
-        `━━━━━━━━━━━━━━━━━━━\n`;
-
-
-    pedidoSistema.itens.forEach(
-        item => {
-
-            const subtotal =
-                item.preco *
-                item.quantidade;
-
-
-            mensagem +=
-
-                `${item.quantidade}x ${
-                    item.nome
-                } — R$ ${
-                    formatarDinheiro(
-                        subtotal
-                    )
-                }\n`;
-
-
-            if(item.observacao){
-
-                mensagem +=
-
-                    `   📝 *OBS:* ${
-                        item.observacao
-                    }\n`;
-
-            }
-
-        }
-    );
-
-
-    mensagem +=
-
-        `━━━━━━━━━━━━━━━━━━━\n`;
-
-
-    mensagem +=
-
-        `💰 *TOTAL: R$ ${
-            formatarDinheiro(
-                pedidoSistema.total
-            )
-        }*`;
-
-
-    const url =
-
-        `https://wa.me/${
-            TELEFONE_WHATSAPP
-        }?text=${
-            encodeURIComponent(
-                mensagem
-            )
-        }`;
-
-
-    window.open(
-        url,
-        "_blank"
-    );
-
-}
-
-
-/* =========================
-   ENVIAR PEDIDO
-========================= */
 
 async function enviarPedido(){
-
-    const mesa =
-        document.getElementById(
-            "mesa"
-        ).value.trim();
-
-
-    const responsavel =
-        document.getElementById(
-            "responsavel"
-        ).value.trim();
-
-
-    if(!mesa){
-
-        alert(
-            "⚠️ Digite o número da mesa!"
-        );
-
-        return;
-
-    }
-
-
-    if(!responsavel){
-
-        alert(
-            "⚠️ Digite o nome do responsável pela mesa!"
-        );
-
-        document.getElementById(
-            "responsavel"
-        ).focus();
-
-        return;
-
-    }
-
-
-    if(
-        pedido.length === 0
-    ){
-
-        alert(
-            "⚠️ O carrinho está vazio!"
-        );
-
-        return;
-
-    }
-
-
-    const botao =
-        document.getElementById(
-            "btnEnviarPedido"
-        );
-
-
-    const textoOriginal =
-        botao.innerHTML;
-
-
-    botao.disabled =
-        true;
-
-
-    botao.innerHTML =
-        "⏳ Enviando pedido...";
-
+    const mesa = document.getElementById("mesa").value.trim();
+    const responsavel = document.getElementById("responsavel").value.trim();
+    if(!mesa){ alert("⚠️ Digite o número da mesa!"); return; }
+    if(!responsavel){ alert("⚠️ Digite o nome do responsável!"); document.getElementById("responsavel").focus(); return; }
+    if(pedido.length === 0){ alert("⚠️ O carrinho está vazio!"); return; }
 
     atualizarObservacoes();
-
     salvarIdentificacao();
+    const pedidoSistema = salvarPedidoNoSistema(mesa, responsavel);
 
+    const aviso = document.getElementById("avisoPedido");
+    aviso.innerHTML = `✅ Pedido #${String(pedidoSistema.numero).padStart(3,"0")} enviado com sucesso!<br><small>Mesa ${mesa} — ${responsavel}</small>`;
+    aviso.style.display = "block";
 
-    const pedidoSistema =
-        criarPedido(
-            mesa,
-            responsavel
-        );
+    enviarWhatsApp(pedidoSistema);
 
-
-    try{
-
-        /*
-         * PRIMEIRO ENVIA PARA O FIREBASE
-         */
-
-        const firebaseId =
-            await window.salvarPedidoFirebase(
-                pedidoSistema
-            );
-
-
-        pedidoSistema.firebaseId =
-            firebaseId;
-
-
-        /*
-         * DEPOIS SALVA UMA CÓPIA LOCAL
-         */
-
-        salvarPedidoLocal(
-            pedidoSistema
-        );
-
-
-        /*
-         * AGORA ENVIA PARA O WHATSAPP
-         */
-
-        enviarWhatsApp(
-            pedidoSistema
-        );
-
-
-        const aviso =
-            document.getElementById(
-                "avisoPedido"
-            );
-
-
-        aviso.innerHTML = `
-
-            ✅ Pedido #${
-                String(
-                    pedidoSistema.numero
-                ).padStart(3,"0")
-            }
-            enviado com sucesso!
-
-            <br>
-
-            <small>
-
-                Mesa ${mesa}
-                —
-                ${responsavel}
-
-            </small>
-
-        `;
-
-
-        aviso.style.display =
-            "block";
-
-
-        /*
-         * LIMPA O PEDIDO
-         */
-
-        setTimeout(
-            () => {
-
-                pedido = [];
-
-                totalGeral = 0;
-
-
-                document
-                    .querySelectorAll(
-                        ".qtd-texto"
-                    )
-                    .forEach(
-                        el => {
-
-                            el.innerText =
-                                "0";
-
-                        }
-                    );
-
-
-                document
-                    .querySelectorAll(
-                        ".observacao"
-                    )
-                    .forEach(
-                        el => {
-
-                            el.value =
-                                "";
-
-                        }
-                    );
-
-
-                atualizarBotaoCarrinho();
-
-
-                fecharCarrinho();
-
-
-                aviso.style.display =
-                    "none";
-
-
-                botao.disabled =
-                    false;
-
-
-                botao.innerHTML =
-                    textoOriginal;
-
-            },
-            1000
-        );
-
-
-    }catch(erro){
-
-        console.error(
-            "Erro ao enviar pedido:",
-            erro
-        );
-
-
-        botao.disabled =
-            false;
-
-
-        botao.innerHTML =
-            textoOriginal;
-
-
-        alert(
-            "❌ Não foi possível enviar o pedido ao sistema.\n\nVerifique a conexão com a internet e tente novamente."
-        );
-
-    }
-
+    setTimeout(() => {
+        pedido = []; totalGeral = 0;
+        document.querySelectorAll(".qtd-texto").forEach(el => el.innerText = "0");
+        document.querySelectorAll(".observacao").forEach(el => el.value = "");
+        atualizarBotaoCarrinho();
+        fecharCarrinho();
+        aviso.style.display = "none";
+    }, 1500);
 }
 
-
-/* =========================
-   FILTRO
-========================= */
-
-function filtrar(
-    categoria,
-    botao
-){
-
-    document
-        .querySelectorAll(
-            ".categoria"
-        )
-        .forEach(
-            btn =>
-                btn.classList.remove(
-                    "ativa"
-                )
-        );
-
-
-    botao.classList.add(
-        "ativa"
-    );
-
-
-    document
-        .querySelectorAll(
-            ".produto"
-        )
-        .forEach(
-            produto => {
-
-                if(
-
-                    categoria ===
-                    "todos"
-
-                    ||
-
-                    produto.dataset
-                        .categoria ===
-                    categoria
-
-                ){
-
-                    produto.style.display =
-                        "block";
-
-                }else{
-
-                    produto.style.display =
-                        "none";
-
-                }
-
-            }
-        );
-
+function filtrar(categoria, botao){
+    document.querySelectorAll(".categoria").forEach(btn => btn.classList.remove("ativa"));
+    botao.classList.add("ativa");
+    document.querySelectorAll(".produto").forEach(p => {
+        p.style.display = (categoria === "todos" || p.dataset.categoria === categoria) ? "block" : "none";
+    });
 }
 
-
-/* =========================
-   MESA DIGITADA
-========================= */
-
-document.getElementById(
-    "mesa"
-).addEventListener(
-    "input",
-    verificarMesaAtual
-);
-
-
-/* =========================
-   FECHAR FORA
-========================= */
-
-document.getElementById(
-    "modalFundo"
-).addEventListener(
-    "click",
-    function(event){
-
-        if(
-            event.target === this
-        ){
-
-            fecharCarrinho();
-
-        }
-
-    }
-);
-
-
-/* =========================
-   INICIAR
-========================= */
+document.getElementById("modalFundo").addEventListener("click", e => { if(e.target === document.getElementById("modalFundo")) fecharCarrinho(); });
 
 carregarIdentificacao();
-
 atualizarBotaoCarrinho();
-
 </script>
 
 </body>
