@@ -1971,29 +1971,22 @@ async function salvarPedidoNoSistema() {
 
 
 
-  } catch (erro) {
+} catch (erro) {
 
+  console.error(
+    "Erro ao salvar pedido:",
+    erro
+  );
 
-    console.error(
+  alert(
+    "Erro ao registrar pedido:\n\n" +
+    "Código: " + (erro.code || "desconhecido") +
+    "\n\nMensagem: " + erro.message
+  );
 
-      "Erro ao salvar pedido:",
+  return null;
 
-      erro
-
-    );
-
-
-    alert(
-
-      "Erro ao registrar pedido. Verifique sua internet."
-
-    );
-
-
-    return null;
-
-  }
-
+}
 }
 
 
