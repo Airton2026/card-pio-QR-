@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Painel do Proprietário — Sabor da Casa</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -99,9 +101,7 @@ header p{
     font-weight:bold;
 }
 
-/* =========================
-   RESUMO
-========================= */
+/* RESUMO */
 
 .titulo-secao{
     font-size:18px;
@@ -140,9 +140,7 @@ header p{
     color:#4ade80;
 }
 
-/* =========================
-   MESAS
-========================= */
+/* MESAS */
 
 .mesas-titulo{
     display:flex;
@@ -260,13 +258,7 @@ header p{
     font-weight:bold;
 }
 
-.btn-abrir:hover{
-    background:#1d4ed8;
-}
-
-/* =========================
-   MODAL
-========================= */
+/* MODAL */
 
 .modal-fundo{
     display:none;
@@ -433,19 +425,13 @@ header p{
     font-weight:bold;
 }
 
-.btn-finalizar:hover{
-    background:#15803d;
-}
-
 .sem-pedidos{
     text-align:center;
     color:#9ca3af;
     padding:30px;
 }
 
-/* =========================
-   HISTÓRICO
-========================= */
+/* HISTÓRICO */
 
 .historico-resumo{
     background:#111827;
@@ -500,10 +486,6 @@ header p{
 
 @media(max-width:500px){
 
-    .resumo{
-        grid-template-columns:1fr 1fr;
-    }
-
     .mesas{
         grid-template-columns:1fr;
     }
@@ -513,6 +495,7 @@ header p{
     }
 
 }
+
 </style>
 </head>
 
@@ -524,7 +507,7 @@ header p{
 
         <div>
             <h1>🍔 Sabor da Casa</h1>
-            <p>Painel do Proprietário</p>
+            <p>🔥 Painel do Proprietário — Online</p>
         </div>
 
         <button
@@ -541,13 +524,9 @@ header p{
 
 <div class="container">
 
-    <!-- CONFIGURAÇÃO -->
-
     <div class="configuracao">
 
-        <label>
-            🪑 Quantidade de mesas
-        </label>
+        <label>🪑 Quantidade de mesas</label>
 
         <input
             type="number"
@@ -569,11 +548,10 @@ header p{
     </div>
 
 
-    <!-- RESUMO -->
-
     <h2 class="titulo-secao">
         📊 Resumo do Dia
     </h2>
+
 
     <div class="resumo">
 
@@ -607,15 +585,12 @@ header p{
     </div>
 
 
-    <!-- MESAS -->
-
     <div class="mesas-titulo">
 
-        <h2>
-            🪑 Mesas
-        </h2>
+        <h2>🪑 Mesas</h2>
 
     </div>
+
 
     <div
         class="mesas"
@@ -625,9 +600,7 @@ header p{
 </div>
 
 
-<!-- =========================
-     MODAL COMANDA
-========================= -->
+<!-- MODAL COMANDA -->
 
 <div
     class="modal-fundo"
@@ -681,9 +654,7 @@ header p{
 </div>
 
 
-<!-- =========================
-     MODAL HISTÓRICO
-========================= -->
+<!-- MODAL HISTÓRICO -->
 
 <div
     class="modal-fundo"
@@ -694,9 +665,7 @@ header p{
 
         <div class="modal-header">
 
-            <h2>
-                📜 Histórico
-            </h2>
+            <h2>📜 Histórico</h2>
 
             <button
                 class="btn-fechar"
@@ -715,60 +684,79 @@ header p{
 </div>
 
 
-<script>
+<!-- FIREBASE -->
 
-const CHAVE_PEDIDOS = "pedidosCardapio";
-const CHAVE_MESAS = "quantidadeMesas";
-const CHAVE_HISTORICO = "historicoComandas";
+<script type="module">
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    doc,
+    getDocs,
+    getDoc,
+    onSnapshot,
+    updateDoc,
+    setDoc,
+    query,
+    where,
+    writeBatch
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+/* =========================
+   CONFIGURAÇÃO FIREBASE
+========================= */
+
+const firebaseConfig = {
+
+    apiKey:
+    "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+
+    authDomain:
+    "sistema-digital-f9df1.firebaseapp.com",
+
+    projectId:
+    "sistema-digital-f9df1",
+
+    storageBucket:
+    "sistema-digital-f9df1.firebasestorage.app",
+
+    messagingSenderId:
+    "783545984661",
+
+    appId:
+    "1:783545984661:web:5d0945907ad9db3990dd9c"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const db =
+    getFirestore(app);
+
+
+console.log("🔥 Painel conectado ao Firebase!");
+
+
+/* =========================
+   CONFIGURAÇÕES
+========================= */
+
+const CHAVE_MESAS =
+    "quantidadeMesas";
+
+let pedidos = [];
+
+let historico = [];
 
 let mesaSelecionada = null;
-let ultimoNumeroPedidos = 0;
-
-
-/* =========================
-   PEDIDOS
-========================= */
-
-function obterPedidos(){
-
-    return JSON.parse(
-        localStorage.getItem(CHAVE_PEDIDOS) || "[]"
-    );
-
-}
-
-
-function salvarPedidos(pedidos){
-
-    localStorage.setItem(
-        CHAVE_PEDIDOS,
-        JSON.stringify(pedidos)
-    );
-
-}
-
-
-/* =========================
-   HISTÓRICO
-========================= */
-
-function obterHistorico(){
-
-    return JSON.parse(
-        localStorage.getItem(CHAVE_HISTORICO) || "[]"
-    );
-
-}
-
-
-function salvarHistorico(historico){
-
-    localStorage.setItem(
-        CHAVE_HISTORICO,
-        JSON.stringify(historico)
-    );
-
-}
 
 
 /* =========================
@@ -784,6 +772,14 @@ function formatarDinheiro(valor){
 }
 
 
+function obterDataHoje(){
+
+    return new Date()
+        .toLocaleDateString("pt-BR");
+
+}
+
+
 function obterQuantidadeMesas(){
 
     return Number(
@@ -793,21 +789,12 @@ function obterQuantidadeMesas(){
 }
 
 
-function mesmaData(data){
-
-    const hoje =
-        new Date().toLocaleDateString("pt-BR");
-
-    return data === hoje;
-
-}
-
-
 /* =========================
-   MESAS
+   QUANTIDADE DE MESAS
 ========================= */
 
-function salvarQuantidadeMesas(){
+window.salvarQuantidadeMesas =
+function(){
 
     let quantidade =
         Number(
@@ -816,79 +803,231 @@ function salvarQuantidadeMesas(){
             ).value
         );
 
+
     if(quantidade < 1)
         quantidade = 1;
 
+
     if(quantidade > 100)
         quantidade = 100;
+
 
     localStorage.setItem(
         CHAVE_MESAS,
         quantidade
     );
 
+
     document.getElementById(
         "quantidadeMesas"
     ).value = quantidade;
 
+
     renderizarMesas();
 
-}
+};
 
 
-function pedidosDaMesa(numeroMesa){
+/* =========================
+   FIREBASE - PEDIDOS
+========================= */
 
-    return obterPedidos().filter(
-        pedido =>
-            String(pedido.mesa) ===
-            String(numeroMesa) &&
-            pedido.status !== "finalizado"
+function carregarPedidosFirebase(){
+
+    const referencia =
+        collection(db,"pedidos");
+
+
+    onSnapshot(
+        referencia,
+        snapshot => {
+
+            pedidos = [];
+
+
+            snapshot.forEach(documento => {
+
+                pedidos.push({
+                    id:documento.id,
+                    ...documento.data()
+                });
+
+            });
+
+
+            console.log(
+                "📦 Pedidos carregados:",
+                pedidos.length
+            );
+
+
+            renderizarMesas();
+
+
+            if(mesaSelecionada){
+
+                renderizarComanda();
+
+            }
+
+        },
+
+        erro => {
+
+            console.error(
+                "Erro ao carregar pedidos:",
+                erro
+            );
+
+        }
+
     );
 
 }
 
 
+/* =========================
+   FIREBASE - HISTÓRICO
+========================= */
+
+function carregarHistoricoFirebase(){
+
+    const referencia =
+        collection(db,"historicoComandas");
+
+
+    onSnapshot(
+        referencia,
+        snapshot => {
+
+            historico = [];
+
+
+            snapshot.forEach(documento => {
+
+                historico.push({
+                    id:documento.id,
+                    ...documento.data()
+                });
+
+            });
+
+
+            historico.sort((a,b) => {
+
+                return new Date(
+                    b.dataFinalizacao ||
+                    b.dataCriacao ||
+                    0
+                )
+                -
+                new Date(
+                    a.dataFinalizacao ||
+                    a.dataCriacao ||
+                    0
+                );
+
+            });
+
+
+            atualizarResumo();
+
+        },
+
+        erro => {
+
+            console.error(
+                "Erro histórico:",
+                erro
+            );
+
+        }
+
+    );
+
+}
+
+
+/* =========================
+   PEDIDOS DA MESA
+========================= */
+
+function pedidosDaMesa(numeroMesa){
+
+    return pedidos.filter(
+        pedido =>
+
+            String(pedido.mesa) ===
+            String(numeroMesa)
+
+            &&
+
+            pedido.status !==
+            "finalizado"
+
+    );
+
+}
+
+
+/* =========================
+   STATUS DA MESA
+========================= */
+
 function obterStatusMesa(numeroMesa){
 
-    const pedidos =
+    const pedidosMesa =
         pedidosDaMesa(numeroMesa);
 
-    if(!pedidos.length)
+
+    if(!pedidosMesa.length)
         return "livre";
 
+
     if(
-        pedidos.some(
-            p => p.status === "pronto"
+        pedidosMesa.some(
+            pedido =>
+            pedido.status === "pronto"
         )
     )
         return "pronto";
 
+
     if(
-        pedidos.some(
-            p => p.status === "preparo"
+        pedidosMesa.some(
+            pedido =>
+            pedido.status === "preparo"
         )
     )
         return "preparo";
+
 
     return "ocupada";
 
 }
 
 
-function obterResponsavel(pedidos){
+/* =========================
+   RESPONSÁVEL
+========================= */
 
-    if(!pedidos.length)
+function obterResponsavel(pedidosMesa){
+
+    if(!pedidosMesa.length)
         return "—";
 
+
     const pedido =
-        pedidos.find(
+        pedidosMesa.find(
             p =>
                 p.responsavel ||
                 p.nomeCliente
         );
 
+
     if(!pedido)
         return "Não informado";
+
 
     return (
         pedido.responsavel ||
@@ -898,20 +1037,28 @@ function obterResponsavel(pedidos){
 }
 
 
-function calcularTotalMesa(pedidos){
+/* =========================
+   TOTAL DA MESA
+========================= */
 
-    return pedidos.reduce(
+function calcularTotalMesa(pedidosMesa){
+
+    return pedidosMesa.reduce(
+
         (total,pedido) =>
+
             total +
             Number(pedido.total || 0),
+
         0
+
     );
 
 }
 
 
 /* =========================
-   RESUMO DO DIA
+   RESUMO
 ========================= */
 
 function atualizarResumo(){
@@ -919,9 +1066,13 @@ function atualizarResumo(){
     const quantidade =
         obterQuantidadeMesas();
 
+
     let livres = 0;
+
     let ocupadas = 0;
+
     let pedidosAbertos = 0;
+
 
     for(
         let mesa = 1;
@@ -929,28 +1080,25 @@ function atualizarResumo(){
         mesa++
     ){
 
-        const pedidos =
+        const pedidosMesa =
             pedidosDaMesa(mesa);
 
-        if(pedidos.length === 0)
+
+        if(!pedidosMesa.length)
             livres++;
+
         else
             ocupadas++;
 
+
         pedidosAbertos +=
-            pedidos.length;
+            pedidosMesa.length;
 
     }
 
 
-    const historico =
-        obterHistorico();
-
-
     const hoje =
-        new Date().toLocaleDateString(
-            "pt-BR"
-        );
+        obterDataHoje();
 
 
     const historicoHoje =
@@ -961,21 +1109,27 @@ function atualizarResumo(){
 
     const totalVendido =
         historicoHoje.reduce(
+
             (total,item) =>
+
                 total +
                 Number(item.total || 0),
+
             0
+
         );
 
 
     document.getElementById(
         "totalLivres"
-    ).innerText = livres;
+    ).innerText =
+        livres;
 
 
     document.getElementById(
         "totalOcupadas"
-    ).innerText = ocupadas;
+    ).innerText =
+        ocupadas;
 
 
     document.getElementById(
@@ -1008,10 +1162,12 @@ function renderizarMesas(){
     const quantidade =
         obterQuantidadeMesas();
 
+
     const area =
         document.getElementById(
             "areaMesas"
         );
+
 
     area.innerHTML = "";
 
@@ -1022,27 +1178,37 @@ function renderizarMesas(){
         mesa++
     ){
 
-        const pedidos =
+        const pedidosMesa =
             pedidosDaMesa(mesa);
+
 
         const status =
             obterStatusMesa(mesa);
 
+
         const total =
-            calcularTotalMesa(pedidos);
+            calcularTotalMesa(
+                pedidosMesa
+            );
+
 
         const responsavel =
-            obterResponsavel(pedidos);
+            obterResponsavel(
+                pedidosMesa
+            );
 
 
         let textoStatus =
             "Livre";
 
+
         if(status === "ocupada")
             textoStatus = "Ocupada";
 
+
         if(status === "preparo")
             textoStatus = "Em preparo";
+
 
         if(status === "pronto")
             textoStatus = "Pronto";
@@ -1050,6 +1216,7 @@ function renderizarMesas(){
 
         const card =
             document.createElement("div");
+
 
         card.className =
             "mesa " + status;
@@ -1060,13 +1227,18 @@ function renderizarMesas(){
             <div class="mesa-topo">
 
                 <span class="mesa-nome">
+
                     🪑 Mesa ${mesa}
+
                 </span>
+
 
                 <span
                     class="status status-${status}"
                 >
+
                     ${textoStatus}
+
                 </span>
 
             </div>
@@ -1074,7 +1246,9 @@ function renderizarMesas(){
 
             <div class="responsavel">
 
-                👤 <strong>Responsável:</strong>
+                👤
+                <strong>Responsável:</strong>
+
                 ${responsavel}
 
             </div>
@@ -1083,13 +1257,15 @@ function renderizarMesas(){
             <div class="info-pedido">
 
                 ${
-                    pedidos.length
+                    pedidosMesa.length
                     ?
-                    pedidos.length +
+                    pedidosMesa.length +
                     (
-                        pedidos.length === 1
-                        ? " pedido aberto"
-                        : " pedidos abertos"
+                        pedidosMesa.length === 1
+                        ?
+                        " pedido aberto"
+                        :
+                        " pedidos abertos"
                     )
                     :
                     "Nenhum pedido"
@@ -1100,7 +1276,8 @@ function renderizarMesas(){
 
             <div class="total-mesa">
 
-                R$ ${formatarDinheiro(total)}
+                R$
+                ${formatarDinheiro(total)}
 
             </div>
 
@@ -1111,7 +1288,7 @@ function renderizarMesas(){
             >
 
                 ${
-                    pedidos.length
+                    pedidosMesa.length
                     ?
                     "📋 Abrir Comanda"
                     :
@@ -1137,7 +1314,8 @@ function renderizarMesas(){
    ABRIR COMANDA
 ========================= */
 
-function abrirComanda(numeroMesa){
+window.abrirComanda =
+function(numeroMesa){
 
     mesaSelecionada =
         numeroMesa;
@@ -1146,18 +1324,24 @@ function abrirComanda(numeroMesa){
     document.getElementById(
         "tituloComanda"
     ).innerText =
-        "🪑 Mesa " + numeroMesa;
+        "🪑 Mesa " +
+        numeroMesa;
 
 
     renderizarComanda();
+
 
     document.getElementById(
         "modalComanda"
     ).style.display =
         "flex";
 
-}
+};
 
+
+/* =========================
+   RENDERIZAR COMANDA
+========================= */
 
 function renderizarComanda(){
 
@@ -1165,25 +1349,31 @@ function renderizarComanda(){
         return;
 
 
-    const pedidos =
+    const pedidosMesa =
         pedidosDaMesa(
             mesaSelecionada
         );
 
 
     const total =
-        calcularTotalMesa(pedidos);
+        calcularTotalMesa(
+            pedidosMesa
+        );
 
 
     const responsavel =
-        obterResponsavel(pedidos);
+        obterResponsavel(
+            pedidosMesa
+        );
 
 
     document.getElementById(
         "responsavelComanda"
     ).innerHTML = `
 
-        👤 <strong>Responsável:</strong>
+        👤
+        <strong>Responsável:</strong>
+
         ${responsavel}
 
     `;
@@ -1198,7 +1388,7 @@ function renderizarComanda(){
     lista.innerHTML = "";
 
 
-    if(!pedidos.length){
+    if(!pedidosMesa.length){
 
         lista.innerHTML = `
 
@@ -1210,16 +1400,27 @@ function renderizarComanda(){
 
         `;
 
-    }else{
+    }
+
+    else{
 
 
-        pedidos.forEach(
-            (pedido,index) => {
+        pedidosMesa
+        .sort(
+            (a,b) =>
+            Number(a.numero || 0)
+            -
+            Number(b.numero || 0)
+        )
+        .forEach(
+            pedido => {
+
 
                 const bloco =
                     document.createElement(
                         "div"
                     );
+
 
                 bloco.className =
                     "pedido-bloco";
@@ -1227,6 +1428,7 @@ function renderizarComanda(){
 
                 let classeStatus =
                     "status-recebido";
+
 
                 let textoStatus =
                     "🟢 Recebido";
@@ -1239,6 +1441,7 @@ function renderizarComanda(){
 
                     classeStatus =
                         "status-preparo-pedido";
+
 
                     textoStatus =
                         "🟠 Em preparo";
@@ -1254,19 +1457,23 @@ function renderizarComanda(){
                     classeStatus =
                         "status-pronto-pedido";
 
+
                     textoStatus =
                         "🔵 Pronto";
 
                 }
 
 
-                let itensHTML = "";
+                let itensHTML =
+                    "";
 
 
                 (
                     pedido.itens || []
-                ).forEach(
+                )
+                .forEach(
                     item => {
+
 
                         itensHTML += `
 
@@ -1281,13 +1488,16 @@ function renderizarComanda(){
 
                                     </span>
 
+
                                     <span>
 
                                         R$
+
                                         ${
                                             formatarDinheiro(
-                                                item.preco *
-                                                item.quantidade
+                                                Number(item.preco || 0)
+                                                *
+                                                Number(item.quantidade || 0)
                                             )
                                         }
 
@@ -1300,12 +1510,14 @@ function renderizarComanda(){
                                     item.observacao
                                     ?
                                     `
+
                                     <div class="item-obs">
 
                                         📝 OBS:
                                         ${item.observacao}
 
                                     </div>
+
                                     `
                                     :
                                     ""
@@ -1326,15 +1538,16 @@ function renderizarComanda(){
                         <span>
 
                             <strong>
+
                                 Pedido #${
                                     String(
-                                        pedido.numero ||
-                                        index + 1
+                                        pedido.numero || 0
                                     ).padStart(
                                         3,
                                         "0"
                                     )
                                 }
+
                             </strong>
 
                             <br>
@@ -1353,7 +1566,9 @@ function renderizarComanda(){
                                 ${classeStatus}
                             "
                         >
+
                             ${textoStatus}
+
                         </span>
 
                     </div>
@@ -1365,68 +1580,86 @@ function renderizarComanda(){
                     <div class="botoes-status">
 
                         <button
+
                             class="
                                 btn-status
                                 btn-recebido
                                 ${
-                                    pedido.status ===
-                                    "recebido"
-                                    ? "ativo"
-                                    : ""
+                                    pedido.status === "recebido"
+                                    ?
+                                    "ativo"
+                                    :
+                                    ""
                                 }
                             "
+
                             onclick="
                                 alterarStatusPedido(
                                     '${pedido.id}',
                                     'recebido'
                                 )
                             "
+
                         >
+
                             🟢 Recebido
+
                         </button>
 
 
                         <button
+
                             class="
                                 btn-status
                                 btn-preparo
                                 ${
-                                    pedido.status ===
-                                    "preparo"
-                                    ? "ativo"
-                                    : ""
+                                    pedido.status === "preparo"
+                                    ?
+                                    "ativo"
+                                    :
+                                    ""
                                 }
                             "
+
                             onclick="
                                 alterarStatusPedido(
                                     '${pedido.id}',
                                     'preparo'
                                 )
                             "
+
                         >
+
                             🟠 Em preparo
+
                         </button>
 
 
                         <button
+
                             class="
                                 btn-status
                                 btn-pronto
                                 ${
-                                    pedido.status ===
-                                    "pronto"
-                                    ? "ativo"
-                                    : ""
+                                    pedido.status === "pronto"
+                                    ?
+                                    "ativo"
+                                    :
+                                    ""
                                 }
                             "
+
                             onclick="
                                 alterarStatusPedido(
                                     '${pedido.id}',
                                     'pronto'
                                 )
                             "
+
                         >
+
                             🔵 Pronto
+
                         </button>
 
                     </div>
@@ -1451,84 +1684,112 @@ function renderizarComanda(){
 
 
 /* =========================
-   ALTERAR STATUS
+   ALTERAR STATUS FIREBASE
 ========================= */
 
-function alterarStatusPedido(
+window.alterarStatusPedido =
+async function(
     id,
     novoStatus
 ){
 
-    const pedidos =
-        obterPedidos();
+    try{
 
 
-    const pedido =
-        pedidos.find(
-            p => String(p.id) === String(id)
+        const referencia =
+            doc(
+                db,
+                "pedidos",
+                id
+            );
+
+
+        const dadosAtualizacao = {
+
+            status:
+            novoStatus
+
+        };
+
+
+        if(
+            novoStatus === "pronto"
+        ){
+
+            dadosAtualizacao.dataPronto =
+                new Date().toISOString();
+
+        }
+
+
+        await updateDoc(
+            referencia,
+            dadosAtualizacao
         );
 
 
-    if(!pedido)
-        return;
+        console.log(
+            "✅ Status atualizado:",
+            novoStatus
+        );
 
-
-    pedido.status =
-        novoStatus;
-
-
-    if(novoStatus === "pronto"){
-
-        pedido.dataPronto =
-            new Date().toISOString();
 
     }
 
+    catch(erro){
 
-    salvarPedidos(pedidos);
+        console.error(
+            "Erro ao atualizar status:",
+            erro
+        );
 
 
-    renderizarComanda();
+        alert(
+            "❌ Erro ao atualizar pedido."
+        );
 
-    renderizarMesas();
+    }
 
-}
+};
 
 
 /* =========================
    FECHAR COMANDA
 ========================= */
 
-function fecharComanda(){
+window.fecharComanda =
+function(){
 
     document.getElementById(
         "modalComanda"
     ).style.display =
         "none";
 
+
     mesaSelecionada =
         null;
 
-}
+};
 
 
 /* =========================
-   FINALIZAR COMANDA
+   FINALIZAR MESA
 ========================= */
 
-function finalizarMesa(){
+window.finalizarMesa =
+async function(){
 
     if(!mesaSelecionada)
         return;
 
 
-    const pedidos =
+    const pedidosMesa =
         pedidosDaMesa(
             mesaSelecionada
         );
 
 
-    if(!pedidos.length){
+    if(!pedidosMesa.length){
 
         alert(
             "Esta mesa não possui pedidos."
@@ -1540,11 +1801,15 @@ function finalizarMesa(){
 
 
     const total =
-        calcularTotalMesa(pedidos);
+        calcularTotalMesa(
+            pedidosMesa
+        );
 
 
     const responsavel =
-        obterResponsavel(pedidos);
+        obterResponsavel(
+            pedidosMesa
+        );
 
 
     const confirmar =
@@ -1552,14 +1817,17 @@ function finalizarMesa(){
 
             "Finalizar Comanda da Mesa " +
             mesaSelecionada +
+
             "?\n\n" +
 
             "Responsável: " +
             responsavel +
+
             "\n" +
 
             "Total: R$ " +
             formatarDinheiro(total) +
+
             "\n\n" +
 
             "A mesa será liberada."
@@ -1571,140 +1839,167 @@ function finalizarMesa(){
         return;
 
 
-    /* =========================
-       SALVAR HISTÓRICO
-    ========================= */
-
-    const historico =
-        obterHistorico();
+    try{
 
 
-    const agora =
-        new Date();
+        const agora =
+            new Date();
 
 
-    const comandaFinalizada = {
-
-        id:
-            Date.now().toString(),
-
-        mesa:
-            mesaSelecionada,
-
-        responsavel:
-            responsavel,
-
-        total:
-            Number(
-                total.toFixed(2)
-            ),
-
-        data:
-            agora.toLocaleDateString(
-                "pt-BR"
-            ),
-
-        horarioFinalizacao:
-            agora.toLocaleTimeString(
-                "pt-BR",
-                {
-                    hour:"2-digit",
-                    minute:"2-digit"
-                }
-            ),
-
-        pedidos:
-            JSON.parse(
-                JSON.stringify(pedidos)
-            )
-
-    };
+        const batch =
+            writeBatch(db);
 
 
-    historico.push(
-        comandaFinalizada
-    );
+        /* FINALIZA TODOS OS PEDIDOS DA MESA */
+
+        pedidosMesa.forEach(
+            pedido => {
 
 
-    salvarHistorico(
-        historico
-    );
+                const pedidoRef =
+                    doc(
+                        db,
+                        "pedidos",
+                        pedido.id
+                    );
 
 
-    /* =========================
-       FINALIZAR PEDIDOS
-    ========================= */
+                batch.update(
+                    pedidoRef,
+                    {
 
-    const todosPedidos =
-        obterPedidos();
+                        status:
+                        "finalizado",
+
+                        dataFinalizacao:
+                        agora.toISOString()
+
+                    }
+
+                );
 
 
-    todosPedidos.forEach(
-        pedido => {
+            }
+        );
 
-            if(
 
-                String(pedido.mesa) ===
-                String(mesaSelecionada)
+        /* SALVA NO HISTÓRICO */
 
-                &&
+        const historicoRef =
+            doc(
+                collection(
+                    db,
+                    "historicoComandas"
+                )
+            );
 
-                pedido.status !==
-                "finalizado"
 
-            ){
+        batch.set(
+            historicoRef,
+            {
 
-                pedido.status =
-                    "finalizado";
+                mesa:
+                mesaSelecionada,
 
-                pedido.dataFinalizacao =
-                    new Date().toISOString();
+                responsavel:
+                responsavel,
+
+                total:
+                Number(
+                    total.toFixed(2)
+                ),
+
+                data:
+                agora.toLocaleDateString(
+                    "pt-BR"
+                ),
+
+                horarioFinalizacao:
+                agora.toLocaleTimeString(
+                    "pt-BR",
+                    {
+                        hour:"2-digit",
+                        minute:"2-digit"
+                    }
+                ),
+
+                dataFinalizacao:
+                agora.toISOString(),
+
+                pedidos:
+                pedidosMesa.map(
+                    pedido => ({
+
+                        id:pedido.id,
+
+                        numero:
+                        pedido.numero || 0,
+
+                        total:
+                        Number(
+                            pedido.total || 0
+                        ),
+
+                        itens:
+                        pedido.itens || []
+
+                    })
+                )
 
             }
 
-        }
-    );
+        );
 
 
-    salvarPedidos(
-        todosPedidos
-    );
+        await batch.commit();
 
 
-    const mesaFinalizada =
-        mesaSelecionada;
+        const mesaFinalizada =
+            mesaSelecionada;
 
 
-    fecharComanda();
-
-    renderizarMesas();
+        fecharComanda();
 
 
-    alert(
+        alert(
 
-        "✅ Comanda finalizada!\n\n" +
+            "✅ Comanda finalizada!\n\n" +
 
-        "Mesa " +
-        mesaFinalizada +
-        " liberada.\n\n" +
+            "Mesa " +
+            mesaFinalizada +
+            " liberada.\n\n" +
 
-        "Total: R$ " +
-        formatarDinheiro(total)
+            "Total: R$ " +
+            formatarDinheiro(total)
 
-    );
+        );
 
-}
+
+    }
+
+    catch(erro){
+
+        console.error(
+            "Erro ao finalizar:",
+            erro
+        );
+
+
+        alert(
+            "❌ Erro ao finalizar comanda."
+        );
+
+    }
+
+};
 
 
 /* =========================
    HISTÓRICO
 ========================= */
 
-function abrirHistorico(){
-
-    const historico =
-        obterHistorico();
-
+window.abrirHistorico =
+function(){
 
     const lista =
         document.getElementById(
@@ -1716,24 +2011,26 @@ function abrirHistorico(){
 
 
     const hoje =
-        new Date().toLocaleDateString(
-            "pt-BR"
-        );
+        obterDataHoje();
 
 
     const historicoHoje =
         historico.filter(
             item =>
-                item.data === hoje
+            item.data === hoje
         );
 
 
     const totalHoje =
         historicoHoje.reduce(
+
             (total,item) =>
+
                 total +
                 Number(item.total || 0),
+
             0
+
         );
 
 
@@ -1741,17 +2038,24 @@ function abrirHistorico(){
 
         <div class="historico-resumo">
 
-            📊 <strong>Resumo de hoje</strong>
+            📊
+            <strong>
+                Resumo de hoje
+            </strong>
 
-            <div style="
-                color:#9ca3af;
-                margin-top:5px;
-            ">
+
+            <div
+                style="
+                    color:#9ca3af;
+                    margin-top:5px;
+                "
+            >
 
                 ${historicoHoje.length}
                 comandas finalizadas
 
             </div>
+
 
             <strong>
 
@@ -1778,13 +2082,15 @@ function abrirHistorico(){
 
         `;
 
-    }else{
+    }
+
+    else{
 
 
-        [...historico]
-        .reverse()
+        historico
         .forEach(
             comanda => {
+
 
                 const item =
                     document.createElement(
@@ -1794,6 +2100,12 @@ function abrirHistorico(){
 
                 item.className =
                     "historico-item";
+
+
+                const quantidadePedidos =
+                    (
+                        comanda.pedidos || []
+                    ).length;
 
 
                 item.innerHTML = `
@@ -1826,7 +2138,8 @@ function abrirHistorico(){
 
                     <div>
 
-                        👤 ${
+                        👤
+                        ${
                             comanda.responsavel ||
                             "Não informado"
                         }
@@ -1838,11 +2151,15 @@ function abrirHistorico(){
                         class="historico-detalhes"
                     >
 
-                        📅 ${comanda.data}
+                        📅
+                        ${comanda.data || "--/--/----"}
 
                         —
-                        🕐 ${
-                            comanda.horarioFinalizacao
+
+                        🕐
+                        ${
+                            comanda.horarioFinalizacao ||
+                            "--:--"
                         }
 
                     </div>
@@ -1852,10 +2169,9 @@ function abrirHistorico(){
                         class="historico-detalhes"
                     >
 
-                        🍽️ ${
-                            comanda.pedidos.length
-                        }
-                        pedidos nesta comanda
+                        🍽️
+                        ${quantidadePedidos}
+                        pedido(s) nesta comanda
 
                     </div>
 
@@ -1875,122 +2191,18 @@ function abrirHistorico(){
     ).style.display =
         "flex";
 
-}
+};
 
 
-function fecharHistorico(){
+window.fecharHistorico =
+function(){
 
     document.getElementById(
         "modalHistorico"
     ).style.display =
         "none";
 
-}
-
-
-/* =========================
-   ALERTA DE NOVOS PEDIDOS
-========================= */
-
-function verificarNovosPedidos(){
-
-    const pedidos =
-        obterPedidos();
-
-
-    const quantidadeAtual =
-        pedidos.length;
-
-
-    if(
-        quantidadeAtual >
-        ultimoNumeroPedidos
-    ){
-
-        if(
-            ultimoNumeroPedidos !== 0
-        ){
-
-            tocarAlerta();
-
-        }
-
-    }
-
-
-    ultimoNumeroPedidos =
-        quantidadeAtual;
-
-
-    renderizarMesas();
-
-}
-
-
-function tocarAlerta(){
-
-    try{
-
-        const AudioContext =
-            window.AudioContext ||
-            window.webkitAudioContext;
-
-
-        const audio =
-            new AudioContext();
-
-
-        const oscillator =
-            audio.createOscillator();
-
-
-        const gain =
-            audio.createGain();
-
-
-        oscillator.connect(gain);
-
-        gain.connect(
-            audio.destination
-        );
-
-
-        oscillator.frequency.value =
-            880;
-
-        oscillator.type =
-            "sine";
-
-
-        gain.gain.setValueAtTime(
-            0.3,
-            audio.currentTime
-        );
-
-
-        oscillator.start();
-
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.001,
-            audio.currentTime + 0.8
-        );
-
-
-        oscillator.stop(
-            audio.currentTime + 0.8
-        );
-
-
-    }catch(e){
-
-        console.log(
-            "Som indisponível"
-        );
-
-    }
-
-}
+};
 
 
 /* =========================
@@ -1999,7 +2211,8 @@ function tocarAlerta(){
 
 document.getElementById(
     "modalComanda"
-).addEventListener(
+)
+.addEventListener(
     "click",
     function(event){
 
@@ -2015,7 +2228,8 @@ document.getElementById(
 
 document.getElementById(
     "modalHistorico"
-).addEventListener(
+)
+.addEventListener(
     "click",
     function(event){
 
@@ -2030,7 +2244,7 @@ document.getElementById(
 
 
 /* =========================
-   INICIAR
+   INICIAR SISTEMA
 ========================= */
 
 document.getElementById(
@@ -2039,16 +2253,13 @@ document.getElementById(
     obterQuantidadeMesas();
 
 
-ultimoNumeroPedidos =
-    obterPedidos().length;
+carregarPedidosFirebase();
+
+carregarHistoricoFirebase();
 
 
-renderizarMesas();
-
-
-setInterval(
-    verificarNovosPedidos,
-    2000
+console.log(
+    "🚀 Painel iniciado com Firebase!"
 );
 
 </script>
