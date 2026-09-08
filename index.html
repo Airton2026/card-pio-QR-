@@ -3,429 +3,2055 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sabor da Casa — Cardápio Digital</title>
+<title>Painel do Proprietário — Sabor da Casa</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#f8f9fa;color:#212529;padding-bottom:100px}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
 
-header{background:linear-gradient(135deg,#b91c1c,#991b1b);color:white;padding:20px 16px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-header h1{font-size:24px;margin-bottom:4px}
-header p{font-size:14px;opacity:.9}
+body{
+    background:#111827;
+    color:#fff;
+    padding-bottom:30px;
+}
 
-.categorias{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;background:white;position:sticky;top:0;z-index:10;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.categorias button{border:none;background:#f3f4f6;padding:8px 14px;border-radius:20px;white-space:nowrap;cursor:pointer;font-size:14px;color:#374151;transition:.2s}
-.categorias button.ativo{background:#b91c1c;color:white;font-weight:500}
+header{
+    background:#1f2937;
+    padding:20px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 3px 12px rgba(0,0,0,.3);
+}
 
-.container{max-width:720px;margin:0 auto;padding:16px}
-.secao{margin-bottom:28px}
-.secao h2{font-size:18px;color:#b91c1c;margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid #f3f4f6}
+header h1{
+    font-size:23px;
+}
 
-.produtos{display:flex;flex-direction:column;gap:10px}
-.produto{background:white;border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:space-between;gap:12px}
-.produto .info{flex:1}
-.produto h3{font-size:15px;font-weight:600;color:#111827;margin-bottom:3px}
-.produto p{font-size:13px;color:#6b7280;line-height:1.4;margin-bottom:6px}
-.produto .preco{font-size:16px;font-weight:700;color:#b91c1c}
-.produto button{border:none;background:#b91c1c;color:white;padding:9px 14px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;transition:.2s}
-.produto button:active{transform:scale(.96)}
+header p{
+    color:#9ca3af;
+    margin-top:5px;
+    font-size:14px;
+}
 
-.carrinho-fixo{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px 16px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:20}
-.botao-carrinho{width:100%;max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;background:#16a34a;color:white;border:none;padding:13px 18px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer}
-#quantidadeCarrinho{background:white;color:#16a34a;border-radius:12px;padding:2px 10px;font-weight:700}
+.topo{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
 
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;padding:16px}
-.modal.ativo{display:flex}
-.modal-conteudo{background:white;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;border-radius:14px;padding:20px}
-.modal-conteudo h2{font-size:18px;margin-bottom:16px}
-.fechar{float:right;border:none;background:none;font-size:26px;cursor:pointer;color:#6b7280;margin:-6px -6px 0 0}
+.btn-historico{
+    border:none;
+    background:#374151;
+    color:white;
+    padding:11px 15px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+}
 
-.campo{margin-bottom:14px}
-.campo label{display:block;margin-bottom:6px;font-size:14px;font-weight:500;color:#374151}
-.campo input{width:100%;padding:11px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:15px}
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
 
-.mensagem-mesa{background:#fffbeb;color:#92400e;padding:12px;border-radius:8px;margin-bottom:16px;display:none;border:1px solid #fef3c7;font-size:14px}
+.configuracao{
+    background:#1f2937;
+    padding:18px;
+    border-radius:14px;
+    margin-bottom:20px;
+}
 
-.item-carrinho{padding:12px 0;border-bottom:1px solid #f3f4f6}
-.item-carrinho-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.item-carrinho strong{font-size:15px}
-.controles{display:flex;align-items:center;gap:8px;margin-top:8px}
-.controles button{border:none;background:#f3f4f6;width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
-.remover{background:#fee2e2 !important;color:#dc2626}
-.observacao{width:100%;margin-top:8px;padding:9px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px}
+.configuracao label{
+    display:block;
+    font-size:14px;
+    color:#d1d5db;
+    margin-bottom:7px;
+}
 
-.total{font-size:20px;font-weight:700;text-align:right;margin:18px 0}
-.botao-enviar{width:100%;border:none;background:#16a34a;color:white;padding:14px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer}
-.botao-enviar:disabled{opacity:.6;cursor:not-allowed}
-.vazio{text-align:center;padding:30px;color:#6b7280;font-size:15px}
+.configuracao input{
+    width:100%;
+    max-width:180px;
+    padding:12px;
+    border-radius:8px;
+    border:2px solid #374151;
+    background:#111827;
+    color:white;
+    font-size:16px;
+}
+
+.btn-config{
+    margin-top:10px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:11px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* =========================
+   RESUMO
+========================= */
+
+.titulo-secao{
+    font-size:18px;
+    margin-bottom:12px;
+}
+
+.resumo{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+    margin-bottom:25px;
+}
+
+.resumo-card{
+    background:#1f2937;
+    padding:15px;
+    border-radius:12px;
+}
+
+.resumo-card span{
+    color:#9ca3af;
+    font-size:13px;
+}
+
+.resumo-card strong{
+    display:block;
+    font-size:24px;
+    margin-top:6px;
+}
+
+.resumo-total{
+    border:2px solid #16a34a;
+}
+
+.resumo-total strong{
+    color:#4ade80;
+}
+
+/* =========================
+   MESAS
+========================= */
+
+.mesas-titulo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.mesas-titulo h2{
+    font-size:20px;
+}
+
+.mesas{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:15px;
+}
+
+.mesa{
+    background:#1f2937;
+    border-radius:15px;
+    padding:17px;
+    border:2px solid #374151;
+}
+
+.mesa.livre{
+    border-color:#22c55e;
+}
+
+.mesa.ocupada{
+    border-color:#ef4444;
+}
+
+.mesa.preparo{
+    border-color:#f59e0b;
+}
+
+.mesa.pronto{
+    border-color:#3b82f6;
+}
+
+.mesa-topo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.mesa-nome{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.status{
+    padding:6px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.status-livre{
+    background:#14532d;
+    color:#86efac;
+}
+
+.status-ocupada{
+    background:#7f1d1d;
+    color:#fecaca;
+}
+
+.status-preparo{
+    background:#78350f;
+    color:#fde68a;
+}
+
+.status-pronto{
+    background:#1e3a8a;
+    color:#bfdbfe;
+}
+
+.responsavel{
+    background:#111827;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:12px;
+    color:#d1d5db;
+    font-size:14px;
+}
+
+.responsavel strong{
+    color:white;
+}
+
+.total-mesa{
+    font-size:23px;
+    font-weight:bold;
+    color:#4ade80;
+    margin:12px 0;
+}
+
+.info-pedido{
+    color:#9ca3af;
+    font-size:13px;
+    margin-bottom:12px;
+}
+
+.btn-abrir{
+    width:100%;
+    border:none;
+    background:#2563eb;
+    color:white;
+    padding:12px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-abrir:hover{
+    background:#1d4ed8;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-fundo{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    z-index:500;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
+}
+
+.modal{
+    background:#1f2937;
+    width:100%;
+    max-width:650px;
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:18px;
+    padding:20px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.btn-fechar{
+    border:none;
+    background:#374151;
+    color:white;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.comanda-responsavel{
+    background:#111827;
+    padding:12px;
+    border-radius:9px;
+    margin-bottom:15px;
+}
+
+.pedido-bloco{
+    background:#111827;
+    border-radius:10px;
+    padding:13px;
+    margin-bottom:12px;
+    border:1px solid #374151;
+}
+
+.pedido-cabecalho{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+    font-size:13px;
+    color:#9ca3af;
+}
+
+.pedido-status{
+    font-weight:bold;
+    padding:5px 8px;
+    border-radius:6px;
+}
+
+.status-recebido{
+    background:#7f1d1d;
+    color:#fecaca;
+}
+
+.status-preparo-pedido{
+    background:#78350f;
+    color:#fde68a;
+}
+
+.status-pronto-pedido{
+    background:#1e3a8a;
+    color:#bfdbfe;
+}
+
+.item{
+    padding:8px 0;
+    border-bottom:1px solid #374151;
+}
+
+.item:last-child{
+    border-bottom:none;
+}
+
+.item-linha{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.item-nome{
+    font-weight:bold;
+}
+
+.item-obs{
+    color:#fbbf24;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.botoes-status{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+    margin-top:12px;
+}
+
+.btn-status{
+    border:none;
+    padding:9px 5px;
+    border-radius:7px;
+    cursor:pointer;
+    color:white;
+    font-weight:bold;
+    font-size:12px;
+}
+
+.btn-recebido{
+    background:#b91c1c;
+}
+
+.btn-preparo{
+    background:#d97706;
+}
+
+.btn-pronto{
+    background:#2563eb;
+}
+
+.btn-status.ativo{
+    outline:3px solid white;
+}
+
+.comanda-total{
+    border-top:2px dashed #4b5563;
+    margin-top:15px;
+    padding-top:15px;
+    text-align:right;
+    font-size:27px;
+    font-weight:bold;
+    color:#4ade80;
+}
+
+.btn-finalizar{
+    width:100%;
+    margin-top:15px;
+    border:none;
+    background:#16a34a;
+    color:white;
+    padding:15px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.btn-finalizar:hover{
+    background:#15803d;
+}
+
+.sem-pedidos{
+    text-align:center;
+    color:#9ca3af;
+    padding:30px;
+}
+
+/* =========================
+   HISTÓRICO
+========================= */
+
+.historico-resumo{
+    background:#111827;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.historico-resumo strong{
+    display:block;
+    color:#4ade80;
+    font-size:25px;
+    margin-top:5px;
+}
+
+.historico-item{
+    background:#111827;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:10px;
+    border:1px solid #374151;
+}
+
+.historico-topo{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+
+.historico-total{
+    color:#4ade80;
+    font-weight:bold;
+}
+
+.historico-detalhes{
+    color:#9ca3af;
+    font-size:13px;
+    margin-top:5px;
+}
+
+@media(max-width:800px){
+
+    .resumo{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .resumo-card:last-child{
+        grid-column:span 2;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .resumo{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .mesas{
+        grid-template-columns:1fr;
+    }
+
+    .botoes-status{
+        grid-template-columns:1fr;
+    }
+
+}
 </style>
 </head>
+
 <body>
 
 <header>
-  <h1>🍔 Sabor da Casa</h1>
-  <p>Cardápio Digital — faça seu pedido</p>
+
+    <div class="topo">
+
+        <div>
+            <h1>🍔 Sabor da Casa</h1>
+            <p>Painel do Proprietário</p>
+        </div>
+
+        <button
+            class="btn-historico"
+            onclick="abrirHistorico()"
+        >
+            📜 Histórico
+        </button>
+
+    </div>
+
 </header>
 
-<div class="categorias">
-  <button class="ativo" onclick="filtrar('todos',this)">🍽️ Todos</button>
-  <button onclick="filtrar('lanche',this)">🍔 Lanches</button>
-  <button onclick="filtrar('pizza',this)">🍕 Pizzas</button>
-  <button onclick="filtrar('porcao',this)">🍟 Porções</button>
-  <button onclick="filtrar('bebida',this)">🥤 Bebidas</button>
-</div>
 
 <div class="container">
 
-<div class="secao">
-  <h2>🍔 Lanches</h2>
-  <div class="produtos">
-    <div class="produto" data-categoria="lanche">
-      <div class="info">
-        <h3>X-Bacon</h3>
-        <p>Hambúrguer, queijo, bacon, alface, tomate e molho.</p>
-        <div class="preco">R$ 26,00</div>
-      </div>
-      <button onclick="alterarItem('X-Bacon',26,'lanche',1)">+ Adicionar</button>
-    </div>
-    <div class="produto" data-categoria="lanche">
-      <div class="info">
-        <h3>X-Salada</h3>
-        <p>Hambúrguer, queijo, alface, tomate e molho.</p>
-        <div class="preco">R$ 23,00</div>
-      </div>
-      <button onclick="alterarItem('X-Salada',23,'lanche',1)">+ Adicionar</button>
-    </div>
-    <div class="produto" data-categoria="lanche">
-      <div class="info">
-        <h3>X-Calabresa</h3>
-        <p>Hambúrguer, calabresa, queijo, alface e tomate.</p>
-        <div class="preco">R$ 27,00</div>
-      </div>
-      <button onclick="alterarItem('X-Calabresa',27,'lanche',1)">+ Adicionar</button>
-    </div>
-    <div class="produto" data-categoria="lanche">
-      <div class="info">
-        <h3>X-Tudo</h3>
-        <p>Hambúrguer, queijo, bacon, calabresa, ovo e salada.</p>
-        <div class="preco">R$ 34,00</div>
-      </div>
-      <button onclick="alterarItem('X-Tudo',34,'lanche',1)">+ Adicionar</button>
-    </div>
-  </div>
-</div>
+    <!-- CONFIGURAÇÃO -->
 
-<div class="secao">
-  <h2>🍕 Pizzas</h2>
-  <div class="produtos">
-    <div class="produto" data-categoria="pizza">
-      <div class="info">
-        <h3>Pizza Calabresa</h3>
-        <p>Molho, queijo, calabresa e cebola.</p>
-        <div class="preco">R$ 45,00</div>
-      </div>
-      <button onclick="alterarItem('Pizza Calabresa',45,'pizza',1)">+ Adicionar</button>
-    </div>
-    <div class="produto" data-categoria="pizza">
-      <div class="info">
-        <h3>Pizza Frango c/ Catupiry</h3>
-        <p>Frango desfiado, queijo e catupiry.</p>
-        <div class="preco">R$ 48,00</div>
-      </div>
-      <button onclick="alterarItem('Pizza Frango c/ Catupiry',48,'pizza',1)">+ Adicionar</button>
-    </div>
-    <div class="produto" data-categoria="pizza">
-      <div class="info">
-        <h3>Pizza Mussarela</h3>
-        <p>Molho de tomate, queijo mussarela e orégano.</p>
-        <div class="preco">R$ 40,00</div>
-      </div>
-      <button onclick="alterarItem('Pizza Mussarela',40,'pizza',1)">+ Adicionar</button>
-    </div>
-    <div class="produto" data-categoria="pizza">
-      <div class="info">
-        <h3>Pizza Portuguesa</h3>
-        <p>Queijo, presunto, ovo, cebola, tomate e ervilha.</p>
-        <div class="preco">R$ 52,00</div>
-      </div>
-      <button onclick="alterarItem('Pizza Portuguesa',52,'pizza',1)">+ Adicionar</button>
-    </div>
-  </div>
-</div>
+    <div class="configuracao">
 
-<div class="secao">
-  <h2>🍟 Porções</h2>
-  <div class="produtos">
-    <div class="produto" data-categoria="porcao">
-      <div class="info">
-        <h3>Batata Frita</h3>
-        <p>Porção de batata frita crocante.</p>
-        <div class="preco">R$ 20,00</div>
-      </div>
-      <button onclick="alterarItem('Batata Frita',20,'porcao',1)">+ Adicionar</button>
-    </div>
-    <div class="produto" data-categoria="porcao">
-      <div class="info">
-        <h3>Batata Frita c/ Queijo</h3>
-        <p>Batata frita coberta com queijo derretido.</p>
-        <div class="preco">R$ 26,00</div>
-      </div>
-      <button onclick="alterarItem('Batata Frita c/ Queijo',26,'porcao',1)">+ Adicionar</button>
-    </div>
-    <div class="produto" data-categoria="porcao">
-      <div class="info">
-        <h3>Porção de Tilápia</h3>
-        <p>Tilápia frita acompanhada de molho tártaro.</p>
-        <div class="preco">R$ 38,00</div>
-      </div>
-      <button onclick="alterarItem('Porção de Tilápia',38,'porcao',1)">+ Adicionar</button>
-    </div>
-    <div class="produto" data-categoria="porcao">
-      <div class="info">
-        <h3>Mandioca Frita</h3>
-        <p>Porção de mandioca frita sequinha.</p>
-        <div class="preco">R$ 18,00</div>
-      </div>
-      <button onclick="alterarItem('Mandioca Frita',18,'porcao',1)">+ Adicionar</button>
-    </div>
-  </div>
-</div>
+        <label>
+            🪑 Quantidade de mesas
+        </label>
 
-<div class="secao">
-  <h2>🥤 Bebidas</h2>
-  <div class="produtos">
-    <div class="produto" data-categoria="bebida">
-      <div class="info">
-        <h3>Coca-Cola</h3>
-        <p>Refrigerante gelado.</p>
-        <div class="preco">R$ 7,00</div>
-      </div>
-      <button onclick="alterarItem('Coca-Cola',7,'bebida',1)">+ Adicionar</button>
+        <input
+            type="number"
+            id="quantidadeMesas"
+            min="1"
+            max="100"
+            value="8"
+        >
+
+        <br>
+
+        <button
+            class="btn-config"
+            onclick="salvarQuantidadeMesas()"
+        >
+            💾 Salvar Mesas
+        </button>
+
     </div>
-    <div class="produto" data-categoria="bebida">
-      <div class="info">
-        <h3>Pepsi</h3>
-        <p>Refrigerante gelado.</p>
-        <div class="preco">R$ 7,00</div>
-      </div>
-      <button onclick="alterarItem('Pepsi',7,'bebida',1)">+ Adicionar</button>
+
+
+    <!-- RESUMO -->
+
+    <h2 class="titulo-secao">
+        📊 Resumo do Dia
+    </h2>
+
+    <div class="resumo">
+
+        <div class="resumo-card">
+            <span>🟢 Mesas livres</span>
+            <strong id="totalLivres">0</strong>
+        </div>
+
+        <div class="resumo-card">
+            <span>🔴 Mesas ocupadas</span>
+            <strong id="totalOcupadas">0</strong>
+        </div>
+
+        <div class="resumo-card">
+            <span>🍽️ Pedidos abertos</span>
+            <strong id="totalPedidosAbertos">0</strong>
+        </div>
+
+        <div class="resumo-card">
+            <span>✅ Mesas finalizadas</span>
+            <strong id="totalMesasFinalizadas">0</strong>
+        </div>
+
+        <div class="resumo-card resumo-total">
+            <span>💰 Total vendido hoje</span>
+            <strong id="totalVendidoHoje">
+                R$ 0,00
+            </strong>
+        </div>
+
     </div>
-    <div class="produto" data-categoria="bebida">
-      <div class="info">
-        <h3>Cerveja</h3>
-        <p>Lata — gelada.</p>
-        <div class="preco">R$ 13,00</div>
-      </div>
-      <button onclick="alterarItem('Cerveja',13,'bebida',1)">+ Adicionar</button>
+
+
+    <!-- MESAS -->
+
+    <div class="mesas-titulo">
+
+        <h2>
+            🪑 Mesas
+        </h2>
+
     </div>
-    <div class="produto" data-categoria="bebida">
-      <div class="info">
-        <h3>Chopp</h3>
-        <p>Copo de chopp gelado.</p>
-        <div class="preco">R$ 15,00</div>
-      </div>
-      <button onclick="alterarItem('Chopp',15,'bebida',1)">+ Adicionar</button>
-    </div>
-  </div>
-</div>
+
+    <div
+        class="mesas"
+        id="areaMesas"
+    ></div>
 
 </div>
 
-<div class="carrinho-fixo">
-  <button class="botao-carrinho" onclick="abrirCarrinho()">
-    <span>🛒 Ver Pedido</span>
-    <span id="quantidadeCarrinho">0</span>
-  </button>
+
+<!-- =========================
+     MODAL COMANDA
+========================= -->
+
+<div
+    class="modal-fundo"
+    id="modalComanda"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2 id="tituloComanda">
+                🪑 Mesa
+            </h2>
+
+            <button
+                class="btn-fechar"
+                onclick="fecharComanda()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            class="comanda-responsavel"
+            id="responsavelComanda"
+        ></div>
+
+
+        <div id="listaComanda"></div>
+
+
+        <div class="comanda-total">
+
+            Total:
+            R$ <span id="totalComanda">0,00</span>
+
+        </div>
+
+
+        <button
+            class="btn-finalizar"
+            onclick="finalizarMesa()"
+        >
+            ✅ Finalizar Comanda e Liberar Mesa
+        </button>
+
+    </div>
+
 </div>
 
-<div class="modal" id="modalCarrinho">
-<div class="modal-conteudo">
-  <button class="fechar" onclick="fecharCarrinho()">&times;</button>
-  <h2>🛒 Seu Pedido</h2>
 
-  <div id="mensagemMesa" class="mensagem-mesa"></div>
-  <div id="listaItens"></div>
+<!-- =========================
+     MODAL HISTÓRICO
+========================= -->
 
-  <div class="campo">
-    <label for="mesa">🪑 Número da mesa</label>
-    <input type="number" id="mesa" placeholder="Ex.: 5" min="1">
-  </div>
+<div
+    class="modal-fundo"
+    id="modalHistorico"
+>
 
-  <div class="campo">
-    <label for="responsavel">👤 Nome do responsável</label>
-    <input type="text" id="responsavel" placeholder="Digite seu nome">
-  </div>
+    <div class="modal">
 
-  <div class="total">Total: R$ <span id="totalModal">0,00</span></div>
-  <button class="botao-enviar" id="botaoEnviar" onclick="enviarPedido()">📲 Enviar Pedido</button>
+        <div class="modal-header">
+
+            <h2>
+                📜 Histórico
+            </h2>
+
+            <button
+                class="btn-fechar"
+                onclick="fecharHistorico()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div id="listaHistorico"></div>
+
+    </div>
+
 </div>
-</div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
-  authDomain: "sistema-digital-f9df1.firebaseapp.com",
-  projectId: "sistema-digital-f9df1",
-  storageBucket: "sistema-digital-f9df1.firebasestorage.app",
-  messagingSenderId: "783545984661",
-  appId: "1:783545984661:web:5d0945907ad9db3990dd9c"
-};
+<script>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-console.log("🔥 Firebase conectado!");
+const CHAVE_PEDIDOS = "pedidosCardapio";
+const CHAVE_MESAS = "quantidadeMesas";
+const CHAVE_HISTORICO = "historicoComandas";
 
-const TELEFONE_WHATSAPP = "5549984121585";
-const CHAVE_IDENTIFICACAO = "identificacaoMesa";
+let mesaSelecionada = null;
+let ultimoNumeroPedidos = 0;
 
-let pedido = [];
-let mesa = "";
-let responsavel = "";
-let totalGeral = 0;
+
+/* =========================
+   PEDIDOS
+========================= */
+
+function obterPedidos(){
+
+    return JSON.parse(
+        localStorage.getItem(CHAVE_PEDIDOS) || "[]"
+    );
+
+}
+
+
+function salvarPedidos(pedidos){
+
+    localStorage.setItem(
+        CHAVE_PEDIDOS,
+        JSON.stringify(pedidos)
+    );
+
+}
+
+
+/* =========================
+   HISTÓRICO
+========================= */
+
+function obterHistorico(){
+
+    return JSON.parse(
+        localStorage.getItem(CHAVE_HISTORICO) || "[]"
+    );
+
+}
+
+
+function salvarHistorico(historico){
+
+    localStorage.setItem(
+        CHAVE_HISTORICO,
+        JSON.stringify(historico)
+    );
+
+}
+
+
+/* =========================
+   UTILITÁRIOS
+========================= */
 
 function formatarDinheiro(valor){
-  return Number(valor||0).toFixed(2).replace(".",",");
+
+    return Number(valor || 0)
+        .toFixed(2)
+        .replace(".",",");
+
 }
 
-function alterarItem(nome,preco,categoria,quantidade){
-  const existente = pedido.find(i=>i.nome===nome);
-  if(existente){ existente.quantidade += quantidade; }
-  else { pedido.push({nome,preco:Number(preco),quantidade,categoria,observacao:""}); }
-  atualizarCarrinho();
+
+function obterQuantidadeMesas(){
+
+    return Number(
+        localStorage.getItem(CHAVE_MESAS) || 8
+    );
+
 }
 
-function atualizarCarrinho(){
-  const lista = document.getElementById("listaItens");
-  const qtd = document.getElementById("quantidadeCarrinho");
-  const totalEl = document.getElementById("totalModal");
-  lista.innerHTML = "";
-  let qtdTotal = 0; totalGeral = 0;
 
-  if(pedido.length===0){
-    lista.innerHTML = `<div class="vazio">Seu pedido está vazio.</div>`;
-  }
+function mesmaData(data){
 
-  pedido.forEach((item,i)=>{
-    qtdTotal += item.quantidade;
-    const subt = item.preco * item.quantidade;
-    totalGeral += subt;
-    const div = document.createElement("div");
-    div.className="item-carrinho";
-    div.innerHTML = `
-      <div class="item-carrinho-topo">
-        <strong>${item.nome}</strong>
-        <strong>R$ ${formatarDinheiro(subt)}</strong>
-      </div>
-      <div class="controles">
-        <button onclick="diminuirItem(${i})">−</button>
-        <span>${item.quantidade}</span>
-        <button onclick="aumentarItem(${i})">+</button>
-        <button class="remover" onclick="removerItem(${i})">🗑</button>
-      </div>
-      <input class="observacao" placeholder="Observação..." value="${item.observacao||""}" onchange="alterarObservacao(${i},this.value)">
+    const hoje =
+        new Date().toLocaleDateString("pt-BR");
+
+    return data === hoje;
+
+}
+
+
+/* =========================
+   MESAS
+========================= */
+
+function salvarQuantidadeMesas(){
+
+    let quantidade =
+        Number(
+            document.getElementById(
+                "quantidadeMesas"
+            ).value
+        );
+
+    if(quantidade < 1)
+        quantidade = 1;
+
+    if(quantidade > 100)
+        quantidade = 100;
+
+    localStorage.setItem(
+        CHAVE_MESAS,
+        quantidade
+    );
+
+    document.getElementById(
+        "quantidadeMesas"
+    ).value = quantidade;
+
+    renderizarMesas();
+
+}
+
+
+function pedidosDaMesa(numeroMesa){
+
+    return obterPedidos().filter(
+        pedido =>
+            String(pedido.mesa) ===
+            String(numeroMesa) &&
+            pedido.status !== "finalizado"
+    );
+
+}
+
+
+function obterStatusMesa(numeroMesa){
+
+    const pedidos =
+        pedidosDaMesa(numeroMesa);
+
+    if(!pedidos.length)
+        return "livre";
+
+    if(
+        pedidos.some(
+            p => p.status === "pronto"
+        )
+    )
+        return "pronto";
+
+    if(
+        pedidos.some(
+            p => p.status === "preparo"
+        )
+    )
+        return "preparo";
+
+    return "ocupada";
+
+}
+
+
+function obterResponsavel(pedidos){
+
+    if(!pedidos.length)
+        return "—";
+
+    const pedido =
+        pedidos.find(
+            p =>
+                p.responsavel ||
+                p.nomeCliente
+        );
+
+    if(!pedido)
+        return "Não informado";
+
+    return (
+        pedido.responsavel ||
+        pedido.nomeCliente
+    );
+
+}
+
+
+function calcularTotalMesa(pedidos){
+
+    return pedidos.reduce(
+        (total,pedido) =>
+            total +
+            Number(pedido.total || 0),
+        0
+    );
+
+}
+
+
+/* =========================
+   RESUMO DO DIA
+========================= */
+
+function atualizarResumo(){
+
+    const quantidade =
+        obterQuantidadeMesas();
+
+    let livres = 0;
+    let ocupadas = 0;
+    let pedidosAbertos = 0;
+
+    for(
+        let mesa = 1;
+        mesa <= quantidade;
+        mesa++
+    ){
+
+        const pedidos =
+            pedidosDaMesa(mesa);
+
+        if(pedidos.length === 0)
+            livres++;
+        else
+            ocupadas++;
+
+        pedidosAbertos +=
+            pedidos.length;
+
+    }
+
+
+    const historico =
+        obterHistorico();
+
+
+    const hoje =
+        new Date().toLocaleDateString(
+            "pt-BR"
+        );
+
+
+    const historicoHoje =
+        historico.filter(
+            item => item.data === hoje
+        );
+
+
+    const totalVendido =
+        historicoHoje.reduce(
+            (total,item) =>
+                total +
+                Number(item.total || 0),
+            0
+        );
+
+
+    document.getElementById(
+        "totalLivres"
+    ).innerText = livres;
+
+
+    document.getElementById(
+        "totalOcupadas"
+    ).innerText = ocupadas;
+
+
+    document.getElementById(
+        "totalPedidosAbertos"
+    ).innerText =
+        pedidosAbertos;
+
+
+    document.getElementById(
+        "totalMesasFinalizadas"
+    ).innerText =
+        historicoHoje.length;
+
+
+    document.getElementById(
+        "totalVendidoHoje"
+    ).innerText =
+        "R$ " +
+        formatarDinheiro(totalVendido);
+
+}
+
+
+/* =========================
+   RENDERIZAR MESAS
+========================= */
+
+function renderizarMesas(){
+
+    const quantidade =
+        obterQuantidadeMesas();
+
+    const area =
+        document.getElementById(
+            "areaMesas"
+        );
+
+    area.innerHTML = "";
+
+
+    for(
+        let mesa = 1;
+        mesa <= quantidade;
+        mesa++
+    ){
+
+        const pedidos =
+            pedidosDaMesa(mesa);
+
+        const status =
+            obterStatusMesa(mesa);
+
+        const total =
+            calcularTotalMesa(pedidos);
+
+        const responsavel =
+            obterResponsavel(pedidos);
+
+
+        let textoStatus =
+            "Livre";
+
+        if(status === "ocupada")
+            textoStatus = "Ocupada";
+
+        if(status === "preparo")
+            textoStatus = "Em preparo";
+
+        if(status === "pronto")
+            textoStatus = "Pronto";
+
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "mesa " + status;
+
+
+        card.innerHTML = `
+
+            <div class="mesa-topo">
+
+                <span class="mesa-nome">
+                    🪑 Mesa ${mesa}
+                </span>
+
+                <span
+                    class="status status-${status}"
+                >
+                    ${textoStatus}
+                </span>
+
+            </div>
+
+
+            <div class="responsavel">
+
+                👤 <strong>Responsável:</strong>
+                ${responsavel}
+
+            </div>
+
+
+            <div class="info-pedido">
+
+                ${
+                    pedidos.length
+                    ?
+                    pedidos.length +
+                    (
+                        pedidos.length === 1
+                        ? " pedido aberto"
+                        : " pedidos abertos"
+                    )
+                    :
+                    "Nenhum pedido"
+                }
+
+            </div>
+
+
+            <div class="total-mesa">
+
+                R$ ${formatarDinheiro(total)}
+
+            </div>
+
+
+            <button
+                class="btn-abrir"
+                onclick="abrirComanda(${mesa})"
+            >
+
+                ${
+                    pedidos.length
+                    ?
+                    "📋 Abrir Comanda"
+                    :
+                    "👀 Ver Mesa"
+                }
+
+            </button>
+
+        `;
+
+
+        area.appendChild(card);
+
+    }
+
+
+    atualizarResumo();
+
+}
+
+
+/* =========================
+   ABRIR COMANDA
+========================= */
+
+function abrirComanda(numeroMesa){
+
+    mesaSelecionada =
+        numeroMesa;
+
+
+    document.getElementById(
+        "tituloComanda"
+    ).innerText =
+        "🪑 Mesa " + numeroMesa;
+
+
+    renderizarComanda();
+
+    document.getElementById(
+        "modalComanda"
+    ).style.display =
+        "flex";
+
+}
+
+
+function renderizarComanda(){
+
+    if(!mesaSelecionada)
+        return;
+
+
+    const pedidos =
+        pedidosDaMesa(
+            mesaSelecionada
+        );
+
+
+    const total =
+        calcularTotalMesa(pedidos);
+
+
+    const responsavel =
+        obterResponsavel(pedidos);
+
+
+    document.getElementById(
+        "responsavelComanda"
+    ).innerHTML = `
+
+        👤 <strong>Responsável:</strong>
+        ${responsavel}
+
     `;
-    lista.appendChild(div);
-  });
 
-  qtd.innerText = qtdTotal;
-  totalEl.innerText = formatarDinheiro(totalGeral);
+
+    const lista =
+        document.getElementById(
+            "listaComanda"
+        );
+
+
+    lista.innerHTML = "";
+
+
+    if(!pedidos.length){
+
+        lista.innerHTML = `
+
+            <div class="sem-pedidos">
+
+                🟢 Esta mesa está livre.
+
+            </div>
+
+        `;
+
+    }else{
+
+
+        pedidos.forEach(
+            (pedido,index) => {
+
+                const bloco =
+                    document.createElement(
+                        "div"
+                    );
+
+                bloco.className =
+                    "pedido-bloco";
+
+
+                let classeStatus =
+                    "status-recebido";
+
+                let textoStatus =
+                    "🟢 Recebido";
+
+
+                if(
+                    pedido.status ===
+                    "preparo"
+                ){
+
+                    classeStatus =
+                        "status-preparo-pedido";
+
+                    textoStatus =
+                        "🟠 Em preparo";
+
+                }
+
+
+                if(
+                    pedido.status ===
+                    "pronto"
+                ){
+
+                    classeStatus =
+                        "status-pronto-pedido";
+
+                    textoStatus =
+                        "🔵 Pronto";
+
+                }
+
+
+                let itensHTML = "";
+
+
+                (
+                    pedido.itens || []
+                ).forEach(
+                    item => {
+
+                        itensHTML += `
+
+                            <div class="item">
+
+                                <div class="item-linha">
+
+                                    <span class="item-nome">
+
+                                        ${item.quantidade}x
+                                        ${item.nome}
+
+                                    </span>
+
+                                    <span>
+
+                                        R$
+                                        ${
+                                            formatarDinheiro(
+                                                item.preco *
+                                                item.quantidade
+                                            )
+                                        }
+
+                                    </span>
+
+                                </div>
+
+
+                                ${
+                                    item.observacao
+                                    ?
+                                    `
+                                    <div class="item-obs">
+
+                                        📝 OBS:
+                                        ${item.observacao}
+
+                                    </div>
+                                    `
+                                    :
+                                    ""
+                                }
+
+                            </div>
+
+                        `;
+
+                    }
+                );
+
+
+                bloco.innerHTML = `
+
+                    <div class="pedido-cabecalho">
+
+                        <span>
+
+                            <strong>
+                                Pedido #${
+                                    String(
+                                        pedido.numero ||
+                                        index + 1
+                                    ).padStart(
+                                        3,
+                                        "0"
+                                    )
+                                }
+                            </strong>
+
+                            <br>
+
+                            🕐 ${
+                                pedido.horario ||
+                                "--:--"
+                            }
+
+                        </span>
+
+
+                        <span
+                            class="
+                                pedido-status
+                                ${classeStatus}
+                            "
+                        >
+                            ${textoStatus}
+                        </span>
+
+                    </div>
+
+
+                    ${itensHTML}
+
+
+                    <div class="botoes-status">
+
+                        <button
+                            class="
+                                btn-status
+                                btn-recebido
+                                ${
+                                    pedido.status ===
+                                    "recebido"
+                                    ? "ativo"
+                                    : ""
+                                }
+                            "
+                            onclick="
+                                alterarStatusPedido(
+                                    '${pedido.id}',
+                                    'recebido'
+                                )
+                            "
+                        >
+                            🟢 Recebido
+                        </button>
+
+
+                        <button
+                            class="
+                                btn-status
+                                btn-preparo
+                                ${
+                                    pedido.status ===
+                                    "preparo"
+                                    ? "ativo"
+                                    : ""
+                                }
+                            "
+                            onclick="
+                                alterarStatusPedido(
+                                    '${pedido.id}',
+                                    'preparo'
+                                )
+                            "
+                        >
+                            🟠 Em preparo
+                        </button>
+
+
+                        <button
+                            class="
+                                btn-status
+                                btn-pronto
+                                ${
+                                    pedido.status ===
+                                    "pronto"
+                                    ? "ativo"
+                                    : ""
+                                }
+                            "
+                            onclick="
+                                alterarStatusPedido(
+                                    '${pedido.id}',
+                                    'pronto'
+                                )
+                            "
+                        >
+                            🔵 Pronto
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                lista.appendChild(bloco);
+
+            }
+        );
+
+    }
+
+
+    document.getElementById(
+        "totalComanda"
+    ).innerText =
+        formatarDinheiro(total);
+
 }
 
-window.aumentarItem = i=>{pedido[i].quantidade++;atualizarCarrinho();};
-window.diminuirItem = i=>{pedido[i].quantidade--;if(pedido[i].quantidade<=0)pedido.splice(i,1);atualizarCarrinho();};
-window.removerItem = i=>{pedido.splice(i,1);atualizarCarrinho();};
-window.alterarObservacao = (i,v)=>{pedido[i].observacao=v;};
 
-window.abrirCarrinho = ()=>{
-  document.getElementById("modalCarrinho").classList.add("ativo");
-  carregarIdentificacao();
-  atualizarCarrinho();
-};
-window.fecharCarrinho = ()=>{
-  document.getElementById("modalCarrinho").classList.remove("ativo");
-};
+/* =========================
+   ALTERAR STATUS
+========================= */
 
-function carregarIdentificacao(){
-  try{
-    const d = JSON.parse(localStorage.getItem(CHAVE_IDENTIFICACAO));
-    if(d){document.getElementById("mesa").value=d.mesa||"";document.getElementById("responsavel").value=d.responsavel||"";}
-  }catch(e){}
+function alterarStatusPedido(
+    id,
+    novoStatus
+){
+
+    const pedidos =
+        obterPedidos();
+
+
+    const pedido =
+        pedidos.find(
+            p => String(p.id) === String(id)
+        );
+
+
+    if(!pedido)
+        return;
+
+
+    pedido.status =
+        novoStatus;
+
+
+    if(novoStatus === "pronto"){
+
+        pedido.dataPronto =
+            new Date().toISOString();
+
+    }
+
+
+    salvarPedidos(pedidos);
+
+
+    renderizarComanda();
+
+    renderizarMesas();
+
 }
-function salvarIdentificacao(){
-  mesa = document.getElementById("mesa").value.trim();
-  responsavel = document.getElementById("responsavel").value.trim();
-  localStorage.setItem(CHAVE_IDENTIFICACAO,JSON.stringify({mesa,responsavel}));
+
+
+/* =========================
+   FECHAR COMANDA
+========================= */
+
+function fecharComanda(){
+
+    document.getElementById(
+        "modalComanda"
+    ).style.display =
+        "none";
+
+    mesaSelecionada =
+        null;
+
 }
 
-async function salvarPedidoNoSistema(){
-  try{
-    const numero = Math.floor(Math.random() * 900) + 100;
-    const pedidoSistema = {
-      numero, mesa, responsavel, nomeCliente:responsavel,
-      horario:obterHorario(), data:obterData(), status:"recebido",
-      itens:pedido.map(i=>({nome:i.nome,preco:Number(i.preco),quantidade:Number(i.quantidade),categoria:i.categoria||"",observacao:i.observacao||""})),
-      total:Number(totalGeral.toFixed(2)), dataCriacao:new Date().toISOString()
+
+/* =========================
+   FINALIZAR COMANDA
+========================= */
+
+function finalizarMesa(){
+
+    if(!mesaSelecionada)
+        return;
+
+
+    const pedidos =
+        pedidosDaMesa(
+            mesaSelecionada
+        );
+
+
+    if(!pedidos.length){
+
+        alert(
+            "Esta mesa não possui pedidos."
+        );
+
+        return;
+
+    }
+
+
+    const total =
+        calcularTotalMesa(pedidos);
+
+
+    const responsavel =
+        obterResponsavel(pedidos);
+
+
+    const confirmar =
+        confirm(
+
+            "Finalizar Comanda da Mesa " +
+            mesaSelecionada +
+            "?\n\n" +
+
+            "Responsável: " +
+            responsavel +
+            "\n" +
+
+            "Total: R$ " +
+            formatarDinheiro(total) +
+            "\n\n" +
+
+            "A mesa será liberada."
+
+        );
+
+
+    if(!confirmar)
+        return;
+
+
+    /* =========================
+       SALVAR HISTÓRICO
+    ========================= */
+
+    const historico =
+        obterHistorico();
+
+
+    const agora =
+        new Date();
+
+
+    const comandaFinalizada = {
+
+        id:
+            Date.now().toString(),
+
+        mesa:
+            mesaSelecionada,
+
+        responsavel:
+            responsavel,
+
+        total:
+            Number(
+                total.toFixed(2)
+            ),
+
+        data:
+            agora.toLocaleDateString(
+                "pt-BR"
+            ),
+
+        horarioFinalizacao:
+            agora.toLocaleTimeString(
+                "pt-BR",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            ),
+
+        pedidos:
+            JSON.parse(
+                JSON.stringify(pedidos)
+            )
+
     };
-    const ref = collection(db,"pedidos");
-    const docRef = await addDoc(ref, pedidoSistema);
-    console.log("✅ Salvo:", docRef.id, pedidoSistema);
-    return pedidoSistema;
-  }catch(e){
-    console.error("❌ Erro:", e);
-    alert("Erro: " + e.message);
-    return null;
-  }
+
+
+    historico.push(
+        comandaFinalizada
+    );
+
+
+    salvarHistorico(
+        historico
+    );
+
+
+    /* =========================
+       FINALIZAR PEDIDOS
+    ========================= */
+
+    const todosPedidos =
+        obterPedidos();
+
+
+    todosPedidos.forEach(
+        pedido => {
+
+            if(
+
+                String(pedido.mesa) ===
+                String(mesaSelecionada)
+
+                &&
+
+                pedido.status !==
+                "finalizado"
+
+            ){
+
+                pedido.status =
+                    "finalizado";
+
+                pedido.dataFinalizacao =
+                    new Date().toISOString();
+
+            }
+
+        }
+    );
+
+
+    salvarPedidos(
+        todosPedidos
+    );
+
+
+    const mesaFinalizada =
+        mesaSelecionada;
+
+
+    fecharComanda();
+
+    renderizarMesas();
+
+
+    alert(
+
+        "✅ Comanda finalizada!\n\n" +
+
+        "Mesa " +
+        mesaFinalizada +
+        " liberada.\n\n" +
+
+        "Total: R$ " +
+        formatarDinheiro(total)
+
+    );
+
 }
 
-window.enviarPedido = async function(){
-  salvarIdentificacao();
-  if(!mesa)return alert("⚠️ Informe o número da mesa.");
-  if(!responsavel)return alert("⚠️ Informe o nome do responsável.");
-  if(pedido.length===0)return alert("⚠️ Adicione pelo menos um item.");
-  const btn = document.getElementById("botaoEnviar");
-  btn.disabled=true;btn.innerText="⏳ Registrando...";
-  const salvo = await salvarPedidoNoSistema();
-  if(!salvo){btn.disabled=false;btn.innerText="📲 Enviar Pedido";return;}
-  alert(`✅ Pedido #${salvo.numero} registrado!`);
-  enviarWhatsApp(salvo);
-  pedido=[];atualizarCarrinho();fecharCarrinho();
-  btn.disabled=false;btn.innerText="📲 Enviar Pedido";
-};
 
-function enviarWhatsApp(ped){
-  let msg = `🍔 *NOVO PEDIDO — SABOR DA CASA*\n\n`;
-  msg += `📋 Pedido: #${ped.numero}\n`;
-  msg += `🪑 Mesa: ${ped.mesa}\n👤 Responsável: ${ped.responsavel}\n🕐 Horário: ${ped.horario}\n`;
-  msg += `━━━━━━━━━━━━━━━━━━\n`;
-  ped.itens.forEach(i=>{
-    const st = i.preco*i.quantidade;
-    msg += `▪️ ${i.quantidade}x ${i.nome} — R$ ${formatarDinheiro(st)}\n`;
-    if(i.observacao)msg += `   📝 OBS: ${i.observacao}\n`;
-  });
-  msg += `━━━━━━━━━━━━━━━━━━\n💰 *TOTAL: R$ ${formatarDinheiro(ped.total)}*`;
-  window.open(`https://wa.me/${TELEFONE_WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
+/* =========================
+   HISTÓRICO
+========================= */
+
+function abrirHistorico(){
+
+    const historico =
+        obterHistorico();
+
+
+    const lista =
+        document.getElementById(
+            "listaHistorico"
+        );
+
+
+    lista.innerHTML = "";
+
+
+    const hoje =
+        new Date().toLocaleDateString(
+            "pt-BR"
+        );
+
+
+    const historicoHoje =
+        historico.filter(
+            item =>
+                item.data === hoje
+        );
+
+
+    const totalHoje =
+        historicoHoje.reduce(
+            (total,item) =>
+                total +
+                Number(item.total || 0),
+            0
+        );
+
+
+    lista.innerHTML += `
+
+        <div class="historico-resumo">
+
+            📊 <strong>Resumo de hoje</strong>
+
+            <div style="
+                color:#9ca3af;
+                margin-top:5px;
+            ">
+
+                ${historicoHoje.length}
+                comandas finalizadas
+
+            </div>
+
+            <strong>
+
+                R$
+                ${formatarDinheiro(totalHoje)}
+
+            </strong>
+
+        </div>
+
+    `;
+
+
+    if(!historico.length){
+
+        lista.innerHTML += `
+
+            <div class="sem-pedidos">
+
+                📜 Nenhuma comanda
+                finalizada ainda.
+
+            </div>
+
+        `;
+
+    }else{
+
+
+        [...historico]
+        .reverse()
+        .forEach(
+            comanda => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "historico-item";
+
+
+                item.innerHTML = `
+
+                    <div class="historico-topo">
+
+                        <strong>
+
+                            🪑 Mesa
+                            ${comanda.mesa}
+
+                        </strong>
+
+
+                        <span
+                            class="historico-total"
+                        >
+
+                            R$
+                            ${
+                                formatarDinheiro(
+                                    comanda.total
+                                )
+                            }
+
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        👤 ${
+                            comanda.responsavel ||
+                            "Não informado"
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="historico-detalhes"
+                    >
+
+                        📅 ${comanda.data}
+
+                        —
+                        🕐 ${
+                            comanda.horarioFinalizacao
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="historico-detalhes"
+                    >
+
+                        🍽️ ${
+                            comanda.pedidos.length
+                        }
+                        pedidos nesta comanda
+
+                    </div>
+
+                `;
+
+
+                lista.appendChild(item);
+
+            }
+        );
+
+    }
+
+
+    document.getElementById(
+        "modalHistorico"
+    ).style.display =
+        "flex";
+
 }
 
-function obterHorario(){return new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});}
-function obterData(){return new Date().toLocaleDateString("pt-BR");}
 
-window.filtrar = function(cat,btn){
-  document.querySelectorAll(".categorias button").forEach(b=>b.classList.remove("ativo"));
-  btn.classList.add("ativo");
-  document.querySelectorAll(".produto").forEach(p=>{
-    p.style.display = (cat==="todos" || p.dataset.categoria===cat) ? "" : "none";
-  });
-};
+function fecharHistorico(){
 
-window.alterarItem = alterarItem;
+    document.getElementById(
+        "modalHistorico"
+    ).style.display =
+        "none";
 
-document.addEventListener("DOMContentLoaded",()=>{
-  carregarIdentificacao();
-  atualizarCarrinho();
-  console.log("🚀 Sistema iniciado!");
-});
+}
+
+
+/* =========================
+   ALERTA DE NOVOS PEDIDOS
+========================= */
+
+function verificarNovosPedidos(){
+
+    const pedidos =
+        obterPedidos();
+
+
+    const quantidadeAtual =
+        pedidos.length;
+
+
+    if(
+        quantidadeAtual >
+        ultimoNumeroPedidos
+    ){
+
+        if(
+            ultimoNumeroPedidos !== 0
+        ){
+
+            tocarAlerta();
+
+        }
+
+    }
+
+
+    ultimoNumeroPedidos =
+        quantidadeAtual;
+
+
+    renderizarMesas();
+
+}
+
+
+function tocarAlerta(){
+
+    try{
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        const audio =
+            new AudioContext();
+
+
+        const oscillator =
+            audio.createOscillator();
+
+
+        const gain =
+            audio.createGain();
+
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audio.destination
+        );
+
+
+        oscillator.frequency.value =
+            880;
+
+        oscillator.type =
+            "sine";
+
+
+        gain.gain.setValueAtTime(
+            0.3,
+            audio.currentTime
+        );
+
+
+        oscillator.start();
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audio.currentTime + 0.8
+        );
+
+
+        oscillator.stop(
+            audio.currentTime + 0.8
+        );
+
+
+    }catch(e){
+
+        console.log(
+            "Som indisponível"
+        );
+
+    }
+
+}
+
+
+/* =========================
+   FECHAR MODAIS
+========================= */
+
+document.getElementById(
+    "modalComanda"
+).addEventListener(
+    "click",
+    function(event){
+
+        if(event.target === this){
+
+            fecharComanda();
+
+        }
+
+    }
+);
+
+
+document.getElementById(
+    "modalHistorico"
+).addEventListener(
+    "click",
+    function(event){
+
+        if(event.target === this){
+
+            fecharHistorico();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   INICIAR
+========================= */
+
+document.getElementById(
+    "quantidadeMesas"
+).value =
+    obterQuantidadeMesas();
+
+
+ultimoNumeroPedidos =
+    obterPedidos().length;
+
+
+renderizarMesas();
+
+
+setInterval(
+    verificarNovosPedidos,
+    2000
+);
+
 </script>
+
 </body>
 </html>
