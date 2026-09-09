@@ -1,2060 +1,455 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Sabor da Casa — Cardápio Digital</title>
-
 <style>
-
-/* =====================================================
-   RESET E CONFIGURAÇÕES
-===================================================== */
-
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-body{
-  font-family:'Segoe UI',Arial,sans-serif;
-  background:#f8f9fa;
-  color:#212529;
-  padding-bottom:100px;
-}
-
-
-/* =====================================================
-   CABEÇALHO
-===================================================== */
-
-header{
-  background:linear-gradient(135deg,#b91c1c,#991b1b);
-  color:white;
-  padding:20px 16px;
-  text-align:center;
-  box-shadow:0 2px 6px rgba(0,0,0,.15);
-}
-
-header h1{
-  font-size:24px;
-  margin-bottom:4px;
-}
-
-header p{
-  font-size:14px;
-  opacity:.9;
-}
-
-
-/* =====================================================
-   CATEGORIAS
-===================================================== */
-
-.categorias{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:12px 16px;
-  background:white;
-  position:sticky;
-  top:0;
-  z-index:10;
-  box-shadow:0 1px 4px rgba(0,0,0,.06);
-}
-
-.categorias button{
-  border:none;
-  background:#f3f4f6;
-  padding:8px 14px;
-  border-radius:20px;
-  white-space:nowrap;
-  cursor:pointer;
-  font-size:14px;
-  color:#374151;
-  transition:.2s;
-}
-
-.categorias button.ativo{
-  background:#b91c1c;
-  color:white;
-  font-weight:500;
-}
-
-
-/* =====================================================
-   CONTEÚDO
-===================================================== */
-
-.container{
-  max-width:720px;
-  margin:0 auto;
-  padding:16px;
-}
-
-.secao{
-  margin-bottom:28px;
-}
-
-.secao h2{
-  font-size:18px;
-  color:#b91c1c;
-  margin-bottom:12px;
-  padding-bottom:6px;
-  border-bottom:2px solid #f3f4f6;
-}
-
-
-/* =====================================================
-   PRODUTOS
-===================================================== */
-
-.produtos{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.produto{
-  background:white;
-  border-radius:10px;
-  padding:14px;
-  box-shadow:0 1px 3px rgba(0,0,0,.05);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.produto .info{
-  flex:1;
-}
-
-.produto h3{
-  font-size:15px;
-  font-weight:600;
-  color:#111827;
-  margin-bottom:3px;
-}
-
-.produto p{
-  font-size:13px;
-  color:#6b7280;
-  line-height:1.4;
-  margin-bottom:6px;
-}
-
-.produto .preco{
-  font-size:16px;
-  font-weight:700;
-  color:#b91c1c;
-}
-
-.produto button{
-  border:none;
-  background:#b91c1c;
-  color:white;
-  padding:9px 14px;
-  border-radius:8px;
-  font-size:14px;
-  font-weight:500;
-  cursor:pointer;
-  white-space:nowrap;
-  transition:.2s;
-}
-
-.produto button:active{
-  transform:scale(.96);
-}
-
-
-/* =====================================================
-   CARRINHO FIXO
-===================================================== */
-
-.carrinho-fixo{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:white;
-  padding:12px 16px;
-  box-shadow:0 -2px 8px rgba(0,0,0,.1);
-  z-index:20;
-}
-
-.botao-carrinho{
-  width:100%;
-  max-width:720px;
-  margin:0 auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:#16a34a;
-  color:white;
-  border:none;
-  padding:13px 18px;
-  border-radius:10px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-}
-
-#quantidadeCarrinho{
-  background:white;
-  color:#16a34a;
-  border-radius:12px;
-  padding:2px 10px;
-  font-weight:700;
-}
-
-
-/* =====================================================
-   MODAL
-===================================================== */
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  z-index:100;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-}
-
-.modal.ativo{
-  display:flex;
-}
-
-.modal-conteudo{
-  background:white;
-  width:100%;
-  max-width:480px;
-  max-height:90vh;
-  overflow-y:auto;
-  border-radius:14px;
-  padding:20px;
-}
-
-.modal-conteudo h2{
-  font-size:18px;
-  margin-bottom:16px;
-}
-
-.fechar{
-  float:right;
-  border:none;
-  background:none;
-  font-size:26px;
-  cursor:pointer;
-  color:#6b7280;
-  margin:-6px -6px 0 0;
-}
-
-
-/* =====================================================
-   CAMPOS
-===================================================== */
-
-.campo{
-  margin-bottom:14px;
-}
-
-.campo label{
-  display:block;
-  margin-bottom:6px;
-  font-size:14px;
-  font-weight:500;
-  color:#374151;
-}
-
-.campo input{
-  width:100%;
-  padding:11px 12px;
-  border:1px solid #d1d5db;
-  border-radius:8px;
-  font-size:15px;
-}
-
-
-/* =====================================================
-   AVISO DA MESA
-===================================================== */
-
-.mensagem-mesa{
-  background:#fffbeb;
-  color:#92400e;
-  padding:12px;
-  border-radius:8px;
-  margin-bottom:16px;
-  display:none;
-  border:1px solid #fef3c7;
-  font-size:14px;
-}
-
-
-/* =====================================================
-   ITENS DO CARRINHO
-===================================================== */
-
-.item-carrinho{
-  padding:12px 0;
-  border-bottom:1px solid #f3f4f6;
-}
-
-.item-carrinho-topo{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:8px;
-}
-
-.item-carrinho strong{
-  font-size:15px;
-}
-
-.controles{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:8px;
-}
-
-.controles button{
-  border:none;
-  background:#f3f4f6;
-  width:32px;
-  height:32px;
-  border-radius:6px;
-  cursor:pointer;
-  font-size:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.remover{
-  background:#fee2e2 !important;
-  color:#dc2626;
-}
-
-.observacao{
-  width:100%;
-  margin-top:8px;
-  padding:9px 10px;
-  border:1px solid #e5e7eb;
-  border-radius:6px;
-  font-size:14px;
-}
-
-
-/* =====================================================
-   TOTAL
-===================================================== */
-
-.total{
-  font-size:20px;
-  font-weight:700;
-  text-align:right;
-  margin:18px 0;
-}
-
-
-/* =====================================================
-   BOTÃO ENVIAR
-===================================================== */
-
-.botao-enviar{
-  width:100%;
-  border:none;
-  background:#16a34a;
-  color:white;
-  padding:14px;
-  border-radius:10px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-}
-
-.botao-enviar:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
-
-
-/* =====================================================
-   CARRINHO VAZIO
-===================================================== */
-
-.vazio{
-  text-align:center;
-  padding:30px;
-  color:#6b7280;
-  font-size:15px;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f8f9fa;color:#212529;padding-bottom:100px}
+
+header{background:linear-gradient(135deg,#b91c1c,#991b1b);color:white;padding:20px 16px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+header h1{font-size:24px;margin-bottom:4px}
+header p{font-size:14px;opacity:.9}
+
+.categorias{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;background:white;position:sticky;top:0;z-index:10;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.categorias button{border:none;background:#f3f4f6;padding:8px 14px;border-radius:20px;white-space:nowrap;cursor:pointer;font-size:14px;color:#374151;transition:.2s}
+.categorias button.ativo{background:#b91c1c;color:white;font-weight:500}
+
+.container{max-width:720px;margin:0 auto;padding:16px}
+.secao{margin-bottom:28px}
+.secao h2{font-size:18px;color:#b91c1c;margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid #f3f4f6}
+
+.produtos{display:flex;flex-direction:column;gap:10px}
+.produto{background:white;border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.produto .info{flex:1}
+.produto h3{font-size:15px;font-weight:600;color:#111827;margin-bottom:3px}
+.produto p{font-size:13px;color:#6b7280;line-height:1.4;margin-bottom:6px}
+.produto .preco{font-size:16px;font-weight:700;color:#b91c1c}
+.produto button{border:none;background:#b91c1c;color:white;padding:9px 14px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;transition:.2s}
+.produto button:active{transform:scale(.96)}
+
+.carrinho-fixo{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px 16px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:20}
+.botao-carrinho{width:100%;max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;background:#16a34a;color:white;border:none;padding:13px 18px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer}
+#quantidadeCarrinho{background:white;color:#16a34a;border-radius:12px;padding:2px 10px;font-weight:700}
+
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal.ativo{display:flex}
+.modal-conteudo{background:white;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;border-radius:14px;padding:20px}
+.modal-conteudo h2{font-size:18px;margin-bottom:16px}
+.fechar{float:right;border:none;background:none;font-size:26px;cursor:pointer;color:#6b7280;margin:-6px -6px 0 0}
+
+.campo{margin-bottom:14px}
+.campo label{display:block;margin-bottom:6px;font-size:14px;font-weight:500;color:#374151}
+.campo input{width:100%;padding:11px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:15px}
+
+.mensagem-mesa{background:#fffbeb;color:#92400e;padding:12px;border-radius:8px;margin-bottom:16px;display:none;border:1px solid #fef3c7;font-size:14px}
+
+.item-carrinho{padding:12px 0;border-bottom:1px solid #f3f4f6}
+.item-carrinho-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.item-carrinho strong{font-size:15px}
+.controles{display:flex;align-items:center;gap:8px;margin-top:8px}
+.controles button{border:none;background:#f3f4f6;width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.remover{background:#fee2e2 !important;color:#dc2626}
+.observacao{width:100%;margin-top:8px;padding:9px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px}
+
+.total{font-size:20px;font-weight:700;text-align:right;margin:18px 0}
+.botao-enviar{width:100%;border:none;background:#16a34a;color:white;padding:14px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer}
+.botao-enviar:disabled{opacity:.6;cursor:not-allowed}
+.vazio{text-align:center;padding:30px;color:#6b7280;font-size:15px}
 </style>
-
 </head>
-
-
 <body>
 
-
-<!-- =====================================================
-     CABEÇALHO
-===================================================== -->
-
 <header>
-
   <h1>🍔 Sabor da Casa</h1>
-
   <p>Cardápio Digital — faça seu pedido</p>
-
 </header>
 
-
-<!-- =====================================================
-     CATEGORIAS
-===================================================== -->
-
 <div class="categorias">
-
-  <button class="ativo" onclick="filtrar('todos',this)">
-    🍽️ Todos
-  </button>
-
-  <button onclick="filtrar('lanche',this)">
-    🍔 Lanches
-  </button>
-
-  <button onclick="filtrar('pizza',this)">
-    🍕 Pizzas
-  </button>
-
-  <button onclick="filtrar('porcao',this)">
-    🍟 Porções
-  </button>
-
-  <button onclick="filtrar('bebida',this)">
-    🥤 Bebidas
-  </button>
-
+  <button class="ativo" onclick="filtrar('todos',this)">🍽️ Todos</button>
+  <button onclick="filtrar('lanche',this)">🍔 Lanches</button>
+  <button onclick="filtrar('pizza',this)">🍕 Pizzas</button>
+  <button onclick="filtrar('porcao',this)">🍟 Porções</button>
+  <button onclick="filtrar('bebida',this)">🥤 Bebidas</button>
 </div>
-
-
-<!-- =====================================================
-     CARDÁPIO
-===================================================== -->
 
 <div class="container">
 
-
-<!-- Lanches -->
+<div class="secao">
+  <h2>🍔 Lanches</h2>
+  <div class="produtos">
+    <div class="produto" data-categoria="lanche">
+      <div class="info">
+        <h3>X-Bacon</h3>
+        <p>Hambúrguer, queijo, bacon, alface, tomate e molho.</p>
+        <div class="preco">R$ 26,00</div>
+      </div>
+      <button onclick="alterarItem('X-Bacon',26,'lanche',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="lanche">
+      <div class="info">
+        <h3>X-Salada</h3>
+        <p>Hambúrguer, queijo, alface, tomate e molho.</p>
+        <div class="preco">R$ 23,00</div>
+      </div>
+      <button onclick="alterarItem('X-Salada',23,'lanche',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="lanche">
+      <div class="info">
+        <h3>X-Calabresa</h3>
+        <p>Hambúrguer, calabresa, queijo, alface e tomate.</p>
+        <div class="preco">R$ 27,00</div>
+      </div>
+      <button onclick="alterarItem('X-Calabresa',27,'lanche',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="lanche">
+      <div class="info">
+        <h3>X-Tudo</h3>
+        <p>Hambúrguer, queijo, bacon, calabresa, ovo e salada.</p>
+        <div class="preco">R$ 34,00</div>
+      </div>
+      <button onclick="alterarItem('X-Tudo',34,'lanche',1)">+ Adicionar</button>
+    </div>
+  </div>
+</div>
 
 <div class="secao">
-
-<h2>🍔 Lanches</h2>
-
-<div class="produtos">
-
-
-<div class="produto" data-categoria="lanche">
-
-<div class="info">
-
-<h3>X-Bacon</h3>
-
-<p>Hambúrguer, queijo, bacon, alface, tomate e molho.</p>
-
-<div class="preco">R$ 26,00</div>
-
+  <h2>🍕 Pizzas</h2>
+  <div class="produtos">
+    <div class="produto" data-categoria="pizza">
+      <div class="info">
+        <h3>Pizza Calabresa</h3>
+        <p>Molho, queijo, calabresa e cebola.</p>
+        <div class="preco">R$ 45,00</div>
+      </div>
+      <button onclick="alterarItem('Pizza Calabresa',45,'pizza',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="pizza">
+      <div class="info">
+        <h3>Pizza Frango c/ Catupiry</h3>
+        <p>Frango desfiado, queijo e catupiry.</p>
+        <div class="preco">R$ 48,00</div>
+      </div>
+      <button onclick="alterarItem('Pizza Frango c/ Catupiry',48,'pizza',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="pizza">
+      <div class="info">
+        <h3>Pizza Mussarela</h3>
+        <p>Molho de tomate, queijo mussarela e orégano.</p>
+        <div class="preco">R$ 40,00</div>
+      </div>
+      <button onclick="alterarItem('Pizza Mussarela',40,'pizza',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="pizza">
+      <div class="info">
+        <h3>Pizza Portuguesa</h3>
+        <p>Queijo, presunto, ovo, cebola, tomate e ervilha.</p>
+        <div class="preco">R$ 52,00</div>
+      </div>
+      <button onclick="alterarItem('Pizza Portuguesa',52,'pizza',1)">+ Adicionar</button>
+    </div>
+  </div>
 </div>
-
-<button onclick="alterarItem('X-Bacon',26,'lanche',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="lanche">
-
-<div class="info">
-
-<h3>X-Salada</h3>
-
-<p>Hambúrguer, queijo, alface, tomate e molho.</p>
-
-<div class="preco">R$ 23,00</div>
-
-</div>
-
-<button onclick="alterarItem('X-Salada',23,'lanche',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="lanche">
-
-<div class="info">
-
-<h3>X-Calabresa</h3>
-
-<p>Hambúrguer, calabresa, queijo, alface e tomate.</p>
-
-<div class="preco">R$ 27,00</div>
-
-</div>
-
-<button onclick="alterarItem('X-Calabresa',27,'lanche',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="lanche">
-
-<div class="info">
-
-<h3>X-Tudo</h3>
-
-<p>Hambúrguer, queijo, bacon, calabresa, ovo e salada.</p>
-
-<div class="preco">R$ 34,00</div>
-
-</div>
-
-<button onclick="alterarItem('X-Tudo',34,'lanche',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-
-<!-- Pizzas -->
 
 <div class="secao">
-
-<h2>🍕 Pizzas</h2>
-
-<div class="produtos">
-
-
-<div class="produto" data-categoria="pizza">
-
-<div class="info">
-
-<h3>Pizza Calabresa</h3>
-
-<p>Molho, queijo, calabresa e cebola.</p>
-
-<div class="preco">R$ 45,00</div>
-
+  <h2>🍟 Porções</h2>
+  <div class="produtos">
+    <div class="produto" data-categoria="porcao">
+      <div class="info">
+        <h3>Batata Frita</h3>
+        <p>Porção de batata frita crocante.</p>
+        <div class="preco">R$ 20,00</div>
+      </div>
+      <button onclick="alterarItem('Batata Frita',20,'porcao',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="porcao">
+      <div class="info">
+        <h3>Batata Frita c/ Queijo</h3>
+        <p>Batata frita coberta com queijo derretido.</p>
+        <div class="preco">R$ 26,00</div>
+      </div>
+      <button onclick="alterarItem('Batata Frita c/ Queijo',26,'porcao',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="porcao">
+      <div class="info">
+        <h3>Porção de Tilápia</h3>
+        <p>Tilápia frita acompanhada de molho tártaro.</p>
+        <div class="preco">R$ 38,00</div>
+      </div>
+      <button onclick="alterarItem('Porção de Tilápia',38,'porcao',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="porcao">
+      <div class="info">
+        <h3>Mandioca Frita</h3>
+        <p>Porção de mandioca frita sequinha.</p>
+        <div class="preco">R$ 18,00</div>
+      </div>
+      <button onclick="alterarItem('Mandioca Frita',18,'porcao',1)">+ Adicionar</button>
+    </div>
+  </div>
 </div>
-
-<button onclick="alterarItem('Pizza Calabresa',45,'pizza',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="pizza">
-
-<div class="info">
-
-<h3>Pizza Frango c/ Catupiry</h3>
-
-<p>Frango desfiado, queijo e catupiry.</p>
-
-<div class="preco">R$ 48,00</div>
-
-</div>
-
-<button onclick="alterarItem('Pizza Frango c/ Catupiry',48,'pizza',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="pizza">
-
-<div class="info">
-
-<h3>Pizza Mussarela</h3>
-
-<p>Molho de tomate, queijo mussarela e orégano.</p>
-
-<div class="preco">R$ 40,00</div>
-
-</div>
-
-<button onclick="alterarItem('Pizza Mussarela',40,'pizza',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="pizza">
-
-<div class="info">
-
-<h3>Pizza Portuguesa</h3>
-
-<p>Queijo, presunto, ovo, cebola, tomate e ervilha.</p>
-
-<div class="preco">R$ 52,00</div>
-
-</div>
-
-<button onclick="alterarItem('Pizza Portuguesa',52,'pizza',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-
-<!-- Porções -->
 
 <div class="secao">
-
-<h2>🍟 Porções</h2>
-
-<div class="produtos">
-
-
-<div class="produto" data-categoria="porcao">
-
-<div class="info">
-
-<h3>Batata Frita</h3>
-
-<p>Porção de batata frita crocante.</p>
-
-<div class="preco">R$ 20,00</div>
-
-</div>
-
-<button onclick="alterarItem('Batata Frita',20,'porcao',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="porcao">
-
-<div class="info">
-
-<h3>Batata Frita c/ Queijo</h3>
-
-<p>Batata frita coberta com queijo derretido.</p>
-
-<div class="preco">R$ 26,00</div>
-
-</div>
-
-<button onclick="alterarItem('Batata Frita c/ Queijo',26,'porcao',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="porcao">
-
-<div class="info">
-
-<h3>Porção de Tilápia</h3>
-
-<p>Tilápia frita acompanhada de molho tártaro.</p>
-
-<div class="preco">R$ 38,00</div>
-
-</div>
-
-<button onclick="alterarItem('Porção de Tilápia',38,'porcao',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="porcao">
-
-<div class="info">
-
-<h3>Mandioca Frita</h3>
-
-<p>Porção de mandioca frita sequinha.</p>
-
-<div class="preco">R$ 18,00</div>
-
-</div>
-
-<button onclick="alterarItem('Mandioca Frita',18,'porcao',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
+  <h2>🥤 Bebidas</h2>
+  <div class="produtos">
+    <div class="produto" data-categoria="bebida">
+      <div class="info">
+        <h3>Coca-Cola</h3>
+        <p>Refrigerante gelado.</p>
+        <div class="preco">R$ 7,00</div>
+      </div>
+      <button onclick="alterarItem('Coca-Cola',7,'bebida',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="bebida">
+      <div class="info">
+        <h3>Pepsi</h3>
+        <p>Refrigerante gelado.</p>
+        <div class="preco">R$ 7,00</div>
+      </div>
+      <button onclick="alterarItem('Pepsi',7,'bebida',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="bebida">
+      <div class="info">
+        <h3>Cerveja</h3>
+        <p>Lata — gelada.</p>
+        <div class="preco">R$ 13,00</div>
+      </div>
+      <button onclick="alterarItem('Cerveja',13,'bebida',1)">+ Adicionar</button>
+    </div>
+    <div class="produto" data-categoria="bebida">
+      <div class="info">
+        <h3>Chopp</h3>
+        <p>Copo de chopp gelado.</p>
+        <div class="preco">R$ 15,00</div>
+      </div>
+      <button onclick="alterarItem('Chopp',15,'bebida',1)">+ Adicionar</button>
+    </div>
+  </div>
 </div>
 
 </div>
-
-
-
-<!-- Bebidas -->
-
-<div class="secao">
-
-<h2>🥤 Bebidas</h2>
-
-<div class="produtos">
-
-
-<div class="produto" data-categoria="bebida">
-
-<div class="info">
-
-<h3>Coca-Cola</h3>
-
-<p>Refrigerante gelado.</p>
-
-<div class="preco">R$ 7,00</div>
-
-</div>
-
-<button onclick="alterarItem('Coca-Cola',7,'bebida',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="bebida">
-
-<div class="info">
-
-<h3>Pepsi</h3>
-
-<p>Refrigerante gelado.</p>
-
-<div class="preco">R$ 7,00</div>
-
-</div>
-
-<button onclick="alterarItem('Pepsi',7,'bebida',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="bebida">
-
-<div class="info">
-
-<h3>Cerveja</h3>
-
-<p>Lata — gelada.</p>
-
-<div class="preco">R$ 13,00</div>
-
-</div>
-
-<button onclick="alterarItem('Cerveja',13,'bebida',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-
-<div class="produto" data-categoria="bebida">
-
-<div class="info">
-
-<h3>Chopp</h3>
-
-<p>Copo de chopp gelado.</p>
-
-<div class="preco">R$ 15,00</div>
-
-</div>
-
-<button onclick="alterarItem('Chopp',15,'bebida',1)">
-+ Adicionar
-</button>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-</div>
-
-
-
-<!-- =====================================================
-     BOTÃO CARRINHO
-===================================================== -->
 
 <div class="carrinho-fixo">
-
-<button class="botao-carrinho" onclick="abrirCarrinho()">
-
-<span>🛒 Ver Pedido</span>
-
-<span id="quantidadeCarrinho">0</span>
-
-</button>
-
+  <button class="botao-carrinho" onclick="abrirCarrinho()">
+    <span>🛒 Ver Pedido</span>
+    <span id="quantidadeCarrinho">0</span>
+  </button>
 </div>
-
-
-
-<!-- =====================================================
-     MODAL DO CARRINHO
-===================================================== -->
 
 <div class="modal" id="modalCarrinho">
-
 <div class="modal-conteudo">
+  <button class="fechar" onclick="fecharCarrinho()">&times;</button>
+  <h2>🛒 Seu Pedido</h2>
 
-<button class="fechar" onclick="fecharCarrinho()">
-&times;
-</button>
+  <div id="mensagemMesa" class="mensagem-mesa"></div>
+  <div id="listaItens"></div>
 
-<h2>🛒 Seu Pedido</h2>
+  <div class="campo">
+    <label for="mesa">🪑 Número da mesa</label>
+    <input type="number" id="mesa" placeholder="Ex.: 5" min="1">
+  </div>
 
+  <div class="campo">
+    <label for="responsavel">👤 Nome do responsável</label>
+    <input type="text" id="responsavel" placeholder="Digite seu nome">
+  </div>
 
-<div id="mensagemMesa" class="mensagem-mesa"></div>
-
-
-<div id="listaItens"></div>
-
-
-<div class="campo">
-
-<label for="mesa">
-🪑 Número da mesa
-</label>
-
-<input
-type="number"
-id="mesa"
-placeholder="Ex.: 5"
-min="1"
->
-
+  <div class="total">Total: R$ <span id="totalModal">0,00</span></div>
+  <button class="botao-enviar" id="botaoEnviar" onclick="enviarPedido()">📲 Enviar Pedido</button>
 </div>
-
-
-
-<div class="campo">
-
-<label for="responsavel">
-👤 Nome do responsável
-</label>
-
-<input
-type="text"
-id="responsavel"
-placeholder="Digite seu nome"
->
-
 </div>
-
-
-<div class="total">
-
-Total: R$
-<span id="totalModal">0,00</span>
-
-</div>
-
-
-<button
-class="botao-enviar"
-id="botaoEnviar"
-onclick="enviarPedido()"
->
-
-📲 Enviar Pedido
-
-</button>
-
-
-</div>
-
-</div>
-
-
-
-<!-- =====================================================
-     JAVASCRIPT + FIREBASE
-===================================================== -->
 
 <script type="module">
-
-
-/* =====================================================
-   IMPORTAÇÃO FIREBASE
-===================================================== */
-
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-
-import {
-  getFirestore,
-  collection,
-  doc,
-  setDoc,
-  getDocs,
-  query,
-  where,
-  runTransaction
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-
-/* =====================================================
-   CONFIGURAÇÃO FIREBASE
-===================================================== */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const firebaseConfig = {
-
   apiKey: "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
-
   authDomain: "sistema-digital-f9df1.firebaseapp.com",
-
   projectId: "sistema-digital-f9df1",
-
   storageBucket: "sistema-digital-f9df1.firebasestorage.app",
-
   messagingSenderId: "783545984661",
-
   appId: "1:783545984661:web:5d0945907ad9db3990dd9c"
-
 };
-
-
-/* =====================================================
-   INICIAR FIREBASE
-===================================================== */
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
-
 console.log("🔥 Firebase conectado!");
 
-
-/* =====================================================
-   CONFIGURAÇÕES
-===================================================== */
-
 const TELEFONE_WHATSAPP = "5549984121585";
-
 const CHAVE_IDENTIFICACAO = "identificacaoMesa";
 
-
-/* =====================================================
-   VARIÁVEIS DO SISTEMA
-===================================================== */
-
 let pedido = [];
-
 let mesa = "";
-
 let responsavel = "";
-
 let totalGeral = 0;
 
-
-/* =====================================================
-   FORMATAR DINHEIRO
-===================================================== */
-
 function formatarDinheiro(valor){
-
-  return Number(valor || 0)
-    .toFixed(2)
-    .replace(".",",");
-
+  return Number(valor||0).toFixed(2).replace(".",",");
 }
-
-
-/* =====================================================
-   ADICIONAR ITEM
-===================================================== */
 
 function alterarItem(nome,preco,categoria,quantidade){
-
-  const existente = pedido.find(
-    item => item.nome === nome
-  );
-
-
-  if(existente){
-
-    existente.quantidade += quantidade;
-
-  }else{
-
-    pedido.push({
-
-      nome: nome,
-
-      preco: Number(preco),
-
-      quantidade: quantidade,
-
-      categoria: categoria,
-
-      observacao: ""
-
-    });
-
-  }
-
-
+  const existente = pedido.find(i=>i.nome===nome);
+  if(existente){ existente.quantidade += quantidade; }
+  else { pedido.push({nome,preco:Number(preco),quantidade,categoria,observacao:""}); }
   atualizarCarrinho();
-
 }
-
-
-/* =====================================================
-   ATUALIZAR CARRINHO
-===================================================== */
 
 function atualizarCarrinho(){
-
-  const lista =
-    document.getElementById("listaItens");
-
-
-  const qtd =
-    document.getElementById("quantidadeCarrinho");
-
-
-  const totalEl =
-    document.getElementById("totalModal");
-
-
+  const lista = document.getElementById("listaItens");
+  const qtd = document.getElementById("quantidadeCarrinho");
+  const totalEl = document.getElementById("totalModal");
   lista.innerHTML = "";
+  let qtdTotal = 0; totalGeral = 0;
 
-
-  let qtdTotal = 0;
-
-  totalGeral = 0;
-
-
-  if(pedido.length === 0){
-
-    lista.innerHTML = `
-      <div class="vazio">
-        Seu pedido está vazio.
-      </div>
-    `;
-
+  if(pedido.length===0){
+    lista.innerHTML = `<div class="vazio">Seu pedido está vazio.</div>`;
   }
 
-
-  pedido.forEach((item,index)=>{
-
-
+  pedido.forEach((item,i)=>{
     qtdTotal += item.quantidade;
-
-
-    const subtotal =
-      item.preco * item.quantidade;
-
-
-    totalGeral += subtotal;
-
-
-    const div =
-      document.createElement("div");
-
-
-    div.className =
-      "item-carrinho";
-
-
+    const subt = item.preco * item.quantidade;
+    totalGeral += subt;
+    const div = document.createElement("div");
+    div.className="item-carrinho";
     div.innerHTML = `
-
       <div class="item-carrinho-topo">
-
-        <strong>
-          ${item.nome}
-        </strong>
-
-        <strong>
-          R$ ${formatarDinheiro(subtotal)}
-        </strong>
-
+        <strong>${item.nome}</strong>
+        <strong>R$ ${formatarDinheiro(subt)}</strong>
       </div>
-
-
       <div class="controles">
-
-        <button onclick="diminuirItem(${index})">
-          −
-        </button>
-
-
-        <span>
-          ${item.quantidade}
-        </span>
-
-
-        <button onclick="aumentarItem(${index})">
-          +
-        </button>
-
-
-        <button
-          class="remover"
-          onclick="removerItem(${index})"
-        >
-          🗑
-        </button>
-
+        <button onclick="diminuirItem(${i})">−</button>
+        <span>${item.quantidade}</span>
+        <button onclick="aumentarItem(${i})">+</button>
+        <button class="remover" onclick="removerItem(${i})">🗑</button>
       </div>
-
-
-      <input
-
-        class="observacao"
-
-        placeholder="Observação..."
-
-        value="${item.observacao || ""}"
-
-        onchange="alterarObservacao(${index},this.value)"
-
-      >
-
+      <input class="observacao" placeholder="Observação..." value="${item.observacao||""}" onchange="alterarObservacao(${i},this.value)">
     `;
-
-
     lista.appendChild(div);
-
   });
 
-
-  qtd.innerText =
-    qtdTotal;
-
-
-  totalEl.innerText =
-    formatarDinheiro(totalGeral);
-
+  qtd.innerText = qtdTotal;
+  totalEl.innerText = formatarDinheiro(totalGeral);
 }
 
+window.aumentarItem = i=>{pedido[i].quantidade++;atualizarCarrinho();};
+window.diminuirItem = i=>{pedido[i].quantidade--;if(pedido[i].quantidade<=0)pedido.splice(i,1);atualizarCarrinho();};
+window.removerItem = i=>{pedido.splice(i,1);atualizarCarrinho();};
+window.alterarObservacao = (i,v)=>{pedido[i].observacao=v;};
 
-/* =====================================================
-   CONTROLES DO CARRINHO
-===================================================== */
-
-window.aumentarItem = function(index){
-
-  pedido[index].quantidade++;
-
-  atualizarCarrinho();
-
-};
-
-
-window.diminuirItem = function(index){
-
-  pedido[index].quantidade--;
-
-
-  if(pedido[index].quantidade <= 0){
-
-    pedido.splice(index,1);
-
-  }
-
-
-  atualizarCarrinho();
-
-};
-
-
-window.removerItem = function(index){
-
-  pedido.splice(index,1);
-
-  atualizarCarrinho();
-
-};
-
-
-window.alterarObservacao =
-function(index,valor){
-
-  pedido[index].observacao =
-    valor;
-
-};
-
-
-/* =====================================================
-   ABRIR CARRINHO
-===================================================== */
-
-window.abrirCarrinho = function(){
-
-  document
-    .getElementById("modalCarrinho")
-    .classList
-    .add("ativo");
-
-
+window.abrirCarrinho = ()=>{
+  document.getElementById("modalCarrinho").classList.add("ativo");
   carregarIdentificacao();
-
-
   atualizarCarrinho();
-
-
   verificarMesaAtual();
-
 };
-
-
-/* =====================================================
-   FECHAR CARRINHO
-===================================================== */
-
-window.fecharCarrinho = function(){
-
-  document
-    .getElementById("modalCarrinho")
-    .classList
-    .remove("ativo");
-
+window.fecharCarrinho = ()=>{
+  document.getElementById("modalCarrinho").classList.remove("ativo");
 };
-
-
-/* =====================================================
-   CARREGAR IDENTIFICAÇÃO
-===================================================== */
 
 function carregarIdentificacao(){
-
   try{
-
-    const dados =
-      JSON.parse(
-        localStorage.getItem(
-          CHAVE_IDENTIFICACAO
-        )
-      );
-
-
-    if(dados){
-
-      document.getElementById("mesa").value =
-        dados.mesa || "";
-
-
-      document.getElementById("responsavel").value =
-        dados.responsavel || "";
-
-    }
-
-  }catch(e){
-
-    console.error(
-      "Erro ao carregar identificação:",
-      e
-    );
-
-  }
-
+    const d = JSON.parse(localStorage.getItem(CHAVE_IDENTIFICACAO));
+    if(d){document.getElementById("mesa").value=d.mesa||"";document.getElementById("responsavel").value=d.responsavel||"";}
+  }catch(e){}
 }
-
-
-/* =====================================================
-   SALVAR IDENTIFICAÇÃO
-===================================================== */
-
 function salvarIdentificacao(){
-
-  mesa =
-    document
-      .getElementById("mesa")
-      .value
-      .trim();
-
-
-  responsavel =
-    document
-      .getElementById("responsavel")
-      .value
-      .trim();
-
-
-  localStorage.setItem(
-
-    CHAVE_IDENTIFICACAO,
-
-    JSON.stringify({
-
-      mesa: mesa,
-
-      responsavel: responsavel
-
-    })
-
-  );
-
+  mesa = document.getElementById("mesa").value.trim();
+  responsavel = document.getElementById("responsavel").value.trim();
+  localStorage.setItem(CHAVE_IDENTIFICACAO,JSON.stringify({mesa,responsavel}));
 }
-
-
-/* =====================================================
-   VERIFICAR MESA ATUAL
-===================================================== */
 
 async function verificarMesaAtual(){
-
-  mesa =
-    document
-      .getElementById("mesa")
-      .value
-      .trim();
-
-
-  const aviso =
-    document.getElementById("mensagemMesa");
-
-
-  if(!mesa){
-
-    aviso.style.display = "none";
-
-    return;
-
-  }
-
-
+  mesa = document.getElementById("mesa").value.trim();
+  const aviso = document.getElementById("mensagemMesa");
+  if(!mesa){aviso.style.display="none";return;}
   try{
-
-
-    const pedidosRef =
-      collection(db,"pedidos");
-
-
-    const consulta =
-      query(
-        pedidosRef,
-        where("mesa","==",mesa)
-      );
-
-
-    const resultado =
-      await getDocs(consulta);
-
-
-    const pedidosAbertos = [];
-
-
-    resultado.forEach(documento => {
-
-      const dados =
-        documento.data();
-
-
-      if(dados.status !== "finalizado"){
-
-        pedidosAbertos.push(dados);
-
-      }
-
-    });
-
-
-    if(pedidosAbertos.length > 0){
-
-
-      const totalMesa =
-        pedidosAbertos.reduce(
-
-          (total,pedidoAtual) =>
-
-            total +
-            Number(
-              pedidoAtual.total || 0
-            ),
-
-          0
-
-        );
-
-
-      aviso.innerHTML = `
-
-        ⚠️ Esta mesa já tem
-        <strong>${pedidosAbertos.length}</strong>
-        pedido(s) aberto(s).
-
-        <br>
-
-        💰 Total atual:
-        R$ ${formatarDinheiro(totalMesa)}
-
-        <br>
-
-        Será acrescentado à comanda.
-
-      `;
-
-
-      aviso.style.display =
-        "block";
-
-
-    }else{
-
-      aviso.style.display =
-        "none";
-
-    }
-
-
-  }catch(e){
-
-    console.error(
-      "Erro ao verificar mesa:",
-      e
-    );
-
-  }
-
+    const ref = collection(db,"pedidos");
+    const q = query(ref,where("mesa","==",mesa));
+    const snap = await getDocs(q);
+    const abertos = [];
+    snap.forEach(d=>{const x=d.data();if(x.status!=="finalizado")abertos.push(x);});
+    if(abertos.length>0){
+      const totalMesa = abertos.reduce((t,p)=>t+Number(p.total||0),0);
+      aviso.innerHTML = `⚠️ Esta mesa já tem <strong>${abertos.length}</strong> pedido(s) aberto(s).<br>💰 Total atual: R$ ${formatarDinheiro(totalMesa)}<br>Será acrescentado à comanda.`;
+      aviso.style.display="block";
+    }else aviso.style.display="none";
+  }catch(e){console.error(e);}
 }
-
-
-/* =====================================================
-   GERAR PRÓXIMO NÚMERO DO PEDIDO
-===================================================== */
-
-async function obterProximoNumeroPedido(){
-
-  const contadorRef =
-    doc(
-      db,
-      "configuracao",
-      "contadorPedidos"
-    );
-
-
-  return await runTransaction(
-    db,
-
-    async function(transaction){
-
-
-      const snapshot =
-        await transaction.get(
-          contadorRef
-        );
-
-
-      const ultimoNumero =
-
-        snapshot.exists()
-
-          ? Number(
-              snapshot.data().ultimoNumero || 0
-            )
-
-          : 0;
-
-
-      const proximoNumero =
-        ultimoNumero + 1;
-
-
-      transaction.set(
-
-        contadorRef,
-
-        {
-          ultimoNumero: proximoNumero
-        },
-
-        {
-          merge:true
-        }
-
-      );
-
-
-      return proximoNumero;
-
-    }
-
-  );
-
-}
-
-
-/* =====================================================
-   SALVAR PEDIDO NO FIREBASE
-===================================================== */
 
 async function salvarPedidoNoSistema(){
-
-
   try{
-
-
-    console.log(
-      "📤 Iniciando envio para Firebase..."
-    );
-
-
-    const numeroPedido =
-      await obterProximoNumeroPedido();
-
-
-    console.log(
-      "🔢 Número do pedido:",
-      numeroPedido
-    );
-
-
-    const pedidoRef =
-      doc(
-        collection(
-          db,
-          "pedidos"
-        )
-      );
-
-
+    const ref = collection(db,"pedidos");
+    const snap = await getDocs(ref);
+    const numero = snap.size + 1;
+    
     const pedidoSistema = {
-
-
-      id:
-        pedidoRef.id,
-
-
-      numero:
-        numeroPedido,
-
-
-      mesa:
-        mesa,
-
-
-      responsavel:
-        responsavel,
-
-
-      nomeCliente:
-        responsavel,
-
-
-      horario:
-        obterHorario(),
-
-
-      data:
-        obterData(),
-
-
-      status:
-        "recebido",
-
-
-      itens:
-
-        pedido.map(item => ({
-
-          nome:
-            item.nome,
-
-
-          preco:
-            Number(item.preco),
-
-
-          quantidade:
-            Number(item.quantidade),
-
-
-          categoria:
-            item.categoria || "",
-
-
-          observacao:
-            item.observacao || ""
-
-        })),
-
-
-      total:
-        Number(
-          totalGeral.toFixed(2)
-        ),
-
-
-      dataCriacao:
-        new Date().toISOString()
-
+      numero,mesa,responsavel,nomeCliente:responsavel,
+      horario:obterHorario(),data:obterData(),status:"recebido",
+      itens:pedido.map(i=>({nome:i.nome,preco:Number(i.preco),quantidade:Number(i.quantidade),categoria:i.categoria||"",observacao:i.observacao||""})),
+      total:Number(totalGeral.toFixed(2)),dataCriacao:new Date().toISOString()
     };
-
-
-    console.log(
-      "💾 Salvando pedido:",
-      pedidoSistema
-    );
-
-
-    await setDoc(
-
-      pedidoRef,
-
-      pedidoSistema
-
-    );
-
-
-    console.log(
-      "✅ PEDIDO SALVO COM SUCESSO!"
-    );
-
-
+    const docRef = await addDoc(ref, pedidoSistema);
+    console.log("✅ Salvo:", docRef.id, pedidoSistema);
     return pedidoSistema;
-
-
   }catch(e){
-
-
-    console.error(
-      "❌ ERRO FIREBASE COMPLETO:",
-      e
-    );
-
-
-    alert(
-
-      "Erro ao registrar pedido.\n\n" +
-
-      "Código: " +
-      (e.code || "sem código") +
-
-      "\n\nMensagem: " +
-      (e.message || "sem mensagem")
-
-    );
-
-
+    console.error("❌ Erro:", e);
+    alert("Erro: " + e.message);
     return null;
-
   }
-
 }
 
-
-/* =====================================================
-   ENVIAR PEDIDO
-===================================================== */
-
-window.enviarPedido =
-async function(){
-
-
+window.enviarPedido = async function(){
   salvarIdentificacao();
-
-
-  if(!mesa){
-
-    alert(
-      "⚠️ Informe o número da mesa."
-    );
-
-    return;
-
-  }
-
-
-  if(!responsavel){
-
-    alert(
-      "⚠️ Informe o nome do responsável."
-    );
-
-    return;
-
-  }
-
-
-  if(pedido.length === 0){
-
-    alert(
-      "⚠️ Adicione pelo menos um item."
-    );
-
-    return;
-
-  }
-
-
-  const botao =
-    document.getElementById(
-      "botaoEnviar"
-    );
-
-
-  botao.disabled = true;
-
-
-  botao.innerText =
-    "⏳ Registrando...";
-
-
-  const pedidoSalvo =
-    await salvarPedidoNoSistema();
-
-
-  if(!pedidoSalvo){
-
-    botao.disabled =
-      false;
-
-
-    botao.innerText =
-      "📲 Enviar Pedido";
-
-
-    return;
-
-  }
-
-
-  alert(
-
-    `✅ Pedido #${String(
-      pedidoSalvo.numero
-    ).padStart(3,"0")} registrado com sucesso!`
-
-  );
-
-
-  enviarWhatsApp(
-    pedidoSalvo
-  );
-
-
-  pedido = [];
-
-
-  atualizarCarrinho();
-
-
-  fecharCarrinho();
-
-
-  botao.disabled =
-    false;
-
-
-  botao.innerText =
-    "📲 Enviar Pedido";
-
+  if(!mesa)return alert("⚠️ Informe o número da mesa.");
+  if(!responsavel)return alert("⚠️ Informe o nome do responsável.");
+  if(pedido.length===0)return alert("⚠️ Adicione pelo menos um item.");
+  const btn = document.getElementById("botaoEnviar");
+  btn.disabled=true;btn.innerText="⏳ Registrando...";
+  const salvo = await salvarPedidoNoSistema();
+  if(!salvo){btn.disabled=false;btn.innerText="📲 Enviar Pedido";return;}
+  alert(`✅ Pedido #${String(salvo.numero).padStart(3,"0")} registrado!`);
+  enviarWhatsApp(salvo);
+  pedido=[];atualizarCarrinho();fecharCarrinho();
+  btn.disabled=false;btn.innerText="📲 Enviar Pedido";
 };
 
-
-/* =====================================================
-   ENVIAR PARA WHATSAPP
-===================================================== */
-
-function enviarWhatsApp(pedidoAtual){
-
-
-  let mensagem =
-    `🍔 *NOVO PEDIDO — SABOR DA CASA*\n\n`;
-
-
-  mensagem +=
-    `📋 Pedido: #${String(
-      pedidoAtual.numero
-    ).padStart(3,"0")}\n`;
-
-
-  mensagem +=
-    `🪑 Mesa: ${pedidoAtual.mesa}\n`;
-
-
-  mensagem +=
-    `👤 Responsável: ${pedidoAtual.responsavel}\n`;
-
-
-  mensagem +=
-    `🕐 Horário: ${pedidoAtual.horario}\n`;
-
-
-  mensagem +=
-    `━━━━━━━━━━━━━━━━━━\n`;
-
-
-  pedidoAtual.itens.forEach(item => {
-
-
-    const subtotal =
-      item.preco *
-      item.quantidade;
-
-
-    mensagem +=
-
-      `▪️ ${item.quantidade}x ${item.nome}` +
-
-      ` — R$ ${formatarDinheiro(subtotal)}\n`;
-
-
-    if(item.observacao){
-
-      mensagem +=
-        `   📝 OBS: ${item.observacao}\n`;
-
-    }
-
+function enviarWhatsApp(ped){
+  let msg = `🍔 *NOVO PEDIDO — SABOR DA CASA*\n\n`;
+  msg += `📋 Pedido: #${String(ped.numero).padStart(3,"0")}\n`;
+  msg += `🪑 Mesa: ${ped.mesa}\n👤 Responsável: ${ped.responsavel}\n🕐 Horário: ${ped.horario}\n`;
+  msg += `━━━━━━━━━━━━━━━━━━\n`;
+  ped.itens.forEach(i=>{
+    const st = i.preco*i.quantidade;
+    msg += `▪️ ${i.quantidade}x ${i.nome} — R$ ${formatarDinheiro(st)}\n`;
+    if(i.observacao)msg += `   📝 OBS: ${i.observacao}\n`;
   });
-
-
-  mensagem +=
-    `━━━━━━━━━━━━━━━━━━\n`;
-
-
-  mensagem +=
-
-    `💰 *TOTAL: R$ ${formatarDinheiro(
-      pedidoAtual.total
-    )}*`;
-
-
-  window.open(
-
-    `https://wa.me/${TELEFONE_WHATSAPP}?text=${encodeURIComponent(mensagem)}`,
-
-    "_blank"
-
-  );
-
+  msg += `━━━━━━━━━━━━━━━━━━\n💰 *TOTAL: R$ ${formatarDinheiro(ped.total)}*`;
+  window.open(`https://wa.me/${TELEFONE_WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
 }
 
+function obterHorario(){return new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});}
+function obterData(){return new Date().toLocaleDateString("pt-BR");}
 
-/* =====================================================
-   DATA E HORÁRIO
-===================================================== */
-
-function obterHorario(){
-
-  return new Date()
-    .toLocaleTimeString(
-
-      "pt-BR",
-
-      {
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-
-    );
-
-}
-
-
-function obterData(){
-
-  return new Date()
-    .toLocaleDateString(
-      "pt-BR"
-    );
-
-}
-
-
-/* =====================================================
-   FILTRAR CATEGORIAS
-===================================================== */
-
-window.filtrar =
-function(categoria,botao){
-
-
-  document
-    .querySelectorAll(
-      ".categorias button"
-    )
-    .forEach(botaoAtual => {
-
-      botaoAtual
-        .classList
-        .remove("ativo");
-
-    });
-
-
-  botao
-    .classList
-    .add("ativo");
-
-
-  document
-    .querySelectorAll(
-      ".produto"
-    )
-    .forEach(produto => {
-
-
-      if(
-
-        categoria === "todos" ||
-
-        produto.dataset.categoria === categoria
-
-      ){
-
-        produto.style.display = "";
-
-      }else{
-
-        produto.style.display = "none";
-
-      }
-
-    });
-
+window.filtrar = function(cat,btn){
+  document.querySelectorAll(".categorias button").forEach(b=>b.classList.remove("ativo"));
+  btn.classList.add("ativo");
+  document.querySelectorAll(".produto").forEach(p=>{
+    p.style.display = (cat==="todos" || p.dataset.categoria===cat) ? "" : "none";
+  });
 };
 
+window.alterarItem = alterarItem;
 
-/* =====================================================
-   EVENTOS
-===================================================== */
+document.getElementById("mesa").addEventListener("input",verificarMesaAtual);
+document.getElementById("modalCarrinho").addEventListener("click",e=>{if(e.target.id==="modalCarrinho")fecharCarrinho();});
 
-document
-  .getElementById("mesa")
-  .addEventListener(
-
-    "input",
-
-    verificarMesaAtual
-
-  );
-
-
-document
-  .getElementById("modalCarrinho")
-  .addEventListener(
-
-    "click",
-
-    function(evento){
-
-      if(
-        evento.target.id ===
-        "modalCarrinho"
-      ){
-
-        fecharCarrinho();
-
-      }
-
-    }
-
-  );
-
-
-/* =====================================================
-   DISPONIBILIZAR FUNÇÕES PARA HTML
-===================================================== */
-
-window.alterarItem =
-  alterarItem;
-
-
-/* =====================================================
-   INICIAR SISTEMA
-===================================================== */
-
-document.addEventListener(
-
-  "DOMContentLoaded",
-
-  function(){
-
-
-    carregarIdentificacao();
-
-
-    atualizarCarrinho();
-
-
-    console.log(
-      "🚀 Sistema iniciado!"
-    );
-
-
-    console.log(
-      "🔥 Firebase configurado!"
-    );
-
-  }
-
-);
-
-
+document.addEventListener("DOMContentLoaded",()=>{
+  carregarIdentificacao();
+  atualizarCarrinho();
+  console.log("🚀 Sistema iniciado!");
+});
 </script>
-
 </body>
-
 </html>
