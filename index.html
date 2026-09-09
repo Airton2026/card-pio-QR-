@@ -1115,17 +1115,19 @@ async function salvarPedidoNoSistema(){
     return pedidoSistema;
 
 
-  }catch(e){
+  catch(e){
 
-    console.error("Erro Firebase:", e);
+  console.error("ERRO FIREBASE COMPLETO:", e);
 
-    alert(
-      "Erro ao registrar pedido. Verifique a internet."
-    );
+  alert(
+    "Erro ao registrar pedido:\n\n" +
+    "Código: " + (e.code || "sem código") +
+    "\n\nMensagem: " + (e.message || "sem mensagem")
+  );
 
-    return null;
+  return null;
 
-  }
+}
 
 }
 
