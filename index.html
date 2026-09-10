@@ -2,1212 +2,1257 @@
 <html lang="pt-BR">
 
 <head>
+  <meta charset="UTF-8">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Sabor da Casa — Cardápio Digital</title>
+  <title>Sabor da Casa — Cardápio Digital</title>
 
-<style>
+  <style>
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body{
-  font-family:'Segoe UI',Arial,sans-serif;
-  background:#f8f9fa;
-  color:#212529;
-  padding-bottom:100px;
-}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
 
-header{
-  background:linear-gradient(135deg,#b91c1c,#991b1b);
-  color:white;
-  padding:20px 16px;
-  text-align:center;
-  box-shadow:0 2px 6px rgba(0,0,0,.15);
-}
+    header {
+      background: #b71c1c;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
 
-header h1{
-  font-size:24px;
-  margin-bottom:4px;
-}
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
 
-header p{
-  font-size:14px;
-  opacity:.9;
-}
+    header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
 
-.categorias{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:12px 16px;
-  background:white;
-  position:sticky;
-  top:0;
-  z-index:10;
-  box-shadow:0 1px 4px rgba(0,0,0,.06);
-}
+    .categorias {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid #ddd;
+    }
 
-.categorias button{
-  border:none;
-  background:#f3f4f6;
-  padding:8px 14px;
-  border-radius:20px;
-  white-space:nowrap;
-  cursor:pointer;
-  font-size:14px;
-  color:#374151;
-}
+    .categorias button {
+      border: none;
+      background: #eeeeee;
+      padding: 10px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-.categorias button.ativo{
-  background:#b91c1c;
-  color:white;
-}
+    .categorias button.ativo {
+      background: #b71c1c;
+      color: white;
+    }
 
-.container{
-  max-width:720px;
-  margin:0 auto;
-  padding:16px;
-}
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
 
-.secao{
-  margin-bottom:28px;
-}
+    .titulo-categoria {
+      margin: 20px 0 12px;
+      font-size: 22px;
+    }
 
-.secao h2{
-  font-size:18px;
-  color:#b91c1c;
-  margin-bottom:12px;
-  padding-bottom:6px;
-  border-bottom:2px solid #f3f4f6;
-}
+    .produto {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
 
-.produtos{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
+    .produto h3 {
+      margin-bottom: 6px;
+    }
 
-.produto{
-  background:white;
-  border-radius:10px;
-  padding:14px;
-  box-shadow:0 1px 3px rgba(0,0,0,.05);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
+    .produto p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
 
-.produto .info{
-  flex:1;
-}
+    .produto-baixo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-.produto h3{
-  font-size:15px;
-  margin-bottom:3px;
-}
+    .preco {
+      font-size: 18px;
+      font-weight: bold;
+      color: #b71c1c;
+    }
 
-.produto p{
-  font-size:13px;
-  color:#6b7280;
-  margin-bottom:6px;
-}
+    .btn-adicionar {
+      border: none;
+      background: #b71c1c;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-.produto .preco{
-  font-size:16px;
-  font-weight:700;
-  color:#b91c1c;
-}
+    .btn-adicionar:active {
+      transform: scale(0.97);
+    }
 
-.produto button{
-  border:none;
-  background:#b91c1c;
-  color:white;
-  padding:9px 14px;
-  border-radius:8px;
-  cursor:pointer;
-}
+    .carrinho-flutuante {
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+      right: 15px;
+      max-width: 770px;
+      margin: auto;
+      background: #b71c1c;
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 20;
+      cursor: pointer;
+    }
 
-.carrinho-fixo{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:white;
-  padding:12px 16px;
-  box-shadow:0 -2px 8px rgba(0,0,0,.1);
-  z-index:20;
-}
+    .carrinho-flutuante button {
+      background: white;
+      color: #b71c1c;
+      border: none;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-.botao-carrinho{
-  width:100%;
-  max-width:720px;
-  margin:0 auto;
-  display:flex;
-  justify-content:space-between;
-  background:#16a34a;
-  color:white;
-  border:none;
-  padding:13px 18px;
-  border-radius:10px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-}
+    .modal-fundo {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 100;
+      overflow-y: auto;
+      padding: 15px;
+    }
 
-#quantidadeCarrinho{
-  background:white;
-  color:#16a34a;
-  border-radius:12px;
-  padding:2px 10px;
-}
+    .modal {
+      background: white;
+      max-width: 600px;
+      margin: 20px auto;
+      border-radius: 15px;
+      padding: 20px;
+    }
 
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  z-index:100;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-}
+    .modal h2 {
+      margin-bottom: 15px;
+    }
 
-.modal.ativo{
-  display:flex;
-}
+    .campo {
+      margin-bottom: 15px;
+    }
 
-.modal-conteudo{
-  background:white;
-  width:100%;
-  max-width:480px;
-  max-height:90vh;
-  overflow-y:auto;
-  border-radius:14px;
-  padding:20px;
-}
+    .campo label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
 
-.fechar{
-  float:right;
-  border:none;
-  background:none;
-  font-size:26px;
-  cursor:pointer;
-}
+    .campo input,
+    .campo textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
 
-.campo{
-  margin-bottom:14px;
-}
+    .campo textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
 
-.campo label{
-  display:block;
-  margin-bottom:6px;
-  font-size:14px;
-}
+    .item-carrinho {
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+    }
 
-.campo input{
-  width:100%;
-  padding:11px;
-  border:1px solid #d1d5db;
-  border-radius:8px;
-}
+    .item-carrinho-topo {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-.mensagem-mesa{
-  background:#fffbeb;
-  color:#92400e;
-  padding:12px;
-  border-radius:8px;
-  margin-bottom:16px;
-  display:none;
-}
+    .quantidade {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
 
-.item-carrinho{
-  padding:12px 0;
-  border-bottom:1px solid #eee;
-}
+    .quantidade button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 50%;
+      background: #eee;
+      font-size: 18px;
+      cursor: pointer;
+    }
 
-.item-carrinho-topo{
-  display:flex;
-  justify-content:space-between;
-}
+    .observacao-item {
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
 
-.controles{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:8px;
-}
+    .total {
+      font-size: 22px;
+      font-weight: bold;
+      text-align: right;
+      margin: 20px 0;
+    }
 
-.controles button{
-  border:none;
-  background:#f3f4f6;
-  width:32px;
-  height:32px;
-  border-radius:6px;
-  cursor:pointer;
-}
+    .botoes-modal {
+      display: flex;
+      gap: 10px;
+    }
 
-.remover{
-  background:#fee2e2 !important;
-  color:red;
-}
+    .botoes-modal button {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-.observacao{
-  width:100%;
-  margin-top:8px;
-  padding:9px;
-  border:1px solid #ddd;
-  border-radius:6px;
-}
+    .btn-fechar {
+      background: #ddd;
+      color: #222;
+    }
 
-.total{
-  font-size:20px;
-  font-weight:700;
-  text-align:right;
-  margin:18px 0;
-}
+    .btn-enviar {
+      background: #25d366;
+      color: white;
+    }
 
-.botao-enviar{
-  width:100%;
-  border:none;
-  background:#16a34a;
-  color:white;
-  padding:14px;
-  border-radius:10px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-}
+    .btn-enviar:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
 
-.botao-enviar:disabled{
-  opacity:.6;
-}
+    .vazio {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
 
-.vazio{
-  text-align:center;
-  padding:30px;
-  color:#6b7280;
-}
+    .status-firebase {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 8px;
+    }
 
-</style>
-
+  </style>
 </head>
-
 
 <body>
 
-
 <header>
   <h1>🍔 Sabor da Casa</h1>
-  <p>Cardápio Digital — faça seu pedido</p>
+  <p>Cardápio Digital</p>
+  <div id="statusFirebase" class="status-firebase">
+    🔄 Conectando ao sistema...
+  </div>
 </header>
 
 
 <div class="categorias">
 
-<button class="ativo" onclick="filtrar('todos',this)">
-🍽️ Todos
-</button>
+  <button class="ativo"
+          onclick="filtrarCategoria('Todos', this)">
+    Todos
+  </button>
 
-<button onclick="filtrar('lanche',this)">
-🍔 Lanches
-</button>
+  <button onclick="filtrarCategoria('Lanches', this)">
+    🍔 Lanches
+  </button>
 
-<button onclick="filtrar('pizza',this)">
-🍕 Pizzas
-</button>
+  <button onclick="filtrarCategoria('Pizzas', this)">
+    🍕 Pizzas
+  </button>
 
-<button onclick="filtrar('porcao',this)">
-🍟 Porções
-</button>
+  <button onclick="filtrarCategoria('Porções', this)">
+    🍟 Porções
+  </button>
 
-<button onclick="filtrar('bebida',this)">
-🥤 Bebidas
-</button>
+  <button onclick="filtrarCategoria('Bebidas', this)">
+    🥤 Bebidas
+  </button>
 
 </div>
 
 
 <div class="container">
 
+  <h2 class="titulo-categoria">
+    Nosso Cardápio
+  </h2>
 
-<!-- LANCHES -->
-
-<div class="secao">
-
-<h2>🍔 Lanches</h2>
-
-<div class="produtos">
-
-<div class="produto" data-categoria="lanche">
-<div class="info">
-<h3>X-Bacon</h3>
-<p>Hambúrguer, queijo, bacon, alface, tomate e molho.</p>
-<div class="preco">R$ 26,00</div>
-</div>
-<button onclick="alterarItem('X-Bacon',26,'lanche',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="lanche">
-<div class="info">
-<h3>X-Salada</h3>
-<p>Hambúrguer, queijo, alface, tomate e molho.</p>
-<div class="preco">R$ 23,00</div>
-</div>
-<button onclick="alterarItem('X-Salada',23,'lanche',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="lanche">
-<div class="info">
-<h3>X-Calabresa</h3>
-<p>Hambúrguer, calabresa, queijo, alface e tomate.</p>
-<div class="preco">R$ 27,00</div>
-</div>
-<button onclick="alterarItem('X-Calabresa',27,'lanche',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="lanche">
-<div class="info">
-<h3>X-Tudo</h3>
-<p>Hambúrguer, queijo, bacon, calabresa, ovo e salada.</p>
-<div class="preco">R$ 34,00</div>
-</div>
-<button onclick="alterarItem('X-Tudo',34,'lanche',1)">
-+ Adicionar
-</button>
-</div>
-
-</div>
-</div>
-
-
-<!-- PIZZAS -->
-
-<div class="secao">
-
-<h2>🍕 Pizzas</h2>
-
-<div class="produtos">
-
-<div class="produto" data-categoria="pizza">
-<div class="info">
-<h3>Pizza Calabresa</h3>
-<p>Molho, queijo, calabresa e cebola.</p>
-<div class="preco">R$ 45,00</div>
-</div>
-<button onclick="alterarItem('Pizza Calabresa',45,'pizza',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="pizza">
-<div class="info">
-<h3>Pizza Frango c/ Catupiry</h3>
-<p>Frango desfiado, queijo e catupiry.</p>
-<div class="preco">R$ 48,00</div>
-</div>
-<button onclick="alterarItem('Pizza Frango c/ Catupiry',48,'pizza',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="pizza">
-<div class="info">
-<h3>Pizza Mussarela</h3>
-<p>Molho de tomate, queijo mussarela e orégano.</p>
-<div class="preco">R$ 40,00</div>
-</div>
-<button onclick="alterarItem('Pizza Mussarela',40,'pizza',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="pizza">
-<div class="info">
-<h3>Pizza Portuguesa</h3>
-<p>Queijo, presunto, ovo, cebola, tomate e ervilha.</p>
-<div class="preco">R$ 52,00</div>
-</div>
-<button onclick="alterarItem('Pizza Portuguesa',52,'pizza',1)">
-+ Adicionar
-</button>
-</div>
-
-</div>
-</div>
-
-
-<!-- PORÇÕES -->
-
-<div class="secao">
-
-<h2>🍟 Porções</h2>
-
-<div class="produtos">
-
-<div class="produto" data-categoria="porcao">
-<div class="info">
-<h3>Batata Frita</h3>
-<p>Porção de batata frita crocante.</p>
-<div class="preco">R$ 20,00</div>
-</div>
-<button onclick="alterarItem('Batata Frita',20,'porcao',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="porcao">
-<div class="info">
-<h3>Batata Frita c/ Queijo</h3>
-<p>Batata frita coberta com queijo derretido.</p>
-<div class="preco">R$ 26,00</div>
-</div>
-<button onclick="alterarItem('Batata Frita c/ Queijo',26,'porcao',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="porcao">
-<div class="info">
-<h3>Porção de Tilápia</h3>
-<p>Tilápia frita acompanhada de molho tártaro.</p>
-<div class="preco">R$ 38,00</div>
-</div>
-<button onclick="alterarItem('Porção de Tilápia',38,'porcao',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="porcao">
-<div class="info">
-<h3>Mandioca Frita</h3>
-<p>Porção de mandioca frita sequinha.</p>
-<div class="preco">R$ 18,00</div>
-</div>
-<button onclick="alterarItem('Mandioca Frita',18,'porcao',1)">
-+ Adicionar
-</button>
-</div>
-
-</div>
-</div>
-
-
-<!-- BEBIDAS -->
-
-<div class="secao">
-
-<h2>🥤 Bebidas</h2>
-
-<div class="produtos">
-
-<div class="produto" data-categoria="bebida">
-<div class="info">
-<h3>Coca-Cola</h3>
-<p>Refrigerante gelado.</p>
-<div class="preco">R$ 7,00</div>
-</div>
-<button onclick="alterarItem('Coca-Cola',7,'bebida',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="bebida">
-<div class="info">
-<h3>Pepsi</h3>
-<p>Refrigerante gelado.</p>
-<div class="preco">R$ 7,00</div>
-</div>
-<button onclick="alterarItem('Pepsi',7,'bebida',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="bebida">
-<div class="info">
-<h3>Cerveja</h3>
-<p>Lata — gelada.</p>
-<div class="preco">R$ 13,00</div>
-</div>
-<button onclick="alterarItem('Cerveja',13,'bebida',1)">
-+ Adicionar
-</button>
-</div>
-
-<div class="produto" data-categoria="bebida">
-<div class="info">
-<h3>Chopp</h3>
-<p>Copo de chopp gelado.</p>
-<div class="preco">R$ 15,00</div>
-</div>
-<button onclick="alterarItem('Chopp',15,'bebida',1)">
-+ Adicionar
-</button>
-</div>
-
-</div>
-</div>
+  <div id="listaProdutos"></div>
 
 </div>
 
 
-<!-- CARRINHO -->
+<div class="carrinho-flutuante"
+     onclick="abrirCarrinho()">
 
-<div class="carrinho-fixo">
+  <div>
+    🛒 Carrinho:
+    <strong id="quantidadeCarrinho">0</strong>
+  </div>
 
-<button class="botao-carrinho" onclick="abrirCarrinho()">
+  <div>
+    R$ <strong id="totalCarrinho">0,00</strong>
+  </div>
 
-<span>🛒 Ver Pedido</span>
-
-<span id="quantidadeCarrinho">0</span>
-
-</button>
-
-</div>
-
-
-<!-- MODAL -->
-
-<div class="modal" id="modalCarrinho">
-
-<div class="modal-conteudo">
-
-<button class="fechar" onclick="fecharCarrinho()">
-&times;
-</button>
-
-<h2>🛒 Seu Pedido</h2>
-
-<div id="mensagemMesa" class="mensagem-mesa"></div>
-
-<div id="listaItens"></div>
-
-
-<div class="campo">
-
-<label>🪑 Número da mesa</label>
-
-<input
-type="number"
-id="mesa"
-placeholder="Ex.: 5"
-min="1"
->
+  <button onclick="event.stopPropagation(); abrirCarrinho()">
+    Ver pedido
+  </button>
 
 </div>
 
 
-<div class="campo">
+<!-- MODAL DO CARRINHO -->
 
-<label>👤 Nome do responsável</label>
+<div id="modalCarrinho"
+     class="modal-fundo">
 
-<input
-type="text"
-id="responsavel"
-placeholder="Digite seu nome"
->
+  <div class="modal">
+
+    <h2>🛒 Seu Pedido</h2>
+
+    <div id="listaCarrinho"></div>
+
+
+    <div class="campo">
+
+      <label for="mesa">
+        🪑 Número da mesa
+      </label>
+
+      <input
+        type="text"
+        id="mesa"
+        placeholder="Ex.: 5"
+        autocomplete="off"
+      >
+
+    </div>
+
+
+    <div class="campo">
+
+      <label for="responsavel">
+        👤 Nome do responsável
+      </label>
+
+      <input
+        type="text"
+        id="responsavel"
+        placeholder="Digite seu nome"
+        autocomplete="name"
+      >
+
+    </div>
+
+
+    <div class="campo">
+
+      <label for="observacaoGeral">
+        📝 Observações do pedido
+      </label>
+
+      <textarea
+        id="observacaoGeral"
+        placeholder="Alguma observação?"
+      ></textarea>
+
+    </div>
+
+
+    <div class="total">
+      Total: R$ <span id="totalModal">0,00</span>
+    </div>
+
+
+    <div class="botoes-modal">
+
+      <button
+        class="btn-fechar"
+        onclick="fecharCarrinho()">
+        Fechar
+      </button>
+
+      <button
+        id="btnEnviar"
+        class="btn-enviar"
+        onclick="enviarPedido()">
+        📲 Enviar Pedido
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
-
-<div class="total">
-
-Total: R$
-<span id="totalModal">0,00</span>
-
-</div>
-
-
-<button
-class="botao-enviar"
-id="botaoEnviar"
-onclick="enviarPedido()"
->
-
-📲 Enviar Pedido
-
-</button>
-
-</div>
-</div>
-
-
-<!-- JAVASCRIPT -->
 
 <script type="module">
 
+  /*
+  ============================================================
+  FIREBASE
+  ============================================================
+  */
 
-/* FIREBASE */
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
+  import {
+    initializeFirestore,
+    collection,
+    addDoc
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
+  const firebaseConfig = {
 
-const firebaseConfig = {
+    apiKey: "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
 
-  apiKey: "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+    authDomain:
+      "sistema-digital-f9df1.firebaseapp.com",
 
-  authDomain: "sistema-digital-f9df1.firebaseapp.com",
+    projectId:
+      "sistema-digital-f9df1",
 
-  projectId: "sistema-digital-f9df1",
+    storageBucket:
+      "sistema-digital-f9df1.firebasestorage.app",
 
-  storageBucket: "sistema-digital-f9df1.firebasestorage.app",
+    messagingSenderId:
+      "783545984661",
 
-  messagingSenderId: "783545984661",
+    appId:
+      "1:783545984661:web:5d0945907ad9db3990dd9c"
 
-  appId: "1:783545984661:web:5d0945907ad9db3990dd9c"
+  };
 
-};
 
+  const app = initializeApp(firebaseConfig);
 
-const app = initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+  /*
+  ============================================================
+  FIRESTORE
 
+  FORÇAMOS LONG POLLING PARA EVITAR PROBLEMAS
+  DE CONEXÃO EM ALGUMAS REDES / ANTIVÍRUS / PROXY.
+  ============================================================
+  */
 
-console.log("🔥 Firebase conectado!");
+  const db = initializeFirestore(app, {
 
-
-/* CONFIGURAÇÕES */
-
-const TELEFONE_WHATSAPP = "5549984121585";
-
-const CHAVE_IDENTIFICACAO = "identificacaoMesa";
-
-
-/* VARIÁVEIS */
-
-let pedido = [];
-
-let mesa = "";
-
-let responsavel = "";
-
-let totalGeral = 0;
-
-
-/* DINHEIRO */
-
-function formatarDinheiro(valor){
-
-  return Number(valor || 0)
-    .toFixed(2)
-    .replace(".",",");
-
-}
-
-
-/* ADICIONAR ITEM */
-
-function alterarItem(nome,preco,categoria,quantidade){
-
-  const existente =
-    pedido.find(item => item.nome === nome);
-
-
-  if(existente){
-
-    existente.quantidade += quantidade;
-
-  }else{
-
-    pedido.push({
-
-      nome:nome,
-
-      preco:Number(preco),
-
-      quantidade:quantidade,
-
-      categoria:categoria,
-
-      observacao:""
-
-    });
-
-  }
-
-
-  atualizarCarrinho();
-
-}
-
-
-/* ATUALIZAR CARRINHO */
-
-function atualizarCarrinho(){
-
-  const lista =
-    document.getElementById("listaItens");
-
-  const qtd =
-    document.getElementById("quantidadeCarrinho");
-
-  const totalEl =
-    document.getElementById("totalModal");
-
-
-  lista.innerHTML = "";
-
-
-  let qtdTotal = 0;
-
-  totalGeral = 0;
-
-
-  if(pedido.length === 0){
-
-    lista.innerHTML = `
-      <div class="vazio">
-        Seu pedido está vazio.
-      </div>
-    `;
-
-  }
-
-
-  pedido.forEach((item,index)=>{
-
-
-    qtdTotal += item.quantidade;
-
-
-    const subtotal =
-      item.preco * item.quantidade;
-
-
-    totalGeral += subtotal;
-
-
-    const div =
-      document.createElement("div");
-
-
-    div.className =
-      "item-carrinho";
-
-
-    div.innerHTML = `
-
-      <div class="item-carrinho-topo">
-
-        <strong>${item.nome}</strong>
-
-        <strong>
-          R$ ${formatarDinheiro(subtotal)}
-        </strong>
-
-      </div>
-
-
-      <div class="controles">
-
-        <button onclick="diminuirItem(${index})">
-          −
-        </button>
-
-
-        <span>
-          ${item.quantidade}
-        </span>
-
-
-        <button onclick="aumentarItem(${index})">
-          +
-        </button>
-
-
-        <button
-          class="remover"
-          onclick="removerItem(${index})"
-        >
-          🗑
-        </button>
-
-      </div>
-
-
-      <input
-        class="observacao"
-        placeholder="Observação..."
-        value="${item.observacao || ""}"
-        onchange="alterarObservacao(${index},this.value)"
-      >
-
-    `;
-
-
-    lista.appendChild(div);
+    experimentalForceLongPolling: true
 
   });
 
 
-  qtd.innerText = qtdTotal;
-
-  totalEl.innerText =
-    formatarDinheiro(totalGeral);
-
-}
+  console.log("🔥 Firebase inicializado");
 
 
-/* CONTROLES */
+  /*
+  ============================================================
+  PRODUTOS
+  ============================================================
+  */
 
-window.aumentarItem = function(index){
+  const produtos = [
 
-  pedido[index].quantidade++;
+    {
+      id: 1,
+      nome: "X-Bacon",
+      descricao: "Hambúrguer, bacon, queijo e salada",
+      preco: 26,
+      categoria: "Lanches"
+    },
 
-  atualizarCarrinho();
+    {
+      id: 2,
+      nome: "X-Salada",
+      descricao: "Hambúrguer, queijo, alface, tomate e maionese",
+      preco: 23,
+      categoria: "Lanches"
+    },
 
-};
+    {
+      id: 3,
+      nome: "X-Calabresa",
+      descricao: "Hambúrguer, calabresa, queijo e salada",
+      preco: 27,
+      categoria: "Lanches"
+    },
+
+    {
+      id: 4,
+      nome: "X-Tudo",
+      descricao: "Hambúrguer completo com queijo, bacon, calabresa e salada",
+      preco: 34,
+      categoria: "Lanches"
+    },
 
 
-window.diminuirItem = function(index){
+    {
+      id: 5,
+      nome: "Pizza Calabresa",
+      descricao: "Pizza de calabresa",
+      preco: 45,
+      categoria: "Pizzas"
+    },
 
-  pedido[index].quantidade--;
+    {
+      id: 6,
+      nome: "Pizza Frango c/ Catupiry",
+      descricao: "Frango e catupiry",
+      preco: 48,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 7,
+      nome: "Pizza Mussarela",
+      descricao: "Mussarela e orégano",
+      preco: 40,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 8,
+      nome: "Pizza Portuguesa",
+      descricao: "Presunto, queijo, ovo, cebola e ervilha",
+      preco: 52,
+      categoria: "Pizzas"
+    },
 
 
-  if(pedido[index].quantidade <= 0){
+    {
+      id: 9,
+      nome: "Batata Frita",
+      descricao: "Porção de batata frita",
+      preco: 20,
+      categoria: "Porções"
+    },
 
-    pedido.splice(index,1);
+    {
+      id: 10,
+      nome: "Batata Frita c/ Queijo",
+      descricao: "Batata frita com queijo",
+      preco: 26,
+      categoria: "Porções"
+    },
+
+    {
+      id: 11,
+      nome: "Porção de Tilápia",
+      descricao: "Porção de tilápia frita",
+      preco: 38,
+      categoria: "Porções"
+    },
+
+    {
+      id: 12,
+      nome: "Mandioca Frita",
+      descricao: "Porção de mandioca frita",
+      preco: 18,
+      categoria: "Porções"
+    },
+
+
+    {
+      id: 13,
+      nome: "Coca-Cola",
+      descricao: "Refrigerante",
+      preco: 7,
+      categoria: "Bebidas"
+    },
+
+    {
+      id: 14,
+      nome: "Pepsi",
+      descricao: "Refrigerante",
+      preco: 7,
+      categoria: "Bebidas"
+    },
+
+    {
+      id: 15,
+      nome: "Cerveja",
+      descricao: "Cerveja",
+      preco: 13,
+      categoria: "Bebidas"
+    },
+
+    {
+      id: 16,
+      nome: "Chopp",
+      descricao: "Chopp",
+      preco: 15,
+      categoria: "Bebidas"
+    }
+
+  ];
+
+
+  /*
+  ============================================================
+  VARIÁVEIS
+  ============================================================
+  */
+
+  let pedido = [];
+
+  let categoriaAtual = "Todos";
+
+
+  const TELEFONE_WHATSAPP =
+    "5549984121585";
+
+
+  /*
+  ============================================================
+  FUNÇÕES
+  ============================================================
+  */
+
+  function formatarPreco(valor) {
+
+    return Number(valor).toLocaleString(
+      "pt-BR",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    );
 
   }
 
 
-  atualizarCarrinho();
+  function obterTotal() {
 
-};
+    return pedido.reduce(
 
+      (total, item) => {
 
-window.removerItem = function(index){
+        return total +
+          (Number(item.preco) *
+           Number(item.quantidade));
 
-  pedido.splice(index,1);
+      },
 
-  atualizarCarrinho();
+      0
 
-};
+    );
 
-
-window.alterarObservacao =
-function(index,valor){
-
-  pedido[index].observacao = valor;
-
-};
+  }
 
 
-/* ABRIR CARRINHO */
+  function atualizarCarrinho() {
 
-window.abrirCarrinho = function(){
-
-  document
-    .getElementById("modalCarrinho")
-    .classList
-    .add("ativo");
-
-
-  carregarIdentificacao();
-
-  atualizarCarrinho();
-
-};
-
-
-/* FECHAR CARRINHO */
-
-window.fecharCarrinho = function(){
-
-  document
-    .getElementById("modalCarrinho")
-    .classList
-    .remove("ativo");
-
-};
-
-
-/* LOCAL STORAGE */
-
-function carregarIdentificacao(){
-
-  try{
-
-    const dados =
-      JSON.parse(
-        localStorage.getItem(
-          CHAVE_IDENTIFICACAO
-        )
+    const quantidade =
+      pedido.reduce(
+        (total, item) =>
+          total + Number(item.quantidade),
+        0
       );
 
 
-    if(dados){
+    document.getElementById(
+      "quantidadeCarrinho"
+    ).textContent = quantidade;
 
-      document.getElementById("mesa").value =
-        dados.mesa || "";
 
-      document.getElementById("responsavel").value =
-        dados.responsavel || "";
+    document.getElementById(
+      "totalCarrinho"
+    ).textContent =
+      formatarPreco(obterTotal());
+
+
+    document.getElementById(
+      "totalModal"
+    ).textContent =
+      formatarPreco(obterTotal());
+
+  }
+
+
+  /*
+  ============================================================
+  MOSTRAR PRODUTOS
+  ============================================================
+  */
+
+  function mostrarProdutos() {
+
+    const lista =
+      document.getElementById(
+        "listaProdutos"
+      );
+
+
+    lista.innerHTML = "";
+
+
+    let produtosFiltrados;
+
+
+    if (categoriaAtual === "Todos") {
+
+      produtosFiltrados = produtos;
+
+    } else {
+
+      produtosFiltrados =
+        produtos.filter(
+          produto =>
+            produto.categoria === categoriaAtual
+        );
 
     }
 
-  }catch(e){
 
-    console.error(e);
+    if (produtosFiltrados.length === 0) {
 
-  }
+      lista.innerHTML =
+        `<div class="vazio">
+          Nenhum produto encontrado.
+        </div>`;
 
-}
+      return;
 
-
-function salvarIdentificacao(){
-
-  mesa =
-    document
-      .getElementById("mesa")
-      .value
-      .trim();
+    }
 
 
-  responsavel =
-    document
-      .getElementById("responsavel")
-      .value
-      .trim();
+    produtosFiltrados.forEach(produto => {
+
+      const div =
+        document.createElement("div");
 
 
-  localStorage.setItem(
-
-    CHAVE_IDENTIFICACAO,
-
-    JSON.stringify({
-
-      mesa:mesa,
-
-      responsavel:responsavel
-
-    })
-
-  );
-
-}
+      div.className = "produto";
 
 
-/* VERIFICAR MESA */
+      div.innerHTML = `
 
-async function verificarMesaAtual(){
+        <h3>${produto.nome}</h3>
 
-  mesa =
-    document
-      .getElementById("mesa")
-      .value
-      .trim();
+        <p>${produto.descricao}</p>
 
+        <div class="produto-baixo">
 
-  const aviso =
-    document.getElementById("mensagemMesa");
+          <span class="preco">
+            R$ ${formatarPreco(produto.preco)}
+          </span>
 
+          <button
+            class="btn-adicionar"
+            onclick="adicionarProduto(${produto.id})">
 
-  if(!mesa){
+            ➕ Adicionar
 
-    aviso.style.display = "none";
+          </button>
 
-    return;
-
-  }
-
-
-  try{
-
-    const ref =
-      collection(db,"pedidos");
-
-
-    const q =
-      query(
-        ref,
-        where("mesa","==",mesa)
-      );
-
-
-    const resultado =
-      await getDocs(q);
-
-
-    const abertos = [];
-
-
-    resultado.forEach(docAtual=>{
-
-      const dados =
-        docAtual.data();
-
-
-      if(dados.status !== "finalizado"){
-
-        abertos.push(dados);
-
-      }
-
-    });
-
-
-    if(abertos.length > 0){
-
-      const totalMesa =
-        abertos.reduce(
-
-          (total,pedidoAtual)=>
-
-            total +
-            Number(pedidoAtual.total || 0),
-
-          0
-
-        );
-
-
-      aviso.innerHTML = `
-
-        ⚠️ Esta mesa já tem
-        <strong>${abertos.length}</strong>
-        pedido(s) aberto(s).
-
-        <br>
-
-        💰 Total atual:
-        R$ ${formatarDinheiro(totalMesa)}
+        </div>
 
       `;
 
 
-      aviso.style.display =
-        "block";
+      lista.appendChild(div);
 
-    }else{
+    });
 
-      aviso.style.display =
-        "none";
+  }
+
+
+  /*
+  ============================================================
+  FILTRO
+  ============================================================
+  */
+
+  window.filtrarCategoria =
+    function(categoria, botao) {
+
+      categoriaAtual = categoria;
+
+
+      document
+        .querySelectorAll(".categorias button")
+        .forEach(btn =>
+          btn.classList.remove("ativo")
+        );
+
+
+      botao.classList.add("ativo");
+
+
+      mostrarProdutos();
+
+    };
+
+
+  /*
+  ============================================================
+  ADICIONAR PRODUTO
+  ============================================================
+  */
+
+  window.adicionarProduto =
+    function(id) {
+
+      const produto =
+        produtos.find(
+          p => p.id === id
+        );
+
+
+      if (!produto) return;
+
+
+      const existente =
+        pedido.find(
+          item => item.id === id
+        );
+
+
+      if (existente) {
+
+        existente.quantidade++;
+
+      } else {
+
+        pedido.push({
+
+          id: produto.id,
+
+          nome: produto.nome,
+
+          preco: produto.preco,
+
+          categoria: produto.categoria,
+
+          quantidade: 1,
+
+          observacao: ""
+
+        });
+
+      }
+
+
+      atualizarCarrinho();
+
+
+      console.log(
+        "Produto adicionado:",
+        produto.nome
+      );
+
+    };
+
+
+  /*
+  ============================================================
+  ABRIR CARRINHO
+  ============================================================
+  */
+
+  window.abrirCarrinho =
+    function() {
+
+      mostrarCarrinho();
+
+
+      document.getElementById(
+        "modalCarrinho"
+      ).style.display = "block";
+
+    };
+
+
+  /*
+  ============================================================
+  FECHAR CARRINHO
+  ============================================================
+  */
+
+  window.fecharCarrinho =
+    function() {
+
+      document.getElementById(
+        "modalCarrinho"
+      ).style.display = "none";
+
+    };
+
+
+  /*
+  ============================================================
+  MOSTRAR CARRINHO
+  ============================================================
+  */
+
+  function mostrarCarrinho() {
+
+    const lista =
+      document.getElementById(
+        "listaCarrinho"
+      );
+
+
+    lista.innerHTML = "";
+
+
+    if (pedido.length === 0) {
+
+      lista.innerHTML =
+        `<div class="vazio">
+          Seu carrinho está vazio.
+        </div>`;
+
+      atualizarCarrinho();
+
+      return;
 
     }
 
 
-  }catch(e){
+    pedido.forEach((item, index) => {
 
-    console.error(
-      "Erro ao verificar mesa:",
-      e
+      const div =
+        document.createElement("div");
+
+
+      div.className =
+        "item-carrinho";
+
+
+      div.innerHTML = `
+
+        <div class="item-carrinho-topo">
+
+          <strong>
+            ${item.nome}
+          </strong>
+
+          <strong>
+            R$ ${formatarPreco(
+              item.preco * item.quantidade
+            )}
+          </strong>
+
+        </div>
+
+
+        <div class="quantidade">
+
+          <button
+            onclick="diminuirQuantidade(${index})">
+            −
+          </button>
+
+          <strong>
+            ${item.quantidade}
+          </strong>
+
+          <button
+            onclick="aumentarQuantidade(${index})">
+            +
+          </button>
+
+          <button
+            onclick="removerProduto(${index})">
+            🗑️
+          </button>
+
+        </div>
+
+
+        <input
+          class="observacao-item"
+          type="text"
+          placeholder="Observação deste item"
+          value="${item.observacao || ""}"
+          onchange="alterarObservacao(${index}, this.value)"
+        >
+
+      `;
+
+
+      lista.appendChild(div);
+
+    });
+
+
+    atualizarCarrinho();
+
+  }
+
+
+  /*
+  ============================================================
+  QUANTIDADES
+  ============================================================
+  */
+
+  window.aumentarQuantidade =
+    function(index) {
+
+      if (!pedido[index]) return;
+
+      pedido[index].quantidade++;
+
+      mostrarCarrinho();
+
+    };
+
+
+  window.diminuirQuantidade =
+    function(index) {
+
+      if (!pedido[index]) return;
+
+
+      if (pedido[index].quantidade > 1) {
+
+        pedido[index].quantidade--;
+
+      } else {
+
+        pedido.splice(index, 1);
+
+      }
+
+
+      mostrarCarrinho();
+
+    };
+
+
+  window.removerProduto =
+    function(index) {
+
+      pedido.splice(index, 1);
+
+      mostrarCarrinho();
+
+    };
+
+
+  window.alterarObservacao =
+    function(index, valor) {
+
+      if (pedido[index]) {
+
+        pedido[index].observacao =
+          valor;
+
+      }
+
+    };
+
+
+  /*
+  ============================================================
+  HORÁRIO E DATA
+  ============================================================
+  */
+
+  function obterHorario() {
+
+    return new Date().toLocaleTimeString(
+      "pt-BR",
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
     );
 
   }
 
-}
+
+  function obterData() {
+
+    return new Date().toLocaleDateString(
+      "pt-BR"
+    );
+
+  }
 
 
-/* =====================================================
-   SALVAR PEDIDO - CORRIGIDO
-===================================================== */
+  /*
+  ============================================================
+  NÚMERO DO PEDIDO
 
-async function salvarPedidoNoSistema(){
+  Não usamos mais:
+  getDocs(collection(db,"pedidos"))
 
-  try{
+  Portanto não precisamos baixar todos
+  os pedidos para gerar o número.
+  ============================================================
+  */
 
+  function gerarNumeroPedido() {
+
+    const agora = new Date();
+
+
+    const hora =
+      String(agora.getHours())
+        .padStart(2, "0");
+
+
+    const minuto =
+      String(agora.getMinutes())
+        .padStart(2, "0");
+
+
+    const segundo =
+      String(agora.getSeconds())
+        .padStart(2, "0");
+
+
+    const milissegundo =
+      String(agora.getMilliseconds())
+        .padStart(3, "0");
+
+
+    return `${hora}${minuto}${segundo}${milissegundo}`;
+
+  }
+
+
+  /*
+  ============================================================
+  SALVAR PEDIDO NO FIREBASE
+
+  ESTA É A PRINCIPAL ALTERAÇÃO.
+  ============================================================
+  */
+
+  async function salvarPedidoNoSistema() {
 
     console.log(
-      "📤 Salvando pedido diretamente..."
+      "🔥 Iniciando gravação no Firebase..."
     );
 
 
-    const pedidosRef =
-      collection(db,"pedidos");
+    const ref =
+      collection(db, "pedidos");
 
 
-    /* GERA NÚMERO SEM LER O FIREBASE */
+    const mesa =
+      document.getElementById(
+        "mesa"
+      ).value.trim();
 
-    const agora =
-      new Date();
+
+    const responsavel =
+      document.getElementById(
+        "responsavel"
+      ).value.trim();
 
 
-    const numeroPedido =
-      agora.getFullYear().toString().slice(-2) +
-      String(agora.getMonth()+1).padStart(2,"0") +
-      String(agora.getDate()).padStart(2,"0") +
-      String(agora.getHours()).padStart(2,"0") +
-      String(agora.getMinutes()).padStart(2,"0") +
-      String(agora.getSeconds()).padStart(2,"0");
+    const observacaoGeral =
+      document.getElementById(
+        "observacaoGeral"
+      ).value.trim();
+
+
+    const numero =
+      gerarNumeroPedido();
 
 
     const pedidoSistema = {
 
+      numero: numero,
 
-      numero:
-        numeroPedido,
+      mesa: mesa,
 
+      responsavel: responsavel,
 
-      mesa:
-        mesa,
+      nomeCliente: responsavel,
 
+      horario: obterHorario(),
 
-      responsavel:
-        responsavel,
+      data: obterData(),
 
+      status: "recebido",
 
-      nomeCliente:
-        responsavel,
+      observacaoGeral:
+        observacaoGeral,
 
+      itens: pedido.map(item => ({
 
-      horario:
-        obterHorario(),
+        nome: item.nome,
 
+        preco: Number(item.preco),
 
-      data:
-        obterData(),
+        quantidade:
+          Number(item.quantidade),
 
+        categoria:
+          item.categoria || "",
 
-      status:
-        "recebido",
+        observacao:
+          item.observacao || ""
 
-
-      itens:
-
-        pedido.map(item => ({
-
-          nome:item.nome,
-
-          preco:Number(item.preco),
-
-          quantidade:Number(item.quantidade),
-
-          categoria:item.categoria || "",
-
-          observacao:item.observacao || ""
-
-        })),
-
+      })),
 
       total:
-        Number(totalGeral.toFixed(2)),
-
+        Number(
+          obterTotal().toFixed(2)
+        ),
 
       dataCriacao:
         new Date().toISOString()
@@ -1216,387 +1261,421 @@ async function salvarPedidoNoSistema(){
 
 
     console.log(
-      "💾 Enviando para Firebase:",
+      "📦 Pedido preparado:",
       pedidoSistema
     );
 
 
-    /* TIMEOUT DE SEGURANÇA */
+    /*
+    ------------------------------------------------------------
+    GRAVA DIRETAMENTE.
+    NÃO FAZ getDocs ANTES.
+    ------------------------------------------------------------
+    */
 
-    const timeout =
-      new Promise((_,reject)=>{
-
-        setTimeout(()=>{
-
-          reject(
-            new Error(
-              "Tempo limite excedido. Verifique a conexão com o Firebase."
-            )
-          );
-
-        },15000);
-
-      });
-
-
-    const salvar =
-      addDoc(
-        pedidosRef,
+    const docRef =
+      await addDoc(
+        ref,
         pedidoSistema
       );
 
 
-    const docRef =
-      await Promise.race([
-
-        salvar,
-
-        timeout
-
-      ]);
-
-
     console.log(
-      "✅ PEDIDO SALVO!",
+      "✅ PEDIDO SALVO NO FIREBASE!",
       docRef.id
     );
 
 
-    pedidoSistema.id =
-      docRef.id;
+    return {
 
+      ...pedidoSistema,
 
-    return pedidoSistema;
+      idFirebase: docRef.id
 
-
-  }catch(e){
-
-
-    console.error(
-      "❌ ERRO COMPLETO:",
-      e
-    );
-
-
-    alert(
-
-      "❌ Não foi possível registrar o pedido.\n\n" +
-
-      "Erro: " +
-
-      (e.message || "Erro desconhecido")
-
-    );
-
-
-    return null;
-
-  }
-
-}
-
-
-/* ENVIAR PEDIDO */
-
-window.enviarPedido =
-async function(){
-
-
-  salvarIdentificacao();
-
-
-  if(!mesa){
-
-    alert(
-      "⚠️ Informe o número da mesa."
-    );
-
-    return;
+    };
 
   }
 
 
-  if(!responsavel){
+  /*
+  ============================================================
+  WHATSAPP
+  ============================================================
+  */
 
-    alert(
-      "⚠️ Informe o nome do responsável."
+  function enviarWhatsApp(
+    pedidoSistema
+  ) {
+
+    let mensagem =
+      `🍔 *NOVO PEDIDO - SABOR DA CASA*%0A%0A`;
+
+
+    mensagem +=
+      `📋 *Pedido:* #${pedidoSistema.numero}%0A`;
+
+
+    mensagem +=
+      `🪑 *Mesa:* ${pedidoSistema.mesa}%0A`;
+
+
+    mensagem +=
+      `👤 *Responsável:* ${pedidoSistema.responsavel}%0A`;
+
+
+    mensagem +=
+      `📅 *Data:* ${pedidoSistema.data}%0A`;
+
+
+    mensagem +=
+      `⏰ *Horário:* ${pedidoSistema.horario}%0A%0A`;
+
+
+    mensagem +=
+      `*ITENS:*%0A`;
+
+
+    pedidoSistema.itens.forEach(item => {
+
+      mensagem +=
+        `• ${item.quantidade}x ${item.nome} - R$ ${formatarPreco(item.preco * item.quantidade)}%0A`;
+
+
+      if (item.observacao) {
+
+        mensagem +=
+          `  📝 ${item.observacao}%0A`;
+
+      }
+
+    });
+
+
+    if (pedidoSistema.observacaoGeral) {
+
+      mensagem +=
+        `%0A📝 *Observação:* ${pedidoSistema.observacaoGeral}%0A`;
+
+    }
+
+
+    mensagem +=
+      `%0A💰 *TOTAL: R$ ${formatarPreco(pedidoSistema.total)}*`;
+
+
+    const url =
+      `https://wa.me/${TELEFONE_WHATSAPP}?text=${mensagem}`;
+
+
+    console.log(
+      "📲 Abrindo WhatsApp..."
     );
 
-    return;
+
+    window.open(
+      url,
+      "_blank"
+    );
 
   }
 
 
-  if(pedido.length === 0){
+  /*
+  ============================================================
+  ENVIAR PEDIDO
+  ============================================================
+  */
 
-    alert(
-      "⚠️ Adicione pelo menos um item."
-    );
+  window.enviarPedido =
+    async function() {
 
-    return;
-
-  }
-
-
-  const botao =
-    document.getElementById(
-      "botaoEnviar"
-    );
+      const btn =
+        document.getElementById(
+          "btnEnviar"
+        );
 
 
-  botao.disabled = true;
+      const mesa =
+        document.getElementById(
+          "mesa"
+        ).value.trim();
 
 
-  botao.innerText =
-    "⏳ Registrando...";
+      const responsavel =
+        document.getElementById(
+          "responsavel"
+        ).value.trim();
 
 
-  const pedidoSalvo =
-    await salvarPedidoNoSistema();
+      /*
+      ----------------------------------------------------------
+      VALIDAÇÕES
+      ----------------------------------------------------------
+      */
+
+      if (!mesa) {
+
+        alert(
+          "Informe o número da mesa."
+        );
+
+        document
+          .getElementById("mesa")
+          .focus();
+
+        return;
+
+      }
 
 
-  if(!pedidoSalvo){
+      if (!responsavel) {
 
-    botao.disabled = false;
+        alert(
+          "Informe o nome do responsável."
+        );
 
-    botao.innerText =
-      "📲 Enviar Pedido";
+        document
+          .getElementById("responsavel")
+          .focus();
 
-    return;
+        return;
 
-  }
+      }
 
 
-  alert(
-    `✅ Pedido registrado com sucesso!`
+      if (pedido.length === 0) {
+
+        alert(
+          "Adicione pelo menos um produto."
+        );
+
+        return;
+
+      }
+
+
+      /*
+      ----------------------------------------------------------
+      BLOQUEIA O BOTÃO
+      ----------------------------------------------------------
+      */
+
+      btn.disabled = true;
+
+      btn.textContent =
+        "⏳ Registrando...";
+
+
+      try {
+
+        console.log(
+          "🚀 Enviando pedido..."
+        );
+
+
+        /*
+        --------------------------------------------------------
+        FIREBASE
+
+        Agora existe somente UMA operação principal:
+        addDoc()
+
+        Não fazemos mais getDocs().
+        --------------------------------------------------------
+        */
+
+        const pedidoSalvo =
+          await salvarPedidoNoSistema();
+
+
+        if (!pedidoSalvo) {
+
+          throw new Error(
+            "O Firebase não retornou o pedido salvo."
+          );
+
+        }
+
+
+        console.log(
+          "✅ Pedido registrado:",
+          pedidoSalvo
+        );
+
+
+        /*
+        --------------------------------------------------------
+        SUCESSO
+        --------------------------------------------------------
+        */
+
+        alert(
+          `✅ Pedido #${pedidoSalvo.numero} registrado com sucesso!`
+        );
+
+
+        /*
+        --------------------------------------------------------
+        SÓ DEPOIS DO FIREBASE:
+        ABRE O WHATSAPP
+        --------------------------------------------------------
+        */
+
+        enviarWhatsApp(
+          pedidoSalvo
+        );
+
+
+        /*
+        --------------------------------------------------------
+        LIMPA O PEDIDO
+        --------------------------------------------------------
+        */
+
+        pedido = [];
+
+
+        document.getElementById(
+          "mesa"
+        ).value = "";
+
+
+        document.getElementById(
+          "responsavel"
+        ).value = "";
+
+
+        document.getElementById(
+          "observacaoGeral"
+        ).value = "";
+
+
+        atualizarCarrinho();
+
+
+        fecharCarrinho();
+
+
+      } catch (erro) {
+
+        console.error(
+          "❌ ERRO AO REGISTRAR:",
+          erro
+        );
+
+
+        /*
+        --------------------------------------------------------
+        MENSAGEM DE ERRO
+        --------------------------------------------------------
+        */
+
+        let mensagem =
+          "Não foi possível registrar o pedido.";
+
+
+        if (
+          erro.code ===
+          "permission-denied"
+        ) {
+
+          mensagem +=
+            "\n\nO Firebase recusou o acesso. Verifique as regras do Firestore.";
+
+        } else {
+
+          mensagem +=
+            "\n\nErro: " +
+            (erro.message || erro);
+
+        }
+
+
+        alert(mensagem);
+
+
+      } finally {
+
+        /*
+        --------------------------------------------------------
+        DESBLOQUEIA O BOTÃO
+        --------------------------------------------------------
+        */
+
+        btn.disabled = false;
+
+        btn.textContent =
+          "📲 Enviar Pedido";
+
+      }
+
+    };
+
+
+  /*
+  ============================================================
+  TESTE DE CONEXÃO
+  ============================================================
+  */
+
+  window.addEventListener(
+    "online",
+    () => {
+
+      console.log(
+        "🌐 Internet conectada."
+      );
+
+      document.getElementById(
+        "statusFirebase"
+      ).textContent =
+        "🌐 Internet conectada";
+
+    }
   );
 
 
-  enviarWhatsApp(
-    pedidoSalvo
+  window.addEventListener(
+    "offline",
+    () => {
+
+      console.log(
+        "❌ Internet desconectada."
+      );
+
+      document.getElementById(
+        "statusFirebase"
+      ).textContent =
+        "❌ Sem conexão com a internet";
+
+    }
   );
 
 
-  pedido = [];
+  /*
+  ============================================================
+  INICIALIZAÇÃO
+  ============================================================
+  */
 
+  mostrarProdutos();
 
   atualizarCarrinho();
 
 
-  fecharCarrinho();
+  document.getElementById(
+    "statusFirebase"
+  ).textContent =
+    "🔥 Sistema conectado ao Firebase";
 
 
-  botao.disabled = false;
-
-
-  botao.innerText =
-    "📲 Enviar Pedido";
-
-};
-
-
-/* WHATSAPP */
-
-function enviarWhatsApp(pedidoAtual){
-
-  let mensagem =
-    `🍔 *NOVO PEDIDO — SABOR DA CASA*\n\n`;
-
-
-  mensagem +=
-    `📋 Pedido: #${pedidoAtual.numero}\n`;
-
-
-  mensagem +=
-    `🪑 Mesa: ${pedidoAtual.mesa}\n`;
-
-
-  mensagem +=
-    `👤 Responsável: ${pedidoAtual.responsavel}\n`;
-
-
-  mensagem +=
-    `🕐 Horário: ${pedidoAtual.horario}\n`;
-
-
-  mensagem +=
-    `━━━━━━━━━━━━━━━━━━\n`;
-
-
-  pedidoAtual.itens.forEach(item=>{
-
-
-    const subtotal =
-      item.preco *
-      item.quantidade;
-
-
-    mensagem +=
-      `▪️ ${item.quantidade}x ${item.nome} — R$ ${formatarDinheiro(subtotal)}\n`;
-
-
-    if(item.observacao){
-
-      mensagem +=
-        `📝 OBS: ${item.observacao}\n`;
-
-    }
-
-  });
-
-
-  mensagem +=
-    `━━━━━━━━━━━━━━━━━━\n`;
-
-
-  mensagem +=
-    `💰 *TOTAL: R$ ${formatarDinheiro(pedidoAtual.total)}*`;
-
-
-  window.open(
-
-    `https://wa.me/${TELEFONE_WHATSAPP}?text=${encodeURIComponent(mensagem)}`,
-
-    "_blank"
-
+  console.log(
+    "✅ Cardápio carregado."
   );
 
-}
-
-
-/* DATA */
-
-function obterHorario(){
-
-  return new Date()
-    .toLocaleTimeString(
-
-      "pt-BR",
-
-      {
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-
-    );
-
-}
-
-
-function obterData(){
-
-  return new Date()
-    .toLocaleDateString("pt-BR");
-
-}
-
-
-/* FILTROS */
-
-window.filtrar =
-function(categoria,botao){
-
-
-  document
-    .querySelectorAll(".categorias button")
-    .forEach(b=>{
-
-      b.classList.remove("ativo");
-
-    });
-
-
-  botao.classList.add("ativo");
-
-
-  document
-    .querySelectorAll(".produto")
-    .forEach(produto=>{
-
-
-      produto.style.display =
-
-        categoria === "todos" ||
-
-        produto.dataset.categoria === categoria
-
-          ? ""
-
-          : "none";
-
-    });
-
-};
-
-
-/* EVENTOS */
-
-document
-  .getElementById("mesa")
-  .addEventListener(
-
-    "change",
-
-    verificarMesaAtual
-
+  console.log(
+    "🔥 Firestore configurado."
   );
-
-
-document
-  .getElementById("modalCarrinho")
-  .addEventListener(
-
-    "click",
-
-    function(evento){
-
-      if(
-        evento.target.id ===
-        "modalCarrinho"
-      ){
-
-        fecharCarrinho();
-
-      }
-
-    }
-
-  );
-
-
-/* DISPONIBILIZAR FUNÇÕES */
-
-window.alterarItem =
-  alterarItem;
-
-
-/* INICIAR */
-
-document.addEventListener(
-
-  "DOMContentLoaded",
-
-  function(){
-
-
-    carregarIdentificacao();
-
-    atualizarCarrinho();
-
-
-    console.log(
-      "🚀 Sistema iniciado!"
-    );
-
-
-    console.log(
-      "🔥 Firebase pronto!"
-    );
-
-  }
-
-);
-
 
 </script>
 
