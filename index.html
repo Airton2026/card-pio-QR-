@@ -1,2001 +1,1379 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <title>Sabor da Casa — Cardápio Digital</title>
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<title>Sabor da Casa — Cardápio Digital</title>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
 
-<style>
+    header {
+      background: #b0003a;
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+    }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  color: #222;
-}
+    header p {
+      margin: 8px 0 0;
+      font-size: 15px;
+    }
 
-/* CABEÇALHO */
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+      padding-bottom: 120px;
+    }
 
-header {
-  background: #b71c1c;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
+    .categorias {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 15px;
+    }
 
-header h1 {
-  font-size: 28px;
-  margin-bottom: 6px;
-}
+    .categoria {
+      border: none;
+      background: white;
+      border-radius: 20px;
+      padding: 10px 16px;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,.12);
+    }
 
-header p {
-  font-size: 14px;
-  opacity: 0.9;
-}
+    .categoria:hover {
+      background: #ffe5ee;
+    }
 
-#statusFirebase {
-  margin-top: 8px;
-  font-size: 13px;
-}
+    h2 {
+      margin-top: 20px;
+    }
 
-/* CATEGORIAS */
+    .produto {
+      background: white;
+      margin: 12px 0;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
 
-.categorias {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 12px;
-  background: white;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 1px solid #ddd;
-}
+    .produto-info {
+      flex: 1;
+    }
 
-.categorias button {
-  border: none;
-  background: #eeeeee;
-  padding: 10px 16px;
-  border-radius: 20px;
-  white-space: nowrap;
-  cursor: pointer;
-  font-weight: bold;
-}
+    .produto h3 {
+      margin: 0 0 6px;
+    }
 
-.categorias button.ativo {
-  background: #b71c1c;
-  color: white;
-}
+    .produto p {
+      margin: 5px 0;
+      color: #666;
+    }
 
-/* CONTAINER */
+    .preco {
+      color: #b0003a;
+      font-size: 18px;
+      font-weight: bold;
+    }
 
-.container {
-  max-width: 800px;
-  margin: auto;
-  padding: 15px;
-  padding-bottom: 110px;
-}
+    .btn {
+      border: none;
+      background: #b0003a;
+      color: white;
+      padding: 11px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-.titulo-categoria {
-  margin: 20px 0 12px;
-  font-size: 22px;
-}
+    .btn:hover {
+      opacity: .9;
+    }
 
-/* PRODUTO */
+    .btn-secundario {
+      background: #555;
+    }
 
-.produto {
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
+    .carrinho {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 24px);
+      max-width: 850px;
+      background: #b0003a;
+      color: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,.25);
+      z-index: 100;
+    }
 
-.produto h3 {
-  margin-bottom: 6px;
-}
+    .carrinho button {
+      border: none;
+      background: white;
+      color: #b0003a;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-.produto p {
-  color: #666;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
+    .modal-fundo {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 200;
+      padding: 20px;
+      overflow-y: auto;
+    }
 
-.produto-baixo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+    .modal {
+      background: white;
+      max-width: 600px;
+      margin: 30px auto;
+      border-radius: 15px;
+      padding: 22px;
+    }
 
-.preco {
-  font-size: 18px;
-  font-weight: bold;
-  color: #b71c1c;
-}
+    .modal h2 {
+      margin-top: 0;
+    }
 
-.btn-adicionar {
-  border: none;
-  background: #b71c1c;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
+    label {
+      display: block;
+      margin-top: 14px;
+      font-weight: bold;
+    }
 
-/* CARRINHO */
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
 
-.carrinho-flutuante {
-  position: fixed;
-  bottom: 15px;
-  left: 15px;
-  right: 15px;
-  max-width: 770px;
-  margin: auto;
-  background: #b71c1c;
-  color: white;
-  padding: 15px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  z-index: 20;
-  cursor: pointer;
-}
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
 
-.carrinho-flutuante button {
-  background: white;
-  color: #b71c1c;
-  border: none;
-  padding: 9px 14px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .item-carrinho {
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+    }
 
-/* MODAL */
+    .item-topo {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-.modal-fundo {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  z-index: 100;
-  overflow-y: auto;
-  padding: 15px;
-}
+    .quantidade {
+      font-weight: bold;
+      color: #b0003a;
+    }
 
-.modal {
-  background: white;
-  max-width: 600px;
-  margin: 20px auto;
-  border-radius: 15px;
-  padding: 20px;
-}
+    .observacao-item {
+      margin-top: 8px;
+    }
 
-.modal h2 {
-  margin-bottom: 15px;
-}
+    .total {
+      font-size: 22px;
+      font-weight: bold;
+      color: #b0003a;
+      text-align: right;
+      margin: 20px 0;
+    }
 
-/* CAMPOS */
+    .acoes {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
 
-.campo {
-  margin-bottom: 15px;
-}
+    .teste-firebase {
+      margin-top: 25px;
+      width: 100%;
+      background: #b0003a;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-.campo label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 6px;
-}
+    .vazio {
+      text-align: center;
+      color: #777;
+      padding: 30px;
+    }
 
-.campo input,
-.campo textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-}
+    @media (max-width: 600px) {
+      .produto {
+        align-items: flex-start;
+      }
 
-.campo textarea {
-  min-height: 80px;
-  resize: vertical;
-}
+      .produto .btn {
+        padding: 10px 12px;
+      }
 
-/* ITENS DO CARRINHO */
-
-.item-carrinho {
-  border-bottom: 1px solid #ddd;
-  padding: 12px 0;
-}
-
-.item-carrinho-topo {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.quantidade {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.quantidade button {
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: #eee;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.observacao-item {
-  width: 100%;
-  margin-top: 8px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-
-/* TOTAL */
-
-.total {
-  font-size: 22px;
-  font-weight: bold;
-  text-align: right;
-  margin: 20px 0;
-}
-
-/* BOTÕES */
-
-.botoes-modal {
-  display: flex;
-  gap: 10px;
-}
-
-.botoes-modal button {
-  flex: 1;
-  padding: 14px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.btn-fechar {
-  background: #ddd;
-  color: #222;
-}
-
-.btn-enviar {
-  background: #25d366;
-  color: white;
-}
-
-.btn-enviar:disabled {
-  background: #999;
-  cursor: not-allowed;
-}
-
-.vazio {
-  text-align: center;
-  padding: 30px;
-  color: #777;
-}
-
-/* BOTÃO DE TESTE */
-
-#botaoTesteFirebase {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 99999;
-  padding: 12px 15px;
-  background: red;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-}
-
-</style>
-
+      .carrinho {
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
-
 <header>
-
-<h1>🍔 Sabor da Casa</h1>
-
-<p>Cardápio Digital</p>
-
-<div id="statusFirebase">
-🔄 Conectando ao sistema...
-</div>
-
+  <h1>🍽️ Sabor da Casa</h1>
+  <p>Cardápio Digital</p>
 </header>
-
-
-<!-- CATEGORIAS -->
-
-<div class="categorias">
-
-<button class="ativo"
-        onclick="filtrarCategoria('Todos', this)">
-Todos
-</button>
-
-<button onclick="filtrarCategoria('Lanches', this)">
-🍔 Lanches
-</button>
-
-<button onclick="filtrarCategoria('Pizzas', this)">
-🍕 Pizzas
-</button>
-
-<button onclick="filtrarCategoria('Porções', this)">
-🍟 Porções
-</button>
-
-<button onclick="filtrarCategoria('Bebidas', this)">
-🥤 Bebidas
-</button>
-
-</div>
-
-
-<!-- PRODUTOS -->
 
 <div class="container">
 
-<h2 class="titulo-categoria">
-Nosso Cardápio
-</h2>
+  <div class="categorias">
+    <button class="categoria" onclick="filtrar('Todos')">Todos</button>
+    <button class="categoria" onclick="filtrar('Lanches')">🍔 Lanches</button>
+    <button class="categoria" onclick="filtrar('Pizzas')">🍕 Pizzas</button>
+    <button class="categoria" onclick="filtrar('Porções')">🍟 Porções</button>
+    <button class="categoria" onclick="filtrar('Bebidas')">🥤 Bebidas</button>
+  </div>
 
-<div id="listaProdutos"></div>
+  <h2>Nosso Cardápio</h2>
 
-</div>
+  <div id="listaProdutos"></div>
 
-
-<!-- CARRINHO -->
-
-<div class="carrinho-flutuante"
-     onclick="abrirCarrinho()">
-
-<div>
-
-🛒 Carrinho:
-
-<strong id="quantidadeCarrinho">
-0
-</strong>
+  <button class="teste-firebase" onclick="testarFirebase()">
+    🔴 TESTAR FIREBASE
+  </button>
 
 </div>
 
-<div>
+<div class="carrinho">
 
-R$
+  <span>
+    🛒 Carrinho:
+    <strong id="quantidadeCarrinho">0</strong>
+  </span>
 
-<strong id="totalCarrinho">
-0,00
-</strong>
+  <span>
+    R$ <strong id="totalCarrinho">0,00</strong>
+  </span>
 
-</div>
-
-<button onclick="event.stopPropagation(); abrirCarrinho()">
-
-Ver pedido
-
-</button>
-
-</div>
-
-
-<!-- MODAL -->
-
-<div id="modalCarrinho"
-     class="modal-fundo">
-
-<div class="modal">
-
-<h2>🛒 Seu Pedido</h2>
-
-<div id="listaCarrinho"></div>
-
-
-<div class="campo">
-
-<label for="mesa">
-🪑 Número da mesa
-</label>
-
-<input
-type="text"
-id="mesa"
-placeholder="Ex.: 5"
-autocomplete="off">
+  <button onclick="abrirPedido()">
+    Ver pedido
+  </button>
 
 </div>
 
+<div class="modal-fundo" id="modalPedido">
 
-<div class="campo">
+  <div class="modal">
 
-<label for="responsavel">
-👤 Nome do responsável
-</label>
+    <h2>🛒 Seu Pedido</h2>
 
-<input
-type="text"
-id="responsavel"
-placeholder="Digite seu nome"
-autocomplete="name">
+    <div id="itensPedido"></div>
 
-</div>
+    <div class="total">
+      Total: R$ <span id="totalModal">0,00</span>
+    </div>
 
+    <label>
+      Mesa
+      <input
+        type="text"
+        id="mesa"
+        placeholder="Ex.: 5"
+      >
+    </label>
 
-<div class="campo">
+    <label>
+      Responsável pelo pedido
+      <input
+        type="text"
+        id="responsavel"
+        placeholder="Nome"
+      >
+    </label>
 
-<label for="observacaoGeral">
-📝 Observações do pedido
-</label>
+    <label>
+      Observação geral
+      <textarea
+        id="observacaoGeral"
+        placeholder="Alguma observação?"
+      ></textarea>
+    </label>
 
-<textarea
-id="observacaoGeral"
-placeholder="Alguma observação?"></textarea>
+    <div class="acoes">
 
-</div>
+      <button
+        class="btn btn-secundario"
+        onclick="fecharPedido()">
+        Fechar
+      </button>
 
+      <button
+        class="btn"
+        id="btnEnviar"
+        onclick="enviarPedido()">
+        📲 Enviar Pedido
+      </button>
 
-<div class="total">
+    </div>
 
-Total:
-
-R$
-
-<span id="totalModal">
-0,00
-</span>
-
-</div>
-
-
-<div class="botoes-modal">
-
-<button
-class="btn-fechar"
-onclick="fecharCarrinho()">
-
-Fechar
-
-</button>
-
-
-<button
-id="btnEnviar"
-class="btn-enviar"
-onclick="enviarPedido()">
-
-📲 Enviar Pedido
-
-</button>
+  </div>
 
 </div>
-
-</div>
-
-</div>
-
-
-<!-- BOTÃO TEMPORÁRIO DE TESTE -->
-
-<button
-id="botaoTesteFirebase"
-onclick="testarFirebase()">
-
-🔴 TESTAR FIREBASE
-
-</button>
-
 
 
 <script type="module">
 
+  /* =====================================================
+     FIREBASE
+  ====================================================== */
+
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+  import {
+    getFirestore,
+    collection,
+    addDoc
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+
+    authDomain: "sistema-digital-f9df1.firebaseapp.com",
+
+    projectId: "sistema-digital-f9df1",
+
+    storageBucket: "sistema-digital-f9df1.firebasestorage.app",
+
+    messagingSenderId: "783545984661",
+
+    appId: "1:783545984661:web:5d0945907ad9db3990dd9c"
+
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+
+  /*
+     IMPORTANTE:
+     Agora estamos usando o Firestore no modo normal.
+     Retiramos experimentalForceLongPolling.
+  */
+
+  const db = getFirestore(app);
+
+
+  /* =====================================================
+     PRODUTOS
+  ====================================================== */
+
+  const produtos = [
+
+    {
+      id: 1,
+      nome: "X-Bacon",
+      descricao: "Hambúrguer, bacon, queijo e salada",
+      preco: 26,
+      categoria: "Lanches"
+    },
+
+    {
+      id: 2,
+      nome: "X-Salada",
+      descricao: "Hambúrguer, queijo, alface, tomate e maionese",
+      preco: 23,
+      categoria: "Lanches"
+    },
+
+    {
+      id: 3,
+      nome: "X-Calabresa",
+      descricao: "Hambúrguer, calabresa, queijo e salada",
+      preco: 27,
+      categoria: "Lanches"
+    },
+
+    {
+      id: 4,
+      nome: "X-Tudo",
+      descricao: "Hambúrguer, bacon, calabresa, queijo, ovo e salada",
+      preco: 34,
+      categoria: "Lanches"
+    },
+
+    {
+      id: 5,
+      nome: "Pizza Calabresa",
+      descricao: "Molho, queijo e calabresa",
+      preco: 45,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 6,
+      nome: "Pizza Frango c/ Catupiry",
+      descricao: "Frango, queijo e Catupiry",
+      preco: 48,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 7,
+      nome: "Pizza Mussarela",
+      descricao: "Molho, mussarela e orégano",
+      preco: 40,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 8,
+      nome: "Pizza Portuguesa",
+      descricao: "Presunto, queijo, ovo, cebola e azeitona",
+      preco: 52,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 9,
+      nome: "Batata Frita",
+      descricao: "Porção de batata frita",
+      preco: 20,
+      categoria: "Porções"
+    },
+
+    {
+      id: 10,
+      nome: "Batata Frita c/ Queijo",
+      descricao: "Batata frita com queijo",
+      preco: 26,
+      categoria: "Porções"
+    },
+
+    {
+      id: 11,
+      nome: "Porção de Tilápia",
+      descricao: "Tilápia frita",
+      preco: 38,
+      categoria: "Porções"
+    },
 
-/*
-============================================================
-FIREBASE
-============================================================
-*/
+    {
+      id: 12,
+      nome: "Mandioca Frita",
+      descricao: "Porção de mandioca frita",
+      preco: 18,
+      categoria: "Porções"
+    },
 
+    {
+      id: 13,
+      nome: "Coca-Cola",
+      descricao: "Refrigerante",
+      preco: 7,
+      categoria: "Bebidas"
+    },
 
-import {
-  initializeApp
-} from
-"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    {
+      id: 14,
+      nome: "Pepsi",
+      descricao: "Refrigerante",
+      preco: 7,
+      categoria: "Bebidas"
+    },
 
+    {
+      id: 15,
+      nome: "Cerveja",
+      descricao: "Cerveja",
+      preco: 13,
+      categoria: "Bebidas"
+    },
 
-import {
-  initializeFirestore,
-  collection,
-  addDoc
-} from
-"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+    {
+      id: 16,
+      nome: "Chopp",
+      descricao: "Chopp",
+      preco: 15,
+      categoria: "Bebidas"
+    }
 
+  ];
 
-const firebaseConfig = {
 
-  apiKey:
-  "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+  /* =====================================================
+     CARRINHO
+  ====================================================== */
 
-  authDomain:
-  "sistema-digital-f9df1.firebaseapp.com",
+  let carrinho = [];
 
-  projectId:
-  "sistema-digital-f9df1",
 
-  storageBucket:
-  "sistema-digital-f9df1.firebasestorage.app",
+  /* =====================================================
+     FORMATAÇÃO DE PREÇO
+  ====================================================== */
 
-  messagingSenderId:
-  "783545984661",
+  function dinheiro(valor) {
 
-  appId:
-  "1:783545984661:web:5d0945907ad9db3990dd9c"
+    return valor.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
 
-};
+  }
 
 
-const app =
-initializeApp(firebaseConfig);
+  /* =====================================================
+     MOSTRAR PRODUTOS
+  ====================================================== */
 
+  function mostrarProdutos(lista) {
 
-/*
-============================================================
-FIRESTORE
+    const container =
+      document.getElementById("listaProdutos");
 
-MODO LONG POLLING
-============================================================
-*/
+    container.innerHTML = "";
 
 
-const db =
-initializeFirestore(app, {
+    if (lista.length === 0) {
 
-  experimentalForceLongPolling: true
+      container.innerHTML = `
+        <div class="vazio">
+          Nenhum produto encontrado.
+        </div>
+      `;
 
-});
+      return;
+    }
 
 
-console.log(
-"🔥 Firebase inicializado"
-);
+    lista.forEach(produto => {
 
+      const div = document.createElement("div");
 
-document.getElementById(
-"statusFirebase"
-).textContent =
-"🔥 Firebase inicializado";
+      div.className = "produto";
 
 
+      div.innerHTML = `
 
-/*
-============================================================
-PRODUTOS
-============================================================
-*/
+        <div class="produto-info">
 
+          <h3>${produto.nome}</h3>
 
-const produtos = [
+          <p>${produto.descricao}</p>
 
+          <div class="preco">
+            R$ ${dinheiro(produto.preco)}
+          </div>
 
-{
-id: 1,
-nome: "X-Bacon",
-descricao: "Hambúrguer, bacon, queijo e salada",
-preco: 26,
-categoria: "Lanches"
-},
+        </div>
 
+        <button
+          class="btn"
+          onclick="adicionarProduto(${produto.id})">
 
-{
-id: 2,
-nome: "X-Salada",
-descricao: "Hambúrguer, queijo, alface, tomate e maionese",
-preco: 23,
-categoria: "Lanches"
-},
-
-
-{
-id: 3,
-nome: "X-Calabresa",
-descricao: "Hambúrguer, calabresa, queijo e salada",
-preco: 27,
-categoria: "Lanches"
-},
-
-
-{
-id: 4,
-nome: "X-Tudo",
-descricao: "Hambúrguer completo com queijo, bacon, calabresa e salada",
-preco: 34,
-categoria: "Lanches"
-},
-
-
-{
-id: 5,
-nome: "Pizza Calabresa",
-descricao: "Pizza de calabresa",
-preco: 45,
-categoria: "Pizzas"
-},
-
-
-{
-id: 6,
-nome: "Pizza Frango c/ Catupiry",
-descricao: "Frango e catupiry",
-preco: 48,
-categoria: "Pizzas"
-},
-
-
-{
-id: 7,
-nome: "Pizza Mussarela",
-descricao: "Mussarela e orégano",
-preco: 40,
-categoria: "Pizzas"
-},
+          + Adicionar
 
+        </button>
 
-{
-id: 8,
-nome: "Pizza Portuguesa",
-descricao: "Presunto, queijo, ovo, cebola e ervilha",
-preco: 52,
-categoria: "Pizzas"
-},
+      `;
 
 
-{
-id: 9,
-nome: "Batata Frita",
-descricao: "Porção de batata frita",
-preco: 20,
-categoria: "Porções"
-},
+      container.appendChild(div);
 
+    });
 
-{
-id: 10,
-nome: "Batata Frita c/ Queijo",
-descricao: "Batata frita com queijo",
-preco: 26,
-categoria: "Porções"
-},
+  }
 
 
-{
-id: 11,
-nome: "Porção de Tilápia",
-descricao: "Porção de tilápia frita",
-preco: 38,
-categoria: "Porções"
-},
+  /* =====================================================
+     FILTRO
+  ====================================================== */
 
+  window.filtrar = function(categoria) {
 
-{
-id: 12,
-nome: "Mandioca Frita",
-descricao: "Porção de mandioca frita",
-preco: 18,
-categoria: "Porções"
-},
+    if (categoria === "Todos") {
 
+      mostrarProdutos(produtos);
 
-{
-id: 13,
-nome: "Coca-Cola",
-descricao: "Refrigerante",
-preco: 7,
-categoria: "Bebidas"
-},
+      return;
 
+    }
 
-{
-id: 14,
-nome: "Pepsi",
-descricao: "Refrigerante",
-preco: 7,
-categoria: "Bebidas"
-},
 
+    const filtrados =
+      produtos.filter(
+        produto => produto.categoria === categoria
+      );
 
-{
-id: 15,
-nome: "Cerveja",
-descricao: "Cerveja",
-preco: 13,
-categoria: "Bebidas"
-},
 
+    mostrarProdutos(filtrados);
 
-{
-id: 16,
-nome: "Chopp",
-descricao: "Chopp",
-preco: 15,
-categoria: "Bebidas"
-}
+  };
 
 
-];
+  /* =====================================================
+     ADICIONAR PRODUTO
+  ====================================================== */
 
+  window.adicionarProduto = function(id) {
 
+    const produto =
+      produtos.find(p => p.id === id);
 
-/*
-============================================================
-VARIÁVEIS
-============================================================
-*/
 
+    if (!produto) return;
 
-let pedido = [];
 
-let categoriaAtual = "Todos";
+    const existente =
+      carrinho.find(item => item.id === id);
 
 
-const TELEFONE_WHATSAPP =
-"5549984121585";
+    if (existente) {
 
+      existente.quantidade++;
 
+    } else {
 
-/*
-============================================================
-PREÇO
-============================================================
-*/
+      carrinho.push({
 
+        id: produto.id,
 
-function formatarPreco(valor) {
+        nome: produto.nome,
 
-return Number(valor).toLocaleString(
-"pt-BR",
-{
-minimumFractionDigits: 2,
-maximumFractionDigits: 2
-}
-);
+        preco: produto.preco,
 
-}
+        quantidade: 1,
 
+        observacao: ""
 
+      });
 
-/*
-============================================================
-TOTAL
-============================================================
-*/
+    }
 
 
-function obterTotal() {
+    atualizarCarrinho();
 
-return pedido.reduce(
+  };
 
-(total, item) => {
 
-return total +
-Number(item.preco) *
-Number(item.quantidade);
+  /* =====================================================
+     ATUALIZAR CARRINHO
+  ====================================================== */
 
-},
+  function atualizarCarrinho() {
 
-0
+    let quantidade = 0;
 
-);
+    let total = 0;
 
-}
 
+    carrinho.forEach(item => {
 
+      quantidade += item.quantidade;
 
-/*
-============================================================
-ATUALIZAR CARRINHO
-============================================================
-*/
+      total +=
+        item.preco * item.quantidade;
 
+    });
 
-function atualizarCarrinho() {
 
-const quantidade =
-pedido.reduce(
+    document.getElementById(
+      "quantidadeCarrinho"
+    ).textContent = quantidade;
 
-(total, item) =>
-total + Number(item.quantidade),
 
-0
+    document.getElementById(
+      "totalCarrinho"
+    ).textContent = dinheiro(total);
 
-);
+  }
 
 
-document.getElementById(
-"quantidadeCarrinho"
-).textContent =
-quantidade;
+  /* =====================================================
+     ABRIR PEDIDO
+  ====================================================== */
 
+  window.abrirPedido = function() {
 
-document.getElementById(
-"totalCarrinho"
-).textContent =
-formatarPreco(
-obterTotal()
-);
+    if (carrinho.length === 0) {
 
+      alert("🛒 Seu carrinho está vazio.");
 
-document.getElementById(
-"totalModal"
-).textContent =
-formatarPreco(
-obterTotal()
-);
+      return;
 
-}
+    }
 
 
+    renderizarPedido();
 
-/*
-============================================================
-MOSTRAR PRODUTOS
-============================================================
-*/
 
+    document.getElementById(
+      "modalPedido"
+    ).style.display = "block";
 
-function mostrarProdutos() {
+  };
 
-const lista =
-document.getElementById(
-"listaProdutos"
-);
 
+  /* =====================================================
+     FECHAR PEDIDO
+  ====================================================== */
 
-lista.innerHTML = "";
+  window.fecharPedido = function() {
 
+    document.getElementById(
+      "modalPedido"
+    ).style.display = "none";
 
-let produtosFiltrados;
+  };
 
 
-if (
-categoriaAtual === "Todos"
-) {
+  /* =====================================================
+     RENDERIZAR PEDIDO
+  ====================================================== */
 
-produtosFiltrados =
-produtos;
+  function renderizarPedido() {
 
-} else {
+    const container =
+      document.getElementById("itensPedido");
 
-produtosFiltrados =
-produtos.filter(
-produto =>
-produto.categoria ===
-categoriaAtual
-);
 
-}
+    container.innerHTML = "";
 
 
-if (
-produtosFiltrados.length === 0
-) {
+    carrinho.forEach((item, index) => {
 
-lista.innerHTML =
-`
-<div class="vazio">
-Nenhum produto encontrado.
-</div>
-`;
+      const div =
+        document.createElement("div");
 
-return;
 
-}
+      div.className = "item-carrinho";
 
 
-produtosFiltrados.forEach(
-produto => {
+      div.innerHTML = `
 
-const div =
-document.createElement(
-"div"
-);
+        <div class="item-topo">
 
+          <div>
 
-div.className =
-"produto";
+            <strong>
+              ${item.nome}
+            </strong>
 
+            <div class="quantidade">
+              Quantidade: ${item.quantidade}
+            </div>
 
-div.innerHTML = `
+          </div>
 
-<h3>
-${produto.nome}
-</h3>
+          <strong>
+            R$ ${dinheiro(
+              item.preco * item.quantidade
+            )}
+          </strong>
 
-<p>
-${produto.descricao}
-</p>
+        </div>
 
-<div class="produto-baixo">
 
-<span class="preco">
+        <div class="acoes" style="margin-top:8px;">
 
-R$
+          <button
+            class="btn"
+            onclick="aumentarItem(${index})">
+            +
+          </button>
 
-${formatarPreco(
-produto.preco
-)}
+          <button
+            class="btn btn-secundario"
+            onclick="diminuirItem(${index})">
+            -
+          </button>
 
-</span>
+          <button
+            class="btn btn-secundario"
+            onclick="removerItem(${index})">
+            🗑️
+          </button>
 
+        </div>
 
-<button
-class="btn-adicionar"
-onclick="adicionarProduto(${produto.id})">
 
-➕ Adicionar
+        <div class="observacao-item">
 
-</button>
+          <input
+            type="text"
+            placeholder="Observação deste item"
+            value="${item.observacao || ""}"
+            onchange="alterarObservacao(${index}, this.value)"
+          >
 
-</div>
+        </div>
 
-`;
+      `;
 
 
-lista.appendChild(div);
+      container.appendChild(div);
 
-});
+    });
 
-}
 
+    let total = 0;
 
 
-/*
-============================================================
-FILTRAR CATEGORIA
-============================================================
-*/
+    carrinho.forEach(item => {
 
+      total +=
+        item.preco * item.quantidade;
 
-window.filtrarCategoria =
-function(
-categoria,
-botao
-) {
+    });
 
-categoriaAtual =
-categoria;
 
+    document.getElementById(
+      "totalModal"
+    ).textContent = dinheiro(total);
 
-document
-.querySelectorAll(
-".categorias button"
-)
-.forEach(
-btn =>
-btn.classList.remove(
-"ativo"
-)
-);
+  }
 
 
-botao.classList.add(
-"ativo"
-);
+  /* =====================================================
+     AUMENTAR ITEM
+  ====================================================== */
 
+  window.aumentarItem = function(index) {
 
-mostrarProdutos();
+    carrinho[index].quantidade++;
 
-};
+    renderizarPedido();
 
+    atualizarCarrinho();
 
+  };
 
-/*
-============================================================
-ADICIONAR PRODUTO
-============================================================
-*/
 
+  /* =====================================================
+     DIMINUIR ITEM
+  ====================================================== */
 
-window.adicionarProduto =
-function(id) {
+  window.diminuirItem = function(index) {
 
-const produto =
-produtos.find(
-p => p.id === id
-);
+    if (carrinho[index].quantidade > 1) {
 
+      carrinho[index].quantidade--;
 
-if (!produto)
-return;
+    } else {
 
+      carrinho.splice(index, 1);
 
-const existente =
-pedido.find(
-item => item.id === id
-);
+    }
 
 
-if (existente) {
+    if (carrinho.length === 0) {
 
-existente.quantidade++;
+      fecharPedido();
 
-} else {
+    } else {
 
-pedido.push({
+      renderizarPedido();
 
-id:
-produto.id,
+    }
 
-nome:
-produto.nome,
 
-preco:
-produto.preco,
+    atualizarCarrinho();
 
-categoria:
-produto.categoria,
+  };
 
-quantidade:
-1,
 
-observacao:
-""
+  /* =====================================================
+     REMOVER ITEM
+  ====================================================== */
 
-});
+  window.removerItem = function(index) {
 
-}
+    carrinho.splice(index, 1);
 
 
-atualizarCarrinho();
+    if (carrinho.length === 0) {
 
-};
+      fecharPedido();
 
+    } else {
 
+      renderizarPedido();
 
-/*
-============================================================
-ABRIR CARRINHO
-============================================================
-*/
+    }
 
 
-window.abrirCarrinho =
-function() {
+    atualizarCarrinho();
 
-mostrarCarrinho();
+  };
 
 
-document.getElementById(
-"modalCarrinho"
-).style.display =
-"block";
+  /* =====================================================
+     OBSERVAÇÃO DO ITEM
+  ====================================================== */
 
-};
+  window.alterarObservacao =
+    function(index, valor) {
 
+      carrinho[index].observacao = valor;
 
+    };
 
-/*
-============================================================
-FECHAR
-============================================================
-*/
 
+  /* =====================================================
+     GERAR NÚMERO DO PEDIDO
+  ====================================================== */
 
-window.fecharCarrinho =
-function() {
+  function gerarNumeroPedido() {
 
-document.getElementById(
-"modalCarrinho"
-).style.display =
-"none";
+    const agora = new Date();
 
-};
+    const ano =
+      agora.getFullYear();
 
+    const mes =
+      String(
+        agora.getMonth() + 1
+      ).padStart(2, "0");
 
+    const dia =
+      String(
+        agora.getDate()
+      ).padStart(2, "0");
 
-/*
-============================================================
-MOSTRAR CARRINHO
-============================================================
-*/
+    const hora =
+      String(
+        agora.getHours()
+      ).padStart(2, "0");
 
+    const minuto =
+      String(
+        agora.getMinutes()
+      ).padStart(2, "0");
 
-function mostrarCarrinho() {
+    const segundo =
+      String(
+        agora.getSeconds()
+      ).padStart(2, "0");
 
-const lista =
-document.getElementById(
-"listaCarrinho"
-);
 
+    return `${ano}${mes}${dia}${hora}${minuto}${segundo}`;
 
-lista.innerHTML = "";
+  }
 
 
-if (
-pedido.length === 0
-) {
+  /* =====================================================
+     SALVAR PEDIDO NO FIREBASE
+  ====================================================== */
 
-lista.innerHTML =
-`
-<div class="vazio">
+  async function salvarPedidoNoSistema() {
 
-Seu carrinho está vazio.
+    const mesa =
+      document.getElementById("mesa").value.trim();
 
-</div>
-`;
+    const responsavel =
+      document.getElementById("responsavel").value.trim();
 
-atualizarCarrinho();
+    const observacaoGeral =
+      document.getElementById(
+        "observacaoGeral"
+      ).value.trim();
 
-return;
 
-}
+    let total = 0;
 
 
-pedido.forEach(
-(item, index) => {
+    carrinho.forEach(item => {
 
-const div =
-document.createElement(
-"div"
-);
+      total +=
+        item.preco * item.quantidade;
 
+    });
 
-div.className =
-"item-carrinho";
 
+    const pedidoSistema = {
 
-div.innerHTML = `
+      numeroPedido:
+        gerarNumeroPedido(),
 
-<div class="item-carrinho-topo">
+      mesa: mesa,
 
-<strong>
-${item.nome}
-</strong>
+      responsavel: responsavel,
 
-<strong>
+      observacaoGeral:
+        observacaoGeral,
 
-R$
+      itens: carrinho.map(item => ({
 
-${formatarPreco(
-item.preco *
-item.quantidade
-)}
+        id: item.id,
 
-</strong>
+        nome: item.nome,
 
-</div>
+        preco: item.preco,
 
+        quantidade: item.quantidade,
 
-<div class="quantidade">
+        observacao:
+          item.observacao || ""
 
-<button
-onclick="diminuirQuantidade(${index})">
+      })),
 
-−
+      total: total,
 
-</button>
+      status: "Recebido",
 
+      data: new Date().toISOString()
 
-<strong>
+    };
 
-${item.quantidade}
 
-</strong>
+    /*
+       Aqui acontece a gravação direta
+       na coleção "pedidos".
+    */
 
+    const ref =
+      collection(db, "pedidos");
 
-<button
-onclick="aumentarQuantidade(${index})">
 
-+
+    const resultado =
+      await addDoc(
+        ref,
+        pedidoSistema
+      );
 
-</button>
 
+    return {
 
-<button
-onclick="removerProduto(${index})">
+      ...pedidoSistema,
 
-🗑️
+      idFirebase:
+        resultado.id
 
-</button>
+    };
 
-</div>
+  }
 
 
-<input
+  /* =====================================================
+     ENVIAR PEDIDO
+  ====================================================== */
 
-class="observacao-item"
+  window.enviarPedido = async function() {
 
-type="text"
+    if (carrinho.length === 0) {
 
-placeholder="Observação deste item"
+      alert("🛒 O carrinho está vazio.");
 
-value="${item.observacao || ""}"
+      return;
 
-onchange="alterarObservacao(${index}, this.value)"
+    }
 
->
 
-`;
+    const mesa =
+      document.getElementById("mesa").value.trim();
 
 
-lista.appendChild(div);
+    const responsavel =
+      document.getElementById(
+        "responsavel"
+      ).value.trim();
 
-});
 
+    if (!mesa) {
 
-atualizarCarrinho();
+      alert("Informe o número da mesa.");
 
-}
+      return;
 
+    }
 
 
-/*
-============================================================
-QUANTIDADE
-============================================================
-*/
+    if (!responsavel) {
 
+      alert("Informe o responsável pelo pedido.");
 
-window.aumentarQuantidade =
-function(index) {
+      return;
 
-if (!pedido[index])
-return;
+    }
 
 
-pedido[index].quantidade++;
+    const botao =
+      document.getElementById("btnEnviar");
 
 
-mostrarCarrinho();
+    botao.disabled = true;
 
-};
+    botao.textContent =
+      "⏳ Registrando...";
 
 
+    try {
 
-window.diminuirQuantidade =
-function(index) {
+      /*
+         PRIMEIRO:
+         salva no Firebase.
+      */
 
-if (!pedido[index])
-return;
+      const pedido =
+        await salvarPedidoNoSistema();
 
 
-if (
-pedido[index].quantidade > 1
-) {
+      /*
+         DEPOIS:
+         abre o WhatsApp.
+      */
 
-pedido[index].quantidade--;
+      let mensagem =
+        `🍽️ *NOVO PEDIDO - SABOR DA CASA*\n\n`;
 
-} else {
 
-pedido.splice(
-index,
-1
-);
+      mensagem +=
+        `📋 Pedido: ${pedido.numeroPedido}\n`;
 
-}
+      mensagem +=
+        `🪑 Mesa: ${pedido.mesa}\n`;
 
+      mensagem +=
+        `👤 Responsável: ${pedido.responsavel}\n\n`;
 
-mostrarCarrinho();
 
-};
+      mensagem +=
+        `*ITENS:*\n`;
 
 
+      pedido.itens.forEach(item => {
 
-window.removerProduto =
-function(index) {
+        mensagem +=
+          `${item.quantidade}x ${item.nome} - R$ ${dinheiro(
+            item.preco * item.quantidade
+          )}\n`;
 
-pedido.splice(
-index,
-1
-);
 
+        if (item.observacao) {
 
-mostrarCarrinho();
+          mensagem +=
+            `   📝 ${item.observacao}\n`;
 
-};
+        }
 
+      });
 
 
-window.alterarObservacao =
-function(
-index,
-valor
-) {
+      mensagem +=
+        `\n💰 *TOTAL: R$ ${dinheiro(
+          pedido.total
+        )}*`;
 
-if (pedido[index]) {
 
-pedido[index].observacao =
-valor;
+      if (pedido.observacaoGeral) {
 
-}
+        mensagem +=
+          `\n\n📝 Observação:\n${pedido.observacaoGeral}`;
 
-};
+      }
 
 
+      const telefone =
+        "5549984121585";
 
-/*
-============================================================
-DATA
-============================================================
-*/
 
+      const url =
+        "https://wa.me/" +
+        telefone +
+        "?text=" +
+        encodeURIComponent(mensagem);
 
-function obterHorario() {
 
-return new Date().toLocaleTimeString(
-"pt-BR",
-{
-hour: "2-digit",
-minute: "2-digit"
-}
-);
+      alert(
+        "🟢 Pedido registrado com sucesso!\n\n" +
+        "Pedido: " +
+        pedido.numeroPedido
+      );
 
-}
 
+      window.open(
+        url,
+        "_blank"
+      );
 
-function obterData() {
 
-return new Date().toLocaleDateString(
-"pt-BR"
-);
+      /*
+         Limpa o carrinho
+      */
 
-}
+      carrinho = [];
 
 
+      atualizarCarrinho();
 
-/*
-============================================================
-NÚMERO DO PEDIDO
 
-NÃO consulta todos os pedidos.
+      document.getElementById(
+        "mesa"
+      ).value = "";
 
-============================================================
-*/
 
+      document.getElementById(
+        "responsavel"
+      ).value = "";
 
-function gerarNumeroPedido() {
 
-const agora =
-new Date();
+      document.getElementById(
+        "observacaoGeral"
+      ).value = "";
 
 
-const hora =
-String(
-agora.getHours()
-).padStart(
-2,
-"0"
-);
+      fecharPedido();
 
 
-const minuto =
-String(
-agora.getMinutes()
-).padStart(
-2,
-"0"
-);
+    } catch (erro) {
 
+      console.error(
+        "Erro ao registrar pedido:",
+        erro
+      );
 
-const segundo =
-String(
-agora.getSeconds()
-).padStart(
-2,
-"0"
-);
 
+      alert(
+        "❌ Não foi possível registrar o pedido.\n\n" +
+        "Código: " +
+        (erro.code || "não informado") +
+        "\n\n" +
+        "Erro: " +
+        (erro.message || erro)
+      );
 
-const milissegundo =
-String(
-agora.getMilliseconds()
-).padStart(
-3,
-"0"
-);
+    } finally {
 
+      botao.disabled = false;
 
-return (
-hora +
-minuto +
-segundo +
-milissegundo
-);
+      botao.textContent =
+        "📲 Enviar Pedido";
 
-}
+    }
 
+  };
 
 
-/*
-============================================================
-SALVAR PEDIDO
-============================================================
-*/
+  /* =====================================================
+     TESTAR FIREBASE
+  ====================================================== */
 
+  window.testarFirebase = async function() {
 
-async function salvarPedidoNoSistema() {
+    alert(
+      "🔄 Testando o Firebase...\n\nAguarde."
+    );
 
-console.log(
-"🔥 Tentando salvar pedido..."
-);
 
+    try {
 
-const ref =
-collection(
-db,
-"pedidos"
-);
+      const ref =
+        collection(
+          db,
+          "pedidos"
+        );
 
 
-const mesa =
-document.getElementById(
-"mesa"
-).value.trim();
+      const teste = {
 
+        teste: true,
 
-const responsavel =
-document.getElementById(
-"responsavel"
-).value.trim();
+        mensagem:
+          "TESTE FIREBASE",
 
+        data:
+          new Date().toISOString()
 
-const observacaoGeral =
-document.getElementById(
-"observacaoGeral"
-).value.trim();
+      };
 
 
-const numero =
-gerarNumeroPedido();
+      const resultado =
+        await addDoc(
+          ref,
+          teste
+        );
 
 
-const pedidoSistema = {
+      alert(
+        "🟢 FIREBASE FUNCIONOU!\n\n" +
+        "O teste foi salvo no Firestore.\n\n" +
+        "ID:\n" +
+        resultado.id
+      );
 
-numero:
-numero,
 
-mesa:
-mesa,
+    } catch (erro) {
 
-responsavel:
-responsavel,
+      console.error(
+        "Erro no teste Firebase:",
+        erro
+      );
 
-nomeCliente:
-responsavel,
 
-horario:
-obterHorario(),
+      alert(
+        "🔴 FIREBASE DEU ERRO\n\n" +
+        "Código:\n" +
+        (erro.code || "não informado") +
+        "\n\n" +
+        "Mensagem:\n" +
+        (erro.message || erro)
+      );
 
-data:
-obterData(),
+    }
 
-status:
-"recebido",
+  };
 
-observacaoGeral:
-observacaoGeral,
 
-itens:
+  /* =====================================================
+     INICIALIZAÇÃO
+  ====================================================== */
 
-pedido.map(
-item => ({
+  mostrarProdutos(produtos);
 
-nome:
-item.nome,
-
-preco:
-Number(item.preco),
-
-quantidade:
-Number(item.quantidade),
-
-categoria:
-item.categoria || "",
-
-observacao:
-item.observacao || ""
-
-})
-),
-
-total:
-Number(
-obterTotal().toFixed(2)
-),
-
-dataCriacao:
-new Date().toISOString()
-
-};
-
-
-console.log(
-"📦 Pedido:",
-pedidoSistema
-);
-
-
-const docRef =
-await addDoc(
-ref,
-pedidoSistema
-);
-
-
-console.log(
-"✅ PEDIDO SALVO!",
-docRef.id
-);
-
-
-return {
-
-...pedidoSistema,
-
-idFirebase:
-docRef.id
-
-};
-
-}
-
-
-
-/*
-============================================================
-WHATSAPP
-============================================================
-*/
-
-
-function enviarWhatsApp(
-pedidoSistema
-) {
-
-let mensagem =
-`🍔 *NOVO PEDIDO - SABOR DA CASA*%0A%0A`;
-
-
-mensagem +=
-`📋 *Pedido:* #${pedidoSistema.numero}%0A`;
-
-
-mensagem +=
-`🪑 *Mesa:* ${pedidoSistema.mesa}%0A`;
-
-
-mensagem +=
-`👤 *Responsável:* ${pedidoSistema.responsavel}%0A`;
-
-
-mensagem +=
-`📅 *Data:* ${pedidoSistema.data}%0A`;
-
-
-mensagem +=
-`⏰ *Horário:* ${pedidoSistema.horario}%0A%0A`;
-
-
-mensagem +=
-`*ITENS:*%0A`;
-
-
-pedidoSistema.itens.forEach(
-item => {
-
-mensagem +=
-`• ${item.quantidade}x ${item.nome} - R$ ${formatarPreco(item.preco * item.quantidade)}%0A`;
-
-
-if (item.observacao) {
-
-mensagem +=
-`  📝 ${item.observacao}%0A`;
-
-}
-
-});
-
-
-if (
-pedidoSistema.observacaoGeral
-) {
-
-mensagem +=
-`%0A📝 *Observação:* ${pedidoSistema.observacaoGeral}%0A`;
-
-}
-
-
-mensagem +=
-`%0A💰 *TOTAL: R$ ${formatarPreco(pedidoSistema.total)}*`;
-
-
-const url =
-`https://wa.me/${TELEFONE_WHATSAPP}?text=${mensagem}`;
-
-
-window.open(
-url,
-"_blank"
-);
-
-}
-
-
-
-/*
-============================================================
-ENVIAR PEDIDO
-============================================================
-*/
-
-
-window.enviarPedido =
-async function() {
-
-const btn =
-document.getElementById(
-"btnEnviar"
-);
-
-
-const mesa =
-document.getElementById(
-"mesa"
-).value.trim();
-
-
-const responsavel =
-document.getElementById(
-"responsavel"
-).value.trim();
-
-
-if (!mesa) {
-
-alert(
-"Informe o número da mesa."
-);
-
-return;
-
-}
-
-
-if (!responsavel) {
-
-alert(
-"Informe o nome do responsável."
-);
-
-return;
-
-}
-
-
-if (
-pedido.length === 0
-) {
-
-alert(
-"Adicione pelo menos um produto."
-);
-
-return;
-
-}
-
-
-btn.disabled =
-true;
-
-
-btn.textContent =
-"⏳ Registrando...";
-
-
-try {
-
-console.log(
-"🚀 Enviando pedido para o Firebase..."
-);
-
-
-const pedidoSalvo =
-await salvarPedidoNoSistema();
-
-
-if (!pedidoSalvo) {
-
-throw new Error(
-"Firebase não retornou o pedido."
-);
-
-}
-
-
-console.log(
-"🟢 Pedido salvo com sucesso!"
-);
-
-
-alert(
-`✅ Pedido #${pedidoSalvo.numero} registrado com sucesso!`
-);
-
-
-/*
-ABRE WHATSAPP SOMENTE DEPOIS
-DO FIREBASE SALVAR
-*/
-
-enviarWhatsApp(
-pedidoSalvo
-);
-
-
-pedido = [];
-
-
-document.getElementById(
-"mesa"
-).value = "";
-
-
-document.getElementById(
-"responsavel"
-).value = "";
-
-
-document.getElementById(
-"observacaoGeral"
-).value = "";
-
-
-atualizarCarrinho();
-
-
-fecharCarrinho();
-
-
-}
-catch (erro) {
-
-console.error(
-"🔴 ERRO AO SALVAR:",
-erro
-);
-
-
-alert(
-
-"❌ Não foi possível registrar o pedido.\n\n" +
-
-"Código: " +
-(erro.code || "não informado") +
-
-"\n\nMensagem:\n" +
-
-(erro.message || erro)
-
-);
-
-}
-finally {
-
-btn.disabled =
-false;
-
-
-btn.textContent =
-"📲 Enviar Pedido";
-
-}
-
-};
-
-
-
-/*
-============================================================
-TESTE DIRETO DO FIREBASE
-============================================================
-*/
-
-
-window.testarFirebase =
-async function() {
-
-console.log(
-"🔴 TESTE DIRETO DO FIREBASE"
-);
-
-
-alert(
-"🔄 Testando o Firebase...\n\nAguarde."
-);
-
-
-try {
-
-const ref =
-collection(
-db,
-"pedidos"
-);
-
-
-const teste = {
-
-teste:
-true,
-
-mensagem:
-"TESTE FIREBASE",
-
-data:
-new Date().toISOString()
-
-};
-
-
-console.log(
-"📦 Enviando teste:",
-teste
-);
-
-
-const resultado =
-await addDoc(
-ref,
-teste
-);
-
-
-console.log(
-"🟢 TESTE FUNCIONOU!"
-);
-
-
-console.log(
-"ID:",
-resultado.id
-);
-
-
-alert(
-
-"🟢 FIREBASE FUNCIONOU!\n\n" +
-
-"O teste foi salvo no Firestore.\n\n" +
-
-"ID:\n" +
-
-resultado.id
-
-);
-
-
-}
-catch (erro) {
-
-console.error(
-"🔴 TESTE FALHOU:",
-erro
-);
-
-
-alert(
-
-"🔴 FIREBASE DEU ERRO\n\n" +
-
-"Código:\n" +
-
-(erro.code ||
-"não informado") +
-
-"\n\nMensagem:\n" +
-
-(erro.message ||
-erro)
-
-);
-
-}
-
-};
-
-
-
-/*
-============================================================
-INTERNET
-============================================================
-*/
-
-
-window.addEventListener(
-"online",
-function() {
-
-document.getElementById(
-"statusFirebase"
-).textContent =
-"🌐 Internet conectada";
-
-});
-
-
-window.addEventListener(
-"offline",
-function() {
-
-document.getElementById(
-"statusFirebase"
-).textContent =
-"❌ Sem conexão com a internet";
-
-});
-
-
-
-/*
-============================================================
-INICIALIZAÇÃO
-============================================================
-*/
-
-
-mostrarProdutos();
-
-atualizarCarrinho();
-
-
-console.log(
-"✅ Cardápio carregado."
-);
-
-
-console.log(
-"🔥 Firestore configurado."
-);
-
+  atualizarCarrinho();
 
 </script>
 
 </body>
-
 </html>
