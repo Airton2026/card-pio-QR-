@@ -3,38 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Sabor da Casa — Cardápio Digital</title>
+
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     body {
       font-family: Arial, sans-serif;
       background: #f7f4f8;
       color: #333;
       padding-bottom: 90px;
     }
+
     header {
       background: linear-gradient(135deg, #7b145f, #b21d83);
       color: white;
       padding: 25px 18px;
       text-align: center;
     }
+
     header h1 {
       font-size: 28px;
       margin-bottom: 8px;
     }
+
     header p {
       font-size: 15px;
       opacity: 0.9;
     }
+
     .container {
       max-width: 900px;
       margin: auto;
       padding: 15px;
     }
+
     .busca {
       width: 100%;
       padding: 14px;
@@ -44,12 +52,14 @@
       font-size: 16px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
+
     .categorias {
       display: flex;
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 10px;
     }
+
     .categoria {
       border: none;
       background: #eee;
@@ -60,10 +70,12 @@
       cursor: pointer;
       font-size: 14px;
     }
+
     .categoria.ativa {
       background: #a71978;
       color: white;
     }
+
     .produto {
       background: white;
       border-radius: 14px;
@@ -75,23 +87,28 @@
       align-items: center;
       gap: 15px;
     }
+
     .produto-info {
       flex: 1;
     }
+
     .produto h3 {
       font-size: 18px;
       margin-bottom: 5px;
     }
+
     .produto p {
       color: #777;
       font-size: 14px;
       margin-bottom: 6px;
     }
+
     .preco {
       font-weight: bold;
       color: #8c145f;
       font-size: 17px;
     }
+
     .btn-adicionar {
       background: #a71978;
       color: white;
@@ -101,9 +118,11 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     .btn-adicionar:active {
       transform: scale(0.97);
     }
+
     .teste-firebase {
       width: 100%;
       border: none;
@@ -115,6 +134,7 @@
       font-size: 15px;
       cursor: pointer;
     }
+
     .carrinho-barra {
       position: fixed;
       bottom: 0;
@@ -128,6 +148,7 @@
       align-items: center;
       z-index: 1000;
     }
+
     .btn-ver-pedido {
       border: none;
       background: white;
@@ -137,6 +158,7 @@
       font-weight: bold;
       cursor: pointer;
     }
+
     .modal-fundo {
       display: none;
       position: fixed;
@@ -146,6 +168,7 @@
       padding: 15px;
       overflow-y: auto;
     }
+
     .modal {
       background: white;
       max-width: 600px;
@@ -153,10 +176,12 @@
       border-radius: 15px;
       padding: 20px;
     }
+
     .modal h2 {
       margin-bottom: 15px;
       color: #7b145f;
     }
+
     .campo {
       width: 100%;
       padding: 12px;
@@ -165,14 +190,17 @@
       border-radius: 8px;
       font-size: 15px;
     }
+
     .item-carrinho {
       border-bottom: 1px solid #eee;
       padding: 12px 0;
     }
+
     .item-carrinho strong {
       display: block;
       margin-bottom: 5px;
     }
+
     .observacao-item {
       width: 100%;
       padding: 8px;
@@ -180,12 +208,14 @@
       border-radius: 7px;
       margin-top: 6px;
     }
+
     .quantidade {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-top: 7px;
     }
+
     .quantidade button {
       width: 30px;
       height: 30px;
@@ -195,6 +225,7 @@
       cursor: pointer;
       font-size: 18px;
     }
+
     .total {
       font-size: 21px;
       font-weight: bold;
@@ -202,10 +233,12 @@
       margin: 18px 0;
       color: #7b145f;
     }
+
     .botoes-modal {
       display: flex;
       gap: 10px;
     }
+
     .botoes-modal button {
       flex: 1;
       padding: 13px;
@@ -214,14 +247,17 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     .btn-fechar {
       background: #ddd;
       color: #333;
     }
+
     .btn-enviar {
       background: #25d366;
       color: white;
     }
+
     .vazio {
       text-align: center;
       padding: 30px;
@@ -239,262 +275,1301 @@
 </header>
 
 <div class="container">
-  <input type="text" id="busca" class="busca" placeholder="🔎 Procurar no cardápio...">
+
+  <input
+    type="text"
+    id="busca"
+    class="busca"
+    placeholder="🔎 Procurar no cardápio..."
+  >
 
   <div class="categorias">
-    <button class="categoria ativa" onclick="filtrarCategoria('Todos', this)">Todos</button>
-    <button class="categoria" onclick="filtrarCategoria('Lanches', this)">Lanches</button>
-    <button class="categoria" onclick="filtrarCategoria('Pizzas', this)">Pizzas</button>
-    <button class="categoria" onclick="filtrarCategoria('Porções', this)">Porções</button>
-    <button class="categoria" onclick="filtrarCategoria('Bebidas', this)">Bebidas</button>
+
+    <button
+      class="categoria ativa"
+      onclick="filtrarCategoria('Todos', this)">
+      Todos
+    </button>
+
+    <button
+      class="categoria"
+      onclick="filtrarCategoria('Lanches', this)">
+      Lanches
+    </button>
+
+    <button
+      class="categoria"
+      onclick="filtrarCategoria('Pizzas', this)">
+      Pizzas
+    </button>
+
+    <button
+      class="categoria"
+      onclick="filtrarCategoria('Porções', this)">
+      Porções
+    </button>
+
+    <button
+      class="categoria"
+      onclick="filtrarCategoria('Bebidas', this)">
+      Bebidas
+    </button>
+
   </div>
 
   <div id="listaProdutos"></div>
 
-  <button class="teste-firebase" onclick="testarFirebase()">🔴 TESTAR CONEXÃO FIREBASE</button>
+  <button
+    class="teste-firebase"
+    onclick="testarFirebase()">
+
+    🔴 TESTAR FIREBASE
+
+  </button>
+
 </div>
+
 
 <div class="carrinho-barra">
-  <div>🛒 Carrinho: <strong id="quantidadeCarrinho">0</strong></div>
-  <div><strong id="totalBarra">R$ 0,00</strong></div>
-  <button class="btn-ver-pedido" onclick="abrirCarrinho()">Ver pedido</button>
+
+  <div>
+    🛒 Carrinho:
+    <strong id="quantidadeCarrinho">0</strong>
+  </div>
+
+  <div>
+    <strong id="totalBarra">R$ 0,00</strong>
+  </div>
+
+  <button
+    class="btn-ver-pedido"
+    onclick="abrirCarrinho()">
+
+    Ver pedido
+
+  </button>
+
 </div>
 
-<div id="modalCarrinho" class="modal-fundo">
+
+<div
+  id="modalCarrinho"
+  class="modal-fundo">
+
   <div class="modal">
+
     <h2>🛒 Seu pedido</h2>
+
     <div id="itensCarrinho"></div>
+
     <hr>
-    <input id="mesa" class="campo" type="text" placeholder="Número da mesa">
-    <input id="responsavel" class="campo" type="text" placeholder="Nome do responsável">
-    <textarea id="observacaoGeral" class="campo" rows="3" placeholder="Observação geral do pedido"></textarea>
-    <div id="totalModal" class="total">R$ 0,00</div>
-    <div class="botoes-modal">
-      <button class="btn-fechar" onclick="fecharCarrinho()">Fechar</button>
-      <button id="btnEnviar" class="btn-enviar" onclick="enviarPedido()">📲 Enviar Pedido</button>
+
+    <input
+      id="mesa"
+      class="campo"
+      type="text"
+      placeholder="Número da mesa"
+    >
+
+    <input
+      id="responsavel"
+      class="campo"
+      type="text"
+      placeholder="Nome do responsável"
+    >
+
+    <textarea
+      id="observacaoGeral"
+      class="campo"
+      rows="3"
+      placeholder="Observação geral do pedido"></textarea>
+
+    <div
+      id="totalModal"
+      class="total">
+
+      R$ 0,00
+
     </div>
+
+    <div class="botoes-modal">
+
+      <button
+        class="btn-fechar"
+        onclick="fecharCarrinho()">
+
+        Fechar
+
+      </button>
+
+      <button
+        id="btnEnviar"
+        class="btn-enviar"
+        onclick="enviarPedido()">
+
+        📲 Enviar Pedido
+
+      </button>
+
+    </div>
+
   </div>
+
 </div>
+
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+  /*
+   * =====================================================
+   * FIREBASE LITE
+   * =====================================================
+   *
+   * IMPORTANTE:
+   * Estamos usando Firestore Lite nesta versão.
+   * Ele faz leitura e gravação diretamente no Firestore.
+   */
+
+  import {
+    initializeApp
+  } from
+  "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs
+  } from
+  "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore-lite.js";
+
 
   const firebaseConfig = {
-    apiKey: "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
-    authDomain: "sistema-digital-f9df1.firebaseapp.com",
-    projectId: "sistema-digital-f9df1",
-    storageBucket: "sistema-digital-f9df1.firebasestorage.app",
-    messagingSenderId: "783545984661",
-    appId: "1:783545984661:web:5d0945907ad9db3990dd9c"
+
+    apiKey:
+      "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+
+    authDomain:
+      "sistema-digital-f9df1.firebaseapp.com",
+
+    projectId:
+      "sistema-digital-f9df1",
+
+    storageBucket:
+      "sistema-digital-f9df1.firebasestorage.app",
+
+    messagingSenderId:
+      "783545984661",
+
+    appId:
+      "1:783545984661:web:5d0945907ad9db3990dd9c"
+
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+
+  const app =
+    initializeApp(firebaseConfig);
+
+
+  const db =
+    getFirestore(app);
+
+
+  /*
+   * =====================================================
+   * PRODUTOS
+   * =====================================================
+   */
 
   const produtos = [
-    { id: 1, nome: "X-Bacon", descricao: "Hambúrguer, bacon, queijo e molho especial", preco: 26, categoria: "Lanches" },
-    { id: 2, nome: "X-Salada", descricao: "Hambúrguer, queijo, salada e molho especial", preco: 23, categoria: "Lanches" },
-    { id: 3, nome: "X-Calabresa", descricao: "Hambúrguer, calabresa, queijo e molho", preco: 27, categoria: "Lanches" },
-    { id: 4, nome: "X-Tudo", descricao: "Hambúrguer completo com queijo, bacon e salada", preco: 34, categoria: "Lanches" },
-    { id: 5, nome: "Pizza Calabresa", descricao: "Pizza de calabresa", preco: 45, categoria: "Pizzas" },
-    { id: 6, nome: "Pizza Frango c/ Catupiry", descricao: "Frango desfiado e catupiry", preco: 48, categoria: "Pizzas" },
-    { id: 7, nome: "Pizza Mussarela", descricao: "Mussarela e molho de tomate", preco: 40, categoria: "Pizzas" },
-    { id: 8, nome: "Pizza Portuguesa", descricao: "Presunto, queijo, ovo, cebola e ervilha", preco: 52, categoria: "Pizzas" },
-    { id: 9, nome: "Batata Frita", descricao: "Porção de batata frita", preco: 20, categoria: "Porções" },
-    { id: 10, nome: "Batata Frita c/ Queijo", descricao: "Batata frita com queijo", preco: 26, categoria: "Porções" },
-    { id: 11, nome: "Porção de Tilápia", descricao: "Porção de tilápia frita", preco: 38, categoria: "Porções" },
-    { id: 12, nome: "Mandioca Frita", descricao: "Porção de mandioca frita", preco: 18, categoria: "Porções" },
-    { id: 13, nome: "Coca-Cola", descricao: "Refrigerante", preco: 7, categoria: "Bebidas" },
-    { id: 14, nome: "Pepsi", descricao: "Refrigerante", preco: 7, categoria: "Bebidas" },
-    { id: 15, nome: "Cerveja", descricao: "Cerveja", preco: 13, categoria: "Bebidas" },
-    { id: 16, nome: "Chopp", descricao: "Chopp", preco: 15, categoria: "Bebidas" }
+
+    {
+      id: 1,
+      nome: "X-Bacon",
+      descricao:
+        "Hambúrguer, bacon, queijo e molho especial",
+      preco: 26,
+      categoria: "Lanches"
+    },
+
+    {
+      id: 2,
+      nome: "X-Salada",
+      descricao:
+        "Hambúrguer, queijo, salada e molho especial",
+      preco: 23,
+      categoria: "Lanches"
+    },
+
+    {
+      id: 3,
+      nome: "X-Calabresa",
+      descricao:
+        "Hambúrguer, calabresa, queijo e molho",
+      preco: 27,
+      categoria: "Lanches"
+    },
+
+    {
+      id: 4,
+      nome: "X-Tudo",
+      descricao:
+        "Hambúrguer completo com queijo, bacon e salada",
+      preco: 34,
+      categoria: "Lanches"
+    },
+
+    {
+      id: 5,
+      nome: "Pizza Calabresa",
+      descricao:
+        "Pizza de calabresa",
+      preco: 45,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 6,
+      nome: "Pizza Frango c/ Catupiry",
+      descricao:
+        "Frango desfiado e catupiry",
+      preco: 48,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 7,
+      nome: "Pizza Mussarela",
+      descricao:
+        "Mussarela e molho de tomate",
+      preco: 40,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 8,
+      nome: "Pizza Portuguesa",
+      descricao:
+        "Presunto, queijo, ovo, cebola e ervilha",
+      preco: 52,
+      categoria: "Pizzas"
+    },
+
+    {
+      id: 9,
+      nome: "Batata Frita",
+      descricao:
+        "Porção de batata frita",
+      preco: 20,
+      categoria: "Porções"
+    },
+
+    {
+      id: 10,
+      nome: "Batata Frita c/ Queijo",
+      descricao:
+        "Batata frita com queijo",
+      preco: 26,
+      categoria: "Porções"
+    },
+
+    {
+      id: 11,
+      nome: "Porção de Tilápia",
+      descricao:
+        "Porção de tilápia frita",
+      preco: 38,
+      categoria: "Porções"
+    },
+
+    {
+      id: 12,
+      nome: "Mandioca Frita",
+      descricao:
+        "Porção de mandioca frita",
+      preco: 18,
+      categoria: "Porções"
+    },
+
+    {
+      id: 13,
+      nome: "Coca-Cola",
+      descricao:
+        "Refrigerante",
+      preco: 7,
+      categoria: "Bebidas"
+    },
+
+    {
+      id: 14,
+      nome: "Pepsi",
+      descricao:
+        "Refrigerante",
+      preco: 7,
+      categoria: "Bebidas"
+    },
+
+    {
+      id: 15,
+      nome: "Cerveja",
+      descricao:
+        "Cerveja",
+      preco: 13,
+      categoria: "Bebidas"
+    },
+
+    {
+      id: 16,
+      nome: "Chopp",
+      descricao:
+        "Chopp",
+      preco: 15,
+      categoria: "Bebidas"
+    }
+
   ];
 
+
   let carrinho = [];
+
   let categoriaAtual = "Todos";
 
+
+  /*
+   * =====================================================
+   * DINHEIRO
+   * =====================================================
+   */
+
   function dinheiro(valor) {
-    return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+    return valor.toLocaleString(
+      "pt-BR",
+      {
+        style: "currency",
+        currency: "BRL"
+      }
+    );
+
   }
+
+
+  /*
+   * =====================================================
+   * MOSTRAR PRODUTOS
+   * =====================================================
+   */
 
   function mostrarProdutos() {
-    const lista = document.getElementById("listaProdutos");
-    const busca = document.getElementById("busca").value.toLowerCase().trim();
-    const filtrados = produtos.filter(produto => {
-      const correspondeCategoria = categoriaAtual === "Todos" || produto.categoria === categoriaAtual;
-      const correspondeBusca = !busca || produto.nome.toLowerCase().includes(busca) || produto.descricao.toLowerCase().includes(busca) || produto.categoria.toLowerCase().includes(busca);
-      return correspondeCategoria && correspondeBusca;
-    });
+
+    const lista =
+      document.getElementById(
+        "listaProdutos"
+      );
+
+
+    const busca =
+      document
+        .getElementById("busca")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const filtrados =
+      produtos.filter(produto => {
+
+        const categoriaOK =
+          categoriaAtual === "Todos" ||
+          produto.categoria === categoriaAtual;
+
+
+        const buscaOK =
+          !busca ||
+
+          produto.nome
+            .toLowerCase()
+            .includes(busca) ||
+
+          produto.descricao
+            .toLowerCase()
+            .includes(busca) ||
+
+          produto.categoria
+            .toLowerCase()
+            .includes(busca);
+
+
+        return categoriaOK && buscaOK;
+
+      });
+
+
     if (filtrados.length === 0) {
-      lista.innerHTML = `<div class="vazio">Nenhum produto encontrado.</div>`;
+
+      lista.innerHTML =
+        `<div class="vazio">
+          Nenhum produto encontrado.
+        </div>`;
+
       return;
+
     }
-    lista.innerHTML = filtrados.map(produto => `
-      <div class="produto">
-        <div class="produto-info">
-          <h3>${produto.nome}</h3>
-          <p>${produto.descricao}</p>
-          <div class="preco">${dinheiro(produto.preco)}</div>
+
+
+    lista.innerHTML =
+      filtrados.map(produto => `
+
+        <div class="produto">
+
+          <div class="produto-info">
+
+            <h3>
+              ${produto.nome}
+            </h3>
+
+            <p>
+              ${produto.descricao}
+            </p>
+
+            <div class="preco">
+              ${dinheiro(produto.preco)}
+            </div>
+
+          </div>
+
+          <button
+            class="btn-adicionar"
+            onclick="adicionarCarrinho(${produto.id})">
+
+            + Adicionar
+
+          </button>
+
         </div>
-        <button class="btn-adicionar" onclick="adicionarCarrinho(${produto.id})">+ Adicionar</button>
-      </div>
-    `).join("");
+
+      `).join("");
+
   }
 
-  window.filtrarCategoria = function(categoria, botao) {
-    categoriaAtual = categoria;
-    document.querySelectorAll(".categoria").forEach(btn => btn.classList.remove("ativa"));
-    botao.classList.add("ativa");
-    mostrarProdutos();
-  };
 
-  document.getElementById("busca").addEventListener("input", mostrarProdutos);
+  /*
+   * =====================================================
+   * CATEGORIA
+   * =====================================================
+   */
 
-  window.adicionarCarrinho = function(id) {
-    const produto = produtos.find(item => item.id === id);
-    if (!produto) return;
-    const existente = carrinho.find(item => item.id === id);
-    if (existente) {
-      existente.quantidade++;
-    } else {
-      carrinho.push({ ...produto, quantidade: 1, observacao: "" });
-    }
-    atualizarCarrinho();
-  };
+  window.filtrarCategoria =
+    function(categoria, botao) {
 
-  window.alterarQuantidade = function(id, valor) {
-    const item = carrinho.find(produto => produto.id === id);
-    if (!item) return;
-    item.quantidade += valor;
-    if (item.quantidade <= 0) {
-      carrinho = carrinho.filter(produto => produto.id !== id);
-    }
-    atualizarCarrinho();
-    mostrarCarrinho();
-  };
+      categoriaAtual = categoria;
 
-  window.alterarObservacao = function(id, valor) {
-    const item = carrinho.find(produto => produto.id === id);
-    if (item) item.observacao = valor;
-  };
+
+      document
+        .querySelectorAll(".categoria")
+        .forEach(btn => {
+
+          btn.classList.remove("ativa");
+
+        });
+
+
+      botao.classList.add("ativa");
+
+
+      mostrarProdutos();
+
+    };
+
+
+  /*
+   * =====================================================
+   * BUSCA
+   * =====================================================
+   */
+
+  document
+    .getElementById("busca")
+    .addEventListener(
+      "input",
+      mostrarProdutos
+    );
+
+
+  /*
+   * =====================================================
+   * ADICIONAR CARRINHO
+   * =====================================================
+   */
+
+  window.adicionarCarrinho =
+    function(id) {
+
+      const produto =
+        produtos.find(
+          item => item.id === id
+        );
+
+
+      if (!produto) return;
+
+
+      const existente =
+        carrinho.find(
+          item => item.id === id
+        );
+
+
+      if (existente) {
+
+        existente.quantidade++;
+
+      } else {
+
+        carrinho.push({
+
+          ...produto,
+
+          quantidade: 1,
+
+          observacao: ""
+
+        });
+
+      }
+
+
+      atualizarCarrinho();
+
+    };
+
+
+  /*
+   * =====================================================
+   * QUANTIDADE
+   * =====================================================
+   */
+
+  window.alterarQuantidade =
+    function(id, valor) {
+
+      const item =
+        carrinho.find(
+          produto => produto.id === id
+        );
+
+
+      if (!item) return;
+
+
+      item.quantidade += valor;
+
+
+      if (item.quantidade <= 0) {
+
+        carrinho =
+          carrinho.filter(
+            produto => produto.id !== id
+          );
+
+      }
+
+
+      atualizarCarrinho();
+
+      mostrarCarrinho();
+
+    };
+
+
+  /*
+   * =====================================================
+   * OBSERVAÇÃO
+   * =====================================================
+   */
+
+  window.alterarObservacao =
+    function(id, valor) {
+
+      const item =
+        carrinho.find(
+          produto => produto.id === id
+        );
+
+
+      if (item) {
+
+        item.observacao = valor;
+
+      }
+
+    };
+
+
+  /*
+   * =====================================================
+   * ATUALIZAR CARRINHO
+   * =====================================================
+   */
 
   function atualizarCarrinho() {
-    let quantidade = 0, total = 0;
-    carrinho.forEach(item => { quantidade += item.quantidade; total += item.preco * item.quantidade; });
-    document.getElementById("quantidadeCarrinho").textContent = quantidade;
-    document.getElementById("totalBarra").textContent = dinheiro(total);
+
+    let quantidade = 0;
+
+    let total = 0;
+
+
+    carrinho.forEach(item => {
+
+      quantidade +=
+        item.quantidade;
+
+      total +=
+        item.preco *
+        item.quantidade;
+
+    });
+
+
+    document
+      .getElementById(
+        "quantidadeCarrinho"
+      )
+      .textContent = quantidade;
+
+
+    document
+      .getElementById(
+        "totalBarra"
+      )
+      .textContent =
+      dinheiro(total);
+
   }
 
-  window.abrirCarrinho = function() {
-    if (carrinho.length === 0) { alert("Seu carrinho está vazio."); return; }
-    document.getElementById("modalCarrinho").style.display = "block";
-    mostrarCarrinho();
-  };
 
-  window.fecharCarrinho = function() {
-    document.getElementById("modalCarrinho").style.display = "none";
-  };
+  /*
+   * =====================================================
+   * ABRIR CARRINHO
+   * =====================================================
+   */
+
+  window.abrirCarrinho =
+    function() {
+
+      if (carrinho.length === 0) {
+
+        alert(
+          "Seu carrinho está vazio."
+        );
+
+        return;
+
+      }
+
+
+      document
+        .getElementById(
+          "modalCarrinho"
+        )
+        .style.display = "block";
+
+
+      mostrarCarrinho();
+
+    };
+
+
+  /*
+   * =====================================================
+   * FECHAR
+   * =====================================================
+   */
+
+  window.fecharCarrinho =
+    function() {
+
+      document
+        .getElementById(
+          "modalCarrinho"
+        )
+        .style.display = "none";
+
+    };
+
+
+  /*
+   * =====================================================
+   * MOSTRAR CARRINHO
+   * =====================================================
+   */
 
   function mostrarCarrinho() {
-    const container = document.getElementById("itensCarrinho");
+
+    const container =
+      document.getElementById(
+        "itensCarrinho"
+      );
+
+
     let total = 0;
-    container.innerHTML = carrinho.map(item => {
-      const subtotal = item.preco * item.quantidade;
-      total += subtotal;
-      return `
-        <div class="item-carrinho">
-          <strong>${item.nome}</strong>
-          <div>${dinheiro(item.preco)} cada</div>
-          <div class="quantidade">
-            <button onclick="alterarQuantidade(${item.id}, -1)">-</button>
-            <span>${item.quantidade}</span>
-            <button onclick="alterarQuantidade(${item.id}, 1)">+</button>
-            <span>${dinheiro(subtotal)}</span>
+
+
+    container.innerHTML =
+      carrinho.map(item => {
+
+        const subtotal =
+          item.preco *
+          item.quantidade;
+
+
+        total += subtotal;
+
+
+        return `
+
+          <div class="item-carrinho">
+
+            <strong>
+              ${item.nome}
+            </strong>
+
+            <div>
+              ${dinheiro(item.preco)}
+              cada
+            </div>
+
+            <div class="quantidade">
+
+              <button
+                onclick="alterarQuantidade(${item.id}, -1)">
+                -
+              </button>
+
+              <span>
+                ${item.quantidade}
+              </span>
+
+              <button
+                onclick="alterarQuantidade(${item.id}, 1)">
+                +
+              </button>
+
+              <span>
+                ${dinheiro(subtotal)}
+              </span>
+
+            </div>
+
+            <input
+              class="observacao-item"
+              value="${item.observacao || ""}"
+              placeholder="Observação deste item"
+              onchange="alterarObservacao(${item.id}, this.value)"
+            >
+
           </div>
-          <input class="observacao-item" value="${item.observacao || ""}" placeholder="Observação deste item" onchange="alterarObservacao(${item.id}, this.value)">
-        </div>
-      `;
-    }).join("");
-    document.getElementById("totalModal").textContent = dinheiro(total);
+
+        `;
+
+      }).join("");
+
+
+    document
+      .getElementById(
+        "totalModal"
+      )
+      .textContent =
+      dinheiro(total);
+
   }
+
+
+  /*
+   * =====================================================
+   * NÚMERO DO PEDIDO
+   * =====================================================
+   */
 
   function gerarNumeroPedido() {
+
     const agora = new Date();
-    return agora.getHours().toString().padStart(2, "0") + agora.getMinutes().toString().padStart(2, "0") + agora.getSeconds().toString().padStart(2, "0");
+
+
+    return (
+
+      agora
+        .getHours()
+        .toString()
+        .padStart(2, "0") +
+
+      agora
+        .getMinutes()
+        .toString()
+        .padStart(2, "0") +
+
+      agora
+        .getSeconds()
+        .toString()
+        .padStart(2, "0")
+
+    );
+
   }
 
-  window.testarFirebase = async function() {
-    alert("🔄 TESTANDO CONEXÃO...\nAguarde.");
-    try {
-      const ref = collection(db, "pedidos");
-      const resultado = await getDocs(ref);
-      alert("🟢 FIREBASE CONECTADO!\n\nDocumentos encontrados: " + resultado.size);
-    } catch (erro) {
-      alert("🔴 ERRO\n\n" + (erro.code || "sem código") + "\n" + (erro.message || erro));
-    }
-  };
+
+  /*
+   * =====================================================
+   * TESTE FIREBASE LITE
+   * =====================================================
+   */
+
+  window.testarFirebase =
+    async function() {
+
+      alert(
+        "🔄 TESTANDO FIREBASE LITE...\n\n" +
+        "Primeiro vamos testar a leitura."
+      );
+
+
+      try {
+
+        const ref =
+          collection(
+            db,
+            "pedidos"
+          );
+
+
+        const resultado =
+          await getDocs(ref);
+
+
+        alert(
+
+          "🟢 LEITURA FUNCIONOU!\n\n" +
+
+          "Documentos encontrados: " +
+
+          resultado.size +
+
+          "\n\nAgora vamos testar a gravação."
+
+        );
+
+
+        const teste = {
+
+          teste: true,
+
+          mensagem:
+            "TESTE FIREBASE LITE",
+
+          data:
+            new Date().toISOString()
+
+        };
+
+
+        const novoDocumento =
+          await addDoc(
+            ref,
+            teste
+          );
+
+
+        alert(
+
+          "🟢 FIREBASE LITE FUNCIONOU!\n\n" +
+
+          "Leitura: OK\n" +
+
+          "Gravação: OK\n\n" +
+
+          "ID do teste:\n" +
+
+          novoDocumento.id
+
+        );
+
+
+      } catch (erro) {
+
+        alert(
+
+          "🔴 ERRO NO FIREBASE LITE\n\n" +
+
+          "Código:\n" +
+
+          (erro.code ||
+            "não informado") +
+
+          "\n\nMensagem:\n" +
+
+          (erro.message ||
+            erro)
+
+        );
+
+      }
+
+    };
+
+
+  /*
+   * =====================================================
+   * SALVAR PEDIDO
+   * =====================================================
+   */
 
   async function salvarPedidoNoSistema() {
-    const mesa = document.getElementById("mesa").value.trim();
-    const responsavel = document.getElementById("responsavel").value.trim();
-    const observacaoGeral = document.getElementById("observacaoGeral").value.trim();
+
+    const mesa =
+      document
+        .getElementById("mesa")
+        .value
+        .trim();
+
+
+    const responsavel =
+      document
+        .getElementById("responsavel")
+        .value
+        .trim();
+
+
+    const observacaoGeral =
+      document
+        .getElementById("observacaoGeral")
+        .value
+        .trim();
+
+
     let total = 0;
-    carrinho.forEach(item => { total += item.preco * item.quantidade; });
+
+
+    carrinho.forEach(item => {
+
+      total +=
+        item.preco *
+        item.quantidade;
+
+    });
+
+
     const pedidoSistema = {
-      numeroPedido: gerarNumeroPedido(),
-      mesa, responsavel, observacaoGeral,
-      itens: carrinho.map(item => ({ id: item.id, nome: item.nome, preco: item.preco, quantidade: item.quantidade, observacao: item.observacao || "" })),
-      total, status: "Recebido", data: new Date().toISOString()
+
+      numeroPedido:
+        gerarNumeroPedido(),
+
+      mesa:
+        mesa,
+
+      responsavel:
+        responsavel,
+
+      observacaoGeral:
+        observacaoGeral,
+
+      itens:
+        carrinho.map(item => ({
+
+          id:
+            item.id,
+
+          nome:
+            item.nome,
+
+          preco:
+            item.preco,
+
+          quantidade:
+            item.quantidade,
+
+          observacao:
+            item.observacao || ""
+
+        })),
+
+      total:
+        total,
+
+      status:
+        "Recebido",
+
+      data:
+        new Date().toISOString()
+
     };
-    const ref = collection(db, "pedidos");
-    const resultado = await addDoc(ref, pedidoSistema);
-    return { ...pedidoSistema, idFirebase: resultado.id };
+
+
+    const ref =
+      collection(
+        db,
+        "pedidos"
+      );
+
+
+    /*
+     * GRAVAÇÃO REAL DO PEDIDO
+     */
+
+    const resultado =
+      await addDoc(
+        ref,
+        pedidoSistema
+      );
+
+
+    return {
+
+      ...pedidoSistema,
+
+      idFirebase:
+        resultado.id
+
+    };
+
   }
 
-  window.enviarPedido = async function() {
-    if (carrinho.length === 0) { alert("Adicione pelo menos um produto."); return; }
-    const mesa = document.getElementById("mesa").value.trim();
-    const responsavel = document.getElementById("responsavel").value.trim();
-    if (!mesa) { alert("Digite o número da mesa."); return; }
-    if (!responsavel) { alert("Digite o nome do responsável."); return; }
-    const botao = document.getElementById("btnEnviar");
-    botao.disabled = true;
-    botao.textContent = "⏳ Registrando...";
-    try {
-      const pedido = await salvarPedidoNoSistema();
-      let mensagem = "🍽️ *NOVO PEDIDO - SABOR DA CASA*%0A%0A";
-      mensagem += "*Pedido:* #" + pedido.numeroPedido + "%0A";
-      mensagem += "*Mesa:* " + pedido.mesa + "%0A";
-      mensagem += "*Responsável:* " + pedido.responsavel + "%0A%0A";
-      mensagem += "*ITENS:*%0A";
-      pedido.itens.forEach(item => {
-        mensagem += item.quantidade + "x " + item.nome + " - " + dinheiro(item.preco) + "%0A";
-        if (item.observacao) mensagem += "Obs.: " + item.observacao + "%0A";
-      });
-      mensagem += "%0A*TOTAL:* " + dinheiro(pedido.total);
-      if (pedido.observacaoGeral) mensagem += "%0A%0A*Observação:* " + pedido.observacaoGeral;
-      const telefone = "5549984121585";
-      const url = "https://wa.me/" + telefone + "?text=" + mensagem;
-      alert("✅ Pedido salvo!\n\nNúmero: #" + pedido.numeroPedido);
-      window.open(url, "_blank");
-      carrinho = [];
-      atualizarCarrinho();
-      fecharCarrinho();
-      document.getElementById("mesa").value = "";
-      document.getElementById("responsavel").value = "";
-      document.getElementById("observacaoGeral").value = "";
-    } catch (erro) {
-      console.error("Erro:", erro);
-      alert("❌ ERRO AO SALVAR\n\n" + (erro.code || "sem código") + "\n" + (erro.message || erro));
-    } finally {
-      botao.disabled = false;
-      botao.textContent = "📲 Enviar Pedido";
-    }
-  };
+
+  /*
+   * =====================================================
+   * ENVIAR PEDIDO
+   * =====================================================
+   */
+
+  window.enviarPedido =
+    async function() {
+
+      if (carrinho.length === 0) {
+
+        alert(
+          "Adicione pelo menos um produto."
+        );
+
+        return;
+
+      }
+
+
+      const mesa =
+        document
+          .getElementById("mesa")
+          .value
+          .trim();
+
+
+      const responsavel =
+        document
+          .getElementById("responsavel")
+          .value
+          .trim();
+
+
+      if (!mesa) {
+
+        alert(
+          "Digite o número da mesa."
+        );
+
+        return;
+
+      }
+
+
+      if (!responsavel) {
+
+        alert(
+          "Digite o nome do responsável."
+        );
+
+        return;
+
+      }
+
+
+      const botao =
+        document
+          .getElementById(
+            "btnEnviar"
+          );
+
+
+      botao.disabled = true;
+
+      botao.textContent =
+        "⏳ Registrando...";
+
+
+      try {
+
+        const pedido =
+          await salvarPedidoNoSistema();
+
+
+        let mensagem =
+          "🍽️ *NOVO PEDIDO - SABOR DA CASA*%0A%0A";
+
+
+        mensagem +=
+          "*Pedido:* #" +
+          pedido.numeroPedido +
+          "%0A";
+
+
+        mensagem +=
+          "*Mesa:* " +
+          pedido.mesa +
+          "%0A";
+
+
+        mensagem +=
+          "*Responsável:* " +
+          pedido.responsavel +
+          "%0A%0A";
+
+
+        mensagem +=
+          "*ITENS:*%0A";
+
+
+        pedido.itens.forEach(item => {
+
+          mensagem +=
+            item.quantidade +
+            "x " +
+            item.nome +
+            " - " +
+            dinheiro(item.preco) +
+            "%0A";
+
+
+          if (item.observacao) {
+
+            mensagem +=
+              "Obs.: " +
+              item.observacao +
+              "%0A";
+
+          }
+
+        });
+
+
+        mensagem +=
+          "%0A*TOTAL:* " +
+          dinheiro(pedido.total);
+
+
+        if (pedido.observacaoGeral) {
+
+          mensagem +=
+            "%0A%0A*Observação:* " +
+            pedido.observacaoGeral;
+
+        }
+
+
+        const telefone =
+          "5549984121585";
+
+
+        const url =
+          "https://wa.me/" +
+          telefone +
+          "?text=" +
+          mensagem;
+
+
+        alert(
+
+          "✅ PEDIDO SALVO NO FIREBASE!\n\n" +
+
+          "Número: #" +
+          pedido.numeroPedido
+
+        );
+
+
+        window.open(
+          url,
+          "_blank"
+        );
+
+
+        carrinho = [];
+
+
+        atualizarCarrinho();
+
+
+        fecharCarrinho();
+
+
+        document
+          .getElementById("mesa")
+          .value = "";
+
+
+        document
+          .getElementById("responsavel")
+          .value = "";
+
+
+        document
+          .getElementById("observacaoGeral")
+          .value = "";
+
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao salvar:",
+          erro
+        );
+
+
+        alert(
+
+          "❌ ERRO AO SALVAR PEDIDO\n\n" +
+
+          "Código:\n" +
+
+          (erro.code ||
+            "sem código") +
+
+          "\n\nMensagem:\n" +
+
+          (erro.message ||
+            erro)
+
+        );
+
+      } finally {
+
+        botao.disabled = false;
+
+        botao.textContent =
+          "📲 Enviar Pedido";
+
+      }
+
+    };
+
+
+  /*
+   * =====================================================
+   * INICIAR
+   * =====================================================
+   */
 
   mostrarProdutos();
+
   atualizarCarrinho();
+
 </script>
 
 </body>
