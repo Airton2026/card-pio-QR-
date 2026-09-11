@@ -327,7 +327,6 @@
   <strong id="totalBarra">R$ 0,00</strong>
 </div>
 
-<!-- MODAL DO CARRINHO -->
 <div class="modal-fundo" id="modalCarrinho">
 
   <div class="modal">
@@ -364,13 +363,20 @@
     </div>
 
     <div class="botoes-modal">
-      <button class="btn btn-fechar" onclick="fecharCarrinho()">
+
+      <button
+        class="btn btn-fechar"
+        onclick="fecharCarrinho()">
         Fechar
       </button>
 
-      <button class="btn btn-enviar" id="btnEnviar" onclick="enviarPedido()">
+      <button
+        class="btn btn-enviar"
+        id="btnEnviar"
+        onclick="enviarPedido()">
         📲 Enviar pedido
       </button>
+
     </div>
 
   </div>
@@ -390,11 +396,11 @@
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
   import {
-    getFirestore,
+    initializeFirestore,
     collection,
     addDoc,
     getDocs
-  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore-lite.js";
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
   const firebaseConfig = {
@@ -409,12 +415,18 @@
 
   const app = initializeApp(firebaseConfig);
 
+
   /*
-  IMPORTANTE:
-  estamos informando explicitamente o banco "default"
+  ==========================================================
+  FIRESTORE ENTERPRISE
+  ==========================================================
   */
 
-  const db = getFirestore(app, "default");
+  const db = initializeFirestore(
+    app,
+    {},
+    "default"
+  );
 
 
   /*
@@ -567,7 +579,7 @@
 
   /*
   ==========================================================
-  FORMATAR DINHEIRO
+  DINHEIRO
   ==========================================================
   */
 
@@ -589,15 +601,18 @@
 
   function mostrarProdutos(categoria = "Todos") {
 
-    const lista = document.getElementById("listaProdutos");
+    const lista =
+      document.getElementById("listaProdutos");
 
     lista.innerHTML = "";
+
 
     const produtosFiltrados =
       categoria === "Todos"
         ? produtos
         : produtos.filter(
-            produto => produto.categoria === categoria
+            produto =>
+              produto.categoria === categoria
           );
 
 
@@ -610,20 +625,25 @@
       `;
 
       return;
+
     }
 
 
     produtosFiltrados.forEach(produto => {
 
-      const div = document.createElement("div");
+      const div =
+        document.createElement("div");
 
       div.className = "produto";
+
 
       div.innerHTML = `
 
         <div class="produto-info">
 
-          <h3>${produto.nome}</h3>
+          <h3>
+            ${produto.nome}
+          </h3>
 
           <div class="descricao">
             ${produto.descricao}
@@ -645,6 +665,7 @@
 
       `;
 
+
       lista.appendChild(div);
 
     });
@@ -658,17 +679,22 @@
   ==========================================================
   */
 
-  window.filtrar = function(categoria, botao) {
+  window.filtrar =
+    function(categoria, botao) {
 
-    document
-      .querySelectorAll(".categoria")
-      .forEach(btn => btn.classList.remove("ativa"));
+      document
+        .querySelectorAll(".categoria")
+        .forEach(btn =>
+          btn.classList.remove("ativa")
+        );
 
-    botao.classList.add("ativa");
 
-    mostrarProdutos(categoria);
+      botao.classList.add("ativa");
 
-  };
+
+      mostrarProdutos(categoria);
+
+    };
 
 
   /*
@@ -677,44 +703,50 @@
   ==========================================================
   */
 
-  window.adicionarProduto = function(id) {
+  window.adicionarProduto =
+    function(id) {
 
-    const produto =
-      produtos.find(p => p.id === id);
-
-    if (!produto) return;
-
-
-    const existente =
-      carrinho.find(item => item.id === id);
+      const produto =
+        produtos.find(
+          p => p.id === id
+        );
 
 
-    if (existente) {
-
-      existente.quantidade++;
-
-    } else {
-
-      carrinho.push({
-
-        id: produto.id,
-
-        nome: produto.nome,
-
-        preco: produto.preco,
-
-        quantidade: 1,
-
-        observacao: ""
-
-      });
-
-    }
+      if (!produto) return;
 
 
-    atualizarCarrinho();
+      const existente =
+        carrinho.find(
+          item => item.id === id
+        );
 
-  };
+
+      if (existente) {
+
+        existente.quantidade++;
+
+      } else {
+
+        carrinho.push({
+
+          id: produto.id,
+
+          nome: produto.nome,
+
+          preco: produto.preco,
+
+          quantidade: 1,
+
+          observacao: ""
+
+        });
+
+      }
+
+
+      atualizarCarrinho();
+
+    };
 
 
   /*
@@ -723,46 +755,59 @@
   ==========================================================
   */
 
-  window.alterarQuantidade = function(id, quantidade) {
+  window.alterarQuantidade =
+    function(id, quantidade) {
 
-    const item =
-      carrinho.find(item => item.id === id);
-
-    if (!item) return;
-
-
-    item.quantidade = quantidade;
+      const item =
+        carrinho.find(
+          item => item.id === id
+        );
 
 
-    if (item.quantidade <= 0) {
-
-      carrinho =
-        carrinho.filter(item => item.id !== id);
-
-    }
+      if (!item) return;
 
 
-    atualizarCarrinho();
+      item.quantidade =
+        quantidade;
 
-  };
+
+      if (item.quantidade <= 0) {
+
+        carrinho =
+          carrinho.filter(
+            item => item.id !== id
+          );
+
+      }
+
+
+      atualizarCarrinho();
+
+    };
 
 
   /*
   ==========================================================
-  OBSERVAÇÃO DO ITEM
+  OBSERVAÇÃO
   ==========================================================
   */
 
-  window.alterarObservacao = function(id, valor) {
+  window.alterarObservacao =
+    function(id, valor) {
 
-    const item =
-      carrinho.find(item => item.id === id);
+      const item =
+        carrinho.find(
+          item => item.id === id
+        );
 
-    if (!item) return;
 
-    item.observacao = valor;
+      if (!item) return;
 
-  };
+
+      item.observacao =
+        valor;
+
+    };
 
 
   /*
@@ -775,7 +820,9 @@
 
     return carrinho.reduce(
       (total, item) =>
-        total + item.preco * item.quantidade,
+        total +
+        item.preco *
+        item.quantidade,
       0
     );
 
@@ -794,12 +841,16 @@
       calcularTotal();
 
 
-    document.getElementById("totalBarra")
-      .textContent = dinheiro(total);
+    document.getElementById(
+      "totalBarra"
+    ).textContent =
+      dinheiro(total);
 
 
     const lista =
-      document.getElementById("listaCarrinho");
+      document.getElementById(
+        "listaCarrinho"
+      );
 
 
     lista.innerHTML = "";
@@ -813,8 +864,12 @@
         </div>
       `;
 
-      document.getElementById("totalModal")
-        .textContent = dinheiro(0);
+
+      document.getElementById(
+        "totalModal"
+      ).textContent =
+        dinheiro(0);
+
 
       return;
 
@@ -826,7 +881,9 @@
       const div =
         document.createElement("div");
 
-      div.className = "item-carrinho";
+
+      div.className =
+        "item-carrinho";
 
 
       div.innerHTML = `
@@ -838,7 +895,10 @@
           </span>
 
           <span>
-            ${dinheiro(item.preco * item.quantidade)}
+            ${dinheiro(
+              item.preco *
+              item.quantidade
+            )}
           </span>
 
         </div>
@@ -847,17 +907,29 @@
         <div class="item-controles">
 
           <button
-            onclick="alterarQuantidade(${item.id}, ${item.quantidade - 1})">
+            onclick="alterarQuantidade(
+              ${item.id},
+              ${item.quantidade - 1}
+            )">
+
             −
+
           </button>
+
 
           <strong>
             ${item.quantidade}
           </strong>
 
+
           <button
-            onclick="alterarQuantidade(${item.id}, ${item.quantidade + 1})">
+            onclick="alterarQuantidade(
+              ${item.id},
+              ${item.quantidade + 1}
+            )">
+
             +
+
           </button>
 
         </div>
@@ -868,7 +940,10 @@
           type="text"
           placeholder="Observação deste item"
           value="${item.observacao || ""}"
-          oninput="alterarObservacao(${item.id}, this.value)"
+          oninput="alterarObservacao(
+            ${item.id},
+            this.value
+          )"
         >
 
       `;
@@ -879,8 +954,10 @@
     });
 
 
-    document.getElementById("totalModal")
-      .textContent = dinheiro(total);
+    document.getElementById(
+      "totalModal"
+    ).textContent =
+      dinheiro(total);
 
   }
 
@@ -891,14 +968,18 @@
   ==========================================================
   */
 
-  window.abrirCarrinho = function() {
+  window.abrirCarrinho =
+    function() {
 
-    atualizarCarrinho();
+      atualizarCarrinho();
 
-    document.getElementById("modalCarrinho")
-      .style.display = "block";
 
-  };
+      document.getElementById(
+        "modalCarrinho"
+      ).style.display =
+        "block";
+
+    };
 
 
   /*
@@ -907,12 +988,15 @@
   ==========================================================
   */
 
-  window.fecharCarrinho = function() {
+  window.fecharCarrinho =
+    function() {
 
-    document.getElementById("modalCarrinho")
-      .style.display = "none";
+      document.getElementById(
+        "modalCarrinho"
+      ).style.display =
+        "none";
 
-  };
+    };
 
 
   /*
@@ -921,88 +1005,100 @@
   ==========================================================
   */
 
-  window.testarFirebase = async function() {
-
-    alert(
-      "🔄 TESTANDO FIREBASE LITE...\n\n" +
-      "Primeiro vamos testar a leitura."
-    );
-
-
-    try {
-
-      const ref =
-        collection(db, "pedidos");
-
-
-      const resultado =
-        await getDocs(ref);
-
+  window.testarFirebase =
+    async function() {
 
       alert(
-        "🟢 LEITURA FUNCIONOU!\n\n" +
-
-        "Documentos encontrados: " +
-        resultado.size +
-
-        "\n\nAgora vamos testar a gravação."
+        "🔄 TESTANDO FIREBASE...\n\n" +
+        "Vamos testar a leitura."
       );
 
 
-      const teste = {
+      try {
 
-        teste: true,
-
-        mensagem:
-          "TESTE FIREBASE LITE",
-
-        data:
-          new Date().toISOString()
-
-      };
+        const ref =
+          collection(
+            db,
+            "pedidos"
+          );
 
 
-      const novoDocumento =
-        await addDoc(ref, teste);
+        const resultado =
+          await getDocs(ref);
 
 
-      alert(
-
-        "🟢 FIREBASE LITE FUNCIONOU!\n\n" +
-
-        "Leitura: OK\n" +
-
-        "Gravação: OK\n\n" +
-
-        "ID do teste:\n" +
-
-        novoDocumento.id
-
-      );
+        alert(
+          "🟢 LEITURA FUNCIONOU!\n\n" +
+          "Documentos encontrados: " +
+          resultado.size +
+          "\n\n" +
+          "Agora vamos testar a gravação."
+        );
 
 
-    } catch (erro) {
+        const teste = {
 
-      console.error(erro);
+          teste: true,
+
+          mensagem:
+            "TESTE FIREBASE ENTERPRISE",
+
+          data:
+            new Date().toISOString()
+
+        };
 
 
-      alert(
+        const novoDocumento =
+          await addDoc(
+            ref,
+            teste
+          );
 
-        "🔴 ERRO NO FIREBASE LITE\n\n" +
 
-        "Código:\n" +
+        alert(
 
-        (erro.code || "não informado") +
+          "🟢 FIREBASE FUNCIONOU!\n\n" +
 
-        "\n\nMensagem:\n" +
+          "Leitura: OK\n" +
 
-        (erro.message || erro)
+          "Gravação: OK\n\n" +
 
-      );
+          "ID do teste:\n" +
 
-    }
+          novoDocumento.id
 
-  };
+        );
+
+
+      } catch (erro) {
+
+        console.error(erro);
+
+
+        alert(
+
+          "🔴 ERRO NO FIREBASE\n\n" +
+
+          "Código:\n" +
+
+          (
+            erro.code ||
+            "não informado"
+          ) +
+
+          "\n\nMensagem:\n" +
+
+          (
+            erro.message ||
+            erro
+          )
+
+        );
+
+      }
+
+    };
 
 
   /*
@@ -1013,37 +1109,59 @@
 
   function gerarNumeroPedido() {
 
-    const agora = new Date();
+    const agora =
+      new Date();
+
 
     const hora =
-      String(agora.getHours()).padStart(2, "0");
+      String(
+        agora.getHours()
+      ).padStart(2, "0");
+
 
     const minuto =
-      String(agora.getMinutes()).padStart(2, "0");
+      String(
+        agora.getMinutes()
+      ).padStart(2, "0");
+
 
     const segundo =
-      String(agora.getSeconds()).padStart(2, "0");
+      String(
+        agora.getSeconds()
+      ).padStart(2, "0");
 
 
-    return hora + minuto + segundo;
+    return (
+      hora +
+      minuto +
+      segundo
+    );
 
   }
 
 
   /*
   ==========================================================
-  SALVAR PEDIDO NO FIREBASE
+  SALVAR PEDIDO
   ==========================================================
   */
 
-  async function salvarPedidoNoSistema(pedidoSistema) {
+  async function salvarPedidoNoSistema(
+    pedidoSistema
+  ) {
 
     const ref =
-      collection(db, "pedidos");
+      collection(
+        db,
+        "pedidos"
+      );
 
 
     const resultado =
-      await addDoc(ref, pedidoSistema);
+      await addDoc(
+        ref,
+        pedidoSistema
+      );
 
 
     return resultado;
@@ -1057,291 +1175,311 @@
   ==========================================================
   */
 
-  window.enviarPedido = async function() {
+  window.enviarPedido =
+    async function() {
 
-    if (carrinho.length === 0) {
+      if (carrinho.length === 0) {
 
-      alert(
-        "🛒 Seu carrinho está vazio."
-      );
+        alert(
+          "🛒 Seu carrinho está vazio."
+        );
 
-      return;
-
-    }
-
-
-    const mesa =
-      document.getElementById("mesa")
-        .value.trim();
-
-
-    const responsavel =
-      document.getElementById("responsavel")
-        .value.trim();
-
-
-    const observacaoGeral =
-      document.getElementById("observacaoGeral")
-        .value.trim();
-
-
-    if (!mesa) {
-
-      alert(
-        "⚠️ Informe o número da mesa."
-      );
-
-      return;
-
-    }
-
-
-    const btn =
-      document.getElementById("btnEnviar");
-
-
-    btn.disabled = true;
-
-    btn.textContent =
-      "⏳ Registrando...";
-
-
-    try {
-
-      const numeroPedido =
-        gerarNumeroPedido();
-
-
-      const itensPedido =
-        carrinho.map(item => ({
-
-          id: item.id,
-
-          nome: item.nome,
-
-          preco: item.preco,
-
-          quantidade: item.quantidade,
-
-          observacao:
-            item.observacao || ""
-
-        }));
-
-
-      const pedidoSistema = {
-
-        numeroPedido:
-
-          numeroPedido,
-
-        mesa:
-
-          mesa,
-
-        responsavel:
-
-          responsavel,
-
-        observacaoGeral:
-
-          observacaoGeral,
-
-        itens:
-
-          itensPedido,
-
-        total:
-
-          calcularTotal(),
-
-        status:
-
-          "Recebido",
-
-        data:
-
-          new Date().toISOString()
-
-      };
-
-
-      /*
-      ======================================================
-      PRIMEIRO SALVA NO FIREBASE
-      ======================================================
-      */
-
-      await salvarPedidoNoSistema(
-        pedidoSistema
-      );
-
-
-      /*
-      ======================================================
-      DEPOIS ABRE O WHATSAPP
-      ======================================================
-      */
-
-      let mensagem = "";
-
-      mensagem +=
-        "*🍔 SABOR DA CASA*\n";
-
-      mensagem +=
-        "*Novo pedido #" +
-        numeroPedido +
-        "*\n\n";
-
-
-      mensagem +=
-        "📍 Mesa: " +
-        mesa +
-        "\n";
-
-
-      if (responsavel) {
-
-        mensagem +=
-          "👤 Responsável: " +
-          responsavel +
-          "\n";
+        return;
 
       }
 
 
-      mensagem += "\n";
+      const mesa =
+        document.getElementById(
+          "mesa"
+        ).value.trim();
 
 
-      mensagem +=
-        "*ITENS DO PEDIDO:*\n";
+      const responsavel =
+        document.getElementById(
+          "responsavel"
+        ).value.trim();
 
 
-      carrinho.forEach(item => {
+      const observacaoGeral =
+        document.getElementById(
+          "observacaoGeral"
+        ).value.trim();
+
+
+      if (!mesa) {
+
+        alert(
+          "⚠️ Informe o número da mesa."
+        );
+
+        return;
+
+      }
+
+
+      const btn =
+        document.getElementById(
+          "btnEnviar"
+        );
+
+
+      btn.disabled = true;
+
+
+      btn.textContent =
+        "⏳ Registrando...";
+
+
+      try {
+
+        const numeroPedido =
+          gerarNumeroPedido();
+
+
+        const itensPedido =
+          carrinho.map(item => ({
+
+            id:
+              item.id,
+
+            nome:
+              item.nome,
+
+            preco:
+              item.preco,
+
+            quantidade:
+              item.quantidade,
+
+            observacao:
+              item.observacao || ""
+
+          }));
+
+
+        const pedidoSistema = {
+
+          numeroPedido:
+            numeroPedido,
+
+          mesa:
+            mesa,
+
+          responsavel:
+            responsavel,
+
+          observacaoGeral:
+            observacaoGeral,
+
+          itens:
+            itensPedido,
+
+          total:
+            calcularTotal(),
+
+          status:
+            "Recebido",
+
+          data:
+            new Date().toISOString()
+
+        };
+
+
+        /*
+        ======================================================
+        SALVAR PRIMEIRO NO FIREBASE
+        ======================================================
+        */
+
+        await salvarPedidoNoSistema(
+          pedidoSistema
+        );
+
+
+        /*
+        ======================================================
+        ABRIR WHATSAPP
+        ======================================================
+        */
+
+        let mensagem = "";
+
 
         mensagem +=
-          item.quantidade +
-          "x " +
-          item.nome +
-          " - " +
-          dinheiro(
-            item.preco *
-            item.quantidade
-          ) +
+          "*🍔 SABOR DA CASA*\n";
+
+
+        mensagem +=
+          "*Novo pedido #" +
+          numeroPedido +
+          "*\n\n";
+
+
+        mensagem +=
+          "📍 Mesa: " +
+          mesa +
           "\n";
 
 
-        if (item.observacao) {
+        if (responsavel) {
 
           mensagem +=
-            "   Obs.: " +
-            item.observacao +
+            "👤 Responsável: " +
+            responsavel +
             "\n";
 
         }
 
-      });
-
-
-      if (observacaoGeral) {
 
         mensagem +=
-          "\n📝 *Observação geral:*\n" +
-          observacaoGeral +
           "\n";
+
+
+        mensagem +=
+          "*ITENS DO PEDIDO:*\n";
+
+
+        carrinho.forEach(item => {
+
+          mensagem +=
+            item.quantidade +
+            "x " +
+            item.nome +
+            " - " +
+            dinheiro(
+              item.preco *
+              item.quantidade
+            ) +
+            "\n";
+
+
+          if (item.observacao) {
+
+            mensagem +=
+              "   Obs.: " +
+              item.observacao +
+              "\n";
+
+          }
+
+        });
+
+
+        if (observacaoGeral) {
+
+          mensagem +=
+            "\n📝 *Observação geral:*\n" +
+            observacaoGeral +
+            "\n";
+
+        }
+
+
+        mensagem +=
+          "\n💰 *TOTAL: " +
+          dinheiro(
+            calcularTotal()
+          ) +
+          "*";
+
+
+        const telefone =
+          "5549984121585";
+
+
+        const url =
+          "https://wa.me/" +
+          telefone +
+          "?text=" +
+          encodeURIComponent(
+            mensagem
+          );
+
+
+        window.open(
+          url,
+          "_blank"
+        );
+
+
+        /*
+        ======================================================
+        LIMPAR
+        ======================================================
+        */
+
+        carrinho = [];
+
+
+        document.getElementById(
+          "mesa"
+        ).value = "";
+
+
+        document.getElementById(
+          "responsavel"
+        ).value = "";
+
+
+        document.getElementById(
+          "observacaoGeral"
+        ).value = "";
+
+
+        atualizarCarrinho();
+
+
+        fecharCarrinho();
+
+
+        alert(
+          "✅ Pedido registrado com sucesso!\n\n" +
+          "Número do pedido: #" +
+          numeroPedido
+        );
+
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao registrar pedido:",
+          erro
+        );
+
+
+        alert(
+
+          "🔴 NÃO FOI POSSÍVEL REGISTRAR O PEDIDO.\n\n" +
+
+          "Código:\n" +
+
+          (
+            erro.code ||
+            "não informado"
+          ) +
+
+          "\n\nMensagem:\n" +
+
+          (
+            erro.message ||
+            erro
+          )
+
+        );
+
+      } finally {
+
+        btn.disabled = false;
+
+
+        btn.textContent =
+          "📲 Enviar pedido";
 
       }
 
-
-      mensagem +=
-        "\n💰 *TOTAL: " +
-        dinheiro(calcularTotal()) +
-        "*";
-
-
-      const telefone =
-        "5549984121585";
-
-
-      const url =
-        "https://wa.me/" +
-        telefone +
-        "?text=" +
-        encodeURIComponent(mensagem);
-
-
-      window.open(
-        url,
-        "_blank"
-      );
-
-
-      /*
-      ======================================================
-      LIMPAR CARRINHO
-      ======================================================
-      */
-
-      carrinho = [];
-
-
-      document.getElementById("mesa")
-        .value = "";
-
-      document.getElementById("responsavel")
-        .value = "";
-
-      document.getElementById("observacaoGeral")
-        .value = "";
-
-
-      atualizarCarrinho();
-
-      fecharCarrinho();
-
-
-      alert(
-        "✅ Pedido registrado com sucesso!\n\n" +
-        "Número do pedido: #" +
-        numeroPedido
-      );
-
-
-    } catch (erro) {
-
-      console.error(
-        "Erro ao registrar pedido:",
-        erro
-      );
-
-
-      alert(
-
-        "🔴 NÃO FOI POSSÍVEL REGISTRAR O PEDIDO.\n\n" +
-
-        "Código:\n" +
-
-        (erro.code ||
-          "não informado") +
-
-        "\n\nMensagem:\n" +
-
-        (erro.message ||
-          erro)
-
-      );
-
-
-    } finally {
-
-      btn.disabled = false;
-
-      btn.textContent =
-        "📲 Enviar pedido";
-
-    }
-
-  };
+    };
 
 
   /*
