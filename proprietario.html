@@ -101,8 +101,6 @@ header p{
     font-weight:bold;
 }
 
-/* RESUMO */
-
 .titulo-secao{
     font-size:18px;
     margin-bottom:12px;
@@ -139,8 +137,6 @@ header p{
 .resumo-total strong{
     color:#4ade80;
 }
-
-/* MESAS */
 
 .mesas-titulo{
     display:flex;
@@ -257,8 +253,6 @@ header p{
     cursor:pointer;
     font-weight:bold;
 }
-
-/* MODAL */
 
 .modal-fundo{
     display:none;
@@ -431,8 +425,6 @@ header p{
     padding:30px;
 }
 
-/* HISTÓRICO */
-
 .historico-resumo{
     background:#111827;
     border-radius:12px;
@@ -521,7 +513,6 @@ header p{
 
 </header>
 
-
 <div class="container">
 
     <div class="configuracao">
@@ -547,11 +538,9 @@ header p{
 
     </div>
 
-
     <h2 class="titulo-secao">
         📊 Resumo do Dia
     </h2>
-
 
     <div class="resumo">
 
@@ -584,13 +573,11 @@ header p{
 
     </div>
 
-
     <div class="mesas-titulo">
 
         <h2>🪑 Mesas</h2>
 
     </div>
-
 
     <div
         class="mesas"
@@ -598,7 +585,6 @@ header p{
     ></div>
 
 </div>
-
 
 <!-- MODAL COMANDA -->
 
@@ -624,15 +610,12 @@ header p{
 
         </div>
 
-
         <div
             class="comanda-responsavel"
             id="responsavelComanda"
         ></div>
 
-
         <div id="listaComanda"></div>
-
 
         <div class="comanda-total">
 
@@ -640,7 +623,6 @@ header p{
             R$ <span id="totalComanda">0,00</span>
 
         </div>
-
 
         <button
             class="btn-finalizar"
@@ -652,7 +634,6 @@ header p{
     </div>
 
 </div>
-
 
 <!-- MODAL HISTÓRICO -->
 
@@ -676,40 +657,33 @@ header p{
 
         </div>
 
-
         <div id="listaHistorico"></div>
 
     </div>
 
 </div>
 
-
-<!-- FIREBASE -->
-
 <script type="module">
+
+/* =========================================================
+   FIREBASE
+========================================================= */
 
 import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
-    getFirestore,
+    initializeFirestore,
     collection,
     doc,
     getDocs,
-    getDoc,
-    onSnapshot,
     updateDoc,
     setDoc,
-    query,
-    where,
+    onSnapshot,
     writeBatch
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
-
-/* =========================
-   CONFIGURAÇÃO FIREBASE
-========================= */
 
 const firebaseConfig = {
 
@@ -738,16 +712,26 @@ const app =
     initializeApp(firebaseConfig);
 
 
+/*
+   MESMA CONFIGURAÇÃO QUE FUNCIONOU NO CARDÁPIO
+*/
+
 const db =
-    getFirestore(app);
+    initializeFirestore(
+        app,
+        {},
+        "default"
+    );
 
 
-console.log("🔥 Painel conectado ao Firebase!");
+console.log(
+    "🔥 Painel conectado ao Firestore Enterprise!"
+);
 
 
-/* =========================
-   CONFIGURAÇÕES
-========================= */
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
 
 const CHAVE_MESAS =
     "quantidadeMesas";
@@ -759,9 +743,9 @@ let historico = [];
 let mesaSelecionada = null;
 
 
-/* =========================
+/* =========================================================
    UTILITÁRIOS
-========================= */
+========================================================= */
 
 function formatarDinheiro(valor){
 
@@ -783,15 +767,17 @@ function obterDataHoje(){
 function obterQuantidadeMesas(){
 
     return Number(
-        localStorage.getItem(CHAVE_MESAS) || 8
+        localStorage.getItem(
+            CHAVE_MESAS
+        ) || 8
     );
 
 }
 
 
-/* =========================
+/* =========================================================
    QUANTIDADE DE MESAS
-========================= */
+========================================================= */
 
 window.salvarQuantidadeMesas =
 function(){
@@ -820,7 +806,8 @@ function(){
 
     document.getElementById(
         "quantidadeMesas"
-    ).value = quantidade;
+    ).value =
+        quantidade;
 
 
     renderizarMesas();
@@ -828,31 +815,71 @@ function(){
 };
 
 
-/* =========================
+/* =========================================================
+   NORMALIZAR STATUS
+========================================================= */
+
+/*
+   O cardápio grava "Recebido" com R maiúsculo.
+   O painel trabalha internamente com letras minúsculas.
+*/
+
+function normalizarStatus(status){
+
+    return String(
+        status || "Recebido"
+    )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+/* =========================================================
    FIREBASE - PEDIDOS
-========================= */
+========================================================= */
 
 function carregarPedidosFirebase(){
 
     const referencia =
-        collection(db,"pedidos");
+        collection(
+            db,
+            "pedidos"
+        );
 
 
     onSnapshot(
+
         referencia,
+
         snapshot => {
 
             pedidos = [];
 
 
-            snapshot.forEach(documento => {
+            snapshot.forEach(
+                documento => {
 
-                pedidos.push({
-                    id:documento.id,
-                    ...documento.data()
-                });
+                    const dados =
+                        documento.data();
 
-            });
+
+                    pedidos.push({
+
+                        id:
+                        documento.id,
+
+                        ...dados,
+
+                        status:
+                        normalizarStatus(
+                            dados.status
+                        )
+
+                    });
+
+                }
+            );
 
 
             console.log(
@@ -879,6 +906,15 @@ function carregarPedidosFirebase(){
                 erro
             );
 
+
+            alert(
+                "❌ Erro ao carregar os pedidos do Firebase.\n\n" +
+                (
+                    erro.message ||
+                    erro
+                )
+            );
+
         }
 
     );
@@ -886,48 +922,61 @@ function carregarPedidosFirebase(){
 }
 
 
-/* =========================
+/* =========================================================
    FIREBASE - HISTÓRICO
-========================= */
+========================================================= */
 
 function carregarHistoricoFirebase(){
 
     const referencia =
-        collection(db,"historicoComandas");
+        collection(
+            db,
+            "historicoComandas"
+        );
 
 
     onSnapshot(
+
         referencia,
+
         snapshot => {
 
             historico = [];
 
 
-            snapshot.forEach(documento => {
+            snapshot.forEach(
+                documento => {
 
-                historico.push({
-                    id:documento.id,
-                    ...documento.data()
-                });
+                    historico.push({
 
-            });
+                        id:
+                        documento.id,
+
+                        ...documento.data()
+
+                    });
+
+                }
+            );
 
 
-            historico.sort((a,b) => {
+            historico.sort(
+                (a,b) => {
 
-                return new Date(
-                    b.dataFinalizacao ||
-                    b.dataCriacao ||
-                    0
-                )
-                -
-                new Date(
-                    a.dataFinalizacao ||
-                    a.dataCriacao ||
-                    0
-                );
+                    return new Date(
+                        b.dataFinalizacao ||
+                        b.dataCriacao ||
+                        0
+                    )
+                    -
+                    new Date(
+                        a.dataFinalizacao ||
+                        a.dataCriacao ||
+                        0
+                    );
 
-            });
+                }
+            );
 
 
             atualizarResumo();
@@ -948,21 +997,27 @@ function carregarHistoricoFirebase(){
 }
 
 
-/* =========================
+/* =========================================================
    PEDIDOS DA MESA
-========================= */
+========================================================= */
 
 function pedidosDaMesa(numeroMesa){
 
     return pedidos.filter(
         pedido =>
 
-            String(pedido.mesa) ===
-            String(numeroMesa)
+            String(
+                pedido.mesa
+            ) ===
+            String(
+                numeroMesa
+            )
 
             &&
 
-            pedido.status !==
+            normalizarStatus(
+                pedido.status
+            ) !==
             "finalizado"
 
     );
@@ -970,14 +1025,16 @@ function pedidosDaMesa(numeroMesa){
 }
 
 
-/* =========================
+/* =========================================================
    STATUS DA MESA
-========================= */
+========================================================= */
 
 function obterStatusMesa(numeroMesa){
 
     const pedidosMesa =
-        pedidosDaMesa(numeroMesa);
+        pedidosDaMesa(
+            numeroMesa
+        );
 
 
     if(!pedidosMesa.length)
@@ -987,7 +1044,9 @@ function obterStatusMesa(numeroMesa){
     if(
         pedidosMesa.some(
             pedido =>
-            pedido.status === "pronto"
+            normalizarStatus(
+                pedido.status
+            ) === "pronto"
         )
     )
         return "pronto";
@@ -996,7 +1055,9 @@ function obterStatusMesa(numeroMesa){
     if(
         pedidosMesa.some(
             pedido =>
-            pedido.status === "preparo"
+            normalizarStatus(
+                pedido.status
+            ) === "preparo"
         )
     )
         return "preparo";
@@ -1007,11 +1068,13 @@ function obterStatusMesa(numeroMesa){
 }
 
 
-/* =========================
+/* =========================================================
    RESPONSÁVEL
-========================= */
+========================================================= */
 
-function obterResponsavel(pedidosMesa){
+function obterResponsavel(
+    pedidosMesa
+){
 
     if(!pedidosMesa.length)
         return "—";
@@ -1037,18 +1100,22 @@ function obterResponsavel(pedidosMesa){
 }
 
 
-/* =========================
+/* =========================================================
    TOTAL DA MESA
-========================= */
+========================================================= */
 
-function calcularTotalMesa(pedidosMesa){
+function calcularTotalMesa(
+    pedidosMesa
+){
 
     return pedidosMesa.reduce(
 
         (total,pedido) =>
 
             total +
-            Number(pedido.total || 0),
+            Number(
+                pedido.total || 0
+            ),
 
         0
 
@@ -1057,9 +1124,9 @@ function calcularTotalMesa(pedidosMesa){
 }
 
 
-/* =========================
+/* =========================================================
    RESUMO
-========================= */
+========================================================= */
 
 function atualizarResumo(){
 
@@ -1081,7 +1148,9 @@ function atualizarResumo(){
     ){
 
         const pedidosMesa =
-            pedidosDaMesa(mesa);
+            pedidosDaMesa(
+                mesa
+            );
 
 
         if(!pedidosMesa.length)
@@ -1103,7 +1172,8 @@ function atualizarResumo(){
 
     const historicoHoje =
         historico.filter(
-            item => item.data === hoje
+            item =>
+                item.data === hoje
         );
 
 
@@ -1113,7 +1183,9 @@ function atualizarResumo(){
             (total,item) =>
 
                 total +
-                Number(item.total || 0),
+                Number(
+                    item.total || 0
+                ),
 
             0
 
@@ -1148,14 +1220,16 @@ function atualizarResumo(){
         "totalVendidoHoje"
     ).innerText =
         "R$ " +
-        formatarDinheiro(totalVendido);
+        formatarDinheiro(
+            totalVendido
+        );
 
 }
 
 
-/* =========================
+/* =========================================================
    RENDERIZAR MESAS
-========================= */
+========================================================= */
 
 function renderizarMesas(){
 
@@ -1179,11 +1253,15 @@ function renderizarMesas(){
     ){
 
         const pedidosMesa =
-            pedidosDaMesa(mesa);
+            pedidosDaMesa(
+                mesa
+            );
 
 
         const status =
-            obterStatusMesa(mesa);
+            obterStatusMesa(
+                mesa
+            );
 
 
         const total =
@@ -1202,24 +1280,36 @@ function renderizarMesas(){
             "Livre";
 
 
-        if(status === "ocupada")
-            textoStatus = "Ocupada";
+        if(
+            status === "ocupada"
+        )
+            textoStatus =
+                "Ocupada";
 
 
-        if(status === "preparo")
-            textoStatus = "Em preparo";
+        if(
+            status === "preparo"
+        )
+            textoStatus =
+                "Em preparo";
 
 
-        if(status === "pronto")
-            textoStatus = "Pronto";
+        if(
+            status === "pronto"
+        )
+            textoStatus =
+                "Pronto";
 
 
         const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         card.className =
-            "mesa " + status;
+            "mesa " +
+            status;
 
 
         card.innerHTML = `
@@ -1227,32 +1317,27 @@ function renderizarMesas(){
             <div class="mesa-topo">
 
                 <span class="mesa-nome">
-
                     🪑 Mesa ${mesa}
-
                 </span>
-
 
                 <span
                     class="status status-${status}"
                 >
-
                     ${textoStatus}
-
                 </span>
 
             </div>
 
-
             <div class="responsavel">
 
                 👤
-                <strong>Responsável:</strong>
+                <strong>
+                    Responsável:
+                </strong>
 
                 ${responsavel}
 
             </div>
-
 
             <div class="info-pedido">
 
@@ -1273,14 +1358,12 @@ function renderizarMesas(){
 
             </div>
 
-
             <div class="total-mesa">
 
                 R$
                 ${formatarDinheiro(total)}
 
             </div>
-
 
             <button
                 class="btn-abrir"
@@ -1300,7 +1383,9 @@ function renderizarMesas(){
         `;
 
 
-        area.appendChild(card);
+        area.appendChild(
+            card
+        );
 
     }
 
@@ -1310,9 +1395,9 @@ function renderizarMesas(){
 }
 
 
-/* =========================
+/* =========================================================
    ABRIR COMANDA
-========================= */
+========================================================= */
 
 window.abrirComanda =
 function(numeroMesa){
@@ -1339,9 +1424,9 @@ function(numeroMesa){
 };
 
 
-/* =========================
+/* =========================================================
    RENDERIZAR COMANDA
-========================= */
+========================================================= */
 
 function renderizarComanda(){
 
@@ -1372,7 +1457,9 @@ function renderizarComanda(){
     ).innerHTML = `
 
         👤
-        <strong>Responsável:</strong>
+        <strong>
+            Responsável:
+        </strong>
 
         ${responsavel}
 
@@ -1404,17 +1491,32 @@ function renderizarComanda(){
 
     else{
 
-
         pedidosMesa
         .sort(
-            (a,b) =>
-            Number(a.numero || 0)
-            -
-            Number(b.numero || 0)
+            (a,b) => {
+
+                const numeroA =
+                    Number(
+                        a.numeroPedido ||
+                        a.numero ||
+                        0
+                    );
+
+
+                const numeroB =
+                    Number(
+                        b.numeroPedido ||
+                        b.numero ||
+                        0
+                    );
+
+
+                return numeroA - numeroB;
+
+            }
         )
         .forEach(
             pedido => {
-
 
                 const bloco =
                     document.createElement(
@@ -1426,17 +1528,22 @@ function renderizarComanda(){
                     "pedido-bloco";
 
 
+                const status =
+                    normalizarStatus(
+                        pedido.status
+                    );
+
+
                 let classeStatus =
                     "status-recebido";
 
 
                 let textoStatus =
-                    "🟢 Recebido";
+                    "🔴 Recebido";
 
 
                 if(
-                    pedido.status ===
-                    "preparo"
+                    status === "preparo"
                 ){
 
                     classeStatus =
@@ -1450,8 +1557,7 @@ function renderizarComanda(){
 
 
                 if(
-                    pedido.status ===
-                    "pronto"
+                    status === "pronto"
                 ){
 
                     classeStatus =
@@ -1469,11 +1575,11 @@ function renderizarComanda(){
 
 
                 (
-                    pedido.itens || []
+                    pedido.itens ||
+                    []
                 )
                 .forEach(
                     item => {
-
 
                         itensHTML += `
 
@@ -1481,13 +1587,19 @@ function renderizarComanda(){
 
                                 <div class="item-linha">
 
-                                    <span class="item-nome">
+                                    <span
+                                        class="item-nome"
+                                    >
 
-                                        ${item.quantidade}x
-                                        ${item.nome}
+                                        ${
+                                            item.quantidade
+                                        }x
+
+                                        ${
+                                            item.nome
+                                        }
 
                                     </span>
-
 
                                     <span>
 
@@ -1495,16 +1607,20 @@ function renderizarComanda(){
 
                                         ${
                                             formatarDinheiro(
-                                                Number(item.preco || 0)
-                                                *
-                                                Number(item.quantidade || 0)
+                                                Number(
+                                                    item.preco ||
+                                                    0
+                                                ) *
+                                                Number(
+                                                    item.quantidade ||
+                                                    0
+                                                )
                                             )
                                         }
 
                                     </span>
 
                                 </div>
-
 
                                 ${
                                     item.observacao
@@ -1531,6 +1647,39 @@ function renderizarComanda(){
                 );
 
 
+                const numeroPedido =
+                    pedido.numeroPedido ||
+                    pedido.numero ||
+                    "—";
+
+
+                const dataPedido =
+                    pedido.data
+                    ?
+                    new Date(
+                        pedido.data
+                    )
+                    :
+                    null;
+
+
+                const horario =
+                    dataPedido &&
+                    !isNaN(
+                        dataPedido
+                    )
+                    ?
+                    dataPedido.toLocaleTimeString(
+                        "pt-BR",
+                        {
+                            hour:"2-digit",
+                            minute:"2-digit"
+                        }
+                    )
+                    :
+                    "--:--";
+
+
                 bloco.innerHTML = `
 
                     <div class="pedido-cabecalho">
@@ -1539,26 +1688,15 @@ function renderizarComanda(){
 
                             <strong>
 
-                                Pedido #${
-                                    String(
-                                        pedido.numero || 0
-                                    ).padStart(
-                                        3,
-                                        "0"
-                                    )
-                                }
+                                Pedido #${numeroPedido}
 
                             </strong>
 
                             <br>
 
-                            🕐 ${
-                                pedido.horario ||
-                                "--:--"
-                            }
+                            🕐 ${horario}
 
                         </span>
-
 
                         <span
                             class="
@@ -1573,93 +1711,74 @@ function renderizarComanda(){
 
                     </div>
 
-
                     ${itensHTML}
-
 
                     <div class="botoes-status">
 
                         <button
-
                             class="
                                 btn-status
                                 btn-recebido
                                 ${
-                                    pedido.status === "recebido"
+                                    status === "recebido"
                                     ?
                                     "ativo"
                                     :
                                     ""
                                 }
                             "
-
                             onclick="
                                 alterarStatusPedido(
                                     '${pedido.id}',
                                     'recebido'
                                 )
                             "
-
                         >
-
-                            🟢 Recebido
-
+                            🔴 Recebido
                         </button>
 
-
                         <button
-
                             class="
                                 btn-status
                                 btn-preparo
                                 ${
-                                    pedido.status === "preparo"
+                                    status === "preparo"
                                     ?
                                     "ativo"
                                     :
                                     ""
                                 }
                             "
-
                             onclick="
                                 alterarStatusPedido(
                                     '${pedido.id}',
                                     'preparo'
                                 )
                             "
-
                         >
-
                             🟠 Em preparo
-
                         </button>
 
-
                         <button
-
                             class="
                                 btn-status
                                 btn-pronto
                                 ${
-                                    pedido.status === "pronto"
+                                    status === "pronto"
                                     ?
                                     "ativo"
                                     :
                                     ""
                                 }
                             "
-
                             onclick="
                                 alterarStatusPedido(
                                     '${pedido.id}',
                                     'pronto'
                                 )
                             "
-
                         >
-
                             🔵 Pronto
-
                         </button>
 
                     </div>
@@ -1667,7 +1786,9 @@ function renderizarComanda(){
                 `;
 
 
-                lista.appendChild(bloco);
+                lista.appendChild(
+                    bloco
+                );
 
             }
         );
@@ -1678,14 +1799,16 @@ function renderizarComanda(){
     document.getElementById(
         "totalComanda"
     ).innerText =
-        formatarDinheiro(total);
+        formatarDinheiro(
+            total
+        );
 
 }
 
 
-/* =========================
-   ALTERAR STATUS FIREBASE
-========================= */
+/* =========================================================
+   ALTERAR STATUS
+========================================================= */
 
 window.alterarStatusPedido =
 async function(
@@ -1695,7 +1818,6 @@ async function(
 
     try{
 
-
         const referencia =
             doc(
                 db,
@@ -1704,27 +1826,14 @@ async function(
             );
 
 
-        const dadosAtualizacao = {
-
-            status:
-            novoStatus
-
-        };
-
-
-        if(
-            novoStatus === "pronto"
-        ){
-
-            dadosAtualizacao.dataPronto =
-                new Date().toISOString();
-
-        }
-
-
         await updateDoc(
             referencia,
-            dadosAtualizacao
+            {
+
+                status:
+                    novoStatus
+
+            }
         );
 
 
@@ -1732,7 +1841,6 @@ async function(
             "✅ Status atualizado:",
             novoStatus
         );
-
 
     }
 
@@ -1745,7 +1853,14 @@ async function(
 
 
         alert(
-            "❌ Erro ao atualizar pedido."
+
+            "❌ Erro ao atualizar pedido.\n\n" +
+
+            (
+                erro.message ||
+                erro
+            )
+
         );
 
     }
@@ -1753,9 +1868,9 @@ async function(
 };
 
 
-/* =========================
+/* =========================================================
    FECHAR COMANDA
-========================= */
+========================================================= */
 
 window.fecharComanda =
 function(){
@@ -1772,9 +1887,9 @@ function(){
 };
 
 
-/* =========================
+/* =========================================================
    FINALIZAR MESA
-========================= */
+========================================================= */
 
 window.finalizarMesa =
 async function(){
@@ -1826,7 +1941,9 @@ async function(){
             "\n" +
 
             "Total: R$ " +
-            formatarDinheiro(total) +
+            formatarDinheiro(
+                total
+            ) +
 
             "\n\n" +
 
@@ -1841,7 +1958,6 @@ async function(){
 
     try{
 
-
         const agora =
             new Date();
 
@@ -1850,11 +1966,8 @@ async function(){
             writeBatch(db);
 
 
-        /* FINALIZA TODOS OS PEDIDOS DA MESA */
-
         pedidosMesa.forEach(
             pedido => {
-
 
                 const pedidoRef =
                     doc(
@@ -1869,21 +1982,17 @@ async function(){
                     {
 
                         status:
-                        "finalizado",
+                            "finalizado",
 
                         dataFinalizacao:
-                        agora.toISOString()
+                            agora.toISOString()
 
                     }
-
                 );
-
 
             }
         );
 
-
-        /* SALVA NO HISTÓRICO */
 
         const historicoRef =
             doc(
@@ -1899,52 +2008,57 @@ async function(){
             {
 
                 mesa:
-                mesaSelecionada,
+                    mesaSelecionada,
 
                 responsavel:
-                responsavel,
+                    responsavel,
 
                 total:
-                Number(
-                    total.toFixed(2)
-                ),
+                    Number(
+                        total.toFixed(2)
+                    ),
 
                 data:
-                agora.toLocaleDateString(
-                    "pt-BR"
-                ),
+                    agora.toLocaleDateString(
+                        "pt-BR"
+                    ),
 
                 horarioFinalizacao:
-                agora.toLocaleTimeString(
-                    "pt-BR",
-                    {
-                        hour:"2-digit",
-                        minute:"2-digit"
-                    }
-                ),
+                    agora.toLocaleTimeString(
+                        "pt-BR",
+                        {
+                            hour:"2-digit",
+                            minute:"2-digit"
+                        }
+                    ),
 
                 dataFinalizacao:
-                agora.toISOString(),
+                    agora.toISOString(),
 
                 pedidos:
-                pedidosMesa.map(
-                    pedido => ({
+                    pedidosMesa.map(
+                        pedido => ({
 
-                        id:pedido.id,
+                            id:
+                                pedido.id,
 
-                        numero:
-                        pedido.numero || 0,
+                            numeroPedido:
+                                pedido.numeroPedido ||
+                                pedido.numero ||
+                                0,
 
-                        total:
-                        Number(
-                            pedido.total || 0
-                        ),
+                            total:
+                                Number(
+                                    pedido.total ||
+                                    0
+                                ),
 
-                        itens:
-                        pedido.itens || []
+                            itens:
+                                pedido.itens ||
+                                []
 
-                    })
-                )
+                        })
+                    )
 
             }
 
@@ -1970,10 +2084,11 @@ async function(){
             " liberada.\n\n" +
 
             "Total: R$ " +
-            formatarDinheiro(total)
+            formatarDinheiro(
+                total
+            )
 
         );
-
 
     }
 
@@ -1986,7 +2101,14 @@ async function(){
 
 
         alert(
-            "❌ Erro ao finalizar comanda."
+
+            "❌ Erro ao finalizar comanda.\n\n" +
+
+            (
+                erro.message ||
+                erro
+            )
+
         );
 
     }
@@ -1994,9 +2116,9 @@ async function(){
 };
 
 
-/* =========================
+/* =========================================================
    HISTÓRICO
-========================= */
+========================================================= */
 
 window.abrirHistorico =
 function(){
@@ -2017,7 +2139,7 @@ function(){
     const historicoHoje =
         historico.filter(
             item =>
-            item.data === hoje
+                item.data === hoje
         );
 
 
@@ -2027,7 +2149,9 @@ function(){
             (total,item) =>
 
                 total +
-                Number(item.total || 0),
+                Number(
+                    item.total || 0
+                ),
 
             0
 
@@ -2043,7 +2167,6 @@ function(){
                 Resumo de hoje
             </strong>
 
-
             <div
                 style="
                     color:#9ca3af;
@@ -2056,11 +2179,12 @@ function(){
 
             </div>
 
-
             <strong>
 
                 R$
-                ${formatarDinheiro(totalHoje)}
+                ${formatarDinheiro(
+                    totalHoje
+                )}
 
             </strong>
 
@@ -2086,11 +2210,8 @@ function(){
 
     else{
 
-
-        historico
-        .forEach(
+        historico.forEach(
             comanda => {
-
 
                 const item =
                     document.createElement(
@@ -2104,7 +2225,8 @@ function(){
 
                 const quantidadePedidos =
                     (
-                        comanda.pedidos || []
+                        comanda.pedidos ||
+                        []
                     ).length;
 
 
@@ -2118,7 +2240,6 @@ function(){
                             ${comanda.mesa}
 
                         </strong>
-
 
                         <span
                             class="historico-total"
@@ -2135,7 +2256,6 @@ function(){
 
                     </div>
 
-
                     <div>
 
                         👤
@@ -2146,13 +2266,15 @@ function(){
 
                     </div>
 
-
                     <div
                         class="historico-detalhes"
                     >
 
                         📅
-                        ${comanda.data || "--/--/----"}
+                        ${
+                            comanda.data ||
+                            "--/--/----"
+                        }
 
                         —
 
@@ -2163,7 +2285,6 @@ function(){
                         }
 
                     </div>
-
 
                     <div
                         class="historico-detalhes"
@@ -2178,7 +2299,9 @@ function(){
                 `;
 
 
-                lista.appendChild(item);
+                lista.appendChild(
+                    item
+                );
 
             }
         );
@@ -2205,9 +2328,9 @@ function(){
 };
 
 
-/* =========================
-   FECHAR MODAIS
-========================= */
+/* =========================================================
+   FECHAR MODAIS CLICANDO FORA
+========================================================= */
 
 document.getElementById(
     "modalComanda"
@@ -2216,7 +2339,9 @@ document.getElementById(
     "click",
     function(event){
 
-        if(event.target === this){
+        if(
+            event.target === this
+        ){
 
             fecharComanda();
 
@@ -2233,7 +2358,9 @@ document.getElementById(
     "click",
     function(event){
 
-        if(event.target === this){
+        if(
+            event.target === this
+        ){
 
             fecharHistorico();
 
@@ -2243,9 +2370,9 @@ document.getElementById(
 );
 
 
-/* =========================
+/* =========================================================
    INICIAR SISTEMA
-========================= */
+========================================================= */
 
 document.getElementById(
     "quantidadeMesas"
@@ -2259,7 +2386,7 @@ carregarHistoricoFirebase();
 
 
 console.log(
-    "🚀 Painel iniciado com Firebase!"
+    "🚀 Painel iniciado!"
 );
 
 </script>
