@@ -9,70 +9,79 @@
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #222;
+      background: #f7f4f8;
+      color: #333;
+      padding-bottom: 90px;
     }
 
     header {
-      background: #b0003a;
+      background: linear-gradient(135deg, #7b145f, #b21d83);
       color: white;
-      padding: 25px 20px;
+      padding: 25px 18px;
       text-align: center;
     }
 
     header h1 {
-      margin: 0;
       font-size: 28px;
+      margin-bottom: 8px;
     }
 
     header p {
-      margin: 8px 0 0;
       font-size: 15px;
+      opacity: 0.9;
     }
 
     .container {
       max-width: 900px;
       margin: auto;
-      padding: 20px;
-      padding-bottom: 120px;
+      padding: 15px;
+    }
+
+    .busca {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      margin: 15px 0;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .categorias {
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding-bottom: 15px;
+      padding-bottom: 10px;
     }
 
     .categoria {
       border: none;
-      background: white;
-      border-radius: 20px;
+      background: #eee;
+      color: #555;
       padding: 10px 16px;
+      border-radius: 20px;
       white-space: nowrap;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,.12);
+      font-size: 14px;
     }
 
-    .categoria:hover {
-      background: #ffe5ee;
-    }
-
-    h2 {
-      margin-top: 20px;
+    .categoria.ativa {
+      background: #a71978;
+      color: white;
     }
 
     .produto {
       background: white;
+      border-radius: 14px;
+      padding: 16px;
       margin: 12px 0;
-      padding: 18px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -84,60 +93,66 @@
     }
 
     .produto h3 {
-      margin: 0 0 6px;
+      font-size: 18px;
+      margin-bottom: 5px;
     }
 
     .produto p {
-      margin: 5px 0;
-      color: #666;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 6px;
     }
 
     .preco {
-      color: #b0003a;
-      font-size: 18px;
       font-weight: bold;
+      color: #8c145f;
+      font-size: 17px;
     }
 
-    .btn {
-      border: none;
-      background: #b0003a;
+    .btn-adicionar {
+      background: #a71978;
       color: white;
-      padding: 11px 16px;
-      border-radius: 8px;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 9px;
       cursor: pointer;
       font-weight: bold;
     }
 
-    .btn:hover {
-      opacity: .9;
+    .btn-adicionar:active {
+      transform: scale(0.97);
     }
 
-    .btn-secundario {
-      background: #555;
-    }
-
-    .carrinho {
-      position: fixed;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 24px);
-      max-width: 850px;
-      background: #b0003a;
+    .teste-firebase {
+      width: 100%;
+      border: none;
+      background: #a71978;
       color: white;
-      border-radius: 12px;
-      padding: 12px 16px;
+      padding: 14px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .carrinho-barra {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #a71978;
+      color: white;
+      padding: 10px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,.25);
-      z-index: 100;
+      z-index: 1000;
     }
 
-    .carrinho button {
+    .btn-ver-pedido {
       border: none;
       background: white;
-      color: #b0003a;
+      color: #8c145f;
       padding: 10px 16px;
       border-radius: 8px;
       font-weight: bold;
@@ -148,9 +163,9 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.6);
-      z-index: 200;
-      padding: 20px;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      padding: 15px;
       overflow-y: auto;
     }
 
@@ -159,99 +174,94 @@
       max-width: 600px;
       margin: 30px auto;
       border-radius: 15px;
-      padding: 22px;
+      padding: 20px;
     }
 
     .modal h2 {
-      margin-top: 0;
+      margin-bottom: 15px;
+      color: #7b145f;
     }
 
-    label {
-      display: block;
-      margin-top: 14px;
-      font-weight: bold;
-    }
-
-    input,
-    textarea {
+    .campo {
       width: 100%;
       padding: 12px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
+      margin: 7px 0;
+      border: 1px solid #ddd;
       border-radius: 8px;
-      font-size: 16px;
-    }
-
-    textarea {
-      min-height: 80px;
-      resize: vertical;
+      font-size: 15px;
     }
 
     .item-carrinho {
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid #eee;
       padding: 12px 0;
     }
 
-    .item-topo {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .quantidade {
-      font-weight: bold;
-      color: #b0003a;
+    .item-carrinho strong {
+      display: block;
+      margin-bottom: 5px;
     }
 
     .observacao-item {
-      margin-top: 8px;
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      margin-top: 6px;
+    }
+
+    .quantidade {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 7px;
+    }
+
+    .quantidade button {
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 6px;
+      background: #eee;
+      cursor: pointer;
+      font-size: 18px;
     }
 
     .total {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: bold;
-      color: #b0003a;
       text-align: right;
-      margin: 20px 0;
+      margin: 18px 0;
+      color: #7b145f;
     }
 
-    .acoes {
+    .botoes-modal {
       display: flex;
       gap: 10px;
-      justify-content: flex-end;
-      flex-wrap: wrap;
     }
 
-    .teste-firebase {
-      margin-top: 25px;
-      width: 100%;
-      background: #b0003a;
-      color: white;
+    .botoes-modal button {
+      flex: 1;
+      padding: 13px;
       border: none;
-      padding: 12px;
-      border-radius: 8px;
+      border-radius: 9px;
       cursor: pointer;
       font-weight: bold;
     }
 
-    .vazio {
-      text-align: center;
-      color: #777;
-      padding: 30px;
+    .btn-fechar {
+      background: #ddd;
+      color: #333;
     }
 
-    @media (max-width: 600px) {
-      .produto {
-        align-items: flex-start;
-      }
+    .btn-enviar {
+      background: #25d366;
+      color: white;
+    }
 
-      .produto .btn {
-        padding: 10px 12px;
-      }
-
-      .carrinho {
-        font-size: 14px;
-      }
+    .vazio {
+      text-align: center;
+      padding: 30px;
+      color: #777;
     }
   </style>
 </head>
@@ -259,96 +269,126 @@
 <body>
 
 <header>
-  <h1>🍽️ Sabor da Casa</h1>
+  <h1>🍔 Sabor da Casa</h1>
   <p>Cardápio Digital</p>
+  <p>📍 Chapecó / Santa Catarina</p>
 </header>
 
 <div class="container">
 
-  <div class="categorias">
-    <button class="categoria" onclick="filtrar('Todos')">Todos</button>
-    <button class="categoria" onclick="filtrar('Lanches')">🍔 Lanches</button>
-    <button class="categoria" onclick="filtrar('Pizzas')">🍕 Pizzas</button>
-    <button class="categoria" onclick="filtrar('Porções')">🍟 Porções</button>
-    <button class="categoria" onclick="filtrar('Bebidas')">🥤 Bebidas</button>
-  </div>
+  <input
+    type="text"
+    id="busca"
+    class="busca"
+    placeholder="🔎 Procurar no cardápio..."
+  >
 
-  <h2>Nosso Cardápio</h2>
+  <div class="categorias">
+    <button class="categoria ativa" onclick="filtrarCategoria('Todos', this)">
+      Todos
+    </button>
+
+    <button class="categoria" onclick="filtrarCategoria('Lanches', this)">
+      Lanches
+    </button>
+
+    <button class="categoria" onclick="filtrarCategoria('Pizzas', this)">
+      Pizzas
+    </button>
+
+    <button class="categoria" onclick="filtrarCategoria('Porções', this)">
+      Porções
+    </button>
+
+    <button class="categoria" onclick="filtrarCategoria('Bebidas', this)">
+      Bebidas
+    </button>
+  </div>
 
   <div id="listaProdutos"></div>
 
-  <button class="teste-firebase" onclick="testarFirebase()">
+  <!-- TESTE DO FIREBASE -->
+  <button
+    class="teste-firebase"
+    onclick="testarFirebase()">
     🔴 TESTAR FIREBASE
   </button>
 
 </div>
 
-<div class="carrinho">
+<!-- BARRA DO CARRINHO -->
 
-  <span>
+<div class="carrinho-barra">
+
+  <div>
     🛒 Carrinho:
     <strong id="quantidadeCarrinho">0</strong>
-  </span>
+  </div>
 
-  <span>
-    R$ <strong id="totalCarrinho">0,00</strong>
-  </span>
+  <div>
+    <strong id="totalBarra">R$ 0,00</strong>
+  </div>
 
-  <button onclick="abrirPedido()">
+  <button
+    class="btn-ver-pedido"
+    onclick="abrirCarrinho()">
     Ver pedido
   </button>
 
 </div>
 
-<div class="modal-fundo" id="modalPedido">
+<!-- MODAL DO PEDIDO -->
+
+<div
+  id="modalCarrinho"
+  class="modal-fundo">
 
   <div class="modal">
 
-    <h2>🛒 Seu Pedido</h2>
+    <h2>🛒 Seu pedido</h2>
 
-    <div id="itensPedido"></div>
+    <div id="itensCarrinho"></div>
 
-    <div class="total">
-      Total: R$ <span id="totalModal">0,00</span>
+    <hr>
+
+    <input
+      id="mesa"
+      class="campo"
+      type="text"
+      placeholder="Número da mesa"
+    >
+
+    <input
+      id="responsavel"
+      class="campo"
+      type="text"
+      placeholder="Nome do responsável"
+    >
+
+    <textarea
+      id="observacaoGeral"
+      class="campo"
+      rows="3"
+      placeholder="Observação geral do pedido">
+    </textarea>
+
+    <div
+      id="totalModal"
+      class="total">
+      R$ 0,00
     </div>
 
-    <label>
-      Mesa
-      <input
-        type="text"
-        id="mesa"
-        placeholder="Ex.: 5"
-      >
-    </label>
-
-    <label>
-      Responsável pelo pedido
-      <input
-        type="text"
-        id="responsavel"
-        placeholder="Nome"
-      >
-    </label>
-
-    <label>
-      Observação geral
-      <textarea
-        id="observacaoGeral"
-        placeholder="Alguma observação?"
-      ></textarea>
-    </label>
-
-    <div class="acoes">
+    <div class="botoes-modal">
 
       <button
-        class="btn btn-secundario"
-        onclick="fecharPedido()">
+        class="btn-fechar"
+        onclick="fecharCarrinho()">
         Fechar
       </button>
 
       <button
-        class="btn"
         id="btnEnviar"
+        class="btn-enviar"
         onclick="enviarPedido()">
         📲 Enviar Pedido
       </button>
@@ -360,11 +400,11 @@
 </div>
 
 
-<script type="module">
-
-  /* =====================================================
+<!-- =====================================================
      FIREBASE
-  ====================================================== */
+====================================================== -->
+
+<script type="module">
 
   import {
     initializeApp
@@ -373,7 +413,8 @@
   import {
     getFirestore,
     collection,
-    addDoc
+    addDoc,
+    getDocs
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
@@ -381,26 +422,25 @@
 
     apiKey: "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
 
-    authDomain: "sistema-digital-f9df1.firebaseapp.com",
+    authDomain:
+      "sistema-digital-f9df1.firebaseapp.com",
 
-    projectId: "sistema-digital-f9df1",
+    projectId:
+      "sistema-digital-f9df1",
 
-    storageBucket: "sistema-digital-f9df1.firebasestorage.app",
+    storageBucket:
+      "sistema-digital-f9df1.firebasestorage.app",
 
-    messagingSenderId: "783545984661",
+    messagingSenderId:
+      "783545984661",
 
-    appId: "1:783545984661:web:5d0945907ad9db3990dd9c"
+    appId:
+      "1:783545984661:web:5d0945907ad9db3990dd9c"
 
   };
 
 
   const app = initializeApp(firebaseConfig);
-
-  /*
-     IMPORTANTE:
-     Agora estamos usando o Firestore no modo normal.
-     Retiramos experimentalForceLongPolling.
-  */
 
   const db = getFirestore(app);
 
@@ -414,7 +454,7 @@
     {
       id: 1,
       nome: "X-Bacon",
-      descricao: "Hambúrguer, bacon, queijo e salada",
+      descricao: "Hambúrguer, bacon, queijo e molho especial",
       preco: 26,
       categoria: "Lanches"
     },
@@ -422,7 +462,7 @@
     {
       id: 2,
       nome: "X-Salada",
-      descricao: "Hambúrguer, queijo, alface, tomate e maionese",
+      descricao: "Hambúrguer, queijo, salada e molho especial",
       preco: 23,
       categoria: "Lanches"
     },
@@ -430,7 +470,7 @@
     {
       id: 3,
       nome: "X-Calabresa",
-      descricao: "Hambúrguer, calabresa, queijo e salada",
+      descricao: "Hambúrguer, calabresa, queijo e molho",
       preco: 27,
       categoria: "Lanches"
     },
@@ -438,7 +478,7 @@
     {
       id: 4,
       nome: "X-Tudo",
-      descricao: "Hambúrguer, bacon, calabresa, queijo, ovo e salada",
+      descricao: "Hambúrguer completo com queijo, bacon e salada",
       preco: 34,
       categoria: "Lanches"
     },
@@ -446,7 +486,7 @@
     {
       id: 5,
       nome: "Pizza Calabresa",
-      descricao: "Molho, queijo e calabresa",
+      descricao: "Pizza de calabresa",
       preco: 45,
       categoria: "Pizzas"
     },
@@ -454,7 +494,7 @@
     {
       id: 6,
       nome: "Pizza Frango c/ Catupiry",
-      descricao: "Frango, queijo e Catupiry",
+      descricao: "Frango desfiado e catupiry",
       preco: 48,
       categoria: "Pizzas"
     },
@@ -462,7 +502,7 @@
     {
       id: 7,
       nome: "Pizza Mussarela",
-      descricao: "Molho, mussarela e orégano",
+      descricao: "Mussarela e molho de tomate",
       preco: 40,
       categoria: "Pizzas"
     },
@@ -470,7 +510,7 @@
     {
       id: 8,
       nome: "Pizza Portuguesa",
-      descricao: "Presunto, queijo, ovo, cebola e azeitona",
+      descricao: "Presunto, queijo, ovo, cebola e ervilha",
       preco: 52,
       categoria: "Pizzas"
     },
@@ -494,7 +534,7 @@
     {
       id: 11,
       nome: "Porção de Tilápia",
-      descricao: "Tilápia frita",
+      descricao: "Porção de tilápia frita",
       preco: 38,
       categoria: "Porções"
     },
@@ -542,23 +582,24 @@
   ];
 
 
-  /* =====================================================
-     CARRINHO
-  ====================================================== */
-
   let carrinho = [];
 
+  let categoriaAtual = "Todos";
+
 
   /* =====================================================
-     FORMATAÇÃO DE PREÇO
+     FORMATAR DINHEIRO
   ====================================================== */
 
   function dinheiro(valor) {
 
-    return valor.toLocaleString("pt-BR", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+    return valor.toLocaleString(
+      "pt-BR",
+      {
+        style: "currency",
+        currency: "BRL"
+      }
+    );
 
   }
 
@@ -567,134 +608,231 @@
      MOSTRAR PRODUTOS
   ====================================================== */
 
-  function mostrarProdutos(lista) {
+  function mostrarProdutos() {
 
-    const container =
+    const lista =
       document.getElementById("listaProdutos");
 
-    container.innerHTML = "";
+    const busca =
+      document.getElementById("busca")
+      .value
+      .toLowerCase()
+      .trim();
 
 
-    if (lista.length === 0) {
+    const filtrados =
+      produtos.filter(produto => {
 
-      container.innerHTML = `
-        <div class="vazio">
+        const correspondeCategoria =
+          categoriaAtual === "Todos" ||
+          produto.categoria === categoriaAtual;
+
+        const correspondeBusca =
+          produto.nome
+            .toLowerCase()
+            .includes(busca) ||
+
+          produto.descricao
+            .toLowerCase()
+            .includes(busca) ||
+
+          produto.categoria
+            .toLowerCase()
+            .includes(busca);
+
+
+        return
+          correspondeCategoria &&
+          correspondeBusca;
+
+      });
+
+
+    if (filtrados.length === 0) {
+
+      lista.innerHTML =
+        `<div class="vazio">
           Nenhum produto encontrado.
-        </div>
-      `;
+        </div>`;
 
       return;
+
     }
 
 
-    lista.forEach(produto => {
+    lista.innerHTML =
+      filtrados.map(produto => `
 
-      const div = document.createElement("div");
+        <div class="produto">
 
-      div.className = "produto";
+          <div class="produto-info">
 
+            <h3>${produto.nome}</h3>
 
-      div.innerHTML = `
+            <p>${produto.descricao}</p>
 
-        <div class="produto-info">
+            <div class="preco">
+              ${dinheiro(produto.preco)}
+            </div>
 
-          <h3>${produto.nome}</h3>
-
-          <p>${produto.descricao}</p>
-
-          <div class="preco">
-            R$ ${dinheiro(produto.preco)}
           </div>
+
+          <button
+            class="btn-adicionar"
+            onclick="adicionarCarrinho(${produto.id})">
+
+            + Adicionar
+
+          </button>
 
         </div>
 
-        <button
-          class="btn"
-          onclick="adicionarProduto(${produto.id})">
-
-          + Adicionar
-
-        </button>
-
-      `;
-
-
-      container.appendChild(div);
-
-    });
+      `).join("");
 
   }
 
 
   /* =====================================================
-     FILTRO
+     FILTRO DE CATEGORIA
   ====================================================== */
 
-  window.filtrar = function(categoria) {
+  window.filtrarCategoria =
+    function(categoria, botao) {
 
-    if (categoria === "Todos") {
-
-      mostrarProdutos(produtos);
-
-      return;
-
-    }
+      categoriaAtual = categoria;
 
 
-    const filtrados =
-      produtos.filter(
-        produto => produto.categoria === categoria
-      );
+      document
+        .querySelectorAll(".categoria")
+        .forEach(btn => {
+
+          btn.classList.remove("ativa");
+
+        });
 
 
-    mostrarProdutos(filtrados);
+      botao.classList.add("ativa");
 
-  };
+
+      mostrarProdutos();
+
+    };
 
 
   /* =====================================================
-     ADICIONAR PRODUTO
+     BUSCA
   ====================================================== */
 
-  window.adicionarProduto = function(id) {
-
-    const produto =
-      produtos.find(p => p.id === id);
-
-
-    if (!produto) return;
-
-
-    const existente =
-      carrinho.find(item => item.id === id);
+  document
+    .getElementById("busca")
+    .addEventListener(
+      "input",
+      mostrarProdutos
+    );
 
 
-    if (existente) {
+  /* =====================================================
+     ADICIONAR AO CARRINHO
+  ====================================================== */
 
-      existente.quantidade++;
+  window.adicionarCarrinho =
+    function(id) {
 
-    } else {
-
-      carrinho.push({
-
-        id: produto.id,
-
-        nome: produto.nome,
-
-        preco: produto.preco,
-
-        quantidade: 1,
-
-        observacao: ""
-
-      });
-
-    }
+      const produto =
+        produtos.find(
+          item => item.id === id
+        );
 
 
-    atualizarCarrinho();
+      if (!produto) return;
 
-  };
+
+      const existente =
+        carrinho.find(
+          item => item.id === id
+        );
+
+
+      if (existente) {
+
+        existente.quantidade++;
+
+      } else {
+
+        carrinho.push({
+
+          ...produto,
+
+          quantidade: 1,
+
+          observacao: ""
+
+        });
+
+      }
+
+
+      atualizarCarrinho();
+
+    };
+
+
+  /* =====================================================
+     ALTERAR QUANTIDADE
+  ====================================================== */
+
+  window.alterarQuantidade =
+    function(id, valor) {
+
+      const item =
+        carrinho.find(
+          produto => produto.id === id
+        );
+
+
+      if (!item) return;
+
+
+      item.quantidade += valor;
+
+
+      if (item.quantidade <= 0) {
+
+        carrinho =
+          carrinho.filter(
+            produto => produto.id !== id
+          );
+
+      }
+
+
+      atualizarCarrinho();
+
+      mostrarCarrinho();
+
+    };
+
+
+  /* =====================================================
+     OBSERVAÇÃO DO ITEM
+  ====================================================== */
+
+  window.alterarObservacao =
+    function(id, valor) {
+
+      const item =
+        carrinho.find(
+          produto => produto.id === id
+        );
+
+
+      if (item) {
+
+        item.observacao = valor;
+
+      }
+
+    };
 
 
   /* =====================================================
@@ -713,251 +851,145 @@
       quantidade += item.quantidade;
 
       total +=
-        item.preco * item.quantidade;
+        item.preco *
+        item.quantidade;
 
     });
 
 
-    document.getElementById(
-      "quantidadeCarrinho"
-    ).textContent = quantidade;
+    document
+      .getElementById("quantidadeCarrinho")
+      .textContent = quantidade;
 
 
-    document.getElementById(
-      "totalCarrinho"
-    ).textContent = dinheiro(total);
+    document
+      .getElementById("totalBarra")
+      .textContent = dinheiro(total);
 
   }
 
 
   /* =====================================================
-     ABRIR PEDIDO
+     ABRIR CARRINHO
   ====================================================== */
 
-  window.abrirPedido = function() {
+  window.abrirCarrinho =
+    function() {
 
-    if (carrinho.length === 0) {
+      if (carrinho.length === 0) {
 
-      alert("🛒 Seu carrinho está vazio.");
+        alert(
+          "Seu carrinho está vazio."
+        );
 
-      return;
+        return;
 
-    }
-
-
-    renderizarPedido();
+      }
 
 
-    document.getElementById(
-      "modalPedido"
-    ).style.display = "block";
+      document
+        .getElementById("modalCarrinho")
+        .style.display = "block";
 
-  };
+
+      mostrarCarrinho();
+
+    };
 
 
   /* =====================================================
-     FECHAR PEDIDO
+     FECHAR CARRINHO
   ====================================================== */
 
-  window.fecharPedido = function() {
+  window.fecharCarrinho =
+    function() {
 
-    document.getElementById(
-      "modalPedido"
-    ).style.display = "none";
+      document
+        .getElementById("modalCarrinho")
+        .style.display = "none";
 
-  };
+    };
 
 
   /* =====================================================
-     RENDERIZAR PEDIDO
+     MOSTRAR CARRINHO
   ====================================================== */
 
-  function renderizarPedido() {
+  function mostrarCarrinho() {
 
     const container =
-      document.getElementById("itensPedido");
-
-
-    container.innerHTML = "";
-
-
-    carrinho.forEach((item, index) => {
-
-      const div =
-        document.createElement("div");
-
-
-      div.className = "item-carrinho";
-
-
-      div.innerHTML = `
-
-        <div class="item-topo">
-
-          <div>
-
-            <strong>
-              ${item.nome}
-            </strong>
-
-            <div class="quantidade">
-              Quantidade: ${item.quantidade}
-            </div>
-
-          </div>
-
-          <strong>
-            R$ ${dinheiro(
-              item.preco * item.quantidade
-            )}
-          </strong>
-
-        </div>
-
-
-        <div class="acoes" style="margin-top:8px;">
-
-          <button
-            class="btn"
-            onclick="aumentarItem(${index})">
-            +
-          </button>
-
-          <button
-            class="btn btn-secundario"
-            onclick="diminuirItem(${index})">
-            -
-          </button>
-
-          <button
-            class="btn btn-secundario"
-            onclick="removerItem(${index})">
-            🗑️
-          </button>
-
-        </div>
-
-
-        <div class="observacao-item">
-
-          <input
-            type="text"
-            placeholder="Observação deste item"
-            value="${item.observacao || ""}"
-            onchange="alterarObservacao(${index}, this.value)"
-          >
-
-        </div>
-
-      `;
-
-
-      container.appendChild(div);
-
-    });
+      document.getElementById("itensCarrinho");
 
 
     let total = 0;
 
 
-    carrinho.forEach(item => {
+    container.innerHTML =
+      carrinho.map(item => {
 
-      total +=
-        item.preco * item.quantidade;
+        const subtotal =
+          item.preco *
+          item.quantidade;
 
-    });
+
+        total += subtotal;
 
 
-    document.getElementById(
-      "totalModal"
-    ).textContent = dinheiro(total);
+        return `
+
+          <div class="item-carrinho">
+
+            <strong>
+              ${item.nome}
+            </strong>
+
+            <div>
+              ${dinheiro(item.preco)}
+              cada
+            </div>
+
+            <div class="quantidade">
+
+              <button
+                onclick="alterarQuantidade(${item.id}, -1)">
+                -
+              </button>
+
+              <span>
+                ${item.quantidade}
+              </span>
+
+              <button
+                onclick="alterarQuantidade(${item.id}, 1)">
+                +
+              </button>
+
+              <span>
+                ${dinheiro(subtotal)}
+              </span>
+
+            </div>
+
+            <input
+              class="observacao-item"
+              value="${item.observacao || ""}"
+              placeholder="Observação deste item"
+              onchange="alterarObservacao(${item.id}, this.value)"
+            >
+
+          </div>
+
+        `;
+
+      }).join("");
+
+
+    document
+      .getElementById("totalModal")
+      .textContent =
+      dinheiro(total);
 
   }
-
-
-  /* =====================================================
-     AUMENTAR ITEM
-  ====================================================== */
-
-  window.aumentarItem = function(index) {
-
-    carrinho[index].quantidade++;
-
-    renderizarPedido();
-
-    atualizarCarrinho();
-
-  };
-
-
-  /* =====================================================
-     DIMINUIR ITEM
-  ====================================================== */
-
-  window.diminuirItem = function(index) {
-
-    if (carrinho[index].quantidade > 1) {
-
-      carrinho[index].quantidade--;
-
-    } else {
-
-      carrinho.splice(index, 1);
-
-    }
-
-
-    if (carrinho.length === 0) {
-
-      fecharPedido();
-
-    } else {
-
-      renderizarPedido();
-
-    }
-
-
-    atualizarCarrinho();
-
-  };
-
-
-  /* =====================================================
-     REMOVER ITEM
-  ====================================================== */
-
-  window.removerItem = function(index) {
-
-    carrinho.splice(index, 1);
-
-
-    if (carrinho.length === 0) {
-
-      fecharPedido();
-
-    } else {
-
-      renderizarPedido();
-
-    }
-
-
-    atualizarCarrinho();
-
-  };
-
-
-  /* =====================================================
-     OBSERVAÇÃO DO ITEM
-  ====================================================== */
-
-  window.alterarObservacao =
-    function(index, valor) {
-
-      carrinho[index].observacao = valor;
-
-    };
 
 
   /* =====================================================
@@ -968,38 +1000,85 @@
 
     const agora = new Date();
 
-    const ano =
-      agora.getFullYear();
+    const numero =
+      agora.getHours()
+        .toString()
+        .padStart(2, "0") +
 
-    const mes =
-      String(
-        agora.getMonth() + 1
-      ).padStart(2, "0");
+      agora.getMinutes()
+        .toString()
+        .padStart(2, "0") +
 
-    const dia =
-      String(
-        agora.getDate()
-      ).padStart(2, "0");
-
-    const hora =
-      String(
-        agora.getHours()
-      ).padStart(2, "0");
-
-    const minuto =
-      String(
-        agora.getMinutes()
-      ).padStart(2, "0");
-
-    const segundo =
-      String(
-        agora.getSeconds()
-      ).padStart(2, "0");
+      agora.getSeconds()
+        .toString()
+        .padStart(2, "0");
 
 
-    return `${ano}${mes}${dia}${hora}${minuto}${segundo}`;
+    return numero;
 
   }
+
+
+  /* =====================================================
+     TESTAR LEITURA DO FIREBASE
+  ====================================================== */
+
+  window.testarFirebase =
+    async function() {
+
+      alert(
+        "🔄 TESTANDO LEITURA DO FIREBASE...\n\n" +
+        "Aguarde."
+      );
+
+
+      try {
+
+        const ref =
+          collection(
+            db,
+            "pedidos"
+          );
+
+
+        const resultado =
+          await getDocs(ref);
+
+
+        alert(
+
+          "🟢 FIREBASE RESPONDEU!\n\n" +
+
+          "A leitura funcionou.\n\n" +
+
+          "Documentos encontrados: " +
+
+          resultado.size
+
+        );
+
+
+      } catch (erro) {
+
+        alert(
+
+          "🔴 ERRO NO FIREBASE\n\n" +
+
+          "Código:\n" +
+
+          (erro.code ||
+            "não informado") +
+
+          "\n\nMensagem:\n" +
+
+          (erro.message ||
+            erro)
+
+        );
+
+      }
+
+    };
 
 
   /* =====================================================
@@ -1009,15 +1088,24 @@
   async function salvarPedidoNoSistema() {
 
     const mesa =
-      document.getElementById("mesa").value.trim();
+      document
+        .getElementById("mesa")
+        .value
+        .trim();
+
 
     const responsavel =
-      document.getElementById("responsavel").value.trim();
+      document
+        .getElementById("responsavel")
+        .value
+        .trim();
+
 
     const observacaoGeral =
-      document.getElementById(
-        "observacaoGeral"
-      ).value.trim();
+      document
+        .getElementById("observacaoGeral")
+        .value
+        .trim();
 
 
     let total = 0;
@@ -1026,7 +1114,8 @@
     carrinho.forEach(item => {
 
       total +=
-        item.preco * item.quantidade;
+        item.preco *
+        item.quantidade;
 
     });
 
@@ -1036,44 +1125,52 @@
       numeroPedido:
         gerarNumeroPedido(),
 
-      mesa: mesa,
+      mesa:
+        mesa,
 
-      responsavel: responsavel,
+      responsavel:
+        responsavel,
 
       observacaoGeral:
         observacaoGeral,
 
-      itens: carrinho.map(item => ({
+      itens:
+        carrinho.map(item => ({
 
-        id: item.id,
+          id:
+            item.id,
 
-        nome: item.nome,
+          nome:
+            item.nome,
 
-        preco: item.preco,
+          preco:
+            item.preco,
 
-        quantidade: item.quantidade,
+          quantidade:
+            item.quantidade,
 
-        observacao:
-          item.observacao || ""
+          observacao:
+            item.observacao || ""
 
-      })),
+        })),
 
-      total: total,
+      total:
+        total,
 
-      status: "Recebido",
+      status:
+        "Recebido",
 
-      data: new Date().toISOString()
+      data:
+        new Date().toISOString()
 
     };
 
 
-    /*
-       Aqui acontece a gravação direta
-       na coleção "pedidos".
-    */
-
     const ref =
-      collection(db, "pedidos");
+      collection(
+        db,
+        "pedidos"
+      );
 
 
     const resultado =
@@ -1099,277 +1196,223 @@
      ENVIAR PEDIDO
   ====================================================== */
 
-  window.enviarPedido = async function() {
+  window.enviarPedido =
+    async function() {
 
-    if (carrinho.length === 0) {
+      if (carrinho.length === 0) {
 
-      alert("🛒 O carrinho está vazio.");
+        alert(
+          "Adicione pelo menos um produto."
+        );
 
-      return;
-
-    }
-
-
-    const mesa =
-      document.getElementById("mesa").value.trim();
-
-
-    const responsavel =
-      document.getElementById(
-        "responsavel"
-      ).value.trim();
-
-
-    if (!mesa) {
-
-      alert("Informe o número da mesa.");
-
-      return;
-
-    }
-
-
-    if (!responsavel) {
-
-      alert("Informe o responsável pelo pedido.");
-
-      return;
-
-    }
-
-
-    const botao =
-      document.getElementById("btnEnviar");
-
-
-    botao.disabled = true;
-
-    botao.textContent =
-      "⏳ Registrando...";
-
-
-    try {
-
-      /*
-         PRIMEIRO:
-         salva no Firebase.
-      */
-
-      const pedido =
-        await salvarPedidoNoSistema();
-
-
-      /*
-         DEPOIS:
-         abre o WhatsApp.
-      */
-
-      let mensagem =
-        `🍽️ *NOVO PEDIDO - SABOR DA CASA*\n\n`;
-
-
-      mensagem +=
-        `📋 Pedido: ${pedido.numeroPedido}\n`;
-
-      mensagem +=
-        `🪑 Mesa: ${pedido.mesa}\n`;
-
-      mensagem +=
-        `👤 Responsável: ${pedido.responsavel}\n\n`;
-
-
-      mensagem +=
-        `*ITENS:*\n`;
-
-
-      pedido.itens.forEach(item => {
-
-        mensagem +=
-          `${item.quantidade}x ${item.nome} - R$ ${dinheiro(
-            item.preco * item.quantidade
-          )}\n`;
-
-
-        if (item.observacao) {
-
-          mensagem +=
-            `   📝 ${item.observacao}\n`;
-
-        }
-
-      });
-
-
-      mensagem +=
-        `\n💰 *TOTAL: R$ ${dinheiro(
-          pedido.total
-        )}*`;
-
-
-      if (pedido.observacaoGeral) {
-
-        mensagem +=
-          `\n\n📝 Observação:\n${pedido.observacaoGeral}`;
+        return;
 
       }
 
 
-      const telefone =
-        "5549984121585";
+      const mesa =
+        document
+          .getElementById("mesa")
+          .value
+          .trim();
 
 
-      const url =
-        "https://wa.me/" +
-        telefone +
-        "?text=" +
-        encodeURIComponent(mensagem);
+      const responsavel =
+        document
+          .getElementById("responsavel")
+          .value
+          .trim();
 
 
-      alert(
-        "🟢 Pedido registrado com sucesso!\n\n" +
-        "Pedido: " +
-        pedido.numeroPedido
-      );
+      if (!mesa) {
+
+        alert(
+          "Digite o número da mesa."
+        );
+
+        return;
+
+      }
 
 
-      window.open(
-        url,
-        "_blank"
-      );
+      if (!responsavel) {
+
+        alert(
+          "Digite o nome do responsável."
+        );
+
+        return;
+
+      }
 
 
-      /*
-         Limpa o carrinho
-      */
-
-      carrinho = [];
+      const botao =
+        document
+          .getElementById("btnEnviar");
 
 
-      atualizarCarrinho();
-
-
-      document.getElementById(
-        "mesa"
-      ).value = "";
-
-
-      document.getElementById(
-        "responsavel"
-      ).value = "";
-
-
-      document.getElementById(
-        "observacaoGeral"
-      ).value = "";
-
-
-      fecharPedido();
-
-
-    } catch (erro) {
-
-      console.error(
-        "Erro ao registrar pedido:",
-        erro
-      );
-
-
-      alert(
-        "❌ Não foi possível registrar o pedido.\n\n" +
-        "Código: " +
-        (erro.code || "não informado") +
-        "\n\n" +
-        "Erro: " +
-        (erro.message || erro)
-      );
-
-    } finally {
-
-      botao.disabled = false;
+      botao.disabled = true;
 
       botao.textContent =
-        "📲 Enviar Pedido";
-
-    }
-
-  };
+        "⏳ Registrando...";
 
 
-  /* =====================================================
-     TESTAR FIREBASE
-  ====================================================== */
+      try {
 
-  window.testarFirebase = async function() {
-
-    alert(
-      "🔄 Testando o Firebase...\n\nAguarde."
-    );
+        const pedido =
+          await salvarPedidoNoSistema();
 
 
-    try {
+        let mensagem =
+          "🍽️ *NOVO PEDIDO - SABOR DA CASA*%0A%0A";
 
-      const ref =
-        collection(
-          db,
-          "pedidos"
+
+        mensagem +=
+          "*Pedido:* #" +
+          pedido.numeroPedido +
+          "%0A";
+
+
+        mensagem +=
+          "*Mesa:* " +
+          pedido.mesa +
+          "%0A";
+
+
+        mensagem +=
+          "*Responsável:* " +
+          pedido.responsavel +
+          "%0A%0A";
+
+
+        mensagem +=
+          "*ITENS:*%0A";
+
+
+        pedido.itens.forEach(item => {
+
+          mensagem +=
+            item.quantidade +
+            "x " +
+            item.nome +
+            " - " +
+            dinheiro(item.preco) +
+            "%0A";
+
+
+          if (item.observacao) {
+
+            mensagem +=
+              "Obs.: " +
+              item.observacao +
+              "%0A";
+
+          }
+
+        });
+
+
+        mensagem +=
+          "%0A*TOTAL:* " +
+          dinheiro(pedido.total);
+
+
+        if (pedido.observacaoGeral) {
+
+          mensagem +=
+            "%0A%0A*Observação:* " +
+            pedido.observacaoGeral;
+
+        }
+
+
+        const telefone =
+          "5549984121585";
+
+
+        const url =
+          "https://wa.me/" +
+          telefone +
+          "?text=" +
+          mensagem;
+
+
+        alert(
+          "✅ Pedido registrado com sucesso!\n\n" +
+          "Número do pedido: #" +
+          pedido.numeroPedido
         );
 
 
-      const teste = {
-
-        teste: true,
-
-        mensagem:
-          "TESTE FIREBASE",
-
-        data:
-          new Date().toISOString()
-
-      };
-
-
-      const resultado =
-        await addDoc(
-          ref,
-          teste
+        window.open(
+          url,
+          "_blank"
         );
 
 
-      alert(
-        "🟢 FIREBASE FUNCIONOU!\n\n" +
-        "O teste foi salvo no Firestore.\n\n" +
-        "ID:\n" +
-        resultado.id
-      );
+        carrinho = [];
+
+        atualizarCarrinho();
+
+        fecharCarrinho();
 
 
-    } catch (erro) {
-
-      console.error(
-        "Erro no teste Firebase:",
-        erro
-      );
+        document
+          .getElementById("mesa")
+          .value = "";
 
 
-      alert(
-        "🔴 FIREBASE DEU ERRO\n\n" +
-        "Código:\n" +
-        (erro.code || "não informado") +
-        "\n\n" +
-        "Mensagem:\n" +
-        (erro.message || erro)
-      );
+        document
+          .getElementById("responsavel")
+          .value = "";
 
-    }
 
-  };
+        document
+          .getElementById("observacaoGeral")
+          .value = "";
+
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao salvar pedido:",
+          erro
+        );
+
+
+        alert(
+
+          "❌ NÃO FOI POSSÍVEL REGISTRAR O PEDIDO.\n\n" +
+
+          "Código:\n" +
+
+          (erro.code ||
+            "não informado") +
+
+          "\n\nMensagem:\n" +
+
+          (erro.message ||
+            erro)
+
+        );
+
+      } finally {
+
+        botao.disabled = false;
+
+        botao.textContent =
+          "📲 Enviar Pedido";
+
+      }
+
+    };
 
 
   /* =====================================================
-     INICIALIZAÇÃO
+     INICIAR
   ====================================================== */
 
-  mostrarProdutos(produtos);
+  mostrarProdutos();
 
   atualizarCarrinho();
 
