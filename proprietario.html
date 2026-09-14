@@ -59,6 +59,150 @@ header p{
     font-weight:bold;
 }
 
+/* =========================================================
+   AVISOS
+========================================================= */
+
+.painel-avisos{
+    max-width:1200px;
+    margin:15px auto 0;
+    padding:0 20px;
+    position:sticky;
+    top:86px;
+    z-index:90;
+}
+
+.avisos-caixa{
+    background:#1f2937;
+    border-radius:13px;
+    border:2px solid #374151;
+    box-shadow:0 5px 15px rgba(0,0,0,.35);
+    overflow:hidden;
+}
+
+.avisos-cabecalho{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:11px 15px;
+    background:#182231;
+}
+
+.avisos-titulo{
+    font-size:15px;
+    font-weight:bold;
+}
+
+.contador-avisos{
+    background:#b91c1c;
+    color:white;
+    min-width:28px;
+    height:28px;
+    padding:0 8px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.btn-som{
+    border:none;
+    background:#374151;
+    color:white;
+    padding:7px 10px;
+    border-radius:7px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.lista-avisos{
+    max-height:150px;
+    overflow-y:auto;
+}
+
+.aviso-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:10px 15px;
+    border-top:1px solid #374151;
+    cursor:pointer;
+}
+
+.aviso-item:hover{
+    background:#263244;
+}
+
+.aviso-novo{
+    border-left:5px solid #ef4444;
+}
+
+.aviso-preparo{
+    border-left:5px solid #f59e0b;
+}
+
+.aviso-pronto{
+    border-left:5px solid #3b82f6;
+}
+
+.aviso-info{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    min-width:0;
+}
+
+.aviso-mesa{
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.aviso-detalhes{
+    color:#d1d5db;
+    font-size:13px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.aviso-status{
+    font-size:11px;
+    font-weight:bold;
+    padding:5px 8px;
+    border-radius:15px;
+    white-space:nowrap;
+}
+
+.aviso-status-novo{
+    background:#7f1d1d;
+    color:#fecaca;
+}
+
+.aviso-status-preparo{
+    background:#78350f;
+    color:#fde68a;
+}
+
+.aviso-status-pronto{
+    background:#1e3a8a;
+    color:#bfdbfe;
+}
+
+.sem-avisos{
+    padding:11px 15px;
+    color:#9ca3af;
+    font-size:13px;
+}
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
 .container{
     max-width:1200px;
     margin:auto;
@@ -486,6 +630,14 @@ header p{
         grid-template-columns:1fr;
     }
 
+    .painel-avisos{
+        padding:0 10px;
+    }
+
+    .avisos-cabecalho{
+        flex-wrap:wrap;
+    }
+
 }
 
 </style>
@@ -512,6 +664,53 @@ header p{
     </div>
 
 </header>
+
+
+<!-- =========================================================
+     PAINEL DE AVISOS
+========================================================= -->
+
+<div class="painel-avisos">
+
+    <div class="avisos-caixa">
+
+        <div class="avisos-cabecalho">
+
+            <div class="avisos-titulo">
+                🔔 Pedidos e avisos
+                <span
+                    class="contador-avisos"
+                    id="contadorAvisos"
+                >
+                    0
+                </span>
+            </div>
+
+            <button
+                class="btn-som"
+                id="btnSom"
+                onclick="ativarSom()"
+            >
+                🔇 Ativar som
+            </button>
+
+        </div>
+
+        <div
+            class="lista-avisos"
+            id="listaAvisos"
+        >
+
+            <div class="sem-avisos">
+                ✅ Nenhum pedido aguardando atenção.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <div class="container">
 
@@ -586,7 +785,10 @@ header p{
 
 </div>
 
-<!-- MODAL COMANDA -->
+
+<!-- =========================================================
+     MODAL COMANDA
+========================================================= -->
 
 <div
     class="modal-fundo"
@@ -635,7 +837,10 @@ header p{
 
 </div>
 
-<!-- MODAL HISTÓRICO -->
+
+<!-- =========================================================
+     MODAL HISTÓRICO
+========================================================= -->
 
 <div
     class="modal-fundo"
@@ -662,6 +867,7 @@ header p{
     </div>
 
 </div>
+
 
 <script type="module">
 
@@ -744,6 +950,193 @@ let mesaSelecionada = null;
 
 
 /* =========================================================
+   VARIÁVEIS DOS AVISOS E SOM
+========================================================= */
+
+let idsPedidosConhecidos =
+    new Set();
+
+let primeiraCargaPedidos =
+    true;
+
+let somLiberado =
+    false;
+
+let audioContext =
+    null;
+
+
+/* =========================================================
+   SOM
+========================================================= */
+
+window.ativarSom =
+function(){
+
+    try{
+
+        if(!audioContext){
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        }
+
+
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            audioContext.resume();
+
+        }
+
+
+        somLiberado =
+            true;
+
+
+        document.getElementById(
+            "btnSom"
+        ).innerText =
+            "🔊 Som ativo";
+
+
+        document.getElementById(
+            "btnSom"
+        ).style.background =
+            "#166534";
+
+
+        tocarSomAviso();
+
+    }
+
+    catch(erro){
+
+        console.error(
+            "Erro ao ativar som:",
+            erro
+        );
+
+    }
+
+};
+
+
+function tocarSomAviso(){
+
+    if(!somLiberado)
+        return;
+
+
+    try{
+
+        if(!audioContext){
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        }
+
+
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            audioContext.resume();
+
+        }
+
+
+        const agora =
+            audioContext.currentTime;
+
+
+        const oscilador =
+            audioContext.createOscillator();
+
+
+        const ganho =
+            audioContext.createGain();
+
+
+        oscilador.type =
+            "sine";
+
+
+        oscilador.frequency.setValueAtTime(
+            880,
+            agora
+        );
+
+
+        oscilador.frequency.setValueAtTime(
+            660,
+            agora + 0.15
+        );
+
+
+        ganho.gain.setValueAtTime(
+            0.001,
+            agora
+        );
+
+
+        ganho.gain.exponentialRampToValueAtTime(
+            0.25,
+            agora + 0.03
+        );
+
+
+        ganho.gain.exponentialRampToValueAtTime(
+            0.001,
+            agora + 0.45
+        );
+
+
+        oscilador.connect(
+            ganho
+        );
+
+
+        ganho.connect(
+            audioContext.destination
+        );
+
+
+        oscilador.start(
+            agora
+        );
+
+
+        oscilador.stop(
+            agora + 0.5
+        );
+
+    }
+
+    catch(erro){
+
+        console.error(
+            "Erro no som:",
+            erro
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    UTILITÁRIOS
 ========================================================= */
 
@@ -819,11 +1212,6 @@ function(){
    NORMALIZAR STATUS
 ========================================================= */
 
-/*
-   O cardápio grava "Recebido" com R maiúsculo.
-   O painel trabalha internamente com letras minúsculas.
-*/
-
 function normalizarStatus(status){
 
     return String(
@@ -853,6 +1241,10 @@ function carregarPedidosFirebase(){
         referencia,
 
         snapshot => {
+
+            const pedidosAnteriores =
+                pedidos;
+
 
             pedidos = [];
 
@@ -888,7 +1280,61 @@ function carregarPedidosFirebase(){
             );
 
 
+            /* =================================================
+               DETECTAR NOVOS PEDIDOS
+            ================================================= */
+
+            const novosPedidos =
+                pedidos.filter(
+                    pedido =>
+
+                        !idsPedidosConhecidos.has(
+                            pedido.id
+                        )
+
+                        &&
+
+                        normalizarStatus(
+                            pedido.status
+                        ) ===
+                        "recebido"
+
+                );
+
+
+            /*
+               Na primeira carga não toca som,
+               para não tocar pedidos antigos.
+            */
+
+            if(
+                !primeiraCargaPedidos &&
+                novosPedidos.length
+            ){
+
+                tocarSomAviso();
+
+            }
+
+
+            pedidos.forEach(
+                pedido => {
+
+                    idsPedidosConhecidos.add(
+                        pedido.id
+                    );
+
+                }
+            );
+
+
+            primeiraCargaPedidos =
+                false;
+
+
             renderizarMesas();
+
+            renderizarAvisos();
 
 
             if(mesaSelecionada){
@@ -917,6 +1363,233 @@ function carregarPedidosFirebase(){
 
         }
 
+    );
+
+}
+
+
+/* =========================================================
+   RENDERIZAR AVISOS
+========================================================= */
+
+function renderizarAvisos(){
+
+    const lista =
+        document.getElementById(
+            "listaAvisos"
+        );
+
+
+    const contador =
+        document.getElementById(
+            "contadorAvisos"
+        );
+
+
+    /*
+       Mostra somente pedidos ainda abertos.
+       Finalizados ficam fora dos avisos.
+    */
+
+    const pedidosAbertos =
+        pedidos.filter(
+            pedido =>
+                normalizarStatus(
+                    pedido.status
+                ) !==
+                "finalizado"
+        );
+
+
+    /*
+       Ordena:
+       Recebido primeiro
+       Em preparo depois
+       Pronto por último
+    */
+
+    const prioridade = {
+
+        recebido:1,
+
+        preparo:2,
+
+        pronto:3
+
+    };
+
+
+    pedidosAbertos.sort(
+        (a,b) => {
+
+            return (
+                prioridade[
+                    normalizarStatus(a.status)
+                ] || 99
+            )
+            -
+            (
+                prioridade[
+                    normalizarStatus(b.status)
+                ] || 99
+            );
+
+        }
+    );
+
+
+    contador.innerText =
+        pedidosAbertos.length;
+
+
+    if(!pedidosAbertos.length){
+
+        lista.innerHTML = `
+
+            <div class="sem-avisos">
+
+                ✅ Nenhum pedido aguardando atenção.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    lista.innerHTML = "";
+
+
+    pedidosAbertos.forEach(
+        pedido => {
+
+            const status =
+                normalizarStatus(
+                    pedido.status
+                );
+
+
+            let classe =
+                "aviso-novo";
+
+
+            let classeStatus =
+                "aviso-status-novo";
+
+
+            let textoStatus =
+                "🔴 Novo pedido";
+
+
+            if(
+                status ===
+                "preparo"
+            ){
+
+                classe =
+                    "aviso-preparo";
+
+
+                classeStatus =
+                    "aviso-status-preparo";
+
+
+                textoStatus =
+                    "🟠 Em preparo";
+
+            }
+
+
+            if(
+                status ===
+                "pronto"
+            ){
+
+                classe =
+                    "aviso-pronto";
+
+
+                classeStatus =
+                    "aviso-status-pronto";
+
+
+                textoStatus =
+                    "🔵 Pronto";
+
+            }
+
+
+            const numeroPedido =
+                pedido.numeroPedido ||
+                pedido.numero ||
+                "—";
+
+
+            const mesa =
+                pedido.mesa ||
+                "—";
+
+
+            const aviso =
+                document.createElement(
+                    "div"
+                );
+
+
+            aviso.className =
+                "aviso-item " +
+                classe;
+
+
+            aviso.innerHTML = `
+
+                <div class="aviso-info">
+
+                    <span class="aviso-mesa">
+
+                        🪑 Mesa ${mesa}
+
+                    </span>
+
+                    <span class="aviso-detalhes">
+
+                        Pedido #${numeroPedido}
+
+                    </span>
+
+                </div>
+
+                <span
+                    class="
+                        aviso-status
+                        ${classeStatus}
+                    "
+                >
+
+                    ${textoStatus}
+
+                </span>
+
+            `;
+
+
+            aviso.onclick =
+                function(){
+
+                    abrirComanda(
+                        Number(mesa)
+                    );
+
+                };
+
+
+            lista.appendChild(
+                aviso
+            );
+
+        }
     );
 
 }
