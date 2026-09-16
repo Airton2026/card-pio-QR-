@@ -101,11 +101,12 @@ header p{
     height:28px;
     padding:0 8px;
     border-radius:20px;
-    display:flex;
+    display:inline-flex;
     align-items:center;
     justify-content:center;
     font-size:13px;
     font-weight:bold;
+    margin-left:5px;
 }
 
 .btn-som{
@@ -197,6 +198,25 @@ header p{
     padding:11px 15px;
     color:#9ca3af;
     font-size:13px;
+}
+
+/* =========================================================
+   PISCAR MESA
+========================================================= */
+
+@keyframes piscarMesa{
+    0%,100%{
+        box-shadow:0 0 0 rgba(239,68,68,0);
+    }
+
+    50%{
+        box-shadow:0 0 22px rgba(239,68,68,.95);
+    }
+}
+
+.mesa.novo-pedido{
+    animation:piscarMesa 1s infinite;
+    border-color:#ef4444;
 }
 
 /* =========================================================
@@ -667,7 +687,7 @@ header p{
 
 
 <!-- =========================================================
-     PAINEL DE AVISOS
+     AVISOS
 ========================================================= -->
 
 <div class="painel-avisos">
@@ -677,13 +697,16 @@ header p{
         <div class="avisos-cabecalho">
 
             <div class="avisos-titulo">
+
                 🔔 Pedidos e avisos
+
                 <span
                     class="contador-avisos"
                     id="contadorAvisos"
                 >
                     0
                 </span>
+
             </div>
 
             <button
@@ -702,7 +725,9 @@ header p{
         >
 
             <div class="sem-avisos">
+
                 ✅ Nenhum pedido aguardando atenção.
+
             </div>
 
         </div>
@@ -764,10 +789,13 @@ header p{
         </div>
 
         <div class="resumo-card resumo-total">
+
             <span>💰 Total vendido hoje</span>
+
             <strong id="totalVendidoHoje">
                 R$ 0,00
             </strong>
+
         </div>
 
     </div>
@@ -883,9 +911,7 @@ import {
     initializeFirestore,
     collection,
     doc,
-    getDocs,
     updateDoc,
-    setDoc,
     onSnapshot,
     writeBatch
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -918,10 +944,6 @@ const app =
     initializeApp(firebaseConfig);
 
 
-/*
-   MESMA CONFIGURAÇÃO QUE FUNCIONOU NO CARDÁPIO
-*/
-
 const db =
     initializeFirestore(
         app,
@@ -950,14 +972,8 @@ let mesaSelecionada = null;
 
 
 /* =========================================================
-   VARIÁVEIS DOS AVISOS E SOM
+   SOM
 ========================================================= */
-
-let idsPedidosConhecidos =
-    new Set();
-
-let primeiraCargaPedidos =
-    true;
 
 let somLiberado =
     false;
@@ -965,10 +981,9 @@ let somLiberado =
 let audioContext =
     null;
 
+let intervaloSom =
+    null;
 
-/* =========================================================
-   SOM
-========================================================= */
 
 window.ativarSom =
 function(){
@@ -1013,6 +1028,9 @@ function(){
 
 
         tocarSomAviso();
+
+
+        controlarSomContinuo();
 
     }
 
@@ -1136,6 +1154,97 @@ function tocarSomAviso(){
 }
 
 
+/*
+   Mantém o som tocando enquanto existir
+   pelo menos um pedido com status RECEBIDO.
+*/
+
+function controlarSomContinuo(){
+
+    const existemPedidosNovos =
+        pedidos.some(
+            pedido =>
+
+                normalizarStatus(
+                    pedido.status
+                ) === "recebido"
+
+        );
+
+
+    if(
+        existemPedidosNovos &&
+        somLiberado
+    ){
+
+        if(!intervaloSom){
+
+            tocarSomAviso();
+
+
+            intervaloSom =
+                setInterval(
+                    function(){
+
+                        const aindaTemPedido =
+                            pedidos.some(
+                                pedido =>
+
+                                    normalizarStatus(
+                                        pedido.status
+                                    ) === "recebido"
+
+                            );
+
+
+                        if(
+                            aindaTemPedido &&
+                            somLiberado
+                        ){
+
+                            tocarSomAviso();
+
+                        }
+
+                        else{
+
+                            pararSomContinuo();
+
+                        }
+
+                    },
+                    3000
+                );
+
+        }
+
+    }
+
+    else{
+
+        pararSomContinuo();
+
+    }
+
+}
+
+
+function pararSomContinuo(){
+
+    if(intervaloSom){
+
+        clearInterval(
+            intervaloSom
+        );
+
+        intervaloSom =
+            null;
+
+    }
+
+}
+
+
 /* =========================================================
    UTILITÁRIOS
 ========================================================= */
@@ -1224,6 +1333,47 @@ function normalizarStatus(status){
 
 
 /* =========================================================
+   PEDIDOS VÁLIDOS
+========================================================= */
+
+function pedidoEhValido(dados){
+
+    /*
+       Ignora documentos de teste ou incompletos.
+       Um pedido real precisa ter:
+       - mesa
+       - numeroPedido ou numero
+    */
+
+    const mesaValida =
+        dados.mesa !== undefined &&
+        dados.mesa !== null &&
+        String(dados.mesa).trim() !== "";
+
+
+    const numeroValido =
+        (
+            dados.numeroPedido !== undefined &&
+            dados.numeroPedido !== null &&
+            String(dados.numeroPedido).trim() !== ""
+        )
+        ||
+        (
+            dados.numero !== undefined &&
+            dados.numero !== null &&
+            String(dados.numero).trim() !== ""
+        );
+
+
+    return (
+        mesaValida &&
+        numeroValido
+    );
+
+}
+
+
+/* =========================================================
    FIREBASE - PEDIDOS
 ========================================================= */
 
@@ -1242,10 +1392,6 @@ function carregarPedidosFirebase(){
 
         snapshot => {
 
-            const pedidosAnteriores =
-                pedidos;
-
-
             pedidos = [];
 
 
@@ -1254,6 +1400,26 @@ function carregarPedidosFirebase(){
 
                     const dados =
                         documento.data();
+
+
+                    /*
+                       IGNORA DOCUMENTOS DE TESTE
+                    */
+
+                    if(
+                        !pedidoEhValido(
+                            dados
+                        )
+                    ){
+
+                        console.log(
+                            "🧹 Documento ignorado:",
+                            documento.id
+                        );
+
+                        return;
+
+                    }
 
 
                     pedidos.push({
@@ -1275,66 +1441,16 @@ function carregarPedidosFirebase(){
 
 
             console.log(
-                "📦 Pedidos carregados:",
+                "📦 Pedidos válidos:",
                 pedidos.length
             );
-
-
-            /* =================================================
-               DETECTAR NOVOS PEDIDOS
-            ================================================= */
-
-            const novosPedidos =
-                pedidos.filter(
-                    pedido =>
-
-                        !idsPedidosConhecidos.has(
-                            pedido.id
-                        )
-
-                        &&
-
-                        normalizarStatus(
-                            pedido.status
-                        ) ===
-                        "recebido"
-
-                );
-
-
-            /*
-               Na primeira carga não toca som,
-               para não tocar pedidos antigos.
-            */
-
-            if(
-                !primeiraCargaPedidos &&
-                novosPedidos.length
-            ){
-
-                tocarSomAviso();
-
-            }
-
-
-            pedidos.forEach(
-                pedido => {
-
-                    idsPedidosConhecidos.add(
-                        pedido.id
-                    );
-
-                }
-            );
-
-
-            primeiraCargaPedidos =
-                false;
 
 
             renderizarMesas();
 
             renderizarAvisos();
+
+            controlarSomContinuo();
 
 
             if(mesaSelecionada){
@@ -1387,26 +1503,21 @@ function renderizarAvisos(){
 
 
     /*
-       Mostra somente pedidos ainda abertos.
-       Finalizados ficam fora dos avisos.
+       Mostra somente pedidos válidos
+       que ainda estão abertos.
     */
 
     const pedidosAbertos =
         pedidos.filter(
             pedido =>
+
                 normalizarStatus(
                     pedido.status
                 ) !==
                 "finalizado"
+
         );
 
-
-    /*
-       Ordena:
-       Recebido primeiro
-       Em preparo depois
-       Pronto por último
-    */
 
     const prioridade = {
 
@@ -1949,6 +2060,22 @@ function renderizarMesas(){
             );
 
 
+        /*
+           Mesa pisca somente quando
+           existe pedido RECEBIDO.
+        */
+
+        const temPedidoNovo =
+            pedidosMesa.some(
+                pedido =>
+
+                    normalizarStatus(
+                        pedido.status
+                    ) === "recebido"
+
+            );
+
+
         let textoStatus =
             "Livre";
 
@@ -1982,7 +2109,14 @@ function renderizarMesas(){
 
         card.className =
             "mesa " +
-            status;
+            status +
+            (
+                temPedidoNovo
+                ?
+                " novo-pedido"
+                :
+                ""
+            );
 
 
         card.innerHTML = `
@@ -1990,13 +2124,17 @@ function renderizarMesas(){
             <div class="mesa-topo">
 
                 <span class="mesa-nome">
+
                     🪑 Mesa ${mesa}
+
                 </span>
 
                 <span
                     class="status status-${status}"
                 >
+
                     ${textoStatus}
+
                 </span>
 
             </div>
@@ -2004,6 +2142,7 @@ function renderizarMesas(){
             <div class="responsavel">
 
                 👤
+
                 <strong>
                     Responsável:
                 </strong>
@@ -2130,6 +2269,7 @@ function renderizarComanda(){
     ).innerHTML = `
 
         👤
+
         <strong>
             Responsável:
         </strong>
@@ -2515,6 +2655,12 @@ async function(
             novoStatus
         );
 
+
+        /*
+           O onSnapshot vai atualizar
+           a mesa, os avisos e o som.
+        */
+
     }
 
     catch(erro){
@@ -2836,6 +2982,7 @@ function(){
         <div class="historico-resumo">
 
             📊
+
             <strong>
                 Resumo de hoje
             </strong>
