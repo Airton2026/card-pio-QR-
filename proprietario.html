@@ -1,365 +1,4587 @@
-<!DOCTYPE html>  <html lang="pt-BR">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Painel do Proprietário — Sabor da Casa</title>  
-<style>  
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}  
-body{background:#111827;color:#fff;padding-bottom:30px}  
-header{background:#1f2937;padding:20px;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.3)}  
-header h1{font-size:23px} header p{color:#9ca3af;margin-top:5px;font-size:14px}  
-.topo{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}  
-.btn-historico,.btn-menu{border:none;background:#374151;color:white;padding:11px 15px;border-radius:9px;cursor:pointer;font-weight:bold}  
-.topo-botoes{display:flex;gap:8px;flex-wrap:wrap}  
-.painel-avisos{max-width:1200px;margin:15px auto 0;padding:0 20px;position:sticky;top:86px;z-index:90}  
-.avisos-caixa{background:#1f2937;border-radius:13px;border:2px solid #374151;box-shadow:0 5px 15px rgba(0,0,0,.35);overflow:hidden}  
-.avisos-cabecalho{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 15px;background:#182231}  
-.avisos-titulo{font-size:15px;font-weight:bold}.contador-avisos{background:#b91c1c;color:white;min-width:28px;height:28px;padding:0 8px;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;margin-left:5px}  
-.btn-som{border:none;background:#374151;color:white;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:bold}  
-.lista-avisos{max-height:150px;overflow-y:auto}.aviso-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 15px;border-top:1px solid #374151;cursor:pointer}  
-.aviso-item:hover{background:#263244}.aviso-novo{border-left:5px solid #ef4444}.aviso-preparo{border-left:5px solid #f59e0b}.aviso-pronto{border-left:5px solid #3b82f6}  
-.aviso-info{display:flex;align-items:center;gap:9px;min-width:0}.aviso-mesa{font-weight:bold;white-space:nowrap}.aviso-detalhes{color:#d1d5db;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}  
-.aviso-status{font-size:11px;font-weight:bold;padding:5px 8px;border-radius:15px;white-space:nowrap}.aviso-status-novo{background:#7f1d1d;color:#fecaca}.aviso-status-preparo{background:#78350f;color:#fde68a}.aviso-status-pronto{background:#1e3a8a;color:#bfdbfe}.sem-avisos{padding:11px 15px;color:#9ca3af;font-size:13px}  
-@keyframes piscarMesa{0%,100%{box-shadow:0 0 0 rgba(239,68,68,0)}50%{box-shadow:0 0 22px rgba(239,68,68,.95)}}  
-.mesa.novo-pedido{animation:piscarMesa 1s infinite;border-color:#ef4444}  
-.container{max-width:1200px;margin:auto;padding:20px}  
-.configuracao{background:#1f2937;padding:18px;border-radius:14px;margin-bottom:20px}.configuracao label{display:block;font-size:14px;color:#d1d5db;margin-bottom:7px}  
-.configuracao input,.configuracao textarea,.configuracao select,.form-grid input,.form-grid textarea,.form-grid select{width:100%;padding:11px;border-radius:8px;border:2px solid #374151;background:#111827;color:white;font-size:15px}  
-.configuracao input{max-width:180px}.configuracao textarea{min-height:80px;resize:vertical}.btn-config{margin-top:10px;background:#2563eb;color:white;border:none;padding:11px 18px;border-radius:8px;cursor:pointer;font-weight:bold}  
-.titulo-secao{font-size:18px;margin-bottom:12px}.resumo{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:25px}.resumo-card{background:#1f2937;padding:15px;border-radius:12px}.resumo-card span{color:#9ca3af;font-size:13px}.resumo-card strong{display:block;font-size:24px;margin-top:6px}.resumo-total{border:2px solid #16a34a}.resumo-total strong{color:#4ade80}  
-.mesas-titulo{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.mesas-titulo h2{font-size:20px}.mesas{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:15px}  
-.mesa{background:#1f2937;border-radius:15px;padding:17px;border:2px solid #374151}.mesa.livre{border-color:#22c55e}.mesa.ocupada{border-color:#ef4444}.mesa.preparo{border-color:#f59e0b}.mesa.pronto{border-color:#3b82f6}  
-.mesa-topo{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.mesa-nome{font-size:20px;font-weight:bold}.status{padding:6px 9px;border-radius:20px;font-size:11px;font-weight:bold}.status-livre{background:#14532d;color:#86efac}.status-ocupada{background:#7f1d1d;color:#fecaca}.status-preparo{background:#78350f;color:#fde68a}.status-pronto{background:#1e3a8a;color:#bfdbfe}  
-.responsavel{background:#111827;padding:10px;border-radius:8px;margin-bottom:12px;color:#d1d5db;font-size:14px}.responsavel strong{color:white}.total-mesa{font-size:23px;font-weight:bold;color:#4ade80;margin:12px 0}.info-pedido{color:#9ca3af;font-size:13px;margin-bottom:12px}  
-.btn-abrir,.btn-acao{width:100%;border:none;background:#2563eb;color:white;padding:12px;border-radius:9px;cursor:pointer;font-weight:bold}.btn-acao{width:auto;padding:9px 13px}.btn-verde{background:#16a34a}.btn-vermelho{background:#b91c1c}.btn-cinza{background:#374151}  
-.modal-fundo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;justify-content:center;align-items:center;padding:15px}.modal{background:#1f2937;width:100%;max-width:850px;max-height:90vh;overflow-y:auto;border-radius:18px;padding:20px}  
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.btn-fechar{border:none;background:#374151;color:white;width:35px;height:35px;border-radius:50%;cursor:pointer;font-size:18px}  
-.comanda-responsavel{background:#111827;padding:12px;border-radius:9px;margin-bottom:15px}.pedido-bloco{background:#111827;border-radius:10px;padding:13px;margin-bottom:12px;border:1px solid #374151}.pedido-cabecalho{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;color:#9ca3af}  
-.pedido-status{font-weight:bold;padding:5px 8px;border-radius:6px}.status-recebido{background:#7f1d1d;color:#fecaca}.status-preparo-pedido{background:#78350f;color:#fde68a}.status-pronto-pedido{background:#1e3a8a;color:#bfdbfe}  
-.item{padding:8px 0;border-bottom:1px solid #374151}.item:last-child{border-bottom:none}.item-linha{display:flex;justify-content:space-between;gap:10px}.item-nome{font-weight:bold}.item-obs{color:#fbbf24;font-size:13px;margin-top:5px}  
-.botoes-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.btn-status{border:none;padding:9px 5px;border-radius:7px;cursor:pointer;color:white;font-weight:bold;font-size:12px}.btn-recebido{background:#b91c1c}.btn-preparo{background:#d97706}.btn-pronto{background:#2563eb}.btn-status.ativo{outline:3px solid white}  
-.comanda-total{border-top:2px dashed #4b5563;margin-top:15px;padding-top:15px;text-align:right;font-size:27px;font-weight:bold;color:#4ade80}.btn-finalizar{width:100%;margin-top:15px;border:none;background:#16a34a;color:white;padding:15px;border-radius:10px;cursor:pointer;font-size:17px;font-weight:bold}  
-.sem-pedidos{text-align:center;color:#9ca3af;padding:30px}.historico-resumo{background:#111827;border-radius:12px;padding:15px;margin-bottom:15px}.historico-resumo strong{display:block;color:#4ade80;font-size:25px;margin-top:5px}  
-.historico-item{background:#111827;border-radius:10px;padding:14px;margin-bottom:10px;border:1px solid #374151}.historico-topo{display:flex;justify-content:space-between;margin-bottom:8px}.historico-total{color:#4ade80;font-weight:bold}.historico-detalhes{color:#9ca3af;font-size:13px;margin-top:5px}  
-.abas{display:flex;gap:8px;overflow-x:auto;margin-bottom:15px}.aba{border:none;background:#374151;color:white;padding:11px 14px;border-radius:9px;cursor:pointer;font-weight:bold;white-space:nowrap}.aba.ativa{background:#2563eb}  
-.secao-painel{display:none}.secao-painel.ativa{display:block}  
-.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.form-grid .campo-full{grid-column:1/-1}.campo label{display:block;color:#d1d5db;font-size:13px;margin-bottom:5px;font-weight:bold}  
-.produtos-admin{display:grid;gap:10px}.produto-admin{background:#1f2937;border:1px solid #374151;border-radius:12px;padding:14px}.produto-admin-topo{display:flex;justify-content:space-between;gap:10px;align-items:center}.produto-admin h3{font-size:17px}.produto-admin-info{color:#9ca3af;font-size:13px;margin-top:6px}.produto-admin-acoes{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.badge{display:inline-block;padding:5px 8px;border-radius:15px;font-size:11px;font-weight:bold}.badge-ativo{background:#14532d;color:#86efac}.badge-inativo{background:#7f1d1d;color:#fecaca}.badge-promo{background:#7f1d1d;color:#fecaca}  
-.tabela-financeiro{width:100%;border-collapse:collapse}.tabela-financeiro th,.tabela-financeiro td{padding:9px;border-bottom:1px solid #374151;text-align:left}.tabela-financeiro th{color:#9ca3af;font-size:12px}  
-@media(max-width:800px){.resumo{grid-template-columns:repeat(2,1fr)}.resumo-card:last-child{grid-column:span 2}.form-grid{grid-template-columns:1fr}}  
-@media(max-width:500px){.mesas{grid-template-columns:1fr}.botoes-status{grid-template-columns:1fr}.painel-avisos{padding:0 10px}.avisos-cabecalho{flex-wrap:wrap}.topo{align-items:flex-start}.topo-botoes{justify-content:flex-end}}  
-</style>  
-</head>  
-<body>  
-<header>  
-<div class="topo">  
-<div><h1 id="tituloPainel">🍔 Sabor da Casa</h1><p>🔥 Painel do Proprietário — Online</p></div>  
-<div class="topo-botoes">  
-<button class="btn-menu" onclick="mostrarSecao('produtos')">🍔 Produtos</button>  
-<button class="btn-historico" onclick="abrirHistorico()">📜 Histórico</button>  
-</div>  
-</div>  
-</header>  <div class="painel-avisos">  
-<div class="avisos-caixa">  
-<div class="avisos-cabecalho">  
-<div class="avisos-titulo">🔔 Pedidos e avisos <span class="contador-avisos" id="contadorAvisos">0</span></div>  
-<button class="btn-som" id="btnSom" onclick="ativarSom()">🔇 Ativar som</button>  
-</div>  
-<div class="lista-avisos" id="listaAvisos"><div class="sem-avisos">✅ Nenhum pedido aguardando atenção.</div></div>  
-</div>  
-</div>  <div class="container">  
-<div class="abas">  
-<button class="aba ativa" id="abaMesas" onclick="mostrarSecao('mesas')">🪑 Mesas</button>  
-<button class="aba" id="abaProdutos" onclick="mostrarSecao('produtos')">🍔 Produtos</button>  
-<button class="aba" id="abaFinanceiro" onclick="mostrarSecao('financeiro')">💰 Financeiro</button>  
-<button class="aba" id="abaConfiguracoes" onclick="mostrarSecao('configuracoes')">⚙️ Configurações</button>  
-</div>  <section id="secaoMesas" class="secao-painel ativa">  
-<div class="configuracao">  
-<label>🪑 Quantidade de mesas</label>  
-<input type="number" id="quantidadeMesas" min="1" max="100" value="8"><br>  
-<button class="btn-config" onclick="salvarQuantidadeMesas()">💾 Salvar Mesas</button>  
-</div>  
-<h2 class="titulo-secao">📊 Resumo do Dia</h2>  
-<div class="resumo">  
-<div class="resumo-card"><span>🟢 Mesas livres</span><strong id="totalLivres">0</strong></div>  
-<div class="resumo-card"><span>🔴 Mesas ocupadas</span><strong id="totalOcupadas">0</strong></div>  
-<div class="resumo-card"><span>🍽️ Pedidos abertos</span><strong id="totalPedidosAbertos">0</strong></div>  
-<div class="resumo-card"><span>✅ Mesas finalizadas</span><strong id="totalMesasFinalizadas">0</strong></div>  
-<div class="resumo-card resumo-total"><span>💰 Total vendido hoje</span><strong id="totalVendidoHoje">R$ 0,00</strong></div>  
-</div>  
-<div class="mesas-titulo"><h2>🪑 Mesas</h2></div>  
-<div class="mesas" id="areaMesas"></div>  
-</section>  <section id="secaoProdutos" class="secao-painel">  
-<h2 class="titulo-secao">🍔 Produtos e Promoções</h2>  
-<div class="configuracao">  
-<div class="form-grid">  
-<div class="campo"><label>Nome do produto</label><input id="produtoNome"></div>  
-<div class="campo"><label>Categoria</label><input id="produtoCategoria" placeholder="Lanches, Pizzas..."></div>  
-<div class="campo"><label>Preço</label><input id="produtoPreco" type="number" step="0.01"></div>  
-<div class="campo"><label>Preço promocional</label><input id="produtoPrecoPromo" type="number" step="0.01"></div>  
-<div class="campo campo-full"><label>Descrição</label><textarea id="produtoDescricao"></textarea></div>  
-<div class="campo campo-full"><label>Foto (URL, opcional)</label><input id="produtoFoto" placeholder="https://..."></div>  
-<div class="campo"><label>Promoção</label><select id="produtoPromo"><option value="false">Desativada</option><option value="true">Ativada</option></select></div>  
-<div class="campo"><label>Disponibilidade</label><select id="produtoAtivo"><option value="true">Ativo</option><option value="false">Inativo</option></select></div>  
-</div>  
-<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">  
-<button class="btn-acao btn-verde" onclick="salvarProduto()">💾 Salvar produto</button>  
-<button class="btn-acao btn-cinza" onclick="limparFormularioProduto()">➕ Novo produto</button>  
-</div>  
-<input type="hidden" id="produtoId">  
-</div>  
-<div class="produtos-admin" id="listaProdutosAdmin"></div>  
-</section>  <section id="secaoFinanceiro" class="secao-painel">  
-<h2 class="titulo-secao">💰 Financeiro</h2>  
-<div class="configuracao">  
-<div class="form-grid">  
-<div class="campo"><label>Data inicial</label><input type="date" id="financeiroInicio"></div>  
-<div class="campo"><label>Data final</label><input type="date" id="financeiroFim"></div>  
-</div>  
-<button class="btn-config" onclick="calcularFinanceiro()">📊 Gerar relatório</button>  
-</div>  
-<div class="resumo">  
-<div class="resumo-card"><span>💰 Total vendido</span><strong id="finTotal">R$ 0,00</strong></div>  
-<div class="resumo-card"><span>📋 Comandas</span><strong id="finComandas">0</strong></div>  
-<div class="resumo-card"><span>📈 Média/comanda</span><strong id="finMedia">R$ 0,00</strong></div>  
-<div class="resumo-card"><span>🍔 Itens vendidos</span><strong id="finItens">0</strong></div>  
-<div class="resumo-card"><span>🪑 Mesas</span><strong id="finMesas">0</strong></div>  
-</div>  
-<div class="configuracao">  
-<h3 style="margin-bottom:10px">🍔 Produtos vendidos</h3>  
-<div id="rankingProdutos"></div>  
-</div>  
-</section>  <section id="secaoConfiguracoes" class="secao-painel">  
-<h2 class="titulo-secao">⚙️ Configurações do Restaurante</h2>  
-<div class="configuracao">  
-<div class="form-grid">  
-<div class="campo"><label>Nome do restaurante</label><input id="cfgNome"></div>  
-<div class="campo"><label>Emoji do restaurante</label><input id="cfgEmoji" placeholder="🍔"></div>  
-<div class="campo"><label>Subtítulo</label><input id="cfgSubtitulo" placeholder="Cardápio Digital"></div>  
-<div class="campo"><label>Telefone</label><input id="cfgTelefone" placeholder="5549999999999"></div>  
-<div class="campo campo-full"><label>Endereço</label><input id="cfgEndereco"></div>  
-<div class="campo campo-full"><label>Logo (URL, opcional)</label><input id="cfgLogo" placeholder="https://..."></div>  
-</div>  
-<button class="btn-config" onclick="salvarConfiguracoes()">💾 Salvar configurações</button>  
-</div>  
-</section>  
-</div>  <div class="modal-fundo" id="modalComanda"><div class="modal">  
-<div class="modal-header"><h2 id="tituloComanda">🪑 Mesa</h2><button class="btn-fechar" onclick="fecharComanda()">×</button></div>  
-<div class="comanda-responsavel" id="responsavelComanda"></div><div id="listaComanda"></div>  
-<div class="comanda-total">Total: R$ <span id="totalComanda">0,00</span></div>  
-<button class="btn-finalizar" onclick="finalizarMesa()">✅ Finalizar Comanda e Liberar Mesa</button>  
-</div></div>  <div class="modal-fundo" id="modalHistorico"><div class="modal">  
-<div class="modal-header"><h2>📜 Histórico</h2><button class="btn-fechar" onclick="fecharHistorico()">×</button></div>  
-<div id="listaHistorico"></div>  
-</div></div>  <script type="module">  
-import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";  
-import{initializeFirestore,collection,doc,getDocs,updateDoc,setDoc,onSnapshot,writeBatch}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";  
-  
-const firebaseConfig={apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",authDomain:"sistema-digital-f9df1.firebaseapp.com",projectId:"sistema-digital-f9df1",storageBucket:"sistema-digital-f9df1.firebasestorage.app",messagingSenderId:"783545984661",appId:"1:783545984661:web:5d0945907ad9db3990dd9c"};  
-const app=initializeApp(firebaseConfig);const db=initializeFirestore(app,{},"default");  
-  
-const CHAVE_MESAS="quantidadeMesas";  
-let pedidos=[],historico=[],produtos=[],mesaSelecionada=null,configRestaurante={};  
-let somLiberado=false,audioContext=null,intervaloSom=null;  
-  
-function formatarDinheiro(v){return Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}).replace("R$ ","R$ ")}  
-function obterDataHoje(){return new Date().toLocaleDateString("pt-BR")}  
-function obterQuantidadeMesas(){return Number(localStorage.getItem(CHAVE_MESAS)||8)}  
-function normalizarStatus(s){return String(s||"Recebido").trim().toLowerCase()}  
-function pedidoEhValido(d){return d.mesa!==undefined&&d.mesa!==null&&String(d.mesa).trim()!==""&&(String(d.numeroPedido||d.numero||"").trim()!=="")}  
-  
-window.mostrarSecao=function(secao){  
-document.querySelectorAll(".secao-painel").forEach(s=>s.classList.remove("ativa"));  
-document.querySelectorAll(".aba").forEach(a=>a.classList.remove("ativa"));  
-const mapa={mesas:["secaoMesas","abaMesas"],produtos:["secaoProdutos","abaProdutos"],financeiro:["secaoFinanceiro","abaFinanceiro"],configuracoes:["secaoConfiguracoes","abaConfiguracoes"]};  
-document.getElementById(mapa[secao][0]).classList.add("ativa");document.getElementById(mapa[secao][1]).classList.add("ativa");  
-if(secao==="produtos")renderizarProdutosAdmin();if(secao==="financeiro")calcularFinanceiro();  
-}  
-  
-window.ativarSom=function(){  
-try{  
-if(!audioContext)audioContext=new(window.AudioContext||window.webkitAudioContext)();  
-if(audioContext.state==="suspended")audioContext.resume();  
-somLiberado=true;document.getElementById("btnSom").textContent="🔊 Som ativo";document.getElementById("btnSom").style.background="#166534";tocarSomAviso();controlarSomContinuo();  
-}catch(e){console.error(e)}  
-}  
-function tocarSomAviso(){  
-if(!somLiberado)return;  
-try{  
-if(!audioContext)audioContext=new(window.AudioContext||window.webkitAudioContext)();  
-const t=audioContext.currentTime,o=audioContext.createOscillator(),g=audioContext.createGain();  
-o.type="sine";o.frequency.setValueAtTime(880,t);o.frequency.setValueAtTime(660,t+.15);  
-g.gain.setValueAtTime(.001,t);g.gain.exponentialRampToValueAtTime(.25,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+.45);  
-o.connect(g);g.connect(audioContext.destination);o.start(t);o.stop(t+.5);  
-}catch(e){console.error(e)}  
-}  
-function pararSomContinuo(){if(intervaloSom){clearInterval(intervaloSom);intervaloSom=null}}  
-function controlarSomContinuo(){  
-const temNovo=pedidos.some(p=>normalizarStatus(p.status)==="recebido");  
-if(temNovo&&somLiberado&&!intervaloSom)intervaloSom=setInterval(()=>{if(pedidos.some(p=>normalizarStatus(p.status)==="recebido"))tocarSomAviso();else pararSomContinuo()},3000);  
-else if(!temNovo)pararSomContinuo();  
-}  
-  
-window.salvarQuantidadeMesas=function(){  
-let q=Number(document.getElementById("quantidadeMesas").value);if(q<1)q=1;if(q>100)q=100;  
-localStorage.setItem(CHAVE_MESAS,q);document.getElementById("quantidadeMesas").value=q;renderizarMesas();  
-}  
-  
-function pedidosDaMesa(m){return pedidos.filter(p=>String(p.mesa)===String(m)&&normalizarStatus(p.status)!=="finalizado")}  
-function obterStatusMesa(m){const p=pedidosDaMesa(m);if(!p.length)return"livre";if(p.some(x=>normalizarStatus(x.status)==="pronto"))return"pronto";if(p.some(x=>normalizarStatus(x.status)==="preparo"))return"preparo";return"ocupada"}  
-function obterResponsavel(pm){const p=pm.find(x=>x.responsavel||x.nomeCliente);return p?(p.responsavel||p.nomeCliente):pm.length?"Não informado":"—"}  
-function calcularTotalMesa(pm){return pm.reduce((t,p)=>t+Number(p.total||0),0)}  
-  
-function atualizarResumo(){  
-const q=obterQuantidadeMesas();let livres=0,ocupadas=0,abertos=0;  
-for(let m=1;m<=q;m++){const p=pedidosDaMesa(m);if(p.length)ocupadas++;else livres++;abertos+=p.length}  
-const hoje=historico.filter(x=>x.data===obterDataHoje());  
-const total=hoje.reduce((t,x)=>t+Number(x.total||0),0);  
-document.getElementById("totalLivres").innerText=livres;document.getElementById("totalOcupadas").innerText=ocupadas;document.getElementById("totalPedidosAbertos").innerText=abertos;document.getElementById("totalMesasFinalizadas").innerText=hoje.length;document.getElementById("totalVendidoHoje").innerText=formatarDinheiro(total);  
-}  
-  
-function renderizarMesas(){  
-const area=document.getElementById("areaMesas");area.innerHTML="";  
-for(let mesa=1;mesa<=obterQuantidadeMesas();mesa++){  
-const pm=pedidosDaMesa(mesa),status=obterStatusMesa(mesa),total=calcularTotalMesa(pm),resp=obterResponsavel(pm);  
-const novo=pm.some(p=>normalizarStatus(p.status)==="recebido");  
-let texto=status==="livre"?"Livre":status==="ocupada"?"Ocupada":status==="preparo"?"Em preparo":"Pronto";  
-const card=document.createElement("div");card.className="mesa "+status+(novo?" novo-pedido":"");  
-card.innerHTML=`<div class="mesa-topo"><span class="mesa-nome">🪑 Mesa ${mesa}</span><span class="status status-${status}">${texto}</span></div>  
-<div class="responsavel">👤 <strong>Responsável:</strong> ${resp}</div>  
-<div class="info-pedido">${pm.length?pm.length+(pm.length===1?" pedido aberto":" pedidos abertos"):"Nenhum pedido"}</div>  
-<div class="total-mesa">R$ ${Number(total).toFixed(2).replace(".",",")}</div>  
-<button class="btn-abrir" onclick="abrirComanda(${mesa})">${pm.length?"📋 Abrir Comanda":"👀 Ver Mesa"}</button>`;  
-area.appendChild(card);  
-}  
-atualizarResumo();  
-}  
-  
-function renderizarAvisos(){  
-const lista=document.getElementById("listaAvisos"),contador=document.getElementById("contadorAvisos");  
-const abertos=pedidos.filter(p=>normalizarStatus(p.status)!=="finalizado");  
-const ordem={recebido:1,preparo:2,pronto:3};abertos.sort((a,b)=>(ordem[normalizarStatus(a.status)]||99)-(ordem[normalizarStatus(b.status)]||99));  
-contador.innerText=abertos.length;lista.innerHTML="";  
-if(!abertos.length){lista.innerHTML='<div class="sem-avisos">✅ Nenhum pedido aguardando atenção.</div>';return}  
-abertos.forEach(p=>{  
-const s=normalizarStatus(p.status),cl=s==="recebido"?"aviso-novo":s==="preparo"?"aviso-preparo":"aviso-pronto",cs=s==="recebido"?"aviso-status-novo":s==="preparo"?"aviso-status-preparo":"aviso-status-pronto",txt=s==="recebido"?"🔴 Novo pedido":s==="preparo"?"🟠 Em preparo":"🔵 Pronto";  
-const d=document.createElement("div");d.className="aviso-item "+cl;d.innerHTML=`<div class="aviso-info"><span class="aviso-mesa">🪑 Mesa ${p.mesa}</span><span class="aviso-detalhes">Pedido #${p.numeroPedido||p.numero}</span></div><span class="aviso-status ${cs}">${txt}</span>`;d.onclick=()=>abrirComanda(Number(p.mesa));lista.appendChild(d);  
-});  
-}  
-  
-function carregarPedidos(){  
-onSnapshot(collection(db,"pedidos"),snap=>{  
-pedidos=[];snap.forEach(d=>{const x=d.data();if(pedidoEhValido(x))pedidos.push({id:d.id,...x,status:normalizarStatus(x.status)})});  
-renderizarMesas();renderizarAvisos();controlarSomContinuo();if(mesaSelecionada)renderizarComanda();  
-});  
-}  
-function carregarHistorico(){  
-onSnapshot(collection(db,"historicoComandas"),snap=>{  
-historico=[];snap.forEach(d=>historico.push({id:d.id,...d.data()}));historico.sort((a,b)=>new Date(b.dataFinalizacao||0)-new Date(a.dataFinalizacao||0));atualizarResumo();  
-});  
-}  
-  
-window.abrirComanda=function(m){mesaSelecionada=m;document.getElementById("tituloComanda").innerText="🪑 Mesa "+m;renderizarComanda();document.getElementById("modalComanda").style.display="flex"}  
-function renderizarComanda(){  
-if(!mesaSelecionada)return;const pm=pedidosDaMesa(mesaSelecionada),lista=document.getElementById("listaComanda");  
-document.getElementById("responsavelComanda").innerHTML=`👤 <strong>Responsável:</strong> ${obterResponsavel(pm)}`;lista.innerHTML="";  
-if(!pm.length)lista.innerHTML='<div class="sem-pedidos">🟢 Esta mesa está livre.</div>';  
-pm.sort((a,b)=>Number(a.numeroPedido||a.numero||0)-Number(b.numeroPedido||b.numero||0)).forEach(p=>{  
-const s=normalizarStatus(p.status),classe=s==="preparo"?"status-preparo-pedido":s==="pronto"?"status-pronto-pedido":"status-recebido",txt=s==="preparo"?"🟠 Em preparo":s==="pronto"?"🔵 Pronto":"🔴 Recebido";  
-let itens="";(p.itens||[]).forEach(i=>{itens+=`<div class="item"><div class="item-linha"><span class="item-nome">${i.quantidade}x ${i.nome}</span><span>R$ ${Number(Number(i.preco||0)*Number(i.quantidade||0)).toFixed(2).replace(".",",")}</span></div>${i.observacao?`<div class="item-obs">📝 OBS: ${i.observacao}</div>`:""}</div>`});  
-const hora=p.data?new Date(p.data).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}):"--:--";  
-const bloco=document.createElement("div");bloco.className="pedido-bloco";bloco.innerHTML=`<div class="pedido-cabecalho"><span><strong>Pedido #${p.numeroPedido||p.numero||"—"}</strong><br>🕐 ${hora}</span><span class="pedido-status ${classe}">${txt}</span></div>${itens}  
-<div class="botoes-status">  
-<button class="btn-status btn-recebido ${s==="recebido"?"ativo":""}" onclick="alterarStatusPedido('${p.id}','recebido')">🔴 Recebido</button>  
-<button class="btn-status btn-preparo ${s==="preparo"?"ativo":""}" onclick="alterarStatusPedido('${p.id}','preparo')">🟠 Em preparo</button>  
-<button class="btn-status btn-pronto ${s==="pronto"?"ativo":""}" onclick="alterarStatusPedido('${p.id}','pronto')">🔵 Pronto</button></div>`;  
-lista.appendChild(bloco);  
-});  
-document.getElementById("totalComanda").innerText=Number(calcularTotalMesa(pm)).toFixed(2).replace(".",",");  
-}  
-  
-window.alterarStatusPedido=async(id,status)=>{try{await updateDoc(doc(db,"pedidos",id),{status})}catch(e){alert("❌ Erro ao atualizar pedido.\n\n"+(e.message||e))}};  
-window.fecharComanda=()=>{document.getElementById("modalComanda").style.display="none";mesaSelecionada=null};  
-  
-window.finalizarMesa=async()=>{  
-if(!mesaSelecionada)return;const pm=pedidosDaMesa(mesaSelecionada);if(!pm.length){alert("Esta mesa não possui pedidos.");return}  
-const total=calcularTotalMesa(pm),resp=obterResponsavel(pm);  
-if(!confirm(`Finalizar Comanda da Mesa ${mesaSelecionada}?\n\nResponsável: ${resp}\nTotal: ${formatarDinheiro(total)}\n\nA mesa será liberada.`))return;  
-try{  
-const agora=new Date(),batch=writeBatch(db);  
-pm.forEach(p=>batch.update(doc(db,"pedidos",p.id),{status:"finalizado",dataFinalizacao:agora.toISOString()}));  
-const href=doc(collection(db,"historicoComandas"));  
-batch.set(href,{mesa:mesaSelecionada,responsavel:resp,total:Number(total.toFixed(2)),data:agora.toLocaleDateString("pt-BR"),horarioFinalizacao:agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),dataFinalizacao:agora.toISOString(),pedidos:pm.map(p=>({id:p.id,numeroPedido:p.numeroPedido||p.numero||0,total:Number(p.total||0),itens:p.itens||[]}))});  
-await batch.commit();const m=mesaSelecionada;fecharComanda();alert(`✅ Comanda finalizada!\n\nMesa ${m} liberada.\n\nTotal: ${formatarDinheiro(total)}`);  
-}catch(e){alert("❌ Erro ao finalizar comanda.\n\n"+(e.message||e))}  
-};  
-  
-window.abrirHistorico=function(){  
-const lista=document.getElementById("listaHistorico"),hoje=obterDataHoje(),hh=historico.filter(x=>x.data===hoje),total=hh.reduce((t,x)=>t+Number(x.total||0),0);  
-lista.innerHTML=`<div class="historico-resumo">📊<strong>Resumo de hoje</strong><div style="color:#9ca3af;margin-top:5px">${hh.length} comandas finalizadas</div><strong>${formatarDinheiro(total)}</strong></div>`;  
-if(!historico.length)lista.innerHTML+='<div class="sem-pedidos">📜 Nenhuma comanda finalizada ainda.</div>';  
-else historico.forEach(c=>{const d=document.createElement("div");d.className="historico-item";d.innerHTML=`<div class="historico-topo"><strong>🪑 Mesa ${c.mesa}</strong><span class="historico-total">${formatarDinheiro(c.total)}</span></div><div>👤 ${c.responsavel||"Não informado"}</div><div class="historico-detalhes">📅 ${c.data||"--/--/----"} — 🕐 ${c.horarioFinalizacao||"--:--"}</div><div class="historico-detalhes">🍽️ ${(c.pedidos||[]).length} pedido(s) nesta comanda</div>`;lista.appendChild(d)});  
-document.getElementById("modalHistorico").style.display="flex";  
-}  
-window.fecharHistorico=()=>document.getElementById("modalHistorico").style.display="none";  
-  
-function carregarConfiguracoes(){  
-onSnapshot(collection(db,"configuracaoRestaurante"),snap=>{  
-configRestaurante={};snap.forEach(d=>configRestaurante={...d.data()});  
-document.getElementById("cfgNome").value=configRestaurante.nome||"Sabor da Casa";document.getElementById("cfgEmoji").value=configRestaurante.emoji||"🍔";document.getElementById("cfgSubtitulo").value=configRestaurante.subtitulo||"Cardápio Digital";document.getElementById("cfgTelefone").value=configRestaurante.telefone||"5549984121585";document.getElementById("cfgEndereco").value=configRestaurante.endereco||"Chapecó / Santa Catarina";document.getElementById("cfgLogo").value=configRestaurante.logo||"";  
-document.getElementById("tituloPainel").textContent=`${configRestaurante.emoji||"🍔"} ${configRestaurante.nome||"Sabor da Casa"}`;  
-});  
-}  
-  
-window.salvarConfiguracoes=async()=>{  
-try{  
-await setDoc(doc(db,"configuracaoRestaurante","restaurante"),{nome:document.getElementById("cfgNome").value.trim()||"Sabor da Casa",emoji:document.getElementById("cfgEmoji").value.trim()||"🍔",subtitulo:document.getElementById("cfgSubtitulo").value.trim()||"Cardápio Digital",telefone:document.getElementById("cfgTelefone").value.trim()||"5549984121585",endereco:document.getElementById("cfgEndereco").value.trim()||"Chapecó / Santa Catarina",logo:document.getElementById("cfgLogo").value.trim()},{merge:true});  
-alert("✅ Configurações salvas!");  
-}catch(e){alert("❌ Erro ao salvar configurações.\n\n"+(e.message||e))}  
-};  
-  
-function limparFormularioProduto(){["produtoNome","produtoCategoria","produtoPreco","produtoPrecoPromo","produtoDescricao","produtoFoto","produtoId"].forEach(id=>document.getElementById(id).value="");document.getElementById("produtoPromo").value="false";document.getElementById("produtoAtivo").value="true"}  
-window.limparFormularioProduto=limparFormularioProduto;  
-  
-window.salvarProduto=async()=>{  
-const nome=document.getElementById("produtoNome").value.trim(),categoria=document.getElementById("produtoCategoria").value.trim(),preco=Number(document.getElementById("produtoPreco").value||0),id=document.getElementById("produtoId").value;  
-if(!nome||!categoria||preco<=0){alert("⚠️ Informe nome, categoria e preço.");return}  
-const dados={nome,categoria,preco,precoPromocional:Number(document.getElementById("produtoPrecoPromo").value||0),descricao:document.getElementById("produtoDescricao").value.trim(),foto:document.getElementById("produtoFoto").value.trim(),promocaoAtiva:document.getElementById("produtoPromo").value==="true",ativo:document.getElementById("produtoAtivo").value==="true"};  
-try{await setDoc(doc(db,"produtos",id||crypto.randomUUID()),dados);alert("✅ Produto salvo!");limparFormularioProduto();}catch(e){alert("❌ Erro ao salvar produto.\n\n"+(e.message||e))}  
-};  
-  
-function renderizarProdutosAdmin(){  
-const lista=document.getElementById("listaProdutosAdmin");lista.innerHTML="";  
-if(!produtos.length){lista.innerHTML='<div class="sem-pedidos">Nenhum produto cadastrado.</div>';return}  
-produtos.forEach(p=>{  
-const d=document.createElement("div");d.className="produto-admin";  
-d.innerHTML=`<div class="produto-admin-topo"><h3>${p.nome}</h3><span class="badge ${p.ativo!==false?"badge-ativo":"badge-inativo"}">${p.ativo!==false?"Ativo":"Inativo"}</span></div>  
-<div class="produto-admin-info">${p.categoria||"Sem categoria"} · ${formatarDinheiro(p.preco)} ${p.promocaoAtiva?`· 🔥 Promoção ${formatarDinheiro(p.precoPromocional)}`:""}</div>  
-<div class="produto-admin-info">${p.descricao||""}</div>  
-<div class="produto-admin-acoes"><button class="btn-acao" onclick="editarProduto('${p.id}')">✏️ Editar</button><button class="btn-acao ${p.ativo!==false?"btn-vermelho":"btn-verde"}" onclick="alternarProduto('${p.id}',${p.ativo!==false})">${p.ativo!==false?"🚫 Desativar":"✅ Ativar"}</button></div>`;  
-lista.appendChild(d);  
-});  
-}  
-window.editarProduto=id=>{const p=produtos.find(x=>x.id===id);if(!p)return;document.getElementById("produtoId").value=p.id;document.getElementById("produtoNome").value=p.nome||"";document.getElementById("produtoCategoria").value=p.categoria||"";document.getElementById("produtoPreco").value=p.preco||"";document.getElementById("produtoPrecoPromo").value=p.precoPromocional||"";document.getElementById("produtoDescricao").value=p.descricao||"";document.getElementById("produtoFoto").value=p.foto||"";document.getElementById("produtoPromo").value=p.promocaoAtiva?"true":"false";document.getElementById("produtoAtivo").value=p.ativo!==false?"true":"false";window.scrollTo({top:0,behavior:"smooth"})}  
-window.alternarProduto=async(id,ativo)=>{try{await updateDoc(doc(db,"produtos",id),{ativo:!ativo})}catch(e){alert("❌ Erro.\n\n"+(e.message||e))}};  
-  
-onSnapshot(collection(db,"produtos"),snap=>{produtos=[];snap.forEach(d=>produtos.push({id:d.id,...d.data()}));renderizarProdutosAdmin()});  
-  
-async function calcularFinanceiro(){  
-const inicio=document.getElementById("financeiroInicio").value, fim=document.getElementById("financeiroFim").value;  
-const lista=historico.filter(h=>{  
-if(!h.dataFinalizacao)return false;  
-const dia=h.dataFinalizacao.slice(0,10);return (!inicio||dia>=inicio)&&(!fim||dia<=fim);  
-});  
-const total=lista.reduce((t,h)=>t+Number(h.total||0),0),comandas=lista.length;  
-let itens=0,mesas=new Set(),ranking={};  
-lista.forEach(h=>{mesas.add(String(h.mesa));(h.pedidos||[]).forEach(p=>(p.itens||[]).forEach(i=>{itens+=Number(i.quantidade||0);ranking[i.nome]=(ranking[i.nome]||0)+Number(i.quantidade||0)}))});  
-document.getElementById("finTotal").innerText=formatarDinheiro(total);document.getElementById("finComandas").innerText=comandas;document.getElementById("finMedia").innerText=formatarDinheiro(comandas?total/comandas:0);document.getElementById("finItens").innerText=itens;document.getElementById("finMesas").innerText=mesas.size;  
-const ordenado=Object.entries(ranking).sort((a,b)=>b[1]-a[1]);document.getElementById("rankingProdutos").innerHTML=ordenado.length?`<table class="tabela-financeiro"><thead><tr><th>Produto</th><th>Quantidade</th></tr></thead><tbody>${ordenado.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join("")}</tbody></table>`:"<div class='sem-pedidos'>Nenhuma venda no período.</div>";  
-}  
-window.calcularFinanceiro=calcularFinanceiro;  
-  
-document.getElementById("quantidadeMesas").value=obterQuantidadeMesas();  
-carregarPedidos();carregarHistorico();carregarConfiguracoes();  
-</script>  </body>  
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Painel do Proprietário — Sabor da Casa</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:Arial,sans-serif
+}
+
+body{
+background:#111827;
+color:#fff;
+padding-bottom:30px
+}
+
+header{
+background:#1f2937;
+padding:20px;
+position:sticky;
+top:0;
+z-index:100;
+box-shadow:0 3px 12px rgba(0,0,0,.3)
+}
+
+header h1{
+font-size:23px
+}
+
+header p{
+color:#9ca3af;
+margin-top:5px;
+font-size:14px
+}
+
+.topo{
+max-width:1200px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px
+}
+
+.btn-historico,
+.btn-menu{
+border:none;
+background:#374151;
+color:white;
+padding:11px 15px;
+border-radius:9px;
+cursor:pointer;
+font-weight:bold
+}
+
+.topo-botoes{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.painel-avisos{
+max-width:1200px;
+margin:15px auto 0;
+padding:0 20px;
+position:sticky;
+top:86px;
+z-index:90
+}
+
+.avisos-caixa{
+background:#1f2937;
+border-radius:13px;
+border:2px solid #374151;
+box-shadow:0 5px 15px rgba(0,0,0,.35);
+overflow:hidden
+}
+
+.avisos-cabecalho{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+padding:11px 15px;
+background:#182231
+}
+
+.avisos-titulo{
+font-size:15px;
+font-weight:bold
+}
+
+.contador-avisos{
+background:#b91c1c;
+color:white;
+min-width:28px;
+height:28px;
+padding:0 8px;
+border-radius:20px;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+font-size:13px;
+font-weight:bold;
+margin-left:5px
+}
+
+.btn-som{
+border:none;
+background:#374151;
+color:white;
+padding:7px 10px;
+border-radius:7px;
+cursor:pointer;
+font-size:12px;
+font-weight:bold
+}
+
+.lista-avisos{
+max-height:150px;
+overflow-y:auto
+}
+
+.aviso-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+padding:10px 15px;
+border-top:1px solid #374151;
+cursor:pointer
+}
+
+.aviso-item:hover{
+background:#263244
+}
+
+.aviso-novo{
+border-left:5px solid #ef4444
+}
+
+.aviso-preparo{
+border-left:5px solid #f59e0b
+}
+
+.aviso-pronto{
+border-left:5px solid #3b82f6
+}
+
+.aviso-info{
+display:flex;
+align-items:center;
+gap:9px;
+min-width:0
+}
+
+.aviso-mesa{
+font-weight:bold;
+white-space:nowrap
+}
+
+.aviso-detalhes{
+color:#d1d5db;
+font-size:13px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap
+}
+
+.aviso-status{
+font-size:11px;
+font-weight:bold;
+padding:5px 8px;
+border-radius:15px;
+white-space:nowrap
+}
+
+.aviso-status-novo{
+background:#7f1d1d;
+color:#fecaca
+}
+
+.aviso-status-preparo{
+background:#78350f;
+color:#fde68a
+}
+
+.aviso-status-pronto{
+background:#1e3a8a;
+color:#bfdbfe
+}
+
+.sem-avisos{
+padding:11px 15px;
+color:#9ca3af;
+font-size:13px
+}
+
+@keyframes piscarMesa{
+
+0%,100%{
+box-shadow:0 0 0 rgba(239,68,68,0)
+}
+
+50%{
+box-shadow:0 0 22px rgba(239,68,68,.95)
+}
+
+}
+
+.mesa.novo-pedido{
+animation:piscarMesa 1s infinite;
+border-color:#ef4444
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px
+}
+
+.configuracao{
+background:#1f2937;
+padding:18px;
+border-radius:14px;
+margin-bottom:20px
+}
+
+.configuracao label{
+display:block;
+font-size:14px;
+color:#d1d5db;
+margin-bottom:7px
+}
+
+.configuracao input,
+.configuracao textarea,
+.configuracao select,
+.form-grid input,
+.form-grid textarea,
+.form-grid select{
+width:100%;
+padding:11px;
+border-radius:8px;
+border:2px solid #374151;
+background:#111827;
+color:white;
+font-size:15px
+}
+
+.configuracao input{
+max-width:180px
+}
+
+.configuracao textarea{
+min-height:80px;
+resize:vertical
+}
+
+.btn-config{
+margin-top:10px;
+background:#2563eb;
+color:white;
+border:none;
+padding:11px 18px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold
+}
+
+.titulo-secao{
+font-size:18px;
+margin-bottom:12px
+}
+
+.resumo{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:12px;
+margin-bottom:25px
+}
+
+.resumo-card{
+background:#1f2937;
+padding:15px;
+border-radius:12px
+}
+
+.resumo-card span{
+color:#9ca3af;
+font-size:13px
+}
+
+.resumo-card strong{
+display:block;
+font-size:24px;
+margin-top:6px
+}
+
+.resumo-total{
+border:2px solid #16a34a
+}
+
+.resumo-total strong{
+color:#4ade80
+}
+
+.mesas-titulo{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px
+}
+
+.mesas-titulo h2{
+font-size:20px
+}
+
+.mesas{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:15px
+}
+
+.mesa{
+background:#1f2937;
+border-radius:15px;
+padding:17px;
+border:2px solid #374151
+}
+
+.mesa.livre{
+border-color:#22c55e
+}
+
+.mesa.ocupada{
+border-color:#ef4444
+}
+
+.mesa.preparo{
+border-color:#f59e0b
+}
+
+.mesa.pronto{
+border-color:#3b82f6
+}
+
+.mesa-topo{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:12px
+}
+
+.mesa-nome{
+font-size:20px;
+font-weight:bold
+}
+
+.status{
+padding:6px 9px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold
+}
+
+.status-livre{
+background:#14532d;
+color:#86efac
+}
+
+.status-ocupada{
+background:#7f1d1d;
+color:#fecaca
+}
+
+.status-preparo{
+background:#78350f;
+color:#fde68a
+}
+
+.status-pronto{
+background:#1e3a8a;
+color:#bfdbfe
+}
+
+.responsavel{
+background:#111827;
+padding:10px;
+border-radius:8px;
+margin-bottom:12px;
+color:#d1d5db;
+font-size:14px
+}
+
+.responsavel strong{
+color:white
+}
+
+.total-mesa{
+font-size:23px;
+font-weight:bold;
+color:#4ade80;
+margin:12px 0
+}
+
+.info-pedido{
+color:#9ca3af;
+font-size:13px;
+margin-bottom:12px
+}
+
+.btn-abrir,
+.btn-acao{
+width:100%;
+border:none;
+background:#2563eb;
+color:white;
+padding:12px;
+border-radius:9px;
+cursor:pointer;
+font-weight:bold
+}
+
+.btn-acao{
+width:auto;
+padding:9px 13px
+}
+
+.btn-verde{
+background:#16a34a
+}
+
+.btn-vermelho{
+background:#b91c1c
+}
+
+.btn-cinza{
+background:#374151
+}
+
+.btn-roxo{
+background:#7c3aed
+}
+
+.modal-fundo{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+z-index:500;
+justify-content:center;
+align-items:center;
+padding:15px
+}
+
+.modal{
+background:#1f2937;
+width:100%;
+max-width:850px;
+max-height:90vh;
+overflow-y:auto;
+border-radius:18px;
+padding:20px
+}
+
+.modal-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px
+}
+
+.btn-fechar{
+border:none;
+background:#374151;
+color:white;
+width:35px;
+height:35px;
+border-radius:50%;
+cursor:pointer;
+font-size:18px
+}
+
+.comanda-responsavel{
+background:#111827;
+padding:12px;
+border-radius:9px;
+margin-bottom:15px
+}
+
+.pedido-bloco{
+background:#111827;
+border-radius:10px;
+padding:13px;
+margin-bottom:12px;
+border:1px solid #374151
+}
+
+.pedido-cabecalho{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+font-size:13px;
+color:#9ca3af
+}
+
+.pedido-status{
+font-weight:bold;
+padding:5px 8px;
+border-radius:6px
+}
+
+.status-recebido{
+background:#7f1d1d;
+color:#fecaca
+}
+
+.status-preparo-pedido{
+background:#78350f;
+color:#fde68a
+}
+
+.status-pronto-pedido{
+background:#1e3a8a;
+color:#bfdbfe
+}
+
+.item{
+padding:8px 0;
+border-bottom:1px solid #374151
+}
+
+.item:last-child{
+border-bottom:none
+}
+
+.item-linha{
+display:flex;
+justify-content:space-between;
+gap:10px
+}
+
+.item-nome{
+font-weight:bold
+}
+
+.item-obs{
+color:#fbbf24;
+font-size:13px;
+margin-top:5px
+}
+
+.botoes-status{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:7px;
+margin-top:12px
+}
+
+.btn-status{
+border:none;
+padding:9px 5px;
+border-radius:7px;
+cursor:pointer;
+color:white;
+font-weight:bold;
+font-size:12px
+}
+
+.btn-recebido{
+background:#b91c1c
+}
+
+.btn-preparo{
+background:#d97706
+}
+
+.btn-pronto{
+background:#2563eb
+}
+
+.btn-status.ativo{
+outline:3px solid white
+}
+
+.comanda-total{
+border-top:2px dashed #4b5563;
+margin-top:15px;
+padding-top:15px;
+text-align:right;
+font-size:27px;
+font-weight:bold;
+color:#4ade80
+}
+
+.btn-finalizar{
+width:100%;
+margin-top:15px;
+border:none;
+background:#16a34a;
+color:white;
+padding:15px;
+border-radius:10px;
+cursor:pointer;
+font-size:17px;
+font-weight:bold
+}
+
+.sem-pedidos{
+text-align:center;
+color:#9ca3af;
+padding:30px
+}
+
+.historico-resumo{
+background:#111827;
+border-radius:12px;
+padding:15px;
+margin-bottom:15px
+}
+
+.historico-resumo strong{
+display:block;
+color:#4ade80;
+font-size:25px;
+margin-top:5px
+}
+
+.historico-item{
+background:#111827;
+border-radius:10px;
+padding:14px;
+margin-bottom:10px;
+border:1px solid #374151
+}
+
+.historico-topo{
+display:flex;
+justify-content:space-between;
+margin-bottom:8px
+}
+
+.historico-total{
+color:#4ade80;
+font-weight:bold
+}
+
+.historico-detalhes{
+color:#9ca3af;
+font-size:13px;
+margin-top:5px
+}
+
+.abas{
+display:flex;
+gap:8px;
+overflow-x:auto;
+margin-bottom:15px
+}
+
+.aba{
+border:none;
+background:#374151;
+color:white;
+padding:11px 14px;
+border-radius:9px;
+cursor:pointer;
+font-weight:bold;
+white-space:nowrap
+}
+
+.aba.ativa{
+background:#2563eb
+}
+
+.secao-painel{
+display:none
+}
+
+.secao-painel.ativa{
+display:block
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px
+}
+
+.form-grid .campo-full{
+grid-column:1/-1
+}
+
+.campo label{
+display:block;
+color:#d1d5db;
+font-size:13px;
+margin-bottom:5px;
+font-weight:bold
+}
+
+.produtos-admin{
+display:grid;
+gap:10px
+}
+
+.produto-admin{
+background:#1f2937;
+border:1px solid #374151;
+border-radius:12px;
+padding:14px
+}
+
+.produto-admin-topo{
+display:flex;
+justify-content:space-between;
+gap:10px;
+align-items:center
+}
+
+.produto-admin h3{
+font-size:17px
+}
+
+.produto-admin-info{
+color:#9ca3af;
+font-size:13px;
+margin-top:6px
+}
+
+.produto-admin-acoes{
+display:flex;
+gap:7px;
+flex-wrap:wrap;
+margin-top:10px
+}
+
+.badge{
+display:inline-block;
+padding:5px 8px;
+border-radius:15px;
+font-size:11px;
+font-weight:bold
+}
+
+.badge-ativo{
+background:#14532d;
+color:#86efac
+}
+
+.badge-inativo{
+background:#7f1d1d;
+color:#fecaca
+}
+
+.tabela-financeiro{
+width:100%;
+border-collapse:collapse
+}
+
+.tabela-financeiro th,
+.tabela-financeiro td{
+padding:9px;
+border-bottom:1px solid #374151;
+text-align:left
+}
+
+.tabela-financeiro th{
+color:#9ca3af;
+font-size:12px
+}
+
+.aviso-sucesso{
+background:#14532d;
+color:#86efac;
+padding:12px;
+border-radius:9px;
+margin-bottom:15px;
+display:none
+}
+
+@media(max-width:800px){
+
+.resumo{
+grid-template-columns:repeat(2,1fr)
+}
+
+.resumo-card:last-child{
+grid-column:span 2
+}
+
+.form-grid{
+grid-template-columns:1fr
+}
+
+}
+
+@media(max-width:500px){
+
+.mesas{
+grid-template-columns:1fr
+}
+
+.botoes-status{
+grid-template-columns:1fr
+}
+
+.painel-avisos{
+padding:0 10px
+}
+
+.avisos-cabecalho{
+flex-wrap:wrap
+}
+
+.topo{
+align-items:flex-start
+}
+
+.topo-botoes{
+justify-content:flex-end
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="topo">
+
+<div>
+
+<h1 id="tituloPainel">
+🍔 Sabor da Casa
+</h1>
+
+<p>
+🔥 Painel do Proprietário — Online
+</p>
+
+</div>
+
+<div class="topo-botoes">
+
+<button
+class="btn-menu"
+onclick="mostrarSecao('produtos')">
+
+🍔 Produtos
+
+</button>
+
+<button
+class="btn-historico"
+onclick="abrirHistorico()">
+
+📜 Histórico
+
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+
+<div class="painel-avisos">
+
+<div class="avisos-caixa">
+
+<div class="avisos-cabecalho">
+
+<div class="avisos-titulo">
+
+🔔 Pedidos e avisos
+
+<span
+class="contador-avisos"
+id="contadorAvisos">
+
+0
+
+</span>
+
+</div>
+
+<button
+class="btn-som"
+id="btnSom"
+onclick="ativarSom()">
+
+🔇 Ativar som
+
+</button>
+
+</div>
+
+<div
+class="lista-avisos"
+id="listaAvisos">
+
+<div class="sem-avisos">
+
+✅ Nenhum pedido aguardando atenção.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="container">
+
+
+<div class="abas">
+
+<button
+class="aba ativa"
+id="abaMesas"
+onclick="mostrarSecao('mesas')">
+
+🪑 Mesas
+
+</button>
+
+<button
+class="aba"
+id="abaProdutos"
+onclick="mostrarSecao('produtos')">
+
+🍔 Produtos
+
+</button>
+
+<button
+class="aba"
+id="abaFinanceiro"
+onclick="mostrarSecao('financeiro')">
+
+💰 Financeiro
+
+</button>
+
+<button
+class="aba"
+id="abaConfiguracoes"
+onclick="mostrarSecao('configuracoes')">
+
+⚙️ Configurações
+
+</button>
+
+</div>
+
+
+<section
+id="secaoMesas"
+class="secao-painel ativa">
+
+
+<div class="configuracao">
+
+<label>
+🪑 Quantidade de mesas
+</label>
+
+<input
+type="number"
+id="quantidadeMesas"
+min="1"
+max="100"
+value="8">
+
+<br>
+
+<button
+class="btn-config"
+onclick="salvarQuantidadeMesas()">
+
+💾 Salvar Mesas
+
+</button>
+
+</div>
+
+
+<h2 class="titulo-secao">
+
+📊 Resumo do Dia
+
+</h2>
+
+
+<div class="resumo">
+
+<div class="resumo-card">
+
+<span>
+🟢 Mesas livres
+</span>
+
+<strong id="totalLivres">
+0
+</strong>
+
+</div>
+
+
+<div class="resumo-card">
+
+<span>
+🔴 Mesas ocupadas
+</span>
+
+<strong id="totalOcupadas">
+0
+</strong>
+
+</div>
+
+
+<div class="resumo-card">
+
+<span>
+🍽️ Pedidos abertos
+</span>
+
+<strong id="totalPedidosAbertos">
+0
+</strong>
+
+</div>
+
+
+<div class="resumo-card">
+
+<span>
+✅ Mesas finalizadas
+</span>
+
+<strong id="totalMesasFinalizadas">
+0
+</strong>
+
+</div>
+
+
+<div class="resumo-card resumo-total">
+
+<span>
+💰 Total vendido hoje
+</span>
+
+<strong id="totalVendidoHoje">
+R$ 0,00
+</strong>
+
+</div>
+
+</div>
+
+
+<div class="mesas-titulo">
+
+<h2>
+🪑 Mesas
+</h2>
+
+</div>
+
+
+<div
+class="mesas"
+id="areaMesas">
+</div>
+
+
+</section>
+
+
+<section
+id="secaoProdutos"
+class="secao-painel">
+
+
+<h2 class="titulo-secao">
+
+🍔 Produtos e Promoções
+
+</h2>
+
+
+<div
+id="avisoProdutos"
+class="aviso-sucesso">
+
+</div>
+
+
+<div class="configuracao">
+
+
+<div class="form-grid">
+
+
+<div class="campo">
+
+<label>
+Nome do produto
+</label>
+
+<input
+id="produtoNome">
+
+</div>
+
+
+<div class="campo">
+
+<label>
+Categoria
+</label>
+
+<input
+id="produtoCategoria"
+placeholder="Lanches, Pizzas...">
+
+</div>
+
+
+<div class="campo">
+
+<label>
+Preço
+</label>
+
+<input
+id="produtoPreco"
+type="number"
+step="0.01">
+
+</div>
+
+
+<div class="campo">
+
+<label>
+Preço promocional
+</label>
+
+<input
+id="produtoPrecoPromo"
+type="number"
+step="0.01">
+
+</div>
+
+
+<div class="campo campo-full">
+
+<label>
+Descrição
+</label>
+
+<textarea
+id="produtoDescricao">
+</textarea>
+
+</div>
+
+
+<div class="campo campo-full">
+
+<label>
+Foto (URL, opcional)
+</label>
+
+<input
+id="produtoFoto"
+placeholder="https://...">
+
+</div>
+
+
+<div class="campo">
+
+<label>
+Promoção
+</label>
+
+<select id="produtoPromo">
+
+<option value="false">
+Desativada
+</option>
+
+<option value="true">
+Ativada
+</option>
+
+</select>
+
+</div>
+
+
+<div class="campo">
+
+<label>
+Disponibilidade
+</label>
+
+<select id="produtoAtivo">
+
+<option value="true">
+Ativo
+</option>
+
+<option value="false">
+Inativo
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div
+style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+
+
+<button
+class="btn-acao btn-verde"
+onclick="salvarProduto()">
+
+💾 Salvar produto
+
+</button>
+
+
+<button
+class="btn-acao btn-cinza"
+onclick="limparFormularioProduto()">
+
+➕ Novo produto
+
+</button>
+
+
+<button
+class="btn-acao btn-roxo"
+onclick="carregarProdutosIniciais()">
+
+🚀 Carregar produtos iniciais
+
+</button>
+
+
+</div>
+
+
+<input
+type="hidden"
+id="produtoId">
+
+</div>
+
+
+<div
+class="produtos-admin"
+id="listaProdutosAdmin">
+
+</div>
+
+
+</section>
+
+
+<section
+id="secaoFinanceiro"
+class="secao-painel">
+
+
+<h2 class="titulo-secao">
+
+💰 Financeiro
+
+</h2>
+
+
+<div class="configuracao">
+
+
+<div class="form-grid">
+
+
+<div class="campo">
+
+<label>
+Data inicial
+</label>
+
+<input
+type="date"
+id="financeiroInicio">
+
+</div>
+
+
+<div class="campo">
+
+<label>
+Data final
+</label>
+
+<input
+type="date"
+id="financeiroFim">
+
+</div>
+
+</div>
+
+
+<button
+class="btn-config"
+onclick="calcularFinanceiro()">
+
+📊 Gerar relatório
+
+</button>
+
+</div>
+
+
+<div class="resumo">
+
+
+<div class="resumo-card">
+
+<span>
+💰 Total vendido
+</span>
+
+<strong id="finTotal">
+R$ 0,00
+</strong>
+
+</div>
+
+
+<div class="resumo-card">
+
+<span>
+📋 Comandas
+</span>
+
+<strong id="finComandas">
+0
+</strong>
+
+</div>
+
+
+<div class="resumo-card">
+
+<span>
+📈 Média/comanda
+</span>
+
+<strong id="finMedia">
+R$ 0,00
+</strong>
+
+</div>
+
+
+<div class="resumo-card">
+
+<span>
+🍔 Itens vendidos
+</span>
+
+<strong id="finItens">
+0
+</strong>
+
+</div>
+
+
+<div class="resumo-card">
+
+<span>
+🪑 Mesas
+</span>
+
+<strong id="finMesas">
+0
+</strong>
+
+</div>
+
+</div>
+
+
+<div class="configuracao">
+
+<h3 style="margin-bottom:10px">
+
+🍔 Produtos vendidos
+
+</h3>
+
+<div id="rankingProdutos">
+
+</div>
+
+</div>
+
+
+</section>
+
+
+<section
+id="secaoConfiguracoes"
+class="secao-painel">
+
+
+<h2 class="titulo-secao">
+
+⚙️ Configurações do Restaurante
+
+</h2>
+
+
+<div class="configuracao">
+
+
+<div class="form-grid">
+
+
+<div class="campo">
+
+<label>
+Nome do restaurante
+</label>
+
+<input id="cfgNome">
+
+</div>
+
+
+<div class="campo">
+
+<label>
+Emoji do restaurante
+</label>
+
+<input
+id="cfgEmoji"
+placeholder="🍔">
+
+</div>
+
+
+<div class="campo">
+
+<label>
+Subtítulo
+</label>
+
+<input
+id="cfgSubtitulo"
+placeholder="Cardápio Digital">
+
+</div>
+
+
+<div class="campo">
+
+<label>
+Telefone
+</label>
+
+<input
+id="cfgTelefone"
+placeholder="5549999999999">
+
+</div>
+
+
+<div class="campo campo-full">
+
+<label>
+Endereço
+</label>
+
+<input id="cfgEndereco">
+
+</div>
+
+
+<div class="campo campo-full">
+
+<label>
+Logo (URL, opcional)
+</label>
+
+<input
+id="cfgLogo"
+placeholder="https://...">
+
+</div>
+
+
+</div>
+
+
+<button
+class="btn-config"
+onclick="salvarConfiguracoes()">
+
+💾 Salvar configurações
+
+</button>
+
+</div>
+
+
+</section>
+
+</div>
+
+
+<div
+class="modal-fundo"
+id="modalComanda">
+
+
+<div class="modal">
+
+
+<div class="modal-header">
+
+<h2 id="tituloComanda">
+🪑 Mesa
+</h2>
+
+<button
+class="btn-fechar"
+onclick="fecharComanda()">
+
+×
+
+</button>
+
+</div>
+
+
+<div
+class="comanda-responsavel"
+id="responsavelComanda">
+</div>
+
+
+<div
+id="listaComanda">
+</div>
+
+
+<div class="comanda-total">
+
+Total: R$
+
+<span id="totalComanda">
+0,00
+</span>
+
+</div>
+
+
+<button
+class="btn-finalizar"
+onclick="finalizarMesa()">
+
+✅ Finalizar Comanda e Liberar Mesa
+
+</button>
+
+</div>
+
+</div>
+
+
+<div
+class="modal-fundo"
+id="modalHistorico">
+
+
+<div class="modal">
+
+
+<div class="modal-header">
+
+<h2>
+📜 Histórico
+</h2>
+
+<button
+class="btn-fechar"
+onclick="fecharHistorico()">
+
+×
+
+</button>
+
+</div>
+
+
+<div
+id="listaHistorico">
+</div>
+
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+
+/* =========================================================
+FIREBASE
+========================================================= */
+
+import{
+initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+
+import{
+initializeFirestore,
+collection,
+doc,
+getDocs,
+updateDoc,
+setDoc,
+onSnapshot,
+writeBatch
+}
+from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+const firebaseConfig={
+
+apiKey:
+"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+
+authDomain:
+"sistema-digital-f9df1.firebaseapp.com",
+
+projectId:
+"sistema-digital-f9df1",
+
+storageBucket:
+"sistema-digital-f9df1.firebasestorage.app",
+
+messagingSenderId:
+"783545984661",
+
+appId:
+"1:783545984661:web:5d0945907ad9db3990dd9c"
+
+};
+
+
+const app=
+initializeApp(firebaseConfig);
+
+
+const db=
+initializeFirestore(
+app,
+{},
+"default"
+);
+
+
+/* =========================================================
+VARIÁVEIS
+========================================================= */
+
+const CHAVE_MESAS=
+"quantidadeMesas";
+
+
+let pedidos=[];
+
+let historico=[];
+
+let produtos=[];
+
+let mesaSelecionada=null;
+
+let configRestaurante={};
+
+
+let somLiberado=false;
+
+let audioContext=null;
+
+let intervaloSom=null;
+
+
+/* =========================================================
+FUNÇÕES BÁSICAS
+========================================================= */
+
+function formatarDinheiro(v){
+
+return Number(v||0).toLocaleString(
+"pt-BR",
+{
+style:"currency",
+currency:"BRL"
+}
+).replace("R$ ","R$ ");
+
+}
+
+
+function obterDataHoje(){
+
+return new Date().toLocaleDateString(
+"pt-BR"
+);
+
+}
+
+
+function obterQuantidadeMesas(){
+
+return Number(
+localStorage.getItem(CHAVE_MESAS)||8
+);
+
+}
+
+
+function normalizarStatus(s){
+
+return String(
+s||"Recebido"
+)
+.trim()
+.toLowerCase();
+
+}
+
+
+function pedidoEhValido(d){
+
+return
+
+d.mesa!==undefined&&
+d.mesa!==null&&
+String(d.mesa).trim()!==""&&
+
+(
+String(
+d.numeroPedido||
+d.numero||
+""
+).trim()!==""
+);
+
+}
+
+
+/* =========================================================
+NAVEGAÇÃO
+========================================================= */
+
+window.mostrarSecao=function(secao){
+
+document
+.querySelectorAll(".secao-painel")
+.forEach(
+s=>s.classList.remove("ativa")
+);
+
+
+document
+.querySelectorAll(".aba")
+.forEach(
+a=>a.classList.remove("ativa")
+);
+
+
+const mapa={
+
+mesas:[
+"secaoMesas",
+"abaMesas"
+],
+
+produtos:[
+"secaoProdutos",
+"abaProdutos"
+],
+
+financeiro:[
+"secaoFinanceiro",
+"abaFinanceiro"
+],
+
+configuracoes:[
+"secaoConfiguracoes",
+"abaConfiguracoes"
+]
+
+};
+
+
+document
+.getElementById(mapa[secao][0])
+.classList.add("ativa");
+
+
+document
+.getElementById(mapa[secao][1])
+.classList.add("ativa");
+
+
+if(secao==="produtos")
+renderizarProdutosAdmin();
+
+
+if(secao==="financeiro")
+calcularFinanceiro();
+
+};
+
+
+/* =========================================================
+SOM
+========================================================= */
+
+window.ativarSom=function(){
+
+try{
+
+if(!audioContext)
+
+audioContext=
+new(
+window.AudioContext||
+window.webkitAudioContext
+)();
+
+
+if(
+audioContext.state===
+"suspended"
+)
+
+audioContext.resume();
+
+
+somLiberado=true;
+
+
+document.getElementById(
+"btnSom"
+).textContent=
+"🔊 Som ativo";
+
+
+document.getElementById(
+"btnSom"
+).style.background=
+"#166534";
+
+
+tocarSomAviso();
+
+controlarSomContinuo();
+
+}catch(e){
+
+console.error(e);
+
+}
+
+};
+
+
+function tocarSomAviso(){
+
+if(!somLiberado)
+return;
+
+
+try{
+
+if(!audioContext)
+
+audioContext=
+new(
+window.AudioContext||
+window.webkitAudioContext
+)();
+
+
+const t=
+audioContext.currentTime;
+
+
+const o=
+audioContext.createOscillator();
+
+
+const g=
+audioContext.createGain();
+
+
+o.type="sine";
+
+
+o.frequency.setValueAtTime(
+880,
+t
+);
+
+
+o.frequency.setValueAtTime(
+660,
+t+.15
+);
+
+
+g.gain.setValueAtTime(
+.001,
+t
+);
+
+
+g.gain.exponentialRampToValueAtTime(
+.25,
+t+.03
+);
+
+
+g.gain.exponentialRampToValueAtTime(
+.001,
+t+.45
+);
+
+
+o.connect(g);
+
+g.connect(
+audioContext.destination
+);
+
+
+o.start(t);
+
+o.stop(t+.5);
+
+}catch(e){
+
+console.error(e);
+
+}
+
+}
+
+
+function pararSomContinuo(){
+
+if(intervaloSom){
+
+clearInterval(
+intervaloSom
+);
+
+intervaloSom=null;
+
+}
+
+}
+
+
+function controlarSomContinuo(){
+
+const temNovo=
+pedidos.some(
+p=>
+normalizarStatus(
+p.status
+)==="recebido"
+);
+
+
+if(
+temNovo&&
+somLiberado&&
+!intervaloSom
+){
+
+intervaloSom=
+setInterval(
+()=>{
+
+if(
+pedidos.some(
+p=>
+normalizarStatus(
+p.status
+)==="recebido"
+)
+
+tocarSomAviso();
+
+else
+
+pararSomContinuo();
+
+},
+3000
+);
+
+}
+
+else if(!temNovo){
+
+pararSomContinuo();
+
+}
+
+}
+
+
+/* =========================================================
+MESAS
+========================================================= */
+
+window.salvarQuantidadeMesas=function(){
+
+let q=
+Number(
+document.getElementById(
+"quantidadeMesas"
+).value
+);
+
+
+if(q<1)
+q=1;
+
+
+if(q>100)
+q=100;
+
+
+localStorage.setItem(
+CHAVE_MESAS,
+q
+);
+
+
+document.getElementById(
+"quantidadeMesas"
+).value=q;
+
+
+renderizarMesas();
+
+};
+
+
+function pedidosDaMesa(m){
+
+return pedidos.filter(
+
+p=>
+String(p.mesa)===
+String(m)&&
+normalizarStatus(
+p.status
+)!=="finalizado"
+
+);
+
+}
+
+
+function obterStatusMesa(m){
+
+const p=
+pedidosDaMesa(m);
+
+
+if(!p.length)
+return"livre";
+
+
+if(
+p.some(
+x=>
+normalizarStatus(
+x.status
+)==="pronto"
+)
+)
+
+return"pronto";
+
+
+if(
+p.some(
+x=>
+normalizarStatus(
+x.status
+)==="preparo"
+)
+)
+
+return"preparo";
+
+
+return"ocupada";
+
+}
+
+
+function obterResponsavel(pm){
+
+const p=
+pm.find(
+x=>
+x.responsavel||
+x.nomeCliente
+);
+
+
+return p
+?
+(
+p.responsavel||
+p.nomeCliente
+)
+:
+pm.length
+?
+"Não informado"
+:
+"—";
+
+}
+
+
+function calcularTotalMesa(pm){
+
+return pm.reduce(
+(t,p)=>
+t+
+Number(p.total||0),
+0
+);
+
+}
+
+
+/* =========================================================
+RESUMO
+========================================================= */
+
+function atualizarResumo(){
+
+const q=
+obterQuantidadeMesas();
+
+
+let livres=0;
+
+let ocupadas=0;
+
+let abertos=0;
+
+
+for(
+let m=1;
+m<=q;
+m++
+){
+
+const p=
+pedidosDaMesa(m);
+
+
+if(p.length)
+ocupadas++;
+
+else
+livres++;
+
+
+abertos+=p.length;
+
+}
+
+
+const hoje=
+historico.filter(
+x=>
+x.data===
+obterDataHoje()
+);
+
+
+const total=
+hoje.reduce(
+(t,x)=>
+t+
+Number(x.total||0),
+0
+);
+
+
+document.getElementById(
+"totalLivres"
+).innerText=livres;
+
+
+document.getElementById(
+"totalOcupadas"
+).innerText=ocupadas;
+
+
+document.getElementById(
+"totalPedidosAbertos"
+).innerText=abertos;
+
+
+document.getElementById(
+"totalMesasFinalizadas"
+).innerText=
+hoje.length;
+
+
+document.getElementById(
+"totalVendidoHoje"
+).innerText=
+formatarDinheiro(total);
+
+}
+
+
+/* =========================================================
+RENDERIZAR MESAS
+========================================================= */
+
+function renderizarMesas(){
+
+const area=
+document.getElementById(
+"areaMesas"
+);
+
+
+area.innerHTML="";
+
+
+for(
+let mesa=1;
+mesa<=obterQuantidadeMesas();
+mesa++
+){
+
+const pm=
+pedidosDaMesa(mesa);
+
+
+const status=
+obterStatusMesa(mesa);
+
+
+const total=
+calcularTotalMesa(pm);
+
+
+const resp=
+obterResponsavel(pm);
+
+
+const novo=
+pm.some(
+p=>
+normalizarStatus(
+p.status
+)==="recebido"
+);
+
+
+let texto=
+status==="livre"
+?
+"Livre"
+:
+status==="ocupada"
+?
+"Ocupada"
+:
+status==="preparo"
+?
+"Em preparo"
+:
+"Pronto";
+
+
+const card=
+document.createElement(
+"div"
+);
+
+
+card.className=
+"mesa "+
+status+
+(
+novo
+?
+" novo-pedido"
+:
+""
+);
+
+
+card.innerHTML=`
+
+<div class="mesa-topo">
+
+<span class="mesa-nome">
+🪑 Mesa ${mesa}
+</span>
+
+<span class="status status-${status}">
+${texto}
+</span>
+
+</div>
+
+<div class="responsavel">
+
+👤 <strong>Responsável:</strong>
+${resp}
+
+</div>
+
+<div class="info-pedido">
+
+${
+pm.length
+?
+pm.length+
+(
+pm.length===1
+?
+" pedido aberto"
+:
+" pedidos abertos"
+)
+:
+"Nenhum pedido"
+}
+
+</div>
+
+<div class="total-mesa">
+
+R$ ${Number(total)
+.toFixed(2)
+.replace(".",",")}
+
+</div>
+
+<button
+class="btn-abrir"
+onclick="abrirComanda(${mesa})">
+
+${
+pm.length
+?
+"📋 Abrir Comanda"
+:
+"👀 Ver Mesa"
+}
+
+</button>
+
+`;
+
+
+area.appendChild(card);
+
+}
+
+
+atualizarResumo();
+
+}
+
+
+/* =========================================================
+AVISOS
+========================================================= */
+
+function renderizarAvisos(){
+
+const lista=
+document.getElementById(
+"listaAvisos"
+);
+
+
+const contador=
+document.getElementById(
+"contadorAvisos"
+);
+
+
+const abertos=
+pedidos.filter(
+p=>
+normalizarStatus(
+p.status
+)!=="finalizado"
+);
+
+
+const ordem={
+recebido:1,
+preparo:2,
+pronto:3
+};
+
+
+abertos.sort(
+(a,b)=>
+(
+ordem[
+normalizarStatus(a.status)
+]||99
+)
+-
+(
+ordem[
+normalizarStatus(b.status)
+]||99
+)
+);
+
+
+contador.innerText=
+abertos.length;
+
+
+lista.innerHTML="";
+
+
+if(!abertos.length){
+
+lista.innerHTML=
+'<div class="sem-avisos">✅ Nenhum pedido aguardando atenção.</div>';
+
+return;
+
+}
+
+
+abertos.forEach(
+p=>{
+
+const s=
+normalizarStatus(
+p.status
+);
+
+
+const cl=
+s==="recebido"
+?
+"aviso-novo"
+:
+s==="preparo"
+?
+"aviso-preparo"
+:
+"aviso-pronto";
+
+
+const cs=
+s==="recebido"
+?
+"aviso-status-novo"
+:
+s==="preparo"
+?
+"aviso-status-preparo"
+:
+"aviso-status-pronto";
+
+
+const txt=
+s==="recebido"
+?
+"🔴 Novo pedido"
+:
+s==="preparo"
+?
+"🟠 Em preparo"
+:
+"🔵 Pronto";
+
+
+const d=
+document.createElement(
+"div"
+);
+
+
+d.className=
+"aviso-item "+
+cl;
+
+
+d.innerHTML=`
+
+<div class="aviso-info">
+
+<span class="aviso-mesa">
+
+🪑 Mesa ${p.mesa}
+
+</span>
+
+<span class="aviso-detalhes">
+
+Pedido #${p.numeroPedido||p.numero}
+
+</span>
+
+</div>
+
+<span
+class="aviso-status ${cs}">
+
+${txt}
+
+</span>
+
+`;
+
+
+d.onclick=
+()=>abrirComanda(
+Number(p.mesa)
+);
+
+
+lista.appendChild(d);
+
+});
+
+}
+
+
+/* =========================================================
+PEDIDOS
+========================================================= */
+
+function carregarPedidos(){
+
+onSnapshot(
+collection(
+db,
+"pedidos"
+),
+
+snap=>{
+
+pedidos=[];
+
+
+snap.forEach(
+d=>{
+
+const x=d.data();
+
+
+if(
+pedidoEhValido(x)
+){
+
+pedidos.push({
+
+id:d.id,
+
+...x,
+
+status:
+normalizarStatus(
+x.status
+)
+
+});
+
+}
+
+});
+
+
+renderizarMesas();
+
+renderizarAvisos();
+
+controlarSomContinuo();
+
+
+if(mesaSelecionada)
+renderizarComanda();
+
+});
+
+}
+
+
+/* =========================================================
+HISTÓRICO
+========================================================= */
+
+function carregarHistorico(){
+
+onSnapshot(
+collection(
+db,
+"historicoComandas"
+),
+
+snap=>{
+
+historico=[];
+
+
+snap.forEach(
+d=>
+historico.push({
+id:d.id,
+...d.data()
+})
+);
+
+
+historico.sort(
+(a,b)=>
+new Date(
+b.dataFinalizacao||0
+)
+-
+new Date(
+a.dataFinalizacao||0
+)
+);
+
+
+atualizarResumo();
+
+});
+
+}
+
+
+/* =========================================================
+COMANDA
+========================================================= */
+
+window.abrirComanda=
+function(m){
+
+mesaSelecionada=m;
+
+document.getElementById(
+"tituloComanda"
+).innerText=
+"🪑 Mesa "+m;
+
+renderizarComanda();
+
+document.getElementById(
+"modalComanda"
+).style.display=
+"flex";
+
+};
+
+
+function renderizarComanda(){
+
+if(!mesaSelecionada)
+return;
+
+
+const pm=
+pedidosDaMesa(
+mesaSelecionada
+);
+
+
+const lista=
+document.getElementById(
+"listaComanda"
+);
+
+
+document.getElementById(
+"responsavelComanda"
+).innerHTML=
+
+`👤 <strong>Responsável:</strong> ${
+obterResponsavel(pm)
+}`;
+
+
+lista.innerHTML="";
+
+
+if(!pm.length){
+
+lista.innerHTML=
+'<div class="sem-pedidos">🟢 Esta mesa está livre.</div>';
+
+}
+
+
+pm.sort(
+(a,b)=>
+Number(
+a.numeroPedido||
+a.numero||
+0
+)
+-
+Number(
+b.numeroPedido||
+b.numero||
+0
+)
+);
+
+
+pm.forEach(
+p=>{
+
+const s=
+normalizarStatus(
+p.status
+);
+
+
+const classe=
+s==="preparo"
+?
+"status-preparo-pedido"
+:
+s==="pronto"
+?
+"status-pronto-pedido"
+:
+"status-recebido";
+
+
+const txt=
+s==="preparo"
+?
+"🟠 Em preparo"
+:
+s==="pronto"
+?
+"🔵 Pronto"
+:
+"🔴 Recebido";
+
+
+let itens="";
+
+
+(
+p.itens||
+[]
+).forEach(
+i=>{
+
+itens+=`
+
+<div class="item">
+
+<div class="item-linha">
+
+<span class="item-nome">
+
+${i.quantidade}x ${i.nome}
+
+</span>
+
+<span>
+
+R$ ${
+Number(
+Number(i.preco||0)*
+Number(i.quantidade||0)
+)
+.toFixed(2)
+.replace(".",",")
+}
+
+</span>
+
+</div>
+
+${
+i.observacao
+?
+`<div class="item-obs">
+📝 OBS: ${i.observacao}
+</div>`
+:
+""
+}
+
+</div>
+
+`;
+
+});
+
+
+const hora=
+p.data
+?
+new Date(
+p.data
+).toLocaleTimeString(
+"pt-BR",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+)
+:
+"--:--";
+
+
+const bloco=
+document.createElement(
+"div"
+);
+
+
+bloco.className=
+"pedido-bloco";
+
+
+bloco.innerHTML=`
+
+<div class="pedido-cabecalho">
+
+<span>
+
+<strong>
+Pedido #${p.numeroPedido||p.numero||"—"}
+</strong>
+
+<br>
+
+🕐 ${hora}
+
+</span>
+
+<span
+class="pedido-status ${classe}">
+
+${txt}
+
+</span>
+
+</div>
+
+${itens}
+
+<div class="botoes-status">
+
+<button
+class="btn-status btn-recebido ${
+s==="recebido"?"ativo":""
+}"
+onclick="alterarStatusPedido(
+'${p.id}',
+'recebido'
+)">
+
+🔴 Recebido
+
+</button>
+
+<button
+class="btn-status btn-preparo ${
+s==="preparo"?"ativo":""
+}"
+onclick="alterarStatusPedido(
+'${p.id}',
+'preparo'
+)">
+
+🟠 Em preparo
+
+</button>
+
+<button
+class="btn-status btn-pronto ${
+s==="pronto"?"ativo":""
+}"
+onclick="alterarStatusPedido(
+'${p.id}',
+'pronto'
+)">
+
+🔵 Pronto
+
+</button>
+
+</div>
+
+`;
+
+
+lista.appendChild(
+bloco
+);
+
+});
+
+
+document.getElementById(
+"totalComanda"
+).innerText=
+Number(
+calcularTotalMesa(pm)
+)
+.toFixed(2)
+.replace(".",",");
+
+}
+
+
+/* =========================================================
+ALTERAR STATUS
+========================================================= */
+
+window.alterarStatusPedido=
+async function(id,status){
+
+try{
+
+await updateDoc(
+doc(
+db,
+"pedidos",
+id
+),
+{
+status
+}
+);
+
+}catch(e){
+
+alert(
+"❌ Erro ao atualizar pedido.\n\n"+
+(e.message||e)
+);
+
+}
+
+};
+
+
+/* =========================================================
+FECHAR COMANDA
+========================================================= */
+
+window.fecharComanda=
+function(){
+
+document.getElementById(
+"modalComanda"
+).style.display=
+"none";
+
+mesaSelecionada=null;
+
+};
+
+
+/* =========================================================
+FINALIZAR MESA
+========================================================= */
+
+window.finalizarMesa=
+async function(){
+
+if(!mesaSelecionada)
+return;
+
+
+const pm=
+pedidosDaMesa(
+mesaSelecionada
+);
+
+
+if(!pm.length){
+
+alert(
+"Esta mesa não possui pedidos."
+);
+
+return;
+
+}
+
+
+const total=
+calcularTotalMesa(pm);
+
+
+const resp=
+obterResponsavel(pm);
+
+
+if(
+!confirm(
+`Finalizar Comanda da Mesa ${
+mesaSelecionada
+}?
+
+Responsável: ${resp}
+
+Total: ${
+formatarDinheiro(total)
+}
+
+A mesa será liberada.`
+)
+)
+return;
+
+
+try{
+
+const agora=
+new Date();
+
+
+const batch=
+writeBatch(db);
+
+
+pm.forEach(
+p=>
+batch.update(
+doc(
+db,
+"pedidos",
+p.id
+),
+{
+status:"finalizado",
+dataFinalizacao:
+agora.toISOString()
+}
+)
+);
+
+
+const href=
+doc(
+collection(
+db,
+"historicoComandas"
+)
+);
+
+
+batch.set(
+href,
+{
+
+mesa:
+mesaSelecionada,
+
+responsavel:
+resp,
+
+total:
+Number(
+total.toFixed(2)
+),
+
+data:
+agora.toLocaleDateString(
+"pt-BR"
+),
+
+horarioFinalizacao:
+agora.toLocaleTimeString(
+"pt-BR",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+),
+
+dataFinalizacao:
+agora.toISOString(),
+
+pedidos:
+pm.map(
+p=>({
+
+id:p.id,
+
+numeroPedido:
+p.numeroPedido||
+p.numero||
+0,
+
+total:
+Number(
+p.total||0
+),
+
+itens:
+p.itens||[]
+
+})
+)
+
+}
+);
+
+
+await batch.commit();
+
+
+const m=
+mesaSelecionada;
+
+
+fecharComanda();
+
+
+alert(
+
+`✅ Comanda finalizada!
+
+Mesa ${m} liberada.
+
+Total:
+${formatarDinheiro(total)}`
+
+);
+
+
+}catch(e){
+
+alert(
+"❌ Erro ao finalizar comanda.\n\n"+
+(e.message||e)
+);
+
+}
+
+};
+
+
+/* =========================================================
+HISTÓRICO
+========================================================= */
+
+window.abrirHistorico=
+function(){
+
+const lista=
+document.getElementById(
+"listaHistorico"
+);
+
+
+const hoje=
+obterDataHoje();
+
+
+const hh=
+historico.filter(
+x=>x.data===hoje
+);
+
+
+const total=
+hh.reduce(
+(t,x)=>
+t+
+Number(x.total||0),
+0
+);
+
+
+lista.innerHTML=`
+
+<div class="historico-resumo">
+
+📊
+
+<strong>
+Resumo de hoje
+</strong>
+
+<div
+style="color:#9ca3af;margin-top:5px">
+
+${hh.length}
+comandas finalizadas
+
+</div>
+
+<strong>
+
+${formatarDinheiro(total)}
+
+</strong>
+
+</div>
+
+`;
+
+
+if(!historico.length){
+
+lista.innerHTML+=
+'<div class="sem-pedidos">📜 Nenhuma comanda finalizada ainda.</div>';
+
+}
+
+else{
+
+historico.forEach(
+c=>{
+
+const d=
+document.createElement(
+"div"
+);
+
+
+d.className=
+"historico-item";
+
+
+d.innerHTML=`
+
+<div class="historico-topo">
+
+<strong>
+🪑 Mesa ${c.mesa}
+</strong>
+
+<span class="historico-total">
+
+${formatarDinheiro(c.total)}
+
+</span>
+
+</div>
+
+<div>
+
+👤 ${
+c.responsavel||
+"Não informado"
+}
+
+</div>
+
+<div class="historico-detalhes">
+
+📅 ${
+c.data||
+"--/--/----"
+}
+
+—
+
+🕐 ${
+c.horarioFinalizacao||
+"--:--"
+}
+
+</div>
+
+<div class="historico-detalhes">
+
+🍽️ ${
+(c.pedidos||[]).length
+}
+pedido(s) nesta comanda
+
+</div>
+
+`;
+
+lista.appendChild(d);
+
+});
+
+}
+
+
+document.getElementById(
+"modalHistorico"
+).style.display=
+"flex";
+
+};
+
+
+window.fecharHistorico=
+function(){
+
+document.getElementById(
+"modalHistorico"
+).style.display=
+"none";
+
+};
+
+
+/* =========================================================
+CONFIGURAÇÕES
+========================================================= */
+
+function carregarConfiguracoes(){
+
+onSnapshot(
+collection(
+db,
+"configuracaoRestaurante"
+),
+
+snap=>{
+
+configRestaurante={};
+
+
+snap.forEach(
+d=>
+configRestaurante={
+...d.data()
+}
+);
+
+
+document.getElementById(
+"cfgNome"
+).value=
+configRestaurante.nome||
+"Sabor da Casa";
+
+
+document.getElementById(
+"cfgEmoji"
+).value=
+configRestaurante.emoji||
+"🍔";
+
+
+document.getElementById(
+"cfgSubtitulo"
+).value=
+configRestaurante.subtitulo||
+"Cardápio Digital";
+
+
+document.getElementById(
+"cfgTelefone"
+).value=
+configRestaurante.telefone||
+"5549984121585";
+
+
+document.getElementById(
+"cfgEndereco"
+).value=
+configRestaurante.endereco||
+"Chapecó / Santa Catarina";
+
+
+document.getElementById(
+"cfgLogo"
+).value=
+configRestaurante.logo||
+"";
+
+
+document.getElementById(
+"tituloPainel"
+).textContent=
+
+`${
+configRestaurante.emoji||
+"🍔"
+}
+${
+configRestaurante.nome||
+"Sabor da Casa"
+}`;
+
+});
+
+}
+
+
+window.salvarConfiguracoes=
+async function(){
+
+try{
+
+await setDoc(
+
+doc(
+db,
+"configuracaoRestaurante",
+"restaurante"
+),
+
+{
+
+nome:
+document.getElementById(
+"cfgNome"
+).value.trim()||
+"Sabor da Casa",
+
+emoji:
+document.getElementById(
+"cfgEmoji"
+).value.trim()||
+"🍔",
+
+subtitulo:
+document.getElementById(
+"cfgSubtitulo"
+).value.trim()||
+"Cardápio Digital",
+
+telefone:
+document.getElementById(
+"cfgTelefone"
+).value.trim()||
+"5549984121585",
+
+endereco:
+document.getElementById(
+"cfgEndereco"
+).value.trim()||
+"Chapecó / Santa Catarina",
+
+logo:
+document.getElementById(
+"cfgLogo"
+).value.trim()
+
+},
+
+{
+merge:true
+}
+
+);
+
+
+alert(
+"✅ Configurações salvas!"
+);
+
+
+}catch(e){
+
+alert(
+"❌ Erro ao salvar configurações.\n\n"+
+(e.message||e)
+);
+
+}
+
+};
+
+
+/* =========================================================
+PRODUTOS
+========================================================= */
+
+function limparFormularioProduto(){
+
+[
+"produtoNome",
+"produtoCategoria",
+"produtoPreco",
+"produtoPrecoPromo",
+"produtoDescricao",
+"produtoFoto",
+"produtoId"
+
+].forEach(
+id=>
+document.getElementById(
+id
+).value=""
+);
+
+
+document.getElementById(
+"produtoPromo"
+).value=
+"false";
+
+
+document.getElementById(
+"produtoAtivo"
+).value=
+"true";
+
+}
+
+
+window.limparFormularioProduto=
+limparFormularioProduto;
+
+
+/* =========================================================
+SALVAR PRODUTO
+========================================================= */
+
+window.salvarProduto=
+async function(){
+
+const nome=
+document.getElementById(
+"produtoNome"
+).value.trim();
+
+
+const categoria=
+document.getElementById(
+"produtoCategoria"
+).value.trim();
+
+
+const preco=
+Number(
+document.getElementById(
+"produtoPreco"
+).value||0
+);
+
+
+const id=
+document.getElementById(
+"produtoId"
+).value;
+
+
+if(
+!nome||
+!categoria||
+preco<=0
+){
+
+alert(
+"⚠️ Informe nome, categoria e preço."
+);
+
+return;
+
+}
+
+
+const dados={
+
+nome,
+
+categoria,
+
+preco,
+
+precoPromocional:
+Number(
+document.getElementById(
+"produtoPrecoPromo"
+).value||0
+),
+
+descricao:
+document.getElementById(
+"produtoDescricao"
+).value.trim(),
+
+foto:
+document.getElementById(
+"produtoFoto"
+).value.trim(),
+
+promocaoAtiva:
+document.getElementById(
+"produtoPromo"
+).value===
+"true",
+
+ativo:
+document.getElementById(
+"produtoAtivo"
+).value===
+"true"
+
+};
+
+
+try{
+
+await setDoc(
+
+doc(
+db,
+"produtos",
+id||
+crypto.randomUUID()
+),
+
+dados
+
+);
+
+
+mostrarAvisoProduto(
+"✅ Produto salvo com sucesso!"
+);
+
+
+limparFormularioProduto();
+
+
+}catch(e){
+
+alert(
+"❌ Erro ao salvar produto.\n\n"+
+(e.message||e)
+);
+
+}
+
+};
+
+
+/* =========================================================
+AVISO
+========================================================= */
+
+function mostrarAvisoProduto(texto){
+
+const aviso=
+document.getElementById(
+"avisoProdutos"
+);
+
+
+aviso.innerText=
+texto;
+
+
+aviso.style.display=
+"block";
+
+
+setTimeout(
+()=>{
+aviso.style.display=
+"none";
+},
+3000
+);
+
+}
+
+
+/* =========================================================
+CARREGAR 16 PRODUTOS INICIAIS
+========================================================= */
+
+window.carregarProdutosIniciais=
+async function(){
+
+const produtosIniciais=[
+
+{
+nome:"X-Bacon",
+categoria:"Lanches",
+preco:26,
+descricao:"Lanche",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"X-Salada",
+categoria:"Lanches",
+preco:23,
+descricao:"Lanche",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"X-Calabresa",
+categoria:"Lanches",
+preco:27,
+descricao:"Lanche",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"X-Tudo",
+categoria:"Lanches",
+preco:34,
+descricao:"Lanche completo",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Pizza Calabresa",
+categoria:"Pizzas",
+preco:45,
+descricao:"Pizza",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Pizza Frango c/ Catupiry",
+categoria:"Pizzas",
+preco:48,
+descricao:"Pizza",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Pizza Mussarela",
+categoria:"Pizzas",
+preco:40,
+descricao:"Pizza",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Pizza Portuguesa",
+categoria:"Pizzas",
+preco:52,
+descricao:"Pizza",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Batata Frita",
+categoria:"Porções",
+preco:20,
+descricao:"Porção",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Batata Frita c/ Queijo",
+categoria:"Porções",
+preco:26,
+descricao:"Porção",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Porção de Tilápia",
+categoria:"Porções",
+preco:38,
+descricao:"Porção",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Mandioca Frita",
+categoria:"Porções",
+preco:18,
+descricao:"Porção",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Coca-Cola",
+categoria:"Bebidas",
+preco:7,
+descricao:"Refrigerante",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Pepsi",
+categoria:"Bebidas",
+preco:7,
+descricao:"Refrigerante",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Cerveja",
+categoria:"Bebidas",
+preco:13,
+descricao:"Cerveja",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+},
+
+{
+nome:"Chopp",
+categoria:"Bebidas",
+preco:15,
+descricao:"Chopp",
+precoPromocional:0,
+promocaoAtiva:false,
+ativo:true
+}
+
+];
+
+
+if(
+!confirm(
+"🚀 CARREGAR PRODUTOS INICIAIS?\n\n"+
+"Serão adicionados os 16 produtos do Sabor da Casa.\n\n"+
+"Se algum já existir, ele não será duplicado."
+)
+)
+return;
+
+
+try{
+
+const snapshot=
+await getDocs(
+collection(
+db,
+"produtos"
+)
+);
+
+
+const nomesExistentes=
+new Set();
+
+
+snapshot.forEach(
+d=>{
+
+const p=d.data();
+
+if(p.nome){
+
+nomesExistentes.add(
+String(p.nome)
+.trim()
+.toLowerCase()
+);
+
+}
+
+});
+
+
+let adicionados=0;
+
+let ignorados=0;
+
+
+for(
+const produto
+of produtosIniciais
+){
+
+const nomeNormalizado=
+produto.nome
+.trim()
+.toLowerCase();
+
+
+if(
+nomesExistentes.has(
+nomeNormalizado
+)
+){
+
+ignorados++;
+
+continue;
+
+}
+
+
+await setDoc(
+
+doc(
+collection(
+db,
+"produtos"
+)
+),
+
+produto
+
+);
+
+
+adicionados++;
+
+}
+
+
+mostrarAvisoProduto(
+
+"✅ Produtos carregados! "+
+adicionados+
+" adicionados e "+
+ignorados+
+" já existentes."
+
+);
+
+
+alert(
+
+"✅ PRODUTOS CARREGADOS!\n\n"+
+"Adicionados: "+
+adicionados+
+"\n"+
+"Já existentes: "+
+ignorados
+
+);
+
+
+}catch(e){
+
+console.error(e);
+
+
+alert(
+
+"❌ NÃO FOI POSSÍVEL CARREGAR OS PRODUTOS.\n\n"+
+(e.code||"")+
+"\n\n"+
+(e.message||e)
+
+);
+
+}
+
+};
+
+
+/* =========================================================
+RENDERIZAR PRODUTOS
+========================================================= */
+
+function renderizarProdutosAdmin(){
+
+const lista=
+document.getElementById(
+"listaProdutosAdmin"
+);
+
+
+lista.innerHTML="";
+
+
+if(!produtos.length){
+
+lista.innerHTML=
+'<div class="sem-pedidos">Nenhum produto cadastrado.</div>';
+
+return;
+
+}
+
+
+produtos.forEach(
+p=>{
+
+const d=
+document.createElement(
+"div"
+);
+
+
+d.className=
+"produto-admin";
+
+
+const ativo=
+p.ativo!==false;
+
+
+const promo=
+p.promocaoAtiva&&
+Number(p.precoPromocional)>0;
+
+
+d.innerHTML=`
+
+<div class="produto-admin-topo">
+
+<h3>
+${p.nome}
+</h3>
+
+<span
+class="badge ${
+ativo
+?
+"badge-ativo"
+:
+"badge-inativo"
+}">
+
+${
+ativo
+?
+"Ativo"
+:
+"Inativo"
+}
+
+</span>
+
+</div>
+
+
+<div class="produto-admin-info">
+
+${p.categoria||"Sem categoria"}
+
+·
+
+${formatarDinheiro(p.preco)}
+
+${
+promo
+?
+" · 🔥 Promoção "+
+formatarDinheiro(
+p.precoPromocional
+)
+:
+""
+}
+
+</div>
+
+
+<div class="produto-admin-info">
+
+${p.descricao||""}
+
+</div>
+
+
+<div class="produto-admin-acoes">
+
+
+<button
+class="btn-acao"
+onclick="editarProduto('${p.id}')">
+
+✏️ Editar
+
+</button>
+
+
+<button
+class="btn-acao ${
+ativo
+?
+"btn-vermelho"
+:
+"btn-verde"
+}"
+onclick="alternarProduto(
+'${p.id}',
+${ativo}
+)">
+
+${
+ativo
+?
+"🚫 Desativar"
+:
+"✅ Ativar"
+}
+
+</button>
+
+
+</div>
+
+`;
+
+
+lista.appendChild(d);
+
+});
+
+}
+
+
+/* =========================================================
+EDITAR PRODUTO
+========================================================= */
+
+window.editarProduto=
+function(id){
+
+const p=
+produtos.find(
+x=>x.id===id
+);
+
+
+if(!p)
+return;
+
+
+document.getElementById(
+"produtoId"
+).value=
+p.id;
+
+
+document.getElementById(
+"produtoNome"
+).value=
+p.nome||"";
+
+
+document.getElementById(
+"produtoCategoria"
+).value=
+p.categoria||"";
+
+
+document.getElementById(
+"produtoPreco"
+).value=
+p.preco||"";
+
+
+document.getElementById(
+"produtoPrecoPromo"
+).value=
+p.precoPromocional||"";
+
+
+document.getElementById(
+"produtoDescricao"
+).value=
+p.descricao||"";
+
+
+document.getElementById(
+"produtoFoto"
+).value=
+p.foto||"";
+
+
+document.getElementById(
+"produtoPromo"
+).value=
+p.promocaoAtiva
+?
+"true"
+:
+"false";
+
+
+document.getElementById(
+"produtoAtivo"
+).value=
+p.ativo!==false
+?
+"true"
+:
+"false";
+
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+};
+
+
+/* =========================================================
+ATIVAR / DESATIVAR
+========================================================= */
+
+window.alternarProduto=
+async function(id,ativo){
+
+try{
+
+await updateDoc(
+
+doc(
+db,
+"produtos",
+id
+),
+
+{
+ativo:!ativo
+}
+
+);
+
+}catch(e){
+
+alert(
+"❌ Erro.\n\n"+
+(e.message||e)
+);
+
+}
+
+};
+
+
+/* =========================================================
+OUVIR PRODUTOS
+========================================================= */
+
+onSnapshot(
+
+collection(
+db,
+"produtos"
+),
+
+snap=>{
+
+produtos=[];
+
+
+snap.forEach(
+d=>
+produtos.push({
+id:d.id,
+...d.data()
+})
+);
+
+
+renderizarProdutosAdmin();
+
+}
+
+);
+
+
+/* =========================================================
+FINANCEIRO
+========================================================= */
+
+async function calcularFinanceiro(){
+
+const inicio=
+document.getElementById(
+"financeiroInicio"
+).value;
+
+
+const fim=
+document.getElementById(
+"financeiroFim"
+).value;
+
+
+const lista=
+historico.filter(
+h=>{
+
+if(!h.dataFinalizacao)
+return false;
+
+
+const dia=
+h.dataFinalizacao
+.slice(0,10);
+
+
+return
+
+(!inicio||dia>=inicio)&&
+(!fim||dia<=fim);
+
+});
+
+
+const total=
+lista.reduce(
+(t,h)=>
+t+
+Number(h.total||0),
+0
+);
+
+
+const comandas=
+lista.length;
+
+
+let itens=0;
+
+let mesas=
+new Set();
+
+let ranking={};
+
+
+lista.forEach(
+h=>{
+
+mesas.add(
+String(h.mesa)
+);
+
+
+(
+h.pedidos||
+[]
+).forEach(
+p=>
+(
+p.itens||
+[]
+).forEach(
+i=>{
+
+itens+=
+Number(
+i.quantidade||0
+);
+
+
+ranking[i.nome]=
+(
+ranking[i.nome]||0
+)+
+Number(
+i.quantidade||0
+);
+
+})
+
+);
+
+});
+
+
+document.getElementById(
+"finTotal"
+).innerText=
+formatarDinheiro(total);
+
+
+document.getElementById(
+"finComandas"
+).innerText=
+comandas;
+
+
+document.getElementById(
+"finMedia"
+).innerText=
+formatarDinheiro(
+comandas
+?
+total/comandas
+:
+0
+);
+
+
+document.getElementById(
+"finItens"
+).innerText=
+itens;
+
+
+document.getElementById(
+"finMesas"
+).innerText=
+mesas.size;
+
+
+const ordenado=
+Object.entries(
+ranking
+).sort(
+(a,b)=>
+b[1]-a[1]
+);
+
+
+document.getElementById(
+"rankingProdutos"
+).innerHTML=
+
+ordenado.length
+
+?
+
+`
+
+<table class="tabela-financeiro">
+
+<thead>
+
+<tr>
+
+<th>
+Produto
+</th>
+
+<th>
+Quantidade
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${
+ordenado
+.map(
+x=>
+`
+
+<tr>
+
+<td>
+${x[0]}
+</td>
+
+<td>
+${x[1]}
+</td>
+
+</tr>
+
+`
+)
+.join("")
+}
+
+</tbody>
+
+</table>
+
+`
+
+:
+
+"<div class='sem-pedidos'>Nenhuma venda no período.</div>";
+
+}
+
+
+window.calcularFinanceiro=
+calcularFinanceiro;
+
+
+/* =========================================================
+INICIALIZAÇÃO
+========================================================= */
+
+document.getElementById(
+"quantidadeMesas"
+).value=
+obterQuantidadeMesas();
+
+
+carregarPedidos();
+
+carregarHistorico();
+
+carregarConfiguracoes();
+
+
+</script>
+
+</body>
 </html>
