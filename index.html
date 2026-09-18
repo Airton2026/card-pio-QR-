@@ -286,14 +286,33 @@ snap.forEach(d=>configuracao={...d.data()});
 aplicarConfiguracao();
 },err=>console.warn("Configuração indisponível:",err));
 
-if(ultimoPedido){
 onSnapshot(collection(db,"pedidos"),snap=>{
-if(!snap.docs.length){ultimoPedido=null;localStorage.removeItem("ultimoPedido");mostrarStatusUltimo();return;}
+if(!snap.docs.length){
+  ultimoPedido=null;
+  localStorage.removeItem("ultimoPedido");
+  mostrarStatusUltimo();
+  if(document.getElementById("modalAcompanhamento").style.display==="block")fecharAcompanhamento();
+  return;
+}
+
+if(!ultimoPedido){
+  return;
+}
 
 const p=snap.docs.map(d=>({id:d.id,...d.data()})).find(x=>String(x.numeroPedido)===String(ultimoPedido.numeroPedido));
-if(p){ultimoPedido={numeroPedido:p.numeroPedido,status:p.status};localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));mostrarStatusUltimo();if(document.getElementById("modalAcompanhamento").style.display==="block")renderAcompanhamento()}
-});
+if(p){
+  ultimoPedido={numeroPedido:p.numeroPedido,status:p.status};
+  localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));
+  mostrarStatusUltimo();
+  if(document.getElementById("modalAcompanhamento").style.display==="block")renderAcompanhamento();
+}else{
+  // O pedido salvo no navegador não existe mais no Firebase.
+  ultimoPedido=null;
+  localStorage.removeItem("ultimoPedido");
+  mostrarStatusUltimo();
+  if(document.getElementById("modalAcompanhamento").style.display==="block")fecharAcompanhamento();
 }
+});
 atualizarCarrinho();
 </script>
 </body>
