@@ -116,7 +116,7 @@ header h1{font-size:25px}.produto{padding:13px}.produto h3{font-size:17px}.btn-a
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import{initializeFirestore,collection,doc,addDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import{initializeFirestore,collection,addDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
@@ -128,12 +128,6 @@ appId:"1:783545984661:web:5d0945907ad9db3990dd9c"
 };
 const app=initializeApp(firebaseConfig);
 const db=initializeFirestore(app,{},"default");
-
-// Restaurante definido pelo link. Ex.: ?restaurante=sabor-da-casa
-const RESTAURANTE_ID=new URLSearchParams(location.search).get("restaurante")||"sabor-da-casa";
-const restauranteRef=doc(db,"restaurantes",RESTAURANTE_ID);
-const produtosRef=collection(restauranteRef,"produtos");
-const pedidosRef=collection(restauranteRef,"pedidos");
 
 const produtosIniciais=[
 {id:"x-bacon",nome:"X-Bacon",preco:26,categoria:"Lanches",descricao:"",ativo:true,promocaoAtiva:false},
@@ -239,7 +233,7 @@ try{
 const numeroPedido=gerarNumeroPedido();
 const itens=carrinho.map(i=>({id:i.id,nome:i.nome,preco:i.preco,quantidade:i.quantidade,observacao:i.observacao||""}));
 const pedido={numeroPedido,mesa,responsavel,observacaoGeral,itens,total:total(),status:"Recebido",data:new Date().toISOString()};
-await addDoc(pedidosRef,pedido);
+await addDoc(collection(db,"restaurantes","sabor-da-casa","pedidos"),pedido);
 ultimoPedido={numeroPedido,status:"Recebido"};
 localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));
 mostrarStatusUltimo();
@@ -268,15 +262,15 @@ document.getElementById("numeroAcompanhamento").textContent="#"+ultimoPedido.num
 const s=ultimoPedido.status;
 ["stRecebido","stPreparo","stPronto"].forEach(id=>document.getElementById(id).style.background="#eee");
 if(s==="Recebido"){
-document.getElementById("stRecebido").style.background="#bde8c8";
+document.getElementById("stRecebido").style.background="#39ff14";document.getElementById("stRecebido").style.color="#07120b";document.getElementById("stRecebido").style.boxShadow="0 0 22px #39ff14, 0 0 45px rgba(57,255,20,.65)";
 document.getElementById("mensagemAcompanhamento").textContent="🔴 Pedido recebido! O restaurante já recebeu seu pedido.";
 }
 else if(s==="Em preparo"){
-document.getElementById("stPreparo").style.background="#bde8c8";
+document.getElementById("stPreparo").style.background="#39ff14";document.getElementById("stPreparo").style.color="#07120b";document.getElementById("stPreparo").style.boxShadow="0 0 22px #39ff14, 0 0 45px rgba(57,255,20,.65)";
 document.getElementById("mensagemAcompanhamento").textContent="🟠 Seu pedido está em preparo!";
 }
 else if(s==="Pronto"){
-document.getElementById("stPronto").style.background="#bde8c8";
+document.getElementById("stPronto").style.background="#39ff14";document.getElementById("stPronto").style.color="#07120b";document.getElementById("stPronto").style.boxShadow="0 0 22px #39ff14, 0 0 45px rgba(57,255,20,.65)";
 document.getElementById("mensagemAcompanhamento").textContent="🔵 Seu pedido está pronto! Aguarde para receber seu pedido.";
 }
 }
@@ -285,7 +279,7 @@ try{
 const salvo=JSON.parse(localStorage.getItem("ultimoPedido")||"null");if(salvo)ultimoPedido=salvo;mostrarStatusUltimo();
 }catch(e){}
 
-onSnapshot(produtosRef,snap=>{
+onSnapshot(collection(db,"produtos"),snap=>{
 produtos=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.ativo!==false);
 if(!produtos.length)produtos=produtosIniciais;
 categorias=[...new Set(produtos.map(p=>p.categoria).filter(Boolean))];
@@ -295,12 +289,13 @@ console.warn("Produtos do Firebase indisponíveis:",err);
 produtos=produtosIniciais;categorias=[...new Set(produtos.map(p=>p.categoria))];mostrarCategorias();mostrarProdutos();
 });
 
-onSnapshot(restauranteRef,snap=>{
-configuracao=snap.exists()?snap.data():{};
+onSnapshot(collection(db,"configuracaoRestaurante"),snap=>{
+configuracao={};
+snap.forEach(d=>configuracao={...d.data()});
 aplicarConfiguracao();
-},err=>console.warn("Configuração do restaurante indisponível:",err));
+},err=>console.warn("Configuração indisponível:",err));
 
-onSnapshot(pedidosRef,snap=>{
+onSnapshot(collection(db,"pedidos"),snap=>{
 if(!snap.docs.length){
   ultimoPedido=null;
   localStorage.removeItem("ultimoPedido");
