@@ -288,6 +288,8 @@ aplicarConfiguracao();
 
 if(ultimoPedido){
 onSnapshot(collection(db,"pedidos"),snap=>{
+if(!snap.docs.length){ultimoPedido=null;localStorage.removeItem("ultimoPedido");mostrarStatusUltimo();return;}
+
 const p=snap.docs.map(d=>({id:d.id,...d.data()})).find(x=>String(x.numeroPedido)===String(ultimoPedido.numeroPedido));
 if(p){ultimoPedido={numeroPedido:p.numeroPedido,status:p.status};localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));mostrarStatusUltimo();if(document.getElementById("modalAcompanhamento").style.display==="block")renderAcompanhamento()}
 });
