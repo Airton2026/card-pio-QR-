@@ -262,16 +262,14 @@ try{
 const q=query(collection(db,"pedidos"),where("mesa","==",mesa));
 const snap=await getDocs(q);
 const ativos=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.status!=="Finalizado");
-let comandaId=ativos.find(p=>p.comandaId)?.comandaId||null;
+let comandaId=ativos.find(p=>p.comandaId)?.comandaId||gerarComandaId();
 
-/* Pedidos antigos que não tinham comandaId entram na nova comanda. */
-if(!comandaId&&ativos.length){
-comandaId=gerarComandaId();
+/* Garante que TODOS os pedidos ativos desta mesa pertençam à mesma comanda. */
 for(const antigo of ativos){
+if(String(antigo.comandaId||"")!==String(comandaId)){
 await updateDoc(doc(db,"pedidos",antigo.id),{comandaId});
 }
 }
-if(!comandaId)comandaId=gerarComandaId();
 
 const numeroPedido=gerarNumeroPedido();
 const itens=carrinho.map(i=>({id:i.id,nome:i.nome,preco:i.preco,quantidade:i.quantidade,observacao:i.observacao||""}));
@@ -280,7 +278,16 @@ const ref=await addDoc(collection(db,"pedidos"),pedido);
 
 comandaAtualId=comandaId;
 mesaAtual=mesa;
-pedidosAcompanhamento=[{id:ref.id,...pedido}];
+
+/* Carrega imediatamente TODOS os pedidos ativos desta mesa.
+   Assim o cliente acompanha a comanda inteira, mesmo que algum pedido
+   antigo tenha sido criado antes da vinculação do comandaId. */
+const mesaSnap=await getDocs(query(collection(db,"pedidos"),where("mesa","==",mesa)));
+pedidosAcompanhamento=mesaSnap.docs
+  .map(d=>({id:d.id,...d.data()}))
+  .filter(p=>p.status!=="Finalizado")
+  .sort((a,b)=>String(a.data||"").localeCompare(String(b.data||"")));
+
 localStorage.setItem("comandaAcompanhamento",JSON.stringify({comandaId,mesa}));
 mostrarStatusUltimo();
 
@@ -361,8 +368,8 @@ aplicarConfiguracao();
 onSnapshot(collection(db,"pedidos"),snap=>{
 if(!comandaAtualId)return;
 const todos=snap.docs.map(d=>({id:d.id,...d.data()}));
-const daComanda=todos.filter(p=>String(p.comandaId||"")===String(comandaAtualId));
-const ativos=daComanda.filter(p=>p.status!=="Finalizado");
+const daMesa=todos.filter(p=>String(p.mesa||"")===String(mesaAtual||""));
+const ativos=daMesa.filter(p=>p.status!=="Finalizado");
 
 if(!ativos.length){
 pedidosAcompanhamento=[];
@@ -374,7 +381,7 @@ mostrarStatusUltimo();
 if(document.getElementById("modalAcompanhamento").style.display==="block")fecharAcompanhamento();
 return;
 }
-pedidosAcompanhamento=ativos;
+pedidosAcompanhamento=ativos.sort((a,b)=>String(a.data||"").localeCompare(String(b.data||"")));
 mesaAtual=ativos[0].mesa;
 mostrarStatusUltimo();
 if(document.getElementById("modalAcompanhamento").style.display==="block")renderAcompanhamento();
