@@ -51,6 +51,11 @@ header p{font-size:16px;opacity:.95;margin-top:4px}
 .aviso-carregamento{text-align:center;color:#777;padding:30px 10px}
 .status-ultimo{display:none;margin:14px 0;background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 9px rgba(0,0,0,.1);cursor:pointer}
 .status-ultimo strong{color:#53117e}
+.acomp-pedido{background:#f7f7f7;border-radius:14px;padding:14px;margin:10px 0;text-align:left;border:1px solid #ddd}
+.acomp-pedido-titulo{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px;color:#351047}
+.acomp-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.acomp-status div{padding:11px 6px;border-radius:10px;background:#eee;text-align:center;font-size:13px;color:#555}
+.acomp-status div.ativo-neon{background:#39ff14!important;color:#07120b!important;box-shadow:0 0 22px #39ff14,0 0 45px rgba(57,255,20,.65)}
 @media(max-width:600px){
 header h1{font-size:25px}.produto{padding:13px}.produto h3{font-size:17px}.btn-adicionar{padding:10px;font-size:13px}.produto-foto{width:68px;height:68px}
 }
@@ -99,16 +104,11 @@ header h1{font-size:25px}.produto{padding:13px}.produto h3{font-size:17px}.btn-a
 
 <div class="modal-fundo" id="modalAcompanhamento">
 <div class="modal">
-<h2>📋 Acompanhar pedido</h2>
+<h2>📋 Acompanhar meus pedidos</h2>
 <div style="text-align:center">
-<div style="color:#777">Pedido</div>
-<div id="numeroAcompanhamento" style="font-size:28px;font-weight:bold;color:#5b168f;margin:6px 0 18px"></div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">
-<div id="stRecebido" style="padding:12px;border-radius:10px;background:#eee">🔴<br><b>Recebido</b></div>
-<div id="stPreparo" style="padding:12px;border-radius:10px;background:#eee">🟠<br><b>Em preparo</b></div>
-<div id="stPronto" style="padding:12px;border-radius:10px;background:#eee">🔵<br><b>Pronto</b></div>
-</div>
-<div id="mensagemAcompanhamento" style="font-size:18px;font-weight:bold;color:#5b168f;margin:22px 0"></div>
+<div id="resumoComandaCliente" style="font-size:18px;font-weight:bold;color:#5b168f;margin-bottom:16px"></div>
+<div id="listaAcompanhamento"></div>
+<div id="mensagemAcompanhamento" style="font-size:18px;font-weight:bold;color:#5b168f;margin:18px 0"></div>
 <button class="btn btn-fechar" onclick="fecharAcompanhamento()">Fechar</button>
 </div>
 </div>
@@ -116,7 +116,7 @@ header h1{font-size:25px}.produto{padding:13px}.produto h3{font-size:17px}.btn-a
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import{initializeFirestore,collection,addDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import{initializeFirestore,collection,addDoc,onSnapshot,getDocs,query,where,updateDoc}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
@@ -153,7 +153,7 @@ let carrinho=[];
 let categorias=[];
 let categoriaAtual="Todos";
 let configuracao={};
-let ultimoPedido=null;
+let pedidosAcompanhamento=[];let comandaAtualId=null;let mesaAtual=null;
 
 function dinheiro(v){return Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
 function precoAtual(p){return p.promocaoAtiva&&Number(p.precoPromocional)>0?Number(p.precoPromocional):Number(p.preco||0)}
@@ -220,7 +220,11 @@ if(configuracao.logo){logo.src=configuracao.logo;logo.style.display="inline-bloc
 document.title=`${nome} — Cardápio Digital`;
 }
 
-function gerarNumeroPedido(){const d=new Date();return String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0")+String(d.getSeconds()).padStart(2,"0")}
+function gerarNumeroPedido(){
+const d=new Date();
+return String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0")+String(d.getSeconds()).padStart(2,"0");
+}
+function gerarComandaId(){return "comanda-"+Date.now()+"-"+Math.random().toString(36).slice(2,10)}
 
 window.enviarPedido=async()=>{
 if(!carrinho.length){alert("🛒 Seu carrinho está vazio.");return}
@@ -230,16 +234,39 @@ const observacaoGeral=document.getElementById("observacaoGeral").value.trim();
 if(!mesa){alert("⚠️ Informe o número da mesa.");return}
 const btn=document.getElementById("btnEnviar");btn.disabled=true;btn.textContent="⏳ Registrando...";
 try{
+/* Procura uma comanda aberta para esta mesa. */
+const q=query(collection(db,"pedidos"),where("mesa","==",mesa));
+const snap=await getDocs(q);
+const ativos=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.status!=="Finalizado");
+let comandaId=ativos.find(p=>p.comandaId)?.comandaId||null;
+
+/* Pedidos antigos que não tinham comandaId entram na nova comanda. */
+if(!comandaId&&ativos.length){
+comandaId=gerarComandaId();
+for(const antigo of ativos){
+await updateDoc(doc(db,"pedidos",antigo.id),{comandaId});
+}
+}
+if(!comandaId)comandaId=gerarComandaId();
+
 const numeroPedido=gerarNumeroPedido();
 const itens=carrinho.map(i=>({id:i.id,nome:i.nome,preco:i.preco,quantidade:i.quantidade,observacao:i.observacao||""}));
-const pedido={numeroPedido,mesa,responsavel,observacaoGeral,itens,total:total(),status:"Recebido",data:new Date().toISOString()};
-await addDoc(collection(db,"pedidos"),pedido);
-ultimoPedido={numeroPedido,status:"Recebido"};
-localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));
+const pedido={numeroPedido,mesa,responsavel,observacaoGeral,itens,total:total(),status:"Recebido",data:new Date().toISOString(),comandaId};
+const ref=await addDoc(collection(db,"pedidos"),pedido);
+
+comandaAtualId=comandaId;
+mesaAtual=mesa;
+pedidosAcompanhamento=[{id:ref.id,...pedido}];
+localStorage.setItem("comandaAcompanhamento",JSON.stringify({comandaId,mesa}));
 mostrarStatusUltimo();
-carrinho=[];document.getElementById("mesa").value="";document.getElementById("responsavel").value="";document.getElementById("observacaoGeral").value="";
+
+carrinho=[];
+document.getElementById("mesa").value="";
+document.getElementById("responsavel").value="";
+document.getElementById("observacaoGeral").value="";
 atualizarCarrinho();fecharCarrinho();
-alert(`✅ Pedido registrado com sucesso!\n\nNúmero do pedido: #${numeroPedido}\n\nAgora você pode acompanhar o andamento do pedido.`);
+
+alert(`✅ Pedido registrado com sucesso!\n\nNúmero do pedido: #${numeroPedido}\n\nVocê poderá acompanhar todos os pedidos desta mesa.`);
 abrirAcompanhamento();
 }catch(e){console.error(e);alert("🔴 NÃO FOI POSSÍVEL REGISTRAR O PEDIDO.\n\n"+(e.message||e))}
 finally{btn.disabled=false;btn.textContent="✅ Confirmar pedido"}
@@ -247,36 +274,50 @@ finally{btn.disabled=false;btn.textContent="✅ Confirmar pedido"}
 
 function mostrarStatusUltimo(){
 const el=document.getElementById("statusUltimo");
-if(!ultimoPedido){el.style.display="none";return}
-el.style.display="block";document.getElementById("resumoUltimoPedido").textContent=`#${ultimoPedido.numeroPedido} • ${ultimoPedido.status}`;
+if(!comandaAtualId){el.style.display="none";return}
+el.style.display="block";
+const qtd=pedidosAcompanhamento.filter(p=>p.status!=="Finalizado").length;
+el.querySelector("#resumoUltimoPedido").textContent=`Mesa ${mesaAtual||""} • ${qtd} pedido${qtd===1?"":"s"} ativo${qtd===1?"":"s"}`;
 }
+
 window.abrirAcompanhamento=()=>{
-if(!ultimoPedido){alert("Ainda não há pedido para acompanhar.");return}
-document.getElementById("modalAcompanhamento").style.display="block";renderAcompanhamento();
+if(!comandaAtualId){alert("Ainda não há pedidos para acompanhar.");return}
+document.getElementById("modalAcompanhamento").style.display="block";
+renderAcompanhamento();
 };
 window.fecharAcompanhamento=()=>document.getElementById("modalAcompanhamento").style.display="none";
 
+function caixaStatus(id,rotulo,icone,ativo){
+return `<div class="${ativo?'ativo-neon':''}">${icone}<br><b>${rotulo}</b></div>`;
+}
 function renderAcompanhamento(){
-if(!ultimoPedido)return;
-document.getElementById("numeroAcompanhamento").textContent="#"+ultimoPedido.numeroPedido;
-const s=ultimoPedido.status;
-["stRecebido","stPreparo","stPronto"].forEach(id=>document.getElementById(id).style.background="#eee");
-if(s==="Recebido"){
-document.getElementById("stRecebido").style.background="#39ff14";document.getElementById("stRecebido").style.color="#07120b";document.getElementById("stRecebido").style.boxShadow="0 0 22px #39ff14, 0 0 45px rgba(57,255,20,.65)";
-document.getElementById("mensagemAcompanhamento").textContent="🔴 Pedido recebido! O restaurante já recebeu seu pedido.";
+const lista=document.getElementById("listaAcompanhamento");
+const ativos=pedidosAcompanhamento.filter(p=>p.status!=="Finalizado");
+if(!ativos.length){
+lista.innerHTML='<div style="padding:20px;color:#777">A comanda foi encerrada.</div>';
+document.getElementById("resumoComandaCliente").textContent="";
+return;
 }
-else if(s==="Em preparo"){
-document.getElementById("stPreparo").style.background="#39ff14";document.getElementById("stPreparo").style.color="#07120b";document.getElementById("stPreparo").style.boxShadow="0 0 22px #39ff14, 0 0 45px rgba(57,255,20,.65)";
-document.getElementById("mensagemAcompanhamento").textContent="🟠 Seu pedido está em preparo!";
-}
-else if(s==="Pronto"){
-document.getElementById("stPronto").style.background="#39ff14";document.getElementById("stPronto").style.color="#07120b";document.getElementById("stPronto").style.boxShadow="0 0 22px #39ff14, 0 0 45px rgba(57,255,20,.65)";
-document.getElementById("mensagemAcompanhamento").textContent="🔵 Seu pedido está pronto! Aguarde para receber seu pedido.";
-}
+document.getElementById("resumoComandaCliente").textContent=`🪑 Mesa ${mesaAtual} • ${ativos.length} pedido${ativos.length===1?"":"s"} em aberto`;
+lista.innerHTML=ativos.map(p=>{
+const s=p.status;
+const rec=s==="Recebido",prep=s==="Em preparo",pronto=s==="Pronto";
+return `<div class="acomp-pedido">
+<div class="acomp-pedido-titulo"><strong>Pedido #${escapar(p.numeroPedido)}</strong><strong>${dinheiro(p.total)}</strong></div>
+<div class="acomp-status">
+${caixaStatus("r","Recebido","🔴",rec)}
+${caixaStatus("p","Em preparo","🟠",prep)}
+${caixaStatus("f","Pronto","🔵",pronto)}
+</div>
+<div style="margin-top:10px;color:#5b168f;font-weight:bold">${rec?"🔴 Pedido recebido!":prep?"🟠 Seu pedido está em preparo!":"🔵 Seu pedido está pronto!"}</div>
+</div>`;
+}).join("");
+document.getElementById("mensagemAcompanhamento").textContent="Os pedidos desta mesa são atualizados automaticamente.";
 }
 
 try{
-const salvo=JSON.parse(localStorage.getItem("ultimoPedido")||"null");if(salvo)ultimoPedido=salvo;mostrarStatusUltimo();
+const salvo=JSON.parse(localStorage.getItem("comandaAcompanhamento")||"null");
+if(salvo){comandaAtualId=salvo.comandaId;mesaAtual=salvo.mesa;}
 }catch(e){}
 
 onSnapshot(collection(db,"produtos"),snap=>{
@@ -296,39 +337,26 @@ aplicarConfiguracao();
 },err=>console.warn("Configuração indisponível:",err));
 
 onSnapshot(collection(db,"pedidos"),snap=>{
-if(!snap.docs.length){
-  ultimoPedido=null;
-  localStorage.removeItem("ultimoPedido");
-  mostrarStatusUltimo();
-  if(document.getElementById("modalAcompanhamento").style.display==="block")fecharAcompanhamento();
-  return;
-}
+if(!comandaAtualId)return;
+const todos=snap.docs.map(d=>({id:d.id,...d.data()}));
+const daComanda=todos.filter(p=>String(p.comandaId||"")===String(comandaAtualId));
+const ativos=daComanda.filter(p=>p.status!=="Finalizado");
 
-if(!ultimoPedido){
-  return;
+if(!ativos.length){
+pedidosAcompanhamento=[];
+comandaAtualId=null;
+mesaAtual=null;
+localStorage.removeItem("comandaAcompanhamento");
+mostrarStatusUltimo();
+if(document.getElementById("modalAcompanhamento").style.display==="block")fecharAcompanhamento();
+return;
 }
-
-const p=snap.docs.map(d=>({id:d.id,...d.data()})).find(x=>String(x.numeroPedido)===String(ultimoPedido.numeroPedido));
-if(p){
-  if(p.status==="Finalizado"){
-    ultimoPedido=null;
-    localStorage.removeItem("ultimoPedido");
-    mostrarStatusUltimo();
-    if(document.getElementById("modalAcompanhamento").style.display==="block")fecharAcompanhamento();
-    return;
-  }
-  ultimoPedido={numeroPedido:p.numeroPedido,status:p.status};
-  localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));
-  mostrarStatusUltimo();
-  if(document.getElementById("modalAcompanhamento").style.display==="block")renderAcompanhamento();
-}else{
-  // O pedido salvo no navegador não existe mais no Firebase.
-  ultimoPedido=null;
-  localStorage.removeItem("ultimoPedido");
-  mostrarStatusUltimo();
-  if(document.getElementById("modalAcompanhamento").style.display==="block")fecharAcompanhamento();
-}
+pedidosAcompanhamento=ativos;
+mesaAtual=ativos[0].mesa;
+mostrarStatusUltimo();
+if(document.getElementById("modalAcompanhamento").style.display==="block")renderAcompanhamento();
 });
+
 atualizarCarrinho();
 </script>
 </body>
