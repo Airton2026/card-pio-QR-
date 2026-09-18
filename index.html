@@ -116,7 +116,7 @@ header h1{font-size:25px}.produto{padding:13px}.produto h3{font-size:17px}.btn-a
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import{initializeFirestore,collection,addDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import{initializeFirestore,collection,doc,addDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
@@ -128,6 +128,12 @@ appId:"1:783545984661:web:5d0945907ad9db3990dd9c"
 };
 const app=initializeApp(firebaseConfig);
 const db=initializeFirestore(app,{},"default");
+
+// Restaurante definido pelo link. Ex.: ?restaurante=sabor-da-casa
+const RESTAURANTE_ID=new URLSearchParams(location.search).get("restaurante")||"sabor-da-casa";
+const restauranteRef=doc(db,"restaurantes",RESTAURANTE_ID);
+const produtosRef=collection(restauranteRef,"produtos");
+const pedidosRef=collection(restauranteRef,"pedidos");
 
 const produtosIniciais=[
 {id:"x-bacon",nome:"X-Bacon",preco:26,categoria:"Lanches",descricao:"",ativo:true,promocaoAtiva:false},
@@ -233,7 +239,7 @@ try{
 const numeroPedido=gerarNumeroPedido();
 const itens=carrinho.map(i=>({id:i.id,nome:i.nome,preco:i.preco,quantidade:i.quantidade,observacao:i.observacao||""}));
 const pedido={numeroPedido,mesa,responsavel,observacaoGeral,itens,total:total(),status:"Recebido",data:new Date().toISOString()};
-await addDoc(collection(db,"pedidos"),pedido);
+await addDoc(pedidosRef,pedido);
 ultimoPedido={numeroPedido,status:"Recebido"};
 localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));
 mostrarStatusUltimo();
@@ -279,7 +285,7 @@ try{
 const salvo=JSON.parse(localStorage.getItem("ultimoPedido")||"null");if(salvo)ultimoPedido=salvo;mostrarStatusUltimo();
 }catch(e){}
 
-onSnapshot(collection(db,"produtos"),snap=>{
+onSnapshot(produtosRef,snap=>{
 produtos=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.ativo!==false);
 if(!produtos.length)produtos=produtosIniciais;
 categorias=[...new Set(produtos.map(p=>p.categoria).filter(Boolean))];
@@ -289,13 +295,12 @@ console.warn("Produtos do Firebase indisponíveis:",err);
 produtos=produtosIniciais;categorias=[...new Set(produtos.map(p=>p.categoria))];mostrarCategorias();mostrarProdutos();
 });
 
-onSnapshot(collection(db,"configuracaoRestaurante"),snap=>{
-configuracao={};
-snap.forEach(d=>configuracao={...d.data()});
+onSnapshot(restauranteRef,snap=>{
+configuracao=snap.exists()?snap.data():{};
 aplicarConfiguracao();
-},err=>console.warn("Configuração indisponível:",err));
+},err=>console.warn("Configuração do restaurante indisponível:",err));
 
-onSnapshot(collection(db,"pedidos"),snap=>{
+onSnapshot(pedidosRef,snap=>{
 if(!snap.docs.length){
   ultimoPedido=null;
   localStorage.removeItem("ultimoPedido");
