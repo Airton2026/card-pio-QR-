@@ -233,7 +233,7 @@ try{
 const numeroPedido=gerarNumeroPedido();
 const itens=carrinho.map(i=>({id:i.id,nome:i.nome,preco:i.preco,quantidade:i.quantidade,observacao:i.observacao||""}));
 const pedido={numeroPedido,mesa,responsavel,observacaoGeral,itens,total:total(),status:"Recebido",data:new Date().toISOString()};
-await addDoc(collection(db,"restaurantes","sabor-da-casa","pedidos"),pedido);
+await addDoc(collection(db,"pedidos"),pedido);
 ultimoPedido={numeroPedido,status:"Recebido"};
 localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));
 mostrarStatusUltimo();
