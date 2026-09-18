@@ -116,7 +116,7 @@ header h1{font-size:25px}.produto{padding:13px}.produto h3{font-size:17px}.btn-a
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import{initializeFirestore,collection,addDoc,onSnapshot,getDocs,query,where,updateDoc}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import{initializeFirestore,collection,addDoc,onSnapshot,getDocs,query,where,updateDoc,doc}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
@@ -226,12 +226,36 @@ return String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0
 }
 function gerarComandaId(){return "comanda-"+Date.now()+"-"+Math.random().toString(36).slice(2,10)}
 
+function aplicarDadosCliente(){
+const mesaSalva=localStorage.getItem("mesaCliente")||"";
+const nomeSalvo=localStorage.getItem("nomeCliente")||"";
+const mesa=document.getElementById("mesa");
+const nome=document.getElementById("responsavel");
+if(mesaSalva){mesa.value=mesaSalva;mesa.readOnly=true;mesa.style.background="#eeeeee";mesa.style.color="#666";mesa.title="Mesa vinculada a esta comanda"}
+if(nomeSalvo){nome.value=nomeSalvo;nome.readOnly=true;nome.style.background="#eeeeee";nome.style.color="#666";nome.title="Nome vinculado a esta comanda"}
+}
+function salvarDadosCliente(mesa,nome){
+localStorage.setItem("mesaCliente",mesa);
+localStorage.setItem("nomeCliente",nome);
+aplicarDadosCliente();
+}
+function liberarDadosCliente(){
+localStorage.removeItem("mesaCliente");
+localStorage.removeItem("nomeCliente");
+const mesa=document.getElementById("mesa");
+const nome=document.getElementById("responsavel");
+mesa.value="";nome.value="";
+mesa.readOnly=false;nome.readOnly=false;
+mesa.style.background="";mesa.style.color="";nome.style.background="";nome.style.color="";
+}
+
 window.enviarPedido=async()=>{
 if(!carrinho.length){alert("🛒 Seu carrinho está vazio.");return}
 const mesa=document.getElementById("mesa").value.trim();
 const responsavel=document.getElementById("responsavel").value.trim();
 const observacaoGeral=document.getElementById("observacaoGeral").value.trim();
 if(!mesa){alert("⚠️ Informe o número da mesa.");return}
+salvarDadosCliente(mesa,responsavel);
 const btn=document.getElementById("btnEnviar");btn.disabled=true;btn.textContent="⏳ Registrando...";
 try{
 /* Procura uma comanda aberta para esta mesa. */
@@ -261,8 +285,6 @@ localStorage.setItem("comandaAcompanhamento",JSON.stringify({comandaId,mesa}));
 mostrarStatusUltimo();
 
 carrinho=[];
-document.getElementById("mesa").value="";
-document.getElementById("responsavel").value="";
 document.getElementById("observacaoGeral").value="";
 atualizarCarrinho();fecharCarrinho();
 
@@ -347,6 +369,7 @@ pedidosAcompanhamento=[];
 comandaAtualId=null;
 mesaAtual=null;
 localStorage.removeItem("comandaAcompanhamento");
+liberarDadosCliente();
 mostrarStatusUltimo();
 if(document.getElementById("modalAcompanhamento").style.display==="block")fecharAcompanhamento();
 return;
@@ -357,6 +380,7 @@ mostrarStatusUltimo();
 if(document.getElementById("modalAcompanhamento").style.display==="block")renderAcompanhamento();
 });
 
+aplicarDadosCliente();
 atualizarCarrinho();
 </script>
 </body>
