@@ -20,15 +20,82 @@ function badge(s){return s==="Recebido"?'<span class="badge b-recebido">🔴 Rec
 window.sec=(n,b)=>{document.querySelectorAll('.secao').forEach(x=>x.classList.remove('ativa'));document.getElementById(n).classList.add('ativa');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('ativo'));if(b)b.classList.add('ativo')};
 function classeMesa(n){let p=pedidos.filter(x=>String(x.mesa)===String(n)&&ativo(x));if(!p.length)return['livre','Livre',0,false];let v=p.reduce((s,x)=>s+Number(x.total||0),0);if(p.some(x=>x.status==='Recebido'))return['ocupada','Recebido',v,true];if(p.some(x=>x.status==='Em preparo'))return['preparo','Em preparo',v,false];return['pronto','Pronto',v,false]}
 function renderMesas(){let a=document.getElementById('mesas');a.innerHTML='';let c=[0,0,0,0];for(let n=1;n<=mesas;n++){let r=classeMesa(n),d=document.createElement('div');d.className='mesa '+r[0]+(r[3]?' nova':'');if(r[0]==='livre')c[0]++;else if(r[0]==='ocupada')c[1]++;else if(r[0]==='preparo')c[2]++;else c[3]++;d.innerHTML=`<div><h3>🪑 Mesa ${n}</h3><div style="font-weight:bold;margin-top:8px">${r[1]==='Livre'?'🟢':r[1]==='Recebido'?'🔴':r[1]==='Em preparo'?'🟠':'🔵'} ${r[1]}</div><div style="font-size:20px;font-weight:bold;margin-top:8px">${dinheiro(r[2])}</div></div><button onclick="abrirMesa(${n})">📋 Ver comanda</button>`;a.appendChild(d)}document.getElementById('livres').textContent=c[0];document.getElementById('ocupadas').textContent=c[1];document.getElementById('preparo').textContent=c[2];document.getElementById('prontos').textContent=c[3];document.getElementById('ativos').textContent=pedidos.filter(ativo).length}
-window.abrirMesa=n=>{let p=pedidos.find(x=>String(x.mesa)===String(n)&&ativo(x));if(p)abrirComanda(p);else alert('🟢 Mesa '+n+' está livre.')};
-function renderPedidos(){let a=document.getElementById('listaPedidos'),ps=pedidos.filter(ativo).sort((x,y)=>String(x.data).localeCompare(String(y.data)));if(!ps.length){a.innerHTML='<div class="vazio">Nenhum pedido ativo no momento.</div>';return}a.innerHTML=ps.map(p=>{let itens=(p.itens||[]).map(i=>`<div>• ${i.quantidade}x ${esc(i.nome)} — ${dinheiro(Number(i.preco||0)*Number(i.quantidade||1))}${i.observacao?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`:''}</div>`).join('');let ac=p.status==='Recebido'?`<button class="btn laranja" onclick="status('${p.id}','Em preparo')">🟠 Em preparo</button>`:p.status==='Em preparo'?`<button class="btn azul" onclick="status('${p.id}','Pronto')">🔵 Pronto</button>`:`<button class="btn verde" onclick="abrirId('${p.id}')">📋 Abrir comanda</button>`;return`<div class="pedido ${p.status==='Em preparo'?'prep':p.status==='Pronto'?'pron':''}"><div class="top"><div><strong style="font-size:20px">Pedido #${esc(p.numeroPedido)}</strong><br>🪑 Mesa ${esc(p.mesa)}${p.responsavel?' • 👤 '+esc(p.responsavel):''}<br>${badge(p.status)}</div><strong style="font-size:21px">${dinheiro(p.total)}</strong></div><div class="itens">${itens}</div>${p.observacaoGeral?`<div class="obs">📝 ${esc(p.observacaoGeral)}</div>`:''}<div class="acoes" style="margin-top:12px">${ac}</div></div>`}).join('')}
-window.status=async(id,s)=>{try{await updateDoc(doc(db,'pedidos',id),{status:s})}catch(e){alert('Erro ao atualizar pedido:\n\n'+e.message)}};window.abrirId=id=>{let p=pedidos.find(x=>x.id===id);if(p)abrirComanda(p)};
-function abrirComanda(p){comanda=p;document.getElementById('modalTitulo').textContent=`📋 Pedido #${p.numeroPedido} — Mesa ${p.mesa}`;let itens=(p.itens||[]).map(i=>`<div class="item"><b>${i.quantidade}x ${esc(i.nome)}</b> — ${dinheiro(Number(i.preco||0)*Number(i.quantidade||1))}${i.observacao?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`:''}</div>`).join('');document.getElementById('modalConteudo').innerHTML=`<div class="linha"><span>Status</span><strong>${badge(p.status)}</strong></div><div class="linha"><span>Responsável</span><strong>${esc(p.responsavel||'Não informado')}</strong></div>${itens}<div style="text-align:right;font-size:24px;font-weight:bold;color:#7dc8ff;margin:18px 0">Total: ${dinheiro(p.total)}</div>`;document.getElementById('btnPreparo').style.display=p.status==='Recebido'?'inline-block':'none';document.getElementById('btnPronto').style.display=p.status==='Em preparo'?'inline-block':'none';document.getElementById('finalizar').style.display=p.status==='Pronto'?'inline-block':'none';document.getElementById('modal').style.display='block'}window.fecharModal=()=>{document.getElementById('modal').style.display='none';comanda=null};window.mudarComanda=async s=>{if(!comanda)return;try{await updateDoc(doc(db,'pedidos',comanda.id),{status:s});comanda={...comanda,status:s};abrirComanda(comanda)}catch(e){alert('Erro ao atualizar pedido:\n\n'+e.message)}};
-window.finalizar=async()=>{if(!comanda)return;let p=comanda;try{let b=writeBatch(db),now=new Date().toISOString();b.update(doc(db,'pedidos',p.id),{status:'Finalizado',finalizadoEm:now});b.set(doc(collection(db,'historicoComandas')),{numeroPedido:p.numeroPedido,mesa:p.mesa,responsavel:p.responsavel||'',observacaoGeral:p.observacaoGeral||'',itens:p.itens||[],total:Number(p.total||0),data:p.data||now,finalizadoEm:now});await b.commit();fecharModal();alert(`🟢 Pedido #${p.numeroPedido} finalizado.\n\nMesa ${p.mesa} liberada.`)}catch(e){alert('Erro ao finalizar comanda:\n\n'+e.message)}};
+window.abrirMesa=n=>{let ps=pedidos.filter(x=>String(x.mesa)===String(n)&&ativo(x));if(ps.length)abrirComandaGrupo(ps);else alert('🟢 Mesa '+n+' está livre.')};
+function renderPedidos(){let a=document.getElementById('listaPedidos'),ps=pedidos.filter(ativo).sort((x,y)=>String(x.data).localeCompare(String(y.data)));if(!ps.length){a.innerHTML='<div class="vazio">Nenhum pedido ativo no momento.</div>';return}a.innerHTML=ps.map(p=>{let itens=(p.itens||[]).map(i=>`<div>• ${i.quantidade}x ${esc(i.nome)} — ${dinheiro(Number(i.preco||0)*Number(i.quantidade||1))}${i.observacao?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`:''}</div>`).join('');let ac=p.status==='Recebido'?`<button class="btn laranja" onclick="status('${p.id}','Em preparo')">🟠 Em preparo</button>`:p.status==='Em preparo'?`<button class="btn azul" onclick="status('${p.id}','Pronto')">🔵 Pronto</button>`:`<button class="btn verde" onclick="abrirId('${p.id}')">📋 Abrir comanda</button>`;return`<div class="pedido ${p.status==='Em preparo'?'prep':p.status==='Pronto'?'pron':''}"><div class="top"><div><strong style="font-size:20px">Pedido #${esc(p.numeroPedido)}</strong><br>🪑 Mesa ${esc(p.mesa)}${p.responsavel?' • 👤 '+esc(p.responsavel):''}<br>${badge(p.status)}${p.comandaId?`<br><small style="color:#9fc5ff">📋 Comanda da mesa</small>`:""}</div><strong style="font-size:21px">${dinheiro(p.total)}</strong></div><div class="itens">${itens}</div>${p.observacaoGeral?`<div class="obs">📝 ${esc(p.observacaoGeral)}</div>`:''}<div class="acoes" style="margin-top:12px">${ac}</div></div>`}).join('')}
+window.status=async(id,s)=>{try{await updateDoc(doc(db,'pedidos',id),{status:s})}catch(e){alert('Erro ao atualizar pedido:\n\n'+e.message)}};window.abrirId=id=>{let p=pedidos.find(x=>x.id===id);if(p){let grupo=pedidos.filter(x=>String(x.comandaId||"")===String(p.comandaId||"")&&ativo(x));if(!grupo.length)grupo=[p];abrirComandaGrupo(grupo)}};
+
+function abrirComandaGrupo(grupo){
+comanda=grupo;
+const mesa=grupo[0]?.mesa||"";
+document.getElementById('modalTitulo').textContent=`📋 Mesa ${mesa} — Comanda aberta`;
+const totalGrupo=grupo.reduce((s,p)=>s+Number(p.total||0),0);
+document.getElementById('modalConteudo').innerHTML=`
+<div class="linha"><span>Pedidos na comanda</span><strong>${grupo.length}</strong></div>
+<div class="linha"><span>Total acumulado</span><strong>${dinheiro(totalGrupo)}</strong></div>
+${grupo.map(p=>{
+const itens=(p.itens||[]).map(i=>`<div class="item"><b>${i.quantidade}x ${esc(i.nome)}</b> — ${dinheiro(Number(i.preco||0)*Number(i.quantidade||1))}${i.observacao?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`:''}</div>`).join('');
+const ac=p.status==='Recebido'?`<button class="btn laranja" onclick="mudarPedido('${p.id}','Em preparo')">🟠 Em preparo</button>`:p.status==='Em preparo'?`<button class="btn azul" onclick="mudarPedido('${p.id}','Pronto')">🔵 Pronto</button>`:`<span class="badge b-pronto">🔵 Pronto</span>`;
+return `<div class="card" style="margin:12px 0;background:#0b2c5c"><div class="top"><div><strong>Pedido #${esc(p.numeroPedido)}</strong><br>${badge(p.status)}</div><strong>${dinheiro(p.total)}</strong></div><div class="itens">${itens}</div><div class="acoes">${ac}</div></div>`;
+}).join("")}
+`;
+document.getElementById('btnPreparo').style.display='none';
+document.getElementById('btnPronto').style.display='none';
+document.getElementById('finalizar').style.display=grupo.length&&grupo.every(p=>p.status==='Pronto')?'inline-block':'none';
+document.getElementById('modal').style.display='block';
+}
+window.fecharModal=()=>{document.getElementById('modal').style.display='none';comanda=null};
+
+window.mudarPedido=async(id,s)=>{
+try{
+await updateDoc(doc(db,'pedidos',id),{status:s});
+}catch(e){alert('Erro ao atualizar pedido:\n\n'+e.message)}
+};
+
+window.mudarComanda=async s=>{
+if(!comanda)return;
+for(const p of comanda){if(p.status!==s)await updateDoc(doc(db,'pedidos',p.id),{status:s})}
+};
+
+window.finalizar=async()=>{
+if(!comanda||!comanda.length)return;
+const grupo=pedidos.filter(p=>comanda.some(x=>x.id===p.id)&&ativo(p));
+if(!grupo.length)return;
+if(!grupo.every(p=>p.status==='Pronto')){
+alert("⚠️ Só é possível finalizar a mesa quando todos os pedidos estiverem prontos.");
+return;
+}
+const mesa=grupo[0].mesa;
+try{
+const b=writeBatch(db),now=new Date().toISOString();
+let itens=[];
+let totalGrupo=0;
+grupo.forEach(p=>{
+b.update(doc(db,'pedidos',p.id),{status:'Finalizado',finalizadoEm:now});
+itens=itens.concat((p.itens||[]).map(i=>({...i,pedidoOrigem:p.numeroPedido})));
+totalGrupo+=Number(p.total||0);
+});
+b.set(doc(collection(db,'historicoComandas')),{
+comandaId:grupo[0].comandaId||("legacy-"+grupo[0].id),
+numeroComanda:"Mesa "+mesa,
+mesa,
+pedidos:grupo.map(p=>({numeroPedido:p.numeroPedido,total:Number(p.total||0),status:"Finalizado"})),
+responsavel:grupo[0].responsavel||"",
+observacaoGeral:grupo.map(p=>p.observacaoGeral||"").filter(Boolean).join(" | "),
+itens,
+total:totalGrupo,
+data:grupo.map(p=>p.data).sort()[0]||now,
+finalizadoEm:now
+});
+await b.commit();
+fecharModal();
+alert(`🟢 Mesa ${mesa} finalizada.\n\n${grupo.length} pedido(s) encerrado(s).\nTotal: ${dinheiro(totalGrupo)}\n\nMesa liberada.`);
+}catch(e){console.error(e);alert('Erro ao finalizar a comanda da mesa:\n\n'+e.message)}
+};
+
 function renderProdutos(){let a=document.getElementById('listaProdutos');if(!produtos.length){a.innerHTML='<div class="vazio">Nenhum produto cadastrado.</div>';return}a.innerHTML=produtos.map(p=>`<div class="produto"><div><strong>${esc(p.nome)}</strong><br><span style="color:#a9c9ff">${esc(p.categoria||'')} • ${dinheiro(p.preco)}</span><br><small>${p.ativo===false?'🔴 Indisponível':'🟢 Disponível'}${p.promocaoAtiva?' • 🔥 Promoção':''}</small></div><button class="btn azul" onclick="editar('${p.id}')">✏️ Editar</button></div>`).join('')}
 window.novoProduto=()=>{['pid','pnome','pcat','pdesc','ppreco','ppromo','pfoto'].forEach(id=>document.getElementById(id).value='');document.getElementById('pativo').value='true';document.getElementById('ppromoativa').value='false';document.getElementById('modalProd').style.display='block'};window.fecharProd=()=>document.getElementById('modalProd').style.display='none';window.editar=id=>{let p=produtos.find(x=>x.id===id);if(!p)return;document.getElementById('pid').value=id;document.getElementById('pnome').value=p.nome||'';document.getElementById('pcat').value=p.categoria||'';document.getElementById('pdesc').value=p.descricao||'';document.getElementById('ppreco').value=p.preco??'';document.getElementById('ppromo').value=p.precoPromocional??'';document.getElementById('pfoto').value=p.foto||'';document.getElementById('pativo').value=String(p.ativo!==false);document.getElementById('ppromoativa').value=String(p.promocaoAtiva===true);document.getElementById('modalProd').style.display='block'};
 window.salvarProd=async()=>{let id=document.getElementById('pid').value,d={nome:pnome.value.trim(),categoria:pcat.value.trim(),descricao:pdesc.value.trim(),preco:Number(ppreco.value||0),precoPromocional:Number(ppromo.value||0),foto:pfoto.value.trim(),ativo:pativo.value==='true',promocaoAtiva:ppromoativa.value==='true'};if(!d.nome||!d.preco){alert('Informe nome e preço.');return}try{if(id)await updateDoc(doc(db,'produtos',id),d);else await addDoc(collection(db,'produtos'),d);fecharProd()}catch(e){alert('Erro ao salvar produto:\n\n'+e.message)}};
-function renderHist(){let a=document.getElementById('listaHistorico');let h=[...hist].sort((x,y)=>String(y.finalizadoEm||'').localeCompare(String(x.finalizadoEm||'')));if(!h.length){a.innerHTML='<div class="vazio">Nenhuma comanda finalizada.</div>';return}a.innerHTML=h.map(x=>`<div class="hist"><div class="top"><strong>Pedido #${esc(x.numeroPedido)} — Mesa ${esc(x.mesa)}</strong><strong>${dinheiro(x.total)}</strong></div><div class="obs">${x.finalizadoEm?new Date(x.finalizadoEm).toLocaleString('pt-BR'):''}</div></div>`).join('')}
+function renderHist(){let a=document.getElementById('listaHistorico');let h=[...hist].sort((x,y)=>String(y.finalizadoEm||'').localeCompare(String(x.finalizadoEm||'')));if(!h.length){a.innerHTML='<div class="vazio">Nenhuma comanda finalizada.</div>';return}a.innerHTML=h.map(x=>{const qtd=Array.isArray(x.pedidos)?x.pedidos.length:1;const titulo=x.numeroComanda?x.numeroComanda:`Pedido #${esc(x.numeroPedido||'')}`;return`<div class="hist"><div class="top"><strong>${titulo} — Mesa ${esc(x.mesa)}</strong><strong>${dinheiro(x.total)}</strong></div><div style="margin-top:7px;color:#c9dcff">📋 ${qtd} pedido${qtd===1?'':'s'} na comanda</div><div class="obs">${x.finalizadoEm?new Date(x.finalizadoEm).toLocaleString('pt-BR'):''}</div></div>`}).join('')}
 function renderFin(){let t=hist.reduce((s,x)=>s+Number(x.total||0),0),q=hist.length,hoje=new Date().toLocaleDateString('pt-BR'),ht=hist.filter(x=>x.finalizadoEm&&new Date(x.finalizadoEm).toLocaleDateString('pt-BR')===hoje).reduce((s,x)=>s+Number(x.total||0),0);fQtd.textContent=q;fTotal.textContent=dinheiro(t);fMedia.textContent=dinheiro(q?t/q:0);fHoje.textContent=dinheiro(ht)}
 function preencher(){cfgNome.value=config.nome||'';cfgSub.value=config.subtitulo||'';cfgEnd.value=config.endereco||'';cfgEmoji.value=config.emoji||'🍔';cfgLogo.value=config.logo||''}window.salvarConfig=async()=>{try{await setDoc(doc(db,'configuracaoRestaurante','principal'),{nome:cfgNome.value.trim()||'Sabor da Casa',subtitulo:cfgSub.value.trim()||'Cardápio Digital',endereco:cfgEnd.value.trim()||'Chapecó / Santa Catarina',emoji:cfgEmoji.value.trim()||'🍔',logo:cfgLogo.value.trim()});alert('✅ Configurações salvas.')}catch(e){alert('Erro ao salvar:\n\n'+e.message)}};
 async function prepararSom(){try{if(!audio)audio=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')await audio.resume();return audio.state==='running'}catch(e){console.warn('Áudio:',e);return false}}
