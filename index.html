@@ -261,9 +261,18 @@ if(!ultimoPedido)return;
 document.getElementById("numeroAcompanhamento").textContent="#"+ultimoPedido.numeroPedido;
 const s=ultimoPedido.status;
 ["stRecebido","stPreparo","stPronto"].forEach(id=>document.getElementById(id).style.background="#eee");
-if(s==="Recebido"){document.getElementById("stRecebido").style.background="#d9b8ff";document.getElementById("mensagemAcompanhamento").textContent="🔴 Pedido recebido! O restaurante já recebeu seu pedido."}
-else if(s==="Em preparo"){document.getElementById("stRecebido").style.background="#bde8c8";document.getElementById("stPreparo").style.background="#d9b8ff";document.getElementById("mensagemAcompanhamento").textContent="🟠 Seu pedido está em preparo!"}
-else if(s==="Pronto"||s==="Finalizado"){document.getElementById("stRecebido").style.background="#bde8c8";document.getElementById("stPreparo").style.background="#bde8c8";document.getElementById("stPronto").style.background="#bde8c8";document.getElementById("mensagemAcompanhamento").textContent="🔵 Seu pedido está pronto! Aguarde para receber seu pedido."}
+if(s==="Recebido"){
+document.getElementById("stRecebido").style.background="#bde8c8";
+document.getElementById("mensagemAcompanhamento").textContent="🔴 Pedido recebido! O restaurante já recebeu seu pedido.";
+}
+else if(s==="Em preparo"){
+document.getElementById("stPreparo").style.background="#bde8c8";
+document.getElementById("mensagemAcompanhamento").textContent="🟠 Seu pedido está em preparo!";
+}
+else if(s==="Pronto"){
+document.getElementById("stPronto").style.background="#bde8c8";
+document.getElementById("mensagemAcompanhamento").textContent="🔵 Seu pedido está pronto! Aguarde para receber seu pedido.";
+}
 }
 
 try{
@@ -301,6 +310,13 @@ if(!ultimoPedido){
 
 const p=snap.docs.map(d=>({id:d.id,...d.data()})).find(x=>String(x.numeroPedido)===String(ultimoPedido.numeroPedido));
 if(p){
+  if(p.status==="Finalizado"){
+    ultimoPedido=null;
+    localStorage.removeItem("ultimoPedido");
+    mostrarStatusUltimo();
+    if(document.getElementById("modalAcompanhamento").style.display==="block")fecharAcompanhamento();
+    return;
+  }
   ultimoPedido={numeroPedido:p.numeroPedido,status:p.status};
   localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));
   mostrarStatusUltimo();
