@@ -92,7 +92,7 @@ header h1{font-size:25px}.produto{padding:13px}.produto h3{font-size:17px}.btn-a
 <div class="total">Total: <span id="totalModal">R$ 0,00</span></div>
 <div class="botoes-modal">
 <button class="btn btn-fechar" onclick="fecharCarrinho()">Fechar</button>
-<button class="btn btn-enviar" id="btnEnviar" onclick="enviarPedido()">📲 Enviar pedido</button>
+<button class="btn btn-enviar" id="btnEnviar" onclick="enviarPedido()">✅ Confirmar pedido</button>
 </div>
 </div>
 </div>
@@ -237,20 +237,12 @@ await addDoc(collection(db,"pedidos"),pedido);
 ultimoPedido={numeroPedido,status:"Recebido"};
 localStorage.setItem("ultimoPedido",JSON.stringify(ultimoPedido));
 mostrarStatusUltimo();
-const telefone=(configuracao.telefone||"5549984121585").replace(/\D/g,"");
-let msg=`*${configuracao.emoji||"🍔"} ${configuracao.nome||"SABOR DA CASA"}*%0A*Novo pedido #${numeroPedido}*%0A%0A📍 Mesa: ${mesa}%0A`;
-if(responsavel)msg+=`👤 Responsável: ${responsavel}%0A`;
-msg+="%0A*ITENS DO PEDIDO:*%0A";
-itens.forEach(i=>{msg+=`${i.quantidade}x ${i.nome} - ${dinheiro(i.preco*i.quantidade)}%0A`;if(i.observacao)msg+=`   Obs.: ${i.observacao}%0A`});
-if(observacaoGeral)msg+=`%0A📝 *Observação geral:*%0A${observacaoGeral}%0A`;
-msg+=`%0A💰 *TOTAL: ${dinheiro(total())}*`;
-if(telefone)window.open(`https://wa.me/${telefone}?text=${msg}`,"_blank");
 carrinho=[];document.getElementById("mesa").value="";document.getElementById("responsavel").value="";document.getElementById("observacaoGeral").value="";
 atualizarCarrinho();fecharCarrinho();
 alert(`✅ Pedido registrado com sucesso!\n\nNúmero do pedido: #${numeroPedido}\n\nAgora você pode acompanhar o andamento do pedido.`);
 abrirAcompanhamento();
 }catch(e){console.error(e);alert("🔴 NÃO FOI POSSÍVEL REGISTRAR O PEDIDO.\n\n"+(e.message||e))}
-finally{btn.disabled=false;btn.textContent="📲 Enviar pedido"}
+finally{btn.disabled=false;btn.textContent="✅ Confirmar pedido"}
 };
 
 function mostrarStatusUltimo(){
