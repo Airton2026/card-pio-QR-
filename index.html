@@ -1,361 +1,318 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sabor da Casa — Cardápio Digital</title>
 
-  <title>Sabor da Casa — Cardápio Digital</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f3f8;
+  color:#222;
+  padding-bottom:100px
+}
+header{
+  background:linear-gradient(135deg,#5b168f,#7b20b7);
+  color:white;
+  padding:25px 18px;
+  text-align:center;
+  box-shadow:0 3px 12px rgba(0,0,0,.2)
+}
+header h1{font-size:30px;margin-bottom:6px}
+header p{font-size:16px;opacity:.95;margin-top:4px}
+#logoRestaurante{
+  max-height:70px;
+  max-width:180px;
+  object-fit:contain;
+  margin-bottom:8px;
+  display:none
+}
+.container{max-width:900px;margin:auto;padding:18px}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+.pesquisa{
+  background:white;
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:10px;
+  box-shadow:0 2px 7px rgba(0,0,0,.08)
+}
+.pesquisa input{
+  width:100%;
+  border:0;
+  outline:0;
+  font-size:16px;
+  padding:8px
+}
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f5f3f8;
-      color: #222;
-      padding-bottom: 100px;
-    }
+.categorias{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:10px 0 18px
+}
+.categoria{
+  border:none;
+  background:white;
+  color:#5b168f;
+  border-radius:25px;
+  padding:11px 17px;
+  font-size:14px;
+  font-weight:bold;
+  white-space:nowrap;
+  cursor:pointer;
+  box-shadow:0 2px 7px rgba(0,0,0,.12)
+}
+.categoria.ativa{background:#6d1ca5;color:white}
 
-    header {
-      background: linear-gradient(135deg, #5b168f, #7b20b7);
-      color: white;
-      padding: 25px 18px;
-      text-align: center;
-      box-shadow: 0 3px 12px rgba(0,0,0,.2);
-    }
+.produto{
+  background:white;
+  border-radius:15px;
+  margin-bottom:14px;
+  padding:17px;
+  box-shadow:0 2px 9px rgba(0,0,0,.1);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px
+}
+.produto-info{flex:1;min-width:0}
+.produto h3{color:#351047;margin-bottom:5px;font-size:19px}
+.produto .descricao{color:#777;font-size:14px;margin-bottom:8px}
+.preco{color:#6d1ca5;font-size:18px;font-weight:bold}
+.preco-antigo{text-decoration:line-through;color:#999;font-size:13px;margin-right:6px}
+.promocao{
+  display:inline-block;
+  background:#dc2626;
+  color:white;
+  padding:4px 7px;
+  border-radius:7px;
+  font-size:11px;
+  font-weight:bold;
+  margin-bottom:5px
+}
+.produto-foto{
+  width:82px;
+  height:82px;
+  border-radius:12px;
+  object-fit:cover;
+  flex:none
+}
+.btn-adicionar{
+  background:#731cac;
+  color:white;
+  border:none;
+  border-radius:10px;
+  padding:12px 15px;
+  font-weight:bold;
+  cursor:pointer;
+  white-space:nowrap
+}
+.btn-adicionar:active{transform:scale(.97)}
 
-    header h1 {
-      font-size: 30px;
-      margin-bottom: 6px;
-    }
+.barra-carrinho{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#711aaa;
+  color:white;
+  padding:15px;
+  z-index:100;
+  box-shadow:0 -3px 12px rgba(0,0,0,.2);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer
+}
+.barra-carrinho strong{font-size:18px}
 
-    header p {
-      font-size: 16px;
-      opacity: .95;
-      margin-top: 4px;
-    }
+.btn-acompanhar{
+  position:fixed;
+  right:14px;
+  bottom:75px;
+  z-index:101;
+  display:none;
+  border:none;
+  background:#159447;
+  color:white;
+  padding:11px 14px;
+  border-radius:25px;
+  font-weight:bold;
+  box-shadow:0 3px 12px rgba(0,0,0,.25);
+  cursor:pointer
+}
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 18px;
-    }
+.modal-fundo{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:200;
+  padding:15px;
+  overflow-y:auto
+}
+.modal{
+  background:white;
+  max-width:600px;
+  margin:30px auto;
+  border-radius:18px;
+  padding:20px
+}
+.modal h2{color:#53117e;margin-bottom:15px}
+.campo{margin-bottom:14px}
+.campo label{display:block;font-weight:bold;margin-bottom:6px}
+.campo input,.campo textarea,.campo select{
+  width:100%;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:9px;
+  font-size:16px
+}
+.campo textarea{min-height:75px;resize:vertical}
 
-    .categorias {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 10px 0 18px;
-    }
+.item-carrinho{border-bottom:1px solid #ddd;padding:14px 0}
+.item-topo{display:flex;justify-content:space-between;gap:10px;font-weight:bold}
+.item-controles{display:flex;align-items:center;gap:8px;margin-top:9px}
+.item-controles button{
+  border:none;
+  background:#eee;
+  border-radius:7px;
+  width:32px;
+  height:32px;
+  font-size:18px;
+  cursor:pointer
+}
+.item-observacao{
+  width:100%;
+  margin-top:8px;
+  padding:9px;
+  border:1px solid #ddd;
+  border-radius:7px
+}
+.total{
+  text-align:right;
+  font-size:22px;
+  font-weight:bold;
+  color:#64169a;
+  margin:18px 0
+}
+.botoes-modal{display:flex;gap:10px}
+.btn{
+  flex:1;
+  border:none;
+  padding:14px;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer
+}
+.btn-fechar{background:#ddd;color:#333}
+.btn-enviar{background:#159447;color:white}
+.btn-enviar:disabled{opacity:.6;cursor:not-allowed}
 
-    .categoria {
-      border: none;
-      background: white;
-      color: #5b168f;
-      border-radius: 25px;
-      padding: 11px 17px;
-      font-size: 14px;
-      font-weight: bold;
-      white-space: nowrap;
-      cursor: pointer;
-      box-shadow: 0 2px 7px rgba(0,0,0,.12);
-    }
+.vazio{text-align:center;color:#777;padding:30px 10px}
+.aviso-carregamento{text-align:center;color:#777;padding:30px 10px}
 
-    .categoria.ativa {
-      background: #6d1ca5;
-      color: white;
-    }
+.rastreio{
+  text-align:center;
+  padding:10px 0 5px
+}
+.numero-rastreio{
+  color:#6d1ca5;
+  font-size:25px;
+  font-weight:bold;
+  margin:10px 0 20px
+}
+.etapas{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:15px 0
+}
+.etapa{
+  padding:12px 6px;
+  border-radius:10px;
+  background:#eee;
+  color:#777;
+  font-size:12px;
+  font-weight:bold
+}
+.etapa.ativa{background:#6d1ca5;color:white}
+.etapa.concluida{background:#159447;color:white}
+.mensagem-status{
+  background:#f3e8ff;
+  color:#53117e;
+  padding:13px;
+  border-radius:10px;
+  font-weight:bold;
+  margin-top:15px
+}
 
-    .produto {
-      background: white;
-      border-radius: 15px;
-      margin-bottom: 14px;
-      padding: 17px;
-      box-shadow: 0 2px 9px rgba(0,0,0,.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .produto-info {
-      flex: 1;
-    }
-
-    .produto h3 {
-      color: #351047;
-      margin-bottom: 5px;
-      font-size: 19px;
-    }
-
-    .produto .descricao {
-      color: #777;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .preco {
-      color: #6d1ca5;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .btn-adicionar {
-      background: #731cac;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 15px;
-      font-weight: bold;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .btn-adicionar:active {
-      transform: scale(.97);
-    }
-
-    .teste-firebase {
-      width: 100%;
-      border: none;
-      background: #741bae;
-      color: white;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .barra-carrinho {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #711aaa;
-      color: white;
-      padding: 15px;
-      z-index: 100;
-      box-shadow: 0 -3px 12px rgba(0,0,0,.2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .barra-carrinho strong {
-      font-size: 18px;
-    }
-
-    .modal-fundo {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.65);
-      z-index: 200;
-      padding: 15px;
-      overflow-y: auto;
-    }
-
-    .modal {
-      background: white;
-      max-width: 600px;
-      margin: 30px auto;
-      border-radius: 18px;
-      padding: 20px;
-    }
-
-    .modal h2 {
-      color: #53117e;
-      margin-bottom: 15px;
-    }
-
-    .campo {
-      margin-bottom: 14px;
-    }
-
-    .campo label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .campo input,
-    .campo textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 9px;
-      font-size: 16px;
-    }
-
-    .campo textarea {
-      min-height: 75px;
-      resize: vertical;
-    }
-
-    .item-carrinho {
-      border-bottom: 1px solid #ddd;
-      padding: 14px 0;
-    }
-
-    .item-topo {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      font-weight: bold;
-    }
-
-    .item-controles {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 9px;
-    }
-
-    .item-controles button {
-      border: none;
-      background: #eee;
-      border-radius: 7px;
-      width: 32px;
-      height: 32px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .item-observacao {
-      width: 100%;
-      margin-top: 8px;
-      padding: 9px;
-      border: 1px solid #ddd;
-      border-radius: 7px;
-    }
-
-    .total {
-      text-align: right;
-      font-size: 22px;
-      font-weight: bold;
-      color: #64169a;
-      margin: 18px 0;
-    }
-
-    .botoes-modal {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
-      flex: 1;
-      border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .btn-fechar {
-      background: #ddd;
-      color: #333;
-    }
-
-    .btn-enviar {
-      background: #159447;
-      color: white;
-    }
-
-    .vazio {
-      text-align: center;
-      color: #777;
-      padding: 30px 10px;
-    }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 25px;
-      }
-
-      .produto {
-        padding: 14px;
-      }
-
-      .produto h3 {
-        font-size: 17px;
-      }
-
-      .btn-adicionar {
-        padding: 10px;
-        font-size: 13px;
-      }
-    }
-  </style>
+@media(max-width:600px){
+  header h1{font-size:25px}
+  .produto{padding:14px;align-items:flex-start}
+  .produto h3{font-size:17px}
+  .btn-adicionar{padding:10px;font-size:13px}
+  .produto-foto{width:68px;height:68px}
+  .etapas{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h1>🍔 Sabor da Casa</h1>
-  <p>Cardápio Digital</p>
-  <p>📍 Chapecó / Santa Catarina</p>
+  <img id="logoRestaurante" alt="Logo do restaurante">
+  <h1 id="nomeRestaurante">🍔 Sabor da Casa</h1>
+  <p id="subtituloRestaurante">Cardápio Digital</p>
+  <p id="localRestaurante">📍 Chapecó / Santa Catarina</p>
 </header>
 
 <div class="container">
 
-  <div class="categorias">
-    <button class="categoria ativa" onclick="filtrar('Todos', this)">Todos</button>
-    <button class="categoria" onclick="filtrar('Lanches', this)">Lanches</button>
-    <button class="categoria" onclick="filtrar('Pizzas', this)">Pizzas</button>
-    <button class="categoria" onclick="filtrar('Porções', this)">Porções</button>
-    <button class="categoria" onclick="filtrar('Bebidas', this)">Bebidas</button>
+  <div class="pesquisa">
+    <input id="campoPesquisa" type="search" placeholder="🔎 Procurar produto..." autocomplete="off">
   </div>
 
-  <div id="listaProdutos"></div>
+  <div class="categorias" id="areaCategorias"></div>
 
-  <button class="teste-firebase" onclick="testarFirebase()">
-    🔴 TESTAR FIREBASE
-  </button>
+  <div id="listaProdutos">
+    <div class="aviso-carregamento">Carregando cardápio...</div>
+  </div>
 
 </div>
+
+<button class="btn-acompanhar" id="btnAcompanhar" onclick="abrirAcompanhamento()">
+  📋 Acompanhar pedido
+</button>
 
 <div class="barra-carrinho" onclick="abrirCarrinho()">
   <strong>🛒 Carrinho</strong>
   <strong id="totalBarra">R$ 0,00</strong>
 </div>
 
+<!-- CARRINHO -->
 <div class="modal-fundo" id="modalCarrinho">
-
   <div class="modal">
-
     <h2>🛒 Seu pedido</h2>
 
     <div id="listaCarrinho"></div>
 
     <div class="campo">
       <label>Número da mesa</label>
-      <input
-        type="text"
-        id="mesa"
-        placeholder="Ex.: 5">
+      <input type="text" id="mesa" placeholder="Ex.: 5">
     </div>
 
     <div class="campo">
       <label>Responsável pelo pedido</label>
-      <input
-        type="text"
-        id="responsavel"
-        placeholder="Nome">
+      <input type="text" id="responsavel" placeholder="Nome">
     </div>
 
     <div class="campo">
       <label>Observação geral</label>
-      <textarea
-        id="observacaoGeral"
-        placeholder="Alguma observação para o pedido?"></textarea>
+      <textarea id="observacaoGeral" placeholder="Alguma observação para o pedido?"></textarea>
     </div>
 
     <div class="total">
@@ -363,1134 +320,943 @@
     </div>
 
     <div class="botoes-modal">
+      <button class="btn btn-fechar" onclick="fecharCarrinho()">Fechar</button>
+      <button class="btn btn-enviar" id="btnEnviar" onclick="enviarPedido()">📲 Enviar pedido</button>
+    </div>
+  </div>
+</div>
 
-      <button
-        class="btn btn-fechar"
-        onclick="fecharCarrinho()">
-        Fechar
-      </button>
+<!-- ACOMPANHAMENTO -->
+<div class="modal-fundo" id="modalAcompanhamento">
+  <div class="modal">
+    <h2>📋 Acompanhar pedido</h2>
 
-      <button
-        class="btn btn-enviar"
-        id="btnEnviar"
-        onclick="enviarPedido()">
-        📲 Enviar pedido
-      </button>
+    <div class="rastreio">
+      <div>Pedido</div>
+      <div class="numero-rastreio" id="numeroRastreio">#---</div>
 
+      <div class="etapas">
+        <div class="etapa" id="etapaRecebido">🔴<br>Recebido</div>
+        <div class="etapa" id="etapaPreparo">🟠<br>Em preparo</div>
+        <div class="etapa" id="etapaPronto">🔵<br>Pronto</div>
+      </div>
+
+      <div class="mensagem-status" id="mensagemStatus">
+        Aguardando informações...
+      </div>
     </div>
 
+    <button class="btn btn-fechar" onclick="fecharAcompanhamento()" style="width:100%;margin-top:15px">
+      Fechar
+    </button>
   </div>
-
 </div>
 
 <script type="module">
 
-  /*
-  ==========================================================
-  FIREBASE
-  ==========================================================
-  */
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-  import {
-    initializeApp
-  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-  import {
-    initializeFirestore,
-    collection,
-    addDoc,
-    getDocs
-  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import {
+  initializeFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  doc
+}
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
-    authDomain: "sistema-digital-f9df1.firebaseapp.com",
-    projectId: "sistema-digital-f9df1",
-    storageBucket: "sistema-digital-f9df1.firebasestorage.app",
-    messagingSenderId: "783545984661",
-    appId: "1:783545984661:web:5d0945907ad9db3990dd9c"
-  };
+const firebaseConfig = {
+  apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+  authDomain:"sistema-digital-f9df1.firebaseapp.com",
+  projectId:"sistema-digital-f9df1",
+  storageBucket:"sistema-digital-f9df1.firebasestorage.app",
+  messagingSenderId:"783545984661",
+  appId:"1:783545984661:web:5d0945907ad9db3990dd9c"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = initializeFirestore(app, {}, "default");
 
 
-  const app = initializeApp(firebaseConfig);
+let produtos = [];
+let categoriaAtual = "Todos";
+let carrinho = [];
+let configuracao = {};
+
+let pedidoAtualId = localStorage.getItem("pedidoAtualId") || "";
+let numeroPedidoAtual = localStorage.getItem("numeroPedidoAtual") || "";
+
+let pararAcompanhamento = null;
 
 
-  /*
-  ==========================================================
-  FIRESTORE ENTERPRISE
-  ==========================================================
-  */
+/* =========================
+UTILIDADES
+========================= */
 
-  const db = initializeFirestore(
-    app,
-    {},
-    "default"
-  );
+function dinheiro(valor){
+  return Number(valor || 0).toLocaleString("pt-BR",{
+    style:"currency",
+    currency:"BRL"
+  });
+}
+
+function escapar(texto){
+  return String(texto ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function produtoDisponivel(p){
+  return p.ativo !== false;
+}
+
+function precoAtual(p){
+  if(p.promocaoAtiva && Number(p.precoPromocional) > 0){
+    return Number(p.precoPromocional);
+  }
+  return Number(p.preco || 0);
+}
 
 
-  /*
-  ==========================================================
-  PRODUTOS
-  ==========================================================
-  */
+/* =========================
+CONFIGURAÇÃO
+========================= */
 
-  const produtos = [
+function aplicarConfiguracao(){
 
-    {
-      id: 1,
-      nome: "X-Bacon",
-      descricao: "Lanche",
-      preco: 26,
-      categoria: "Lanches"
-    },
+  const nome = configuracao.nome || "Sabor da Casa";
+  const emoji = configuracao.emoji || "🍔";
 
-    {
-      id: 2,
-      nome: "X-Salada",
-      descricao: "Lanche",
-      preco: 23,
-      categoria: "Lanches"
-    },
+  document.getElementById("nomeRestaurante").textContent =
+    `${emoji} ${nome}`;
 
-    {
-      id: 3,
-      nome: "X-Calabresa",
-      descricao: "Lanche",
-      preco: 27,
-      categoria: "Lanches"
-    },
+  document.getElementById("subtituloRestaurante").textContent =
+    configuracao.subtitulo || "Cardápio Digital";
 
-    {
-      id: 4,
-      nome: "X-Tudo",
-      descricao: "Lanche completo",
-      preco: 34,
-      categoria: "Lanches"
-    },
+  document.getElementById("localRestaurante").textContent =
+    configuracao.endereco
+      ? `📍 ${configuracao.endereco}`
+      : "📍 Chapecó / Santa Catarina";
 
-    {
-      id: 5,
-      nome: "Pizza Calabresa",
-      descricao: "Pizza",
-      preco: 45,
-      categoria: "Pizzas"
-    },
+  const logo = document.getElementById("logoRestaurante");
 
-    {
-      id: 6,
-      nome: "Pizza Frango c/ Catupiry",
-      descricao: "Pizza",
-      preco: 48,
-      categoria: "Pizzas"
-    },
+  if(configuracao.logo){
+    logo.src = configuracao.logo;
+    logo.style.display = "inline-block";
+  }else{
+    logo.style.display = "none";
+  }
+}
 
-    {
-      id: 7,
-      nome: "Pizza Mussarela",
-      descricao: "Pizza",
-      preco: 40,
-      categoria: "Pizzas"
-    },
 
-    {
-      id: 8,
-      nome: "Pizza Portuguesa",
-      descricao: "Pizza",
-      preco: 52,
-      categoria: "Pizzas"
-    },
+/* =========================
+CATEGORIAS
+========================= */
 
-    {
-      id: 9,
-      nome: "Batata Frita",
-      descricao: "Porção",
-      preco: 20,
-      categoria: "Porções"
-    },
+function mostrarCategorias(){
 
-    {
-      id: 10,
-      nome: "Batata Frita c/ Queijo",
-      descricao: "Porção",
-      preco: 26,
-      categoria: "Porções"
-    },
+  const area = document.getElementById("areaCategorias");
+  area.innerHTML = "";
 
-    {
-      id: 11,
-      nome: "Porção de Tilápia",
-      descricao: "Porção",
-      preco: 38,
-      categoria: "Porções"
-    },
-
-    {
-      id: 12,
-      nome: "Mandioca Frita",
-      descricao: "Porção",
-      preco: 18,
-      categoria: "Porções"
-    },
-
-    {
-      id: 13,
-      nome: "Coca-Cola",
-      descricao: "Refrigerante",
-      preco: 7,
-      categoria: "Bebidas"
-    },
-
-    {
-      id: 14,
-      nome: "Pepsi",
-      descricao: "Refrigerante",
-      preco: 7,
-      categoria: "Bebidas"
-    },
-
-    {
-      id: 15,
-      nome: "Cerveja",
-      descricao: "Cerveja",
-      preco: 13,
-      categoria: "Bebidas"
-    },
-
-    {
-      id: 16,
-      nome: "Chopp",
-      descricao: "Chopp",
-      preco: 15,
-      categoria: "Bebidas"
-    }
-
+  const categorias = [
+    "Todos",
+    ...new Set(
+      produtos
+        .map(p => p.categoria)
+        .filter(Boolean)
+    )
   ];
 
-
-  /*
-  ==========================================================
-  CARRINHO
-  ==========================================================
-  */
-
-  let carrinho = [];
-
-
-  /*
-  ==========================================================
-  DINHEIRO
-  ==========================================================
-  */
-
-  function dinheiro(valor) {
-
-    return valor.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL"
-    });
-
+  if(!categorias.includes(categoriaAtual)){
+    categoriaAtual = "Todos";
   }
 
+  categorias.forEach(cat => {
 
-  /*
-  ==========================================================
-  MOSTRAR PRODUTOS
-  ==========================================================
-  */
+    const b = document.createElement("button");
 
-  function mostrarProdutos(categoria = "Todos") {
+    b.className =
+      "categoria" +
+      (cat === categoriaAtual ? " ativa" : "");
 
-    const lista =
-      document.getElementById("listaProdutos");
+    b.textContent = cat;
 
-    lista.innerHTML = "";
+    b.onclick = () => {
 
-
-    const produtosFiltrados =
-      categoria === "Todos"
-        ? produtos
-        : produtos.filter(
-            produto =>
-              produto.categoria === categoria
-          );
-
-
-    if (produtosFiltrados.length === 0) {
-
-      lista.innerHTML = `
-        <div class="vazio">
-          Nenhum produto encontrado.
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    produtosFiltrados.forEach(produto => {
-
-      const div =
-        document.createElement("div");
-
-      div.className = "produto";
-
-
-      div.innerHTML = `
-
-        <div class="produto-info">
-
-          <h3>
-            ${produto.nome}
-          </h3>
-
-          <div class="descricao">
-            ${produto.descricao}
-          </div>
-
-          <div class="preco">
-            ${dinheiro(produto.preco)}
-          </div>
-
-        </div>
-
-        <button
-          class="btn-adicionar"
-          onclick="adicionarProduto(${produto.id})">
-
-          + Adicionar
-
-        </button>
-
-      `;
-
-
-      lista.appendChild(div);
-
-    });
-
-  }
-
-
-  /*
-  ==========================================================
-  FILTRO
-  ==========================================================
-  */
-
-  window.filtrar =
-    function(categoria, botao) {
+      categoriaAtual = cat;
 
       document
         .querySelectorAll(".categoria")
-        .forEach(btn =>
-          btn.classList.remove("ativa")
-        );
+        .forEach(x => x.classList.remove("ativa"));
 
+      b.classList.add("ativa");
 
-      botao.classList.add("ativa");
-
-
-      mostrarProdutos(categoria);
+      mostrarProdutos();
 
     };
 
+    area.appendChild(b);
 
-  /*
-  ==========================================================
-  ADICIONAR PRODUTO
-  ==========================================================
-  */
+  });
 
-  window.adicionarProduto =
-    function(id) {
-
-      const produto =
-        produtos.find(
-          p => p.id === id
-        );
+}
 
 
-      if (!produto) return;
+/* =========================
+PESQUISA
+========================= */
+
+document.getElementById("campoPesquisa").addEventListener("input", mostrarProdutos);
 
 
-      const existente =
-        carrinho.find(
-          item => item.id === id
-        );
+/* =========================
+PRODUTOS
+========================= */
 
+function mostrarProdutos(){
 
-      if (existente) {
+  const lista = document.getElementById("listaProdutos");
+  const pesquisa =
+    document.getElementById("campoPesquisa").value
+      .trim()
+      .toLowerCase();
 
-        existente.quantidade++;
+  lista.innerHTML = "";
 
-      } else {
+  const filtrados = produtos.filter(produto => {
 
-        carrinho.push({
+    if(!produtoDisponivel(produto)) return false;
 
-          id: produto.id,
+    const categoriaOK =
+      categoriaAtual === "Todos" ||
+      produto.categoria === categoriaAtual;
 
-          nome: produto.nome,
+    const texto =
+      `${produto.nome || ""} ${produto.descricao || ""} ${produto.categoria || ""}`
+      .toLowerCase();
 
-          preco: produto.preco,
+    const pesquisaOK =
+      !pesquisa || texto.includes(pesquisa);
 
-          quantidade: 1,
+    return categoriaOK && pesquisaOK;
 
-          observacao: ""
+  });
 
-        });
+  if(!filtrados.length){
 
-      }
+    lista.innerHTML =
+      '<div class="vazio">Nenhum produto encontrado.</div>';
 
-
-      atualizarCarrinho();
-
-    };
-
-
-  /*
-  ==========================================================
-  ALTERAR QUANTIDADE
-  ==========================================================
-  */
-
-  window.alterarQuantidade =
-    function(id, quantidade) {
-
-      const item =
-        carrinho.find(
-          item => item.id === id
-        );
-
-
-      if (!item) return;
-
-
-      item.quantidade =
-        quantidade;
-
-
-      if (item.quantidade <= 0) {
-
-        carrinho =
-          carrinho.filter(
-            item => item.id !== id
-          );
-
-      }
-
-
-      atualizarCarrinho();
-
-    };
-
-
-  /*
-  ==========================================================
-  OBSERVAÇÃO
-  ==========================================================
-  */
-
-  window.alterarObservacao =
-    function(id, valor) {
-
-      const item =
-        carrinho.find(
-          item => item.id === id
-        );
-
-
-      if (!item) return;
-
-
-      item.observacao =
-        valor;
-
-    };
-
-
-  /*
-  ==========================================================
-  CALCULAR TOTAL
-  ==========================================================
-  */
-
-  function calcularTotal() {
-
-    return carrinho.reduce(
-      (total, item) =>
-        total +
-        item.preco *
-        item.quantidade,
-      0
-    );
+    return;
 
   }
 
+  filtrados.forEach(produto => {
+
+    const div = document.createElement("div");
+    div.className = "produto";
+
+    const promo =
+      produto.promocaoAtiva &&
+      Number(produto.precoPromocional) > 0;
+
+    const foto = produto.foto
+      ? `<img class="produto-foto" src="${escapar(produto.foto)}" alt="${escapar(produto.nome)}" onerror="this.style.display='none'">`
+      : "";
+
+    div.innerHTML = `
+
+      <div class="produto-info">
+
+        ${promo
+          ? '<div class="promocao">🔥 PROMOÇÃO</div>'
+          : ""}
+
+        <h3>${escapar(produto.nome)}</h3>
+
+        <div class="descricao">
+          ${escapar(produto.descricao || "")}
+        </div>
+
+        <div class="preco">
+          ${
+            promo
+              ? `<span class="preco-antigo">${dinheiro(produto.preco)}</span>`
+              : ""
+          }
+          ${dinheiro(precoAtual(produto))}
+        </div>
+
+      </div>
+
+      ${foto}
+
+      <button
+        class="btn-adicionar"
+        onclick="adicionarProduto('${escapar(produto.id)}')">
+
+        + Adicionar
+
+      </button>
+
+    `;
+
+    lista.appendChild(div);
+
+  });
+
+}
+
+
+/* =========================
+CARRINHO
+========================= */
+
+window.adicionarProduto = id => {
+
+  const produto = produtos.find(p => p.id === id);
+
+  if(!produto) return;
+
+  const existente =
+    carrinho.find(i => i.id === id);
+
+  if(existente){
+
+    existente.quantidade++;
+
+  }else{
+
+    carrinho.push({
+      id:produto.id,
+      nome:produto.nome,
+      preco:precoAtual(produto),
+      quantidade:1,
+      observacao:""
+    });
+
+  }
+
+  atualizarCarrinho();
+
+};
+
+
+window.alterarQuantidade = (id, quantidade) => {
+
+  const item =
+    carrinho.find(i => i.id === id);
+
+  if(!item) return;
+
+  item.quantidade = quantidade;
+
+  if(item.quantidade <= 0){
+
+    carrinho =
+      carrinho.filter(i => i.id !== id);
+
+  }
+
+  atualizarCarrinho();
+
+};
+
+
+window.alterarObservacao = (id, valor) => {
+
+  const item =
+    carrinho.find(i => i.id === id);
+
+  if(item){
+    item.observacao = valor;
+  }
+
+};
+
+
+function calcularTotal(){
+
+  return carrinho.reduce(
+    (total,item) =>
+      total + item.preco * item.quantidade,
+    0
+  );
+
+}
+
+
+function atualizarCarrinho(){
+
+  const total = calcularTotal();
+
+  document.getElementById("totalBarra").textContent =
+    dinheiro(total);
+
+  const lista =
+    document.getElementById("listaCarrinho");
+
+  lista.innerHTML = "";
+
+  if(!carrinho.length){
+
+    lista.innerHTML =
+      '<div class="vazio">Seu carrinho está vazio.</div>';
+
+    document.getElementById("totalModal").textContent =
+      dinheiro(0);
+
+    return;
+
+  }
+
+  carrinho.forEach(item => {
+
+    const div =
+      document.createElement("div");
+
+    div.className = "item-carrinho";
+
+    div.innerHTML = `
+
+      <div class="item-topo">
+
+        <span>${escapar(item.nome)}</span>
+
+        <span>
+          ${dinheiro(item.preco * item.quantidade)}
+        </span>
+
+      </div>
+
+      <div class="item-controles">
+
+        <button
+          onclick="alterarQuantidade('${escapar(item.id)}',${item.quantidade - 1})">
+          −
+        </button>
+
+        <strong>${item.quantidade}</strong>
+
+        <button
+          onclick="alterarQuantidade('${escapar(item.id)}',${item.quantidade + 1})">
+          +
+        </button>
+
+      </div>
+
+      <input
+        class="item-observacao"
+        type="text"
+        placeholder="Observação deste item"
+        value="${escapar(item.observacao || "")}"
+        oninput="alterarObservacao('${escapar(item.id)}',this.value)">
+
+    `;
+
+    lista.appendChild(div);
+
+  });
+
+  document.getElementById("totalModal").textContent =
+    dinheiro(total);
+
+}
+
+
+window.abrirCarrinho = () => {
+
+  atualizarCarrinho();
+
+  document.getElementById("modalCarrinho").style.display =
+    "block";
+
+};
+
+window.fecharCarrinho = () => {
+
+  document.getElementById("modalCarrinho").style.display =
+    "none";
+
+};
+
+
+/* =========================
+NÚMERO DO PEDIDO
+========================= */
+
+function gerarNumeroPedido(){
+
+  const d = new Date();
+
+  const base =
+    String(d.getHours()).padStart(2,"0") +
+    String(d.getMinutes()).padStart(2,"0") +
+    String(d.getSeconds()).padStart(2,"0");
+
+  const aleatorio =
+    String(Math.floor(Math.random() * 100)).padStart(2,"0");
+
+  return base + aleatorio;
+
+}
+
+
+/* =========================
+ENVIAR PEDIDO
+========================= */
+
+window.enviarPedido = async () => {
+
+  if(!carrinho.length){
+
+    alert("🛒 Seu carrinho está vazio.");
+    return;
+
+  }
+
+  const mesa =
+    document.getElementById("mesa").value.trim();
+
+  const responsavel =
+    document.getElementById("responsavel").value.trim();
+
+  const observacaoGeral =
+    document.getElementById("observacaoGeral").value.trim();
+
+  if(!mesa){
+
+    alert("⚠️ Informe o número da mesa.");
+    return;
+
+  }
+
+  const btn =
+    document.getElementById("btnEnviar");
+
+  btn.disabled = true;
+  btn.textContent = "⏳ Registrando...";
 
   /*
-  ==========================================================
-  ATUALIZAR CARRINHO
-  ==========================================================
-  */
+   * Abrimos a janela antes da operação Firebase.
+   * Isso reduz a chance de o navegador bloquear o WhatsApp.
+   */
+  let janelaWhatsApp = null;
 
-  function atualizarCarrinho() {
+  try{
 
-    const total =
+    const numeroPedido =
+      gerarNumeroPedido();
+
+    const itensPedido =
+      carrinho.map(i => ({
+        id:i.id,
+        nome:i.nome,
+        preco:i.preco,
+        quantidade:i.quantidade,
+        observacao:i.observacao || ""
+      }));
+
+    const totalPedido =
       calcularTotal();
 
+    const pedido = {
 
-    document.getElementById(
-      "totalBarra"
-    ).textContent =
-      dinheiro(total);
+      numeroPedido,
 
+      mesa,
 
-    const lista =
-      document.getElementById(
-        "listaCarrinho"
+      responsavel,
+
+      observacaoGeral,
+
+      itens:itensPedido,
+
+      total:totalPedido,
+
+      status:"Recebido",
+
+      data:new Date().toISOString()
+
+    };
+
+    const referencia =
+      await addDoc(
+        collection(db,"pedidos"),
+        pedido
       );
 
+    pedidoAtualId = referencia.id;
+    numeroPedidoAtual = numeroPedido;
 
-    lista.innerHTML = "";
+    localStorage.setItem(
+      "pedidoAtualId",
+      pedidoAtualId
+    );
 
+    localStorage.setItem(
+      "numeroPedidoAtual",
+      numeroPedidoAtual
+    );
 
-    if (carrinho.length === 0) {
+    atualizarBotaoAcompanhar();
 
-      lista.innerHTML = `
-        <div class="vazio">
-          Seu carrinho está vazio.
-        </div>
-      `;
+    const telefone =
+      String(configuracao.telefone || "")
+        .replace(/\D/g,"");
 
+    let mensagem =
+      `*🍔 ${configuracao.nome || "SABOR DA CASA"}*\\n` +
+      `*Novo pedido #${numeroPedido}*\\n\\n` +
+      `📍 Mesa: ${mesa}\\n`;
 
-      document.getElementById(
-        "totalModal"
-      ).textContent =
-        dinheiro(0);
-
-
-      return;
-
+    if(responsavel){
+      mensagem +=
+        `👤 Responsável: ${responsavel}\\n`;
     }
 
+    mensagem +=
+      "\\n*ITENS DO PEDIDO:*\\n";
 
-    carrinho.forEach(item => {
+    carrinho.forEach(i => {
 
-      const div =
-        document.createElement("div");
+      mensagem +=
+        `${i.quantidade}x ${i.nome} - ` +
+        `${dinheiro(i.preco * i.quantidade)}\\n`;
 
+      if(i.observacao){
 
-      div.className =
-        "item-carrinho";
+        mensagem +=
+          `   Obs.: ${i.observacao}\\n`;
 
-
-      div.innerHTML = `
-
-        <div class="item-topo">
-
-          <span>
-            ${item.nome}
-          </span>
-
-          <span>
-            ${dinheiro(
-              item.preco *
-              item.quantidade
-            )}
-          </span>
-
-        </div>
-
-
-        <div class="item-controles">
-
-          <button
-            onclick="alterarQuantidade(
-              ${item.id},
-              ${item.quantidade - 1}
-            )">
-
-            −
-
-          </button>
-
-
-          <strong>
-            ${item.quantidade}
-          </strong>
-
-
-          <button
-            onclick="alterarQuantidade(
-              ${item.id},
-              ${item.quantidade + 1}
-            )">
-
-            +
-
-          </button>
-
-        </div>
-
-
-        <input
-          class="item-observacao"
-          type="text"
-          placeholder="Observação deste item"
-          value="${item.observacao || ""}"
-          oninput="alterarObservacao(
-            ${item.id},
-            this.value
-          )"
-        >
-
-      `;
-
-
-      lista.appendChild(div);
+      }
 
     });
 
+    if(observacaoGeral){
 
-    document.getElementById(
-      "totalModal"
-    ).textContent =
-      dinheiro(total);
+      mensagem +=
+        `\\n📝 *Observação geral:*\\n` +
+        `${observacaoGeral}\\n`;
 
-  }
+    }
 
+    mensagem +=
+      `\\n💰 *TOTAL: ${dinheiro(totalPedido)}*`;
 
-  /*
-  ==========================================================
-  ABRIR CARRINHO
-  ==========================================================
-  */
+    if(telefone){
 
-  window.abrirCarrinho =
-    function() {
+      janelaWhatsApp =
+        window.open("about:blank","_blank");
 
-      atualizarCarrinho();
+      const url =
+        "https://wa.me/" +
+        telefone +
+        "?text=" +
+        encodeURIComponent(mensagem);
 
+      if(janelaWhatsApp){
 
-      document.getElementById(
-        "modalCarrinho"
-      ).style.display =
-        "block";
+        janelaWhatsApp.location.href = url;
 
-    };
+      }else{
 
-
-  /*
-  ==========================================================
-  FECHAR CARRINHO
-  ==========================================================
-  */
-
-  window.fecharCarrinho =
-    function() {
-
-      document.getElementById(
-        "modalCarrinho"
-      ).style.display =
-        "none";
-
-    };
-
-
-  /*
-  ==========================================================
-  TESTAR FIREBASE
-  ==========================================================
-  */
-
-  window.testarFirebase =
-    async function() {
-
-      alert(
-        "🔄 TESTANDO FIREBASE...\n\n" +
-        "Vamos testar a leitura."
-      );
-
-
-      try {
-
-        const ref =
-          collection(
-            db,
-            "pedidos"
-          );
-
-
-        const resultado =
-          await getDocs(ref);
-
-
-        alert(
-          "🟢 LEITURA FUNCIONOU!\n\n" +
-          "Documentos encontrados: " +
-          resultado.size +
-          "\n\n" +
-          "Agora vamos testar a gravação."
-        );
-
-
-        const teste = {
-
-          teste: true,
-
-          mensagem:
-            "TESTE FIREBASE ENTERPRISE",
-
-          data:
-            new Date().toISOString()
-
-        };
-
-
-        const novoDocumento =
-          await addDoc(
-            ref,
-            teste
-          );
-
-
-        alert(
-
-          "🟢 FIREBASE FUNCIONOU!\n\n" +
-
-          "Leitura: OK\n" +
-
-          "Gravação: OK\n\n" +
-
-          "ID do teste:\n" +
-
-          novoDocumento.id
-
-        );
-
-
-      } catch (erro) {
-
-        console.error(erro);
-
-
-        alert(
-
-          "🔴 ERRO NO FIREBASE\n\n" +
-
-          "Código:\n" +
-
-          (
-            erro.code ||
-            "não informado"
-          ) +
-
-          "\n\nMensagem:\n" +
-
-          (
-            erro.message ||
-            erro
-          )
-
-        );
+        window.open(url,"_blank");
 
       }
 
-    };
+    }
+
+    carrinho = [];
+
+    document.getElementById("mesa").value = "";
+    document.getElementById("responsavel").value = "";
+    document.getElementById("observacaoGeral").value = "";
+
+    atualizarCarrinho();
+    fecharCarrinho();
+
+    alert(
+      "✅ Pedido registrado com sucesso!\\n\\n" +
+      "Número do pedido: #" +
+      numeroPedido +
+      "\\n\\n" +
+      "Agora você pode acompanhar o andamento do pedido."
+    );
+
+    abrirAcompanhamento();
+
+  }catch(e){
+
+    console.error(e);
+
+    if(janelaWhatsApp){
+      janelaWhatsApp.close();
+    }
+
+    alert(
+      "🔴 NÃO FOI POSSÍVEL REGISTRAR O PEDIDO.\\n\\n" +
+      (e.message || e)
+    );
+
+  }finally{
+
+    btn.disabled = false;
+    btn.textContent = "📲 Enviar pedido";
+
+  }
+
+};
 
 
-  /*
-  ==========================================================
-  GERAR NÚMERO DO PEDIDO
-  ==========================================================
-  */
+/* =========================
+ACOMPANHAMENTO DO PEDIDO
+========================= */
 
-  function gerarNumeroPedido() {
+function atualizarBotaoAcompanhar(){
 
-    const agora =
-      new Date();
+  const btn =
+    document.getElementById("btnAcompanhar");
 
+  btn.style.display =
+    pedidoAtualId ? "block" : "none";
 
-    const hora =
-      String(
-        agora.getHours()
-      ).padStart(2, "0");
+}
 
 
-    const minuto =
-      String(
-        agora.getMinutes()
-      ).padStart(2, "0");
+function mostrarStatus(status){
+
+  const s =
+    String(status || "Recebido")
+      .trim()
+      .toLowerCase();
+
+  const recebido =
+    document.getElementById("etapaRecebido");
+
+  const preparo =
+    document.getElementById("etapaPreparo");
+
+  const pronto =
+    document.getElementById("etapaPronto");
+
+  [recebido,preparo,pronto]
+    .forEach(x => {
+      x.classList.remove("ativa","concluida");
+    });
+
+  let mensagem =
+    "⏳ Aguardando o restaurante receber o pedido.";
+
+  if(s === "recebido"){
+
+    recebido.classList.add("ativa");
+
+    mensagem =
+      "🔴 Pedido recebido! O restaurante já recebeu seu pedido.";
+
+  }else if(s === "preparo"){
+
+    recebido.classList.add("concluida");
+    preparo.classList.add("ativa");
+
+    mensagem =
+      "🟠 Seu pedido está em preparo!";
+
+  }else if(s === "pronto"){
+
+    recebido.classList.add("concluida");
+    preparo.classList.add("concluida");
+    pronto.classList.add("ativa");
+
+    mensagem =
+      "🔵 Seu pedido está pronto! Aguarde as orientações do restaurante.";
+
+  }else if(s === "finalizado"){
+
+    recebido.classList.add("concluida");
+    preparo.classList.add("concluida");
+    pronto.classList.add("concluida");
+
+    mensagem =
+      "✅ Pedido finalizado. Obrigado pela preferência!";
+
+  }
+
+  document.getElementById("mensagemStatus").textContent =
+    mensagem;
+
+}
 
 
-    const segundo =
-      String(
-        agora.getSeconds()
-      ).padStart(2, "0");
+function acompanharPedido(){
+
+  if(!pedidoAtualId) return;
+
+  document.getElementById("numeroRastreio").textContent =
+    "#" + numeroPedidoAtual;
+
+  if(pararAcompanhamento){
+
+    pararAcompanhamento();
+    pararAcompanhamento = null;
+
+  }
+
+  pararAcompanhamento =
+    onSnapshot(
+      doc(db,"pedidos",pedidoAtualId),
+
+      snap => {
+
+        if(!snap.exists()){
+
+          document.getElementById("mensagemStatus").textContent =
+            "⚠️ Não foi possível localizar este pedido.";
+
+          return;
+
+        }
+
+        const dados = snap.data();
+
+        mostrarStatus(dados.status);
+
+      },
+
+      erro => {
+
+        console.error(erro);
+
+        document.getElementById("mensagemStatus").textContent =
+          "⚠️ Não foi possível atualizar o status neste momento.";
+
+      }
+    );
+
+}
 
 
-    return (
-      hora +
-      minuto +
-      segundo
+window.abrirAcompanhamento = () => {
+
+  if(!pedidoAtualId){
+
+    alert("Ainda não há um pedido para acompanhar.");
+    return;
+
+  }
+
+  document.getElementById("numeroRastreio").textContent =
+    "#" + numeroPedidoAtual;
+
+  document.getElementById("modalAcompanhamento").style.display =
+    "block";
+
+  acompanharPedido();
+
+};
+
+window.fecharAcompanhamento = () => {
+
+  document.getElementById("modalAcompanhamento").style.display =
+    "none";
+
+};
+
+
+/* =========================
+FIREBASE — PRODUTOS
+========================= */
+
+onSnapshot(
+
+  collection(db,"produtos"),
+
+  snap => {
+
+    produtos = [];
+
+    snap.forEach(d => {
+
+      produtos.push({
+        id:d.id,
+        ...d.data()
+      });
+
+    });
+
+    mostrarCategorias();
+    mostrarProdutos();
+
+  },
+
+  erro => {
+
+    console.error("Erro nos produtos:",erro);
+
+    document.getElementById("listaProdutos").innerHTML =
+      '<div class="vazio">⚠️ Não foi possível carregar o cardápio agora. Tente atualizar a página.</div>';
+
+  }
+
+);
+
+
+/* =========================
+FIREBASE — CONFIGURAÇÃO
+========================= */
+
+onSnapshot(
+
+  collection(db,"configuracaoRestaurante"),
+
+  snap => {
+
+    configuracao = {};
+
+    snap.forEach(d => {
+
+      configuracao = {
+        ...configuracao,
+        ...d.data()
+      };
+
+    });
+
+    aplicarConfiguracao();
+
+  },
+
+  erro => {
+
+    console.warn(
+      "Configuração não carregada:",
+      erro
     );
 
   }
 
+);
 
-  /*
-  ==========================================================
-  SALVAR PEDIDO
-  ==========================================================
-  */
 
-  async function salvarPedidoNoSistema(
-    pedidoSistema
-  ) {
+/* =========================
+INÍCIO
+========================= */
 
-    const ref =
-      collection(
-        db,
-        "pedidos"
-      );
+atualizarCarrinho();
+atualizarBotaoAcompanhar();
 
+if(pedidoAtualId){
 
-    const resultado =
-      await addDoc(
-        ref,
-        pedidoSistema
-      );
+  document.getElementById("numeroRastreio").textContent =
+    "#" + numeroPedidoAtual;
 
-
-    return resultado;
-
-  }
-
-
-  /*
-  ==========================================================
-  ENVIAR PEDIDO
-  ==========================================================
-  */
-
-  window.enviarPedido =
-    async function() {
-
-      if (carrinho.length === 0) {
-
-        alert(
-          "🛒 Seu carrinho está vazio."
-        );
-
-        return;
-
-      }
-
-
-      const mesa =
-        document.getElementById(
-          "mesa"
-        ).value.trim();
-
-
-      const responsavel =
-        document.getElementById(
-          "responsavel"
-        ).value.trim();
-
-
-      const observacaoGeral =
-        document.getElementById(
-          "observacaoGeral"
-        ).value.trim();
-
-
-      if (!mesa) {
-
-        alert(
-          "⚠️ Informe o número da mesa."
-        );
-
-        return;
-
-      }
-
-
-      const btn =
-        document.getElementById(
-          "btnEnviar"
-        );
-
-
-      btn.disabled = true;
-
-
-      btn.textContent =
-        "⏳ Registrando...";
-
-
-      try {
-
-        const numeroPedido =
-          gerarNumeroPedido();
-
-
-        const itensPedido =
-          carrinho.map(item => ({
-
-            id:
-              item.id,
-
-            nome:
-              item.nome,
-
-            preco:
-              item.preco,
-
-            quantidade:
-              item.quantidade,
-
-            observacao:
-              item.observacao || ""
-
-          }));
-
-
-        const pedidoSistema = {
-
-          numeroPedido:
-            numeroPedido,
-
-          mesa:
-            mesa,
-
-          responsavel:
-            responsavel,
-
-          observacaoGeral:
-            observacaoGeral,
-
-          itens:
-            itensPedido,
-
-          total:
-            calcularTotal(),
-
-          status:
-            "Recebido",
-
-          data:
-            new Date().toISOString()
-
-        };
-
-
-        /*
-        ======================================================
-        SALVAR PRIMEIRO NO FIREBASE
-        ======================================================
-        */
-
-        await salvarPedidoNoSistema(
-          pedidoSistema
-        );
-
-
-        /*
-        ======================================================
-        ABRIR WHATSAPP
-        ======================================================
-        */
-
-        let mensagem = "";
-
-
-        mensagem +=
-          "*🍔 SABOR DA CASA*\n";
-
-
-        mensagem +=
-          "*Novo pedido #" +
-          numeroPedido +
-          "*\n\n";
-
-
-        mensagem +=
-          "📍 Mesa: " +
-          mesa +
-          "\n";
-
-
-        if (responsavel) {
-
-          mensagem +=
-            "👤 Responsável: " +
-            responsavel +
-            "\n";
-
-        }
-
-
-        mensagem +=
-          "\n";
-
-
-        mensagem +=
-          "*ITENS DO PEDIDO:*\n";
-
-
-        carrinho.forEach(item => {
-
-          mensagem +=
-            item.quantidade +
-            "x " +
-            item.nome +
-            " - " +
-            dinheiro(
-              item.preco *
-              item.quantidade
-            ) +
-            "\n";
-
-
-          if (item.observacao) {
-
-            mensagem +=
-              "   Obs.: " +
-              item.observacao +
-              "\n";
-
-          }
-
-        });
-
-
-        if (observacaoGeral) {
-
-          mensagem +=
-            "\n📝 *Observação geral:*\n" +
-            observacaoGeral +
-            "\n";
-
-        }
-
-
-        mensagem +=
-          "\n💰 *TOTAL: " +
-          dinheiro(
-            calcularTotal()
-          ) +
-          "*";
-
-
-        const telefone =
-          "5549984121585";
-
-
-        const url =
-          "https://wa.me/" +
-          telefone +
-          "?text=" +
-          encodeURIComponent(
-            mensagem
-          );
-
-
-        window.open(
-          url,
-          "_blank"
-        );
-
-
-        /*
-        ======================================================
-        LIMPAR
-        ======================================================
-        */
-
-        carrinho = [];
-
-
-        document.getElementById(
-          "mesa"
-        ).value = "";
-
-
-        document.getElementById(
-          "responsavel"
-        ).value = "";
-
-
-        document.getElementById(
-          "observacaoGeral"
-        ).value = "";
-
-
-        atualizarCarrinho();
-
-
-        fecharCarrinho();
-
-
-        alert(
-          "✅ Pedido registrado com sucesso!\n\n" +
-          "Número do pedido: #" +
-          numeroPedido
-        );
-
-
-      } catch (erro) {
-
-        console.error(
-          "Erro ao registrar pedido:",
-          erro
-        );
-
-
-        alert(
-
-          "🔴 NÃO FOI POSSÍVEL REGISTRAR O PEDIDO.\n\n" +
-
-          "Código:\n" +
-
-          (
-            erro.code ||
-            "não informado"
-          ) +
-
-          "\n\nMensagem:\n" +
-
-          (
-            erro.message ||
-            erro
-          )
-
-        );
-
-      } finally {
-
-        btn.disabled = false;
-
-
-        btn.textContent =
-          "📲 Enviar pedido";
-
-      }
-
-    };
-
-
-  /*
-  ==========================================================
-  INICIAR
-  ==========================================================
-  */
-
-  mostrarProdutos();
-
-  atualizarCarrinho();
+}
 
 </script>
 
