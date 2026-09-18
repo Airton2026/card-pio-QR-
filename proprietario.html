@@ -1,3215 +1,365 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Painel do Proprietário — Sabor da Casa</title>
-
-<style>
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:#111827;
-    color:#fff;
-    padding-bottom:30px;
-}
-
-header{
-    background:#1f2937;
-    padding:20px;
-    position:sticky;
-    top:0;
-    z-index:100;
-    box-shadow:0 3px 12px rgba(0,0,0,.3);
-}
-
-header h1{
-    font-size:23px;
-}
-
-header p{
-    color:#9ca3af;
-    margin-top:5px;
-    font-size:14px;
-}
-
-.topo{
-    max-width:1200px;
-    margin:auto;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-}
-
-.btn-historico{
-    border:none;
-    background:#374151;
-    color:white;
-    padding:11px 15px;
-    border-radius:9px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-/* =========================================================
-   AVISOS
-========================================================= */
-
-.painel-avisos{
-    max-width:1200px;
-    margin:15px auto 0;
-    padding:0 20px;
-    position:sticky;
-    top:86px;
-    z-index:90;
-}
-
-.avisos-caixa{
-    background:#1f2937;
-    border-radius:13px;
-    border:2px solid #374151;
-    box-shadow:0 5px 15px rgba(0,0,0,.35);
-    overflow:hidden;
-}
-
-.avisos-cabecalho{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    padding:11px 15px;
-    background:#182231;
-}
-
-.avisos-titulo{
-    font-size:15px;
-    font-weight:bold;
-}
-
-.contador-avisos{
-    background:#b91c1c;
-    color:white;
-    min-width:28px;
-    height:28px;
-    padding:0 8px;
-    border-radius:20px;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    font-size:13px;
-    font-weight:bold;
-    margin-left:5px;
-}
-
-.btn-som{
-    border:none;
-    background:#374151;
-    color:white;
-    padding:7px 10px;
-    border-radius:7px;
-    cursor:pointer;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.lista-avisos{
-    max-height:150px;
-    overflow-y:auto;
-}
-
-.aviso-item{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    padding:10px 15px;
-    border-top:1px solid #374151;
-    cursor:pointer;
-}
-
-.aviso-item:hover{
-    background:#263244;
-}
-
-.aviso-novo{
-    border-left:5px solid #ef4444;
-}
-
-.aviso-preparo{
-    border-left:5px solid #f59e0b;
-}
-
-.aviso-pronto{
-    border-left:5px solid #3b82f6;
-}
-
-.aviso-info{
-    display:flex;
-    align-items:center;
-    gap:9px;
-    min-width:0;
-}
-
-.aviso-mesa{
-    font-weight:bold;
-    white-space:nowrap;
-}
-
-.aviso-detalhes{
-    color:#d1d5db;
-    font-size:13px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-.aviso-status{
-    font-size:11px;
-    font-weight:bold;
-    padding:5px 8px;
-    border-radius:15px;
-    white-space:nowrap;
-}
-
-.aviso-status-novo{
-    background:#7f1d1d;
-    color:#fecaca;
-}
-
-.aviso-status-preparo{
-    background:#78350f;
-    color:#fde68a;
-}
-
-.aviso-status-pronto{
-    background:#1e3a8a;
-    color:#bfdbfe;
-}
-
-.sem-avisos{
-    padding:11px 15px;
-    color:#9ca3af;
-    font-size:13px;
-}
-
-/* =========================================================
-   PISCAR MESA
-========================================================= */
-
-@keyframes piscarMesa{
-    0%,100%{
-        box-shadow:0 0 0 rgba(239,68,68,0);
-    }
-
-    50%{
-        box-shadow:0 0 22px rgba(239,68,68,.95);
-    }
-}
-
-.mesa.novo-pedido{
-    animation:piscarMesa 1s infinite;
-    border-color:#ef4444;
-}
-
-/* =========================================================
-   CONTAINER
-========================================================= */
-
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
-}
-
-.configuracao{
-    background:#1f2937;
-    padding:18px;
-    border-radius:14px;
-    margin-bottom:20px;
-}
-
-.configuracao label{
-    display:block;
-    font-size:14px;
-    color:#d1d5db;
-    margin-bottom:7px;
-}
-
-.configuracao input{
-    width:100%;
-    max-width:180px;
-    padding:12px;
-    border-radius:8px;
-    border:2px solid #374151;
-    background:#111827;
-    color:white;
-    font-size:16px;
-}
-
-.btn-config{
-    margin-top:10px;
-    background:#2563eb;
-    color:white;
-    border:none;
-    padding:11px 18px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.titulo-secao{
-    font-size:18px;
-    margin-bottom:12px;
-}
-
-.resumo{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:12px;
-    margin-bottom:25px;
-}
-
-.resumo-card{
-    background:#1f2937;
-    padding:15px;
-    border-radius:12px;
-}
-
-.resumo-card span{
-    color:#9ca3af;
-    font-size:13px;
-}
-
-.resumo-card strong{
-    display:block;
-    font-size:24px;
-    margin-top:6px;
-}
-
-.resumo-total{
-    border:2px solid #16a34a;
-}
-
-.resumo-total strong{
-    color:#4ade80;
-}
-
-.mesas-titulo{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
-}
-
-.mesas-titulo h2{
-    font-size:20px;
-}
-
-.mesas{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-    gap:15px;
-}
-
-.mesa{
-    background:#1f2937;
-    border-radius:15px;
-    padding:17px;
-    border:2px solid #374151;
-}
-
-.mesa.livre{
-    border-color:#22c55e;
-}
-
-.mesa.ocupada{
-    border-color:#ef4444;
-}
-
-.mesa.preparo{
-    border-color:#f59e0b;
-}
-
-.mesa.pronto{
-    border-color:#3b82f6;
-}
-
-.mesa-topo{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:12px;
-}
-
-.mesa-nome{
-    font-size:20px;
-    font-weight:bold;
-}
-
-.status{
-    padding:6px 9px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:bold;
-}
-
-.status-livre{
-    background:#14532d;
-    color:#86efac;
-}
-
-.status-ocupada{
-    background:#7f1d1d;
-    color:#fecaca;
-}
-
-.status-preparo{
-    background:#78350f;
-    color:#fde68a;
-}
-
-.status-pronto{
-    background:#1e3a8a;
-    color:#bfdbfe;
-}
-
-.responsavel{
-    background:#111827;
-    padding:10px;
-    border-radius:8px;
-    margin-bottom:12px;
-    color:#d1d5db;
-    font-size:14px;
-}
-
-.responsavel strong{
-    color:white;
-}
-
-.total-mesa{
-    font-size:23px;
-    font-weight:bold;
-    color:#4ade80;
-    margin:12px 0;
-}
-
-.info-pedido{
-    color:#9ca3af;
-    font-size:13px;
-    margin-bottom:12px;
-}
-
-.btn-abrir{
-    width:100%;
-    border:none;
-    background:#2563eb;
-    color:white;
-    padding:12px;
-    border-radius:9px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.modal-fundo{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.75);
-    z-index:500;
-    justify-content:center;
-    align-items:center;
-    padding:15px;
-}
-
-.modal{
-    background:#1f2937;
-    width:100%;
-    max-width:650px;
-    max-height:90vh;
-    overflow-y:auto;
-    border-radius:18px;
-    padding:20px;
-}
-
-.modal-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
-}
-
-.btn-fechar{
-    border:none;
-    background:#374151;
-    color:white;
-    width:35px;
-    height:35px;
-    border-radius:50%;
-    cursor:pointer;
-    font-size:18px;
-}
-
-.comanda-responsavel{
-    background:#111827;
-    padding:12px;
-    border-radius:9px;
-    margin-bottom:15px;
-}
-
-.pedido-bloco{
-    background:#111827;
-    border-radius:10px;
-    padding:13px;
-    margin-bottom:12px;
-    border:1px solid #374151;
-}
-
-.pedido-cabecalho{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
-    font-size:13px;
-    color:#9ca3af;
-}
-
-.pedido-status{
-    font-weight:bold;
-    padding:5px 8px;
-    border-radius:6px;
-}
-
-.status-recebido{
-    background:#7f1d1d;
-    color:#fecaca;
-}
-
-.status-preparo-pedido{
-    background:#78350f;
-    color:#fde68a;
-}
-
-.status-pronto-pedido{
-    background:#1e3a8a;
-    color:#bfdbfe;
-}
-
-.item{
-    padding:8px 0;
-    border-bottom:1px solid #374151;
-}
-
-.item:last-child{
-    border-bottom:none;
-}
-
-.item-linha{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-}
-
-.item-nome{
-    font-weight:bold;
-}
-
-.item-obs{
-    color:#fbbf24;
-    font-size:13px;
-    margin-top:5px;
-}
-
-.botoes-status{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:7px;
-    margin-top:12px;
-}
-
-.btn-status{
-    border:none;
-    padding:9px 5px;
-    border-radius:7px;
-    cursor:pointer;
-    color:white;
-    font-weight:bold;
-    font-size:12px;
-}
-
-.btn-recebido{
-    background:#b91c1c;
-}
-
-.btn-preparo{
-    background:#d97706;
-}
-
-.btn-pronto{
-    background:#2563eb;
-}
-
-.btn-status.ativo{
-    outline:3px solid white;
-}
-
-.comanda-total{
-    border-top:2px dashed #4b5563;
-    margin-top:15px;
-    padding-top:15px;
-    text-align:right;
-    font-size:27px;
-    font-weight:bold;
-    color:#4ade80;
-}
-
-.btn-finalizar{
-    width:100%;
-    margin-top:15px;
-    border:none;
-    background:#16a34a;
-    color:white;
-    padding:15px;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:17px;
-    font-weight:bold;
-}
-
-.sem-pedidos{
-    text-align:center;
-    color:#9ca3af;
-    padding:30px;
-}
-
-.historico-resumo{
-    background:#111827;
-    border-radius:12px;
-    padding:15px;
-    margin-bottom:15px;
-}
-
-.historico-resumo strong{
-    display:block;
-    color:#4ade80;
-    font-size:25px;
-    margin-top:5px;
-}
-
-.historico-item{
-    background:#111827;
-    border-radius:10px;
-    padding:14px;
-    margin-bottom:10px;
-    border:1px solid #374151;
-}
-
-.historico-topo{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:8px;
-}
-
-.historico-total{
-    color:#4ade80;
-    font-weight:bold;
-}
-
-.historico-detalhes{
-    color:#9ca3af;
-    font-size:13px;
-    margin-top:5px;
-}
-
-@media(max-width:800px){
-
-    .resumo{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .resumo-card:last-child{
-        grid-column:span 2;
-    }
-
-}
-
-@media(max-width:500px){
-
-    .mesas{
-        grid-template-columns:1fr;
-    }
-
-    .botoes-status{
-        grid-template-columns:1fr;
-    }
-
-    .painel-avisos{
-        padding:0 10px;
-    }
-
-    .avisos-cabecalho{
-        flex-wrap:wrap;
-    }
-
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-
-    <div class="topo">
-
-        <div>
-            <h1>🍔 Sabor da Casa</h1>
-            <p>🔥 Painel do Proprietário — Online</p>
-        </div>
-
-        <button
-            class="btn-historico"
-            onclick="abrirHistorico()"
-        >
-            📜 Histórico
-        </button>
-
-    </div>
-
-</header>
-
-
-<!-- =========================================================
-     AVISOS
-========================================================= -->
-
-<div class="painel-avisos">
-
-    <div class="avisos-caixa">
-
-        <div class="avisos-cabecalho">
-
-            <div class="avisos-titulo">
-
-                🔔 Pedidos e avisos
-
-                <span
-                    class="contador-avisos"
-                    id="contadorAvisos"
-                >
-                    0
-                </span>
-
-            </div>
-
-            <button
-                class="btn-som"
-                id="btnSom"
-                onclick="ativarSom()"
-            >
-                🔇 Ativar som
-            </button>
-
-        </div>
-
-        <div
-            class="lista-avisos"
-            id="listaAvisos"
-        >
-
-            <div class="sem-avisos">
-
-                ✅ Nenhum pedido aguardando atenção.
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<div class="container">
-
-    <div class="configuracao">
-
-        <label>🪑 Quantidade de mesas</label>
-
-        <input
-            type="number"
-            id="quantidadeMesas"
-            min="1"
-            max="100"
-            value="8"
-        >
-
-        <br>
-
-        <button
-            class="btn-config"
-            onclick="salvarQuantidadeMesas()"
-        >
-            💾 Salvar Mesas
-        </button>
-
-    </div>
-
-    <h2 class="titulo-secao">
-        📊 Resumo do Dia
-    </h2>
-
-    <div class="resumo">
-
-        <div class="resumo-card">
-            <span>🟢 Mesas livres</span>
-            <strong id="totalLivres">0</strong>
-        </div>
-
-        <div class="resumo-card">
-            <span>🔴 Mesas ocupadas</span>
-            <strong id="totalOcupadas">0</strong>
-        </div>
-
-        <div class="resumo-card">
-            <span>🍽️ Pedidos abertos</span>
-            <strong id="totalPedidosAbertos">0</strong>
-        </div>
-
-        <div class="resumo-card">
-            <span>✅ Mesas finalizadas</span>
-            <strong id="totalMesasFinalizadas">0</strong>
-        </div>
-
-        <div class="resumo-card resumo-total">
-
-            <span>💰 Total vendido hoje</span>
-
-            <strong id="totalVendidoHoje">
-                R$ 0,00
-            </strong>
-
-        </div>
-
-    </div>
-
-    <div class="mesas-titulo">
-
-        <h2>🪑 Mesas</h2>
-
-    </div>
-
-    <div
-        class="mesas"
-        id="areaMesas"
-    ></div>
-
-</div>
-
-
-<!-- =========================================================
-     MODAL COMANDA
-========================================================= -->
-
-<div
-    class="modal-fundo"
-    id="modalComanda"
->
-
-    <div class="modal">
-
-        <div class="modal-header">
-
-            <h2 id="tituloComanda">
-                🪑 Mesa
-            </h2>
-
-            <button
-                class="btn-fechar"
-                onclick="fecharComanda()"
-            >
-                ×
-            </button>
-
-        </div>
-
-        <div
-            class="comanda-responsavel"
-            id="responsavelComanda"
-        ></div>
-
-        <div id="listaComanda"></div>
-
-        <div class="comanda-total">
-
-            Total:
-            R$ <span id="totalComanda">0,00</span>
-
-        </div>
-
-        <button
-            class="btn-finalizar"
-            onclick="finalizarMesa()"
-        >
-            ✅ Finalizar Comanda e Liberar Mesa
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     MODAL HISTÓRICO
-========================================================= -->
-
-<div
-    class="modal-fundo"
-    id="modalHistorico"
->
-
-    <div class="modal">
-
-        <div class="modal-header">
-
-            <h2>📜 Histórico</h2>
-
-            <button
-                class="btn-fechar"
-                onclick="fecharHistorico()"
-            >
-                ×
-            </button>
-
-        </div>
-
-        <div id="listaHistorico"></div>
-
-    </div>
-
-</div>
-
-
-<script type="module">
-
-/* =========================================================
-   FIREBASE
-========================================================= */
-
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-import {
-    initializeFirestore,
-    collection,
-    doc,
-    updateDoc,
-    onSnapshot,
-    writeBatch
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-
-const firebaseConfig = {
-
-    apiKey:
-    "AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
-
-    authDomain:
-    "sistema-digital-f9df1.firebaseapp.com",
-
-    projectId:
-    "sistema-digital-f9df1",
-
-    storageBucket:
-    "sistema-digital-f9df1.firebasestorage.app",
-
-    messagingSenderId:
-    "783545984661",
-
-    appId:
-    "1:783545984661:web:5d0945907ad9db3990dd9c"
-
-};
-
-
-const app =
-    initializeApp(firebaseConfig);
-
-
-const db =
-    initializeFirestore(
-        app,
-        {},
-        "default"
-    );
-
-
-console.log(
-    "🔥 Painel conectado ao Firestore Enterprise!"
-);
-
-
-/* =========================================================
-   VARIÁVEIS
-========================================================= */
-
-const CHAVE_MESAS =
-    "quantidadeMesas";
-
-let pedidos = [];
-
-let historico = [];
-
-let mesaSelecionada = null;
-
-
-/* =========================================================
-   SOM
-========================================================= */
-
-let somLiberado =
-    false;
-
-let audioContext =
-    null;
-
-let intervaloSom =
-    null;
-
-
-window.ativarSom =
-function(){
-
-    try{
-
-        if(!audioContext){
-
-            audioContext =
-                new (
-                    window.AudioContext ||
-                    window.webkitAudioContext
-                )();
-
-        }
-
-
-        if(
-            audioContext.state ===
-            "suspended"
-        ){
-
-            audioContext.resume();
-
-        }
-
-
-        somLiberado =
-            true;
-
-
-        document.getElementById(
-            "btnSom"
-        ).innerText =
-            "🔊 Som ativo";
-
-
-        document.getElementById(
-            "btnSom"
-        ).style.background =
-            "#166534";
-
-
-        tocarSomAviso();
-
-
-        controlarSomContinuo();
-
-    }
-
-    catch(erro){
-
-        console.error(
-            "Erro ao ativar som:",
-            erro
-        );
-
-    }
-
-};
-
-
-function tocarSomAviso(){
-
-    if(!somLiberado)
-        return;
-
-
-    try{
-
-        if(!audioContext){
-
-            audioContext =
-                new (
-                    window.AudioContext ||
-                    window.webkitAudioContext
-                )();
-
-        }
-
-
-        if(
-            audioContext.state ===
-            "suspended"
-        ){
-
-            audioContext.resume();
-
-        }
-
-
-        const agora =
-            audioContext.currentTime;
-
-
-        const oscilador =
-            audioContext.createOscillator();
-
-
-        const ganho =
-            audioContext.createGain();
-
-
-        oscilador.type =
-            "sine";
-
-
-        oscilador.frequency.setValueAtTime(
-            880,
-            agora
-        );
-
-
-        oscilador.frequency.setValueAtTime(
-            660,
-            agora + 0.15
-        );
-
-
-        ganho.gain.setValueAtTime(
-            0.001,
-            agora
-        );
-
-
-        ganho.gain.exponentialRampToValueAtTime(
-            0.25,
-            agora + 0.03
-        );
-
-
-        ganho.gain.exponentialRampToValueAtTime(
-            0.001,
-            agora + 0.45
-        );
-
-
-        oscilador.connect(
-            ganho
-        );
-
-
-        ganho.connect(
-            audioContext.destination
-        );
-
-
-        oscilador.start(
-            agora
-        );
-
-
-        oscilador.stop(
-            agora + 0.5
-        );
-
-    }
-
-    catch(erro){
-
-        console.error(
-            "Erro no som:",
-            erro
-        );
-
-    }
-
-}
-
-
-/*
-   Mantém o som tocando enquanto existir
-   pelo menos um pedido com status RECEBIDO.
-*/
-
-function controlarSomContinuo(){
-
-    const existemPedidosNovos =
-        pedidos.some(
-            pedido =>
-
-                normalizarStatus(
-                    pedido.status
-                ) === "recebido"
-
-        );
-
-
-    if(
-        existemPedidosNovos &&
-        somLiberado
-    ){
-
-        if(!intervaloSom){
-
-            tocarSomAviso();
-
-
-            intervaloSom =
-                setInterval(
-                    function(){
-
-                        const aindaTemPedido =
-                            pedidos.some(
-                                pedido =>
-
-                                    normalizarStatus(
-                                        pedido.status
-                                    ) === "recebido"
-
-                            );
-
-
-                        if(
-                            aindaTemPedido &&
-                            somLiberado
-                        ){
-
-                            tocarSomAviso();
-
-                        }
-
-                        else{
-
-                            pararSomContinuo();
-
-                        }
-
-                    },
-                    3000
-                );
-
-        }
-
-    }
-
-    else{
-
-        pararSomContinuo();
-
-    }
-
-}
-
-
-function pararSomContinuo(){
-
-    if(intervaloSom){
-
-        clearInterval(
-            intervaloSom
-        );
-
-        intervaloSom =
-            null;
-
-    }
-
-}
-
-
-/* =========================================================
-   UTILITÁRIOS
-========================================================= */
-
-function formatarDinheiro(valor){
-
-    return Number(valor || 0)
-        .toFixed(2)
-        .replace(".",",");
-
-}
-
-
-function obterDataHoje(){
-
-    return new Date()
-        .toLocaleDateString("pt-BR");
-
-}
-
-
-function obterQuantidadeMesas(){
-
-    return Number(
-        localStorage.getItem(
-            CHAVE_MESAS
-        ) || 8
-    );
-
-}
-
-
-/* =========================================================
-   QUANTIDADE DE MESAS
-========================================================= */
-
-window.salvarQuantidadeMesas =
-function(){
-
-    let quantidade =
-        Number(
-            document.getElementById(
-                "quantidadeMesas"
-            ).value
-        );
-
-
-    if(quantidade < 1)
-        quantidade = 1;
-
-
-    if(quantidade > 100)
-        quantidade = 100;
-
-
-    localStorage.setItem(
-        CHAVE_MESAS,
-        quantidade
-    );
-
-
-    document.getElementById(
-        "quantidadeMesas"
-    ).value =
-        quantidade;
-
-
-    renderizarMesas();
-
-};
-
-
-/* =========================================================
-   NORMALIZAR STATUS
-========================================================= */
-
-function normalizarStatus(status){
-
-    return String(
-        status || "Recebido"
-    )
-    .trim()
-    .toLowerCase();
-
-}
-
-
-/* =========================================================
-   PEDIDOS VÁLIDOS
-========================================================= */
-
-function pedidoEhValido(dados){
-
-    /*
-       Ignora documentos de teste ou incompletos.
-       Um pedido real precisa ter:
-       - mesa
-       - numeroPedido ou numero
-    */
-
-    const mesaValida =
-        dados.mesa !== undefined &&
-        dados.mesa !== null &&
-        String(dados.mesa).trim() !== "";
-
-
-    const numeroValido =
-        (
-            dados.numeroPedido !== undefined &&
-            dados.numeroPedido !== null &&
-            String(dados.numeroPedido).trim() !== ""
-        )
-        ||
-        (
-            dados.numero !== undefined &&
-            dados.numero !== null &&
-            String(dados.numero).trim() !== ""
-        );
-
-
-    return (
-        mesaValida &&
-        numeroValido
-    );
-
-}
-
-
-/* =========================================================
-   FIREBASE - PEDIDOS
-========================================================= */
-
-function carregarPedidosFirebase(){
-
-    const referencia =
-        collection(
-            db,
-            "pedidos"
-        );
-
-
-    onSnapshot(
-
-        referencia,
-
-        snapshot => {
-
-            pedidos = [];
-
-
-            snapshot.forEach(
-                documento => {
-
-                    const dados =
-                        documento.data();
-
-
-                    /*
-                       IGNORA DOCUMENTOS DE TESTE
-                    */
-
-                    if(
-                        !pedidoEhValido(
-                            dados
-                        )
-                    ){
-
-                        console.log(
-                            "🧹 Documento ignorado:",
-                            documento.id
-                        );
-
-                        return;
-
-                    }
-
-
-                    pedidos.push({
-
-                        id:
-                        documento.id,
-
-                        ...dados,
-
-                        status:
-                        normalizarStatus(
-                            dados.status
-                        )
-
-                    });
-
-                }
-            );
-
-
-            console.log(
-                "📦 Pedidos válidos:",
-                pedidos.length
-            );
-
-
-            renderizarMesas();
-
-            renderizarAvisos();
-
-            controlarSomContinuo();
-
-
-            if(mesaSelecionada){
-
-                renderizarComanda();
-
-            }
-
-        },
-
-        erro => {
-
-            console.error(
-                "Erro ao carregar pedidos:",
-                erro
-            );
-
-
-            alert(
-                "❌ Erro ao carregar os pedidos do Firebase.\n\n" +
-                (
-                    erro.message ||
-                    erro
-                )
-            );
-
-        }
-
-    );
-
-}
-
-
-/* =========================================================
-   RENDERIZAR AVISOS
-========================================================= */
-
-function renderizarAvisos(){
-
-    const lista =
-        document.getElementById(
-            "listaAvisos"
-        );
-
-
-    const contador =
-        document.getElementById(
-            "contadorAvisos"
-        );
-
-
-    /*
-       Mostra somente pedidos válidos
-       que ainda estão abertos.
-    */
-
-    const pedidosAbertos =
-        pedidos.filter(
-            pedido =>
-
-                normalizarStatus(
-                    pedido.status
-                ) !==
-                "finalizado"
-
-        );
-
-
-    const prioridade = {
-
-        recebido:1,
-
-        preparo:2,
-
-        pronto:3
-
-    };
-
-
-    pedidosAbertos.sort(
-        (a,b) => {
-
-            return (
-                prioridade[
-                    normalizarStatus(a.status)
-                ] || 99
-            )
-            -
-            (
-                prioridade[
-                    normalizarStatus(b.status)
-                ] || 99
-            );
-
-        }
-    );
-
-
-    contador.innerText =
-        pedidosAbertos.length;
-
-
-    if(!pedidosAbertos.length){
-
-        lista.innerHTML = `
-
-            <div class="sem-avisos">
-
-                ✅ Nenhum pedido aguardando atenção.
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    lista.innerHTML = "";
-
-
-    pedidosAbertos.forEach(
-        pedido => {
-
-            const status =
-                normalizarStatus(
-                    pedido.status
-                );
-
-
-            let classe =
-                "aviso-novo";
-
-
-            let classeStatus =
-                "aviso-status-novo";
-
-
-            let textoStatus =
-                "🔴 Novo pedido";
-
-
-            if(
-                status ===
-                "preparo"
-            ){
-
-                classe =
-                    "aviso-preparo";
-
-
-                classeStatus =
-                    "aviso-status-preparo";
-
-
-                textoStatus =
-                    "🟠 Em preparo";
-
-            }
-
-
-            if(
-                status ===
-                "pronto"
-            ){
-
-                classe =
-                    "aviso-pronto";
-
-
-                classeStatus =
-                    "aviso-status-pronto";
-
-
-                textoStatus =
-                    "🔵 Pronto";
-
-            }
-
-
-            const numeroPedido =
-                pedido.numeroPedido ||
-                pedido.numero ||
-                "—";
-
-
-            const mesa =
-                pedido.mesa ||
-                "—";
-
-
-            const aviso =
-                document.createElement(
-                    "div"
-                );
-
-
-            aviso.className =
-                "aviso-item " +
-                classe;
-
-
-            aviso.innerHTML = `
-
-                <div class="aviso-info">
-
-                    <span class="aviso-mesa">
-
-                        🪑 Mesa ${mesa}
-
-                    </span>
-
-                    <span class="aviso-detalhes">
-
-                        Pedido #${numeroPedido}
-
-                    </span>
-
-                </div>
-
-                <span
-                    class="
-                        aviso-status
-                        ${classeStatus}
-                    "
-                >
-
-                    ${textoStatus}
-
-                </span>
-
-            `;
-
-
-            aviso.onclick =
-                function(){
-
-                    abrirComanda(
-                        Number(mesa)
-                    );
-
-                };
-
-
-            lista.appendChild(
-                aviso
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   FIREBASE - HISTÓRICO
-========================================================= */
-
-function carregarHistoricoFirebase(){
-
-    const referencia =
-        collection(
-            db,
-            "historicoComandas"
-        );
-
-
-    onSnapshot(
-
-        referencia,
-
-        snapshot => {
-
-            historico = [];
-
-
-            snapshot.forEach(
-                documento => {
-
-                    historico.push({
-
-                        id:
-                        documento.id,
-
-                        ...documento.data()
-
-                    });
-
-                }
-            );
-
-
-            historico.sort(
-                (a,b) => {
-
-                    return new Date(
-                        b.dataFinalizacao ||
-                        b.dataCriacao ||
-                        0
-                    )
-                    -
-                    new Date(
-                        a.dataFinalizacao ||
-                        a.dataCriacao ||
-                        0
-                    );
-
-                }
-            );
-
-
-            atualizarResumo();
-
-        },
-
-        erro => {
-
-            console.error(
-                "Erro histórico:",
-                erro
-            );
-
-        }
-
-    );
-
-}
-
-
-/* =========================================================
-   PEDIDOS DA MESA
-========================================================= */
-
-function pedidosDaMesa(numeroMesa){
-
-    return pedidos.filter(
-        pedido =>
-
-            String(
-                pedido.mesa
-            ) ===
-            String(
-                numeroMesa
-            )
-
-            &&
-
-            normalizarStatus(
-                pedido.status
-            ) !==
-            "finalizado"
-
-    );
-
-}
-
-
-/* =========================================================
-   STATUS DA MESA
-========================================================= */
-
-function obterStatusMesa(numeroMesa){
-
-    const pedidosMesa =
-        pedidosDaMesa(
-            numeroMesa
-        );
-
-
-    if(!pedidosMesa.length)
-        return "livre";
-
-
-    if(
-        pedidosMesa.some(
-            pedido =>
-            normalizarStatus(
-                pedido.status
-            ) === "pronto"
-        )
-    )
-        return "pronto";
-
-
-    if(
-        pedidosMesa.some(
-            pedido =>
-            normalizarStatus(
-                pedido.status
-            ) === "preparo"
-        )
-    )
-        return "preparo";
-
-
-    return "ocupada";
-
-}
-
-
-/* =========================================================
-   RESPONSÁVEL
-========================================================= */
-
-function obterResponsavel(
-    pedidosMesa
-){
-
-    if(!pedidosMesa.length)
-        return "—";
-
-
-    const pedido =
-        pedidosMesa.find(
-            p =>
-                p.responsavel ||
-                p.nomeCliente
-        );
-
-
-    if(!pedido)
-        return "Não informado";
-
-
-    return (
-        pedido.responsavel ||
-        pedido.nomeCliente
-    );
-
-}
-
-
-/* =========================================================
-   TOTAL DA MESA
-========================================================= */
-
-function calcularTotalMesa(
-    pedidosMesa
-){
-
-    return pedidosMesa.reduce(
-
-        (total,pedido) =>
-
-            total +
-            Number(
-                pedido.total || 0
-            ),
-
-        0
-
-    );
-
-}
-
-
-/* =========================================================
-   RESUMO
-========================================================= */
-
-function atualizarResumo(){
-
-    const quantidade =
-        obterQuantidadeMesas();
-
-
-    let livres = 0;
-
-    let ocupadas = 0;
-
-    let pedidosAbertos = 0;
-
-
-    for(
-        let mesa = 1;
-        mesa <= quantidade;
-        mesa++
-    ){
-
-        const pedidosMesa =
-            pedidosDaMesa(
-                mesa
-            );
-
-
-        if(!pedidosMesa.length)
-            livres++;
-
-        else
-            ocupadas++;
-
-
-        pedidosAbertos +=
-            pedidosMesa.length;
-
-    }
-
-
-    const hoje =
-        obterDataHoje();
-
-
-    const historicoHoje =
-        historico.filter(
-            item =>
-                item.data === hoje
-        );
-
-
-    const totalVendido =
-        historicoHoje.reduce(
-
-            (total,item) =>
-
-                total +
-                Number(
-                    item.total || 0
-                ),
-
-            0
-
-        );
-
-
-    document.getElementById(
-        "totalLivres"
-    ).innerText =
-        livres;
-
-
-    document.getElementById(
-        "totalOcupadas"
-    ).innerText =
-        ocupadas;
-
-
-    document.getElementById(
-        "totalPedidosAbertos"
-    ).innerText =
-        pedidosAbertos;
-
-
-    document.getElementById(
-        "totalMesasFinalizadas"
-    ).innerText =
-        historicoHoje.length;
-
-
-    document.getElementById(
-        "totalVendidoHoje"
-    ).innerText =
-        "R$ " +
-        formatarDinheiro(
-            totalVendido
-        );
-
-}
-
-
-/* =========================================================
-   RENDERIZAR MESAS
-========================================================= */
-
-function renderizarMesas(){
-
-    const quantidade =
-        obterQuantidadeMesas();
-
-
-    const area =
-        document.getElementById(
-            "areaMesas"
-        );
-
-
-    area.innerHTML = "";
-
-
-    for(
-        let mesa = 1;
-        mesa <= quantidade;
-        mesa++
-    ){
-
-        const pedidosMesa =
-            pedidosDaMesa(
-                mesa
-            );
-
-
-        const status =
-            obterStatusMesa(
-                mesa
-            );
-
-
-        const total =
-            calcularTotalMesa(
-                pedidosMesa
-            );
-
-
-        const responsavel =
-            obterResponsavel(
-                pedidosMesa
-            );
-
-
-        /*
-           Mesa pisca somente quando
-           existe pedido RECEBIDO.
-        */
-
-        const temPedidoNovo =
-            pedidosMesa.some(
-                pedido =>
-
-                    normalizarStatus(
-                        pedido.status
-                    ) === "recebido"
-
-            );
-
-
-        let textoStatus =
-            "Livre";
-
-
-        if(
-            status === "ocupada"
-        )
-            textoStatus =
-                "Ocupada";
-
-
-        if(
-            status === "preparo"
-        )
-            textoStatus =
-                "Em preparo";
-
-
-        if(
-            status === "pronto"
-        )
-            textoStatus =
-                "Pronto";
-
-
-        const card =
-            document.createElement(
-                "div"
-            );
-
-
-        card.className =
-            "mesa " +
-            status +
-            (
-                temPedidoNovo
-                ?
-                " novo-pedido"
-                :
-                ""
-            );
-
-
-        card.innerHTML = `
-
-            <div class="mesa-topo">
-
-                <span class="mesa-nome">
-
-                    🪑 Mesa ${mesa}
-
-                </span>
-
-                <span
-                    class="status status-${status}"
-                >
-
-                    ${textoStatus}
-
-                </span>
-
-            </div>
-
-            <div class="responsavel">
-
-                👤
-
-                <strong>
-                    Responsável:
-                </strong>
-
-                ${responsavel}
-
-            </div>
-
-            <div class="info-pedido">
-
-                ${
-                    pedidosMesa.length
-                    ?
-                    pedidosMesa.length +
-                    (
-                        pedidosMesa.length === 1
-                        ?
-                        " pedido aberto"
-                        :
-                        " pedidos abertos"
-                    )
-                    :
-                    "Nenhum pedido"
-                }
-
-            </div>
-
-            <div class="total-mesa">
-
-                R$
-                ${formatarDinheiro(total)}
-
-            </div>
-
-            <button
-                class="btn-abrir"
-                onclick="abrirComanda(${mesa})"
-            >
-
-                ${
-                    pedidosMesa.length
-                    ?
-                    "📋 Abrir Comanda"
-                    :
-                    "👀 Ver Mesa"
-                }
-
-            </button>
-
-        `;
-
-
-        area.appendChild(
-            card
-        );
-
-    }
-
-
-    atualizarResumo();
-
-}
-
-
-/* =========================================================
-   ABRIR COMANDA
-========================================================= */
-
-window.abrirComanda =
-function(numeroMesa){
-
-    mesaSelecionada =
-        numeroMesa;
-
-
-    document.getElementById(
-        "tituloComanda"
-    ).innerText =
-        "🪑 Mesa " +
-        numeroMesa;
-
-
-    renderizarComanda();
-
-
-    document.getElementById(
-        "modalComanda"
-    ).style.display =
-        "flex";
-
-};
-
-
-/* =========================================================
-   RENDERIZAR COMANDA
-========================================================= */
-
-function renderizarComanda(){
-
-    if(!mesaSelecionada)
-        return;
-
-
-    const pedidosMesa =
-        pedidosDaMesa(
-            mesaSelecionada
-        );
-
-
-    const total =
-        calcularTotalMesa(
-            pedidosMesa
-        );
-
-
-    const responsavel =
-        obterResponsavel(
-            pedidosMesa
-        );
-
-
-    document.getElementById(
-        "responsavelComanda"
-    ).innerHTML = `
-
-        👤
-
-        <strong>
-            Responsável:
-        </strong>
-
-        ${responsavel}
-
-    `;
-
-
-    const lista =
-        document.getElementById(
-            "listaComanda"
-        );
-
-
-    lista.innerHTML = "";
-
-
-    if(!pedidosMesa.length){
-
-        lista.innerHTML = `
-
-            <div class="sem-pedidos">
-
-                🟢 Esta mesa está livre.
-
-            </div>
-
-        `;
-
-    }
-
-    else{
-
-        pedidosMesa
-        .sort(
-            (a,b) => {
-
-                const numeroA =
-                    Number(
-                        a.numeroPedido ||
-                        a.numero ||
-                        0
-                    );
-
-
-                const numeroB =
-                    Number(
-                        b.numeroPedido ||
-                        b.numero ||
-                        0
-                    );
-
-
-                return numeroA - numeroB;
-
-            }
-        )
-        .forEach(
-            pedido => {
-
-                const bloco =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                bloco.className =
-                    "pedido-bloco";
-
-
-                const status =
-                    normalizarStatus(
-                        pedido.status
-                    );
-
-
-                let classeStatus =
-                    "status-recebido";
-
-
-                let textoStatus =
-                    "🔴 Recebido";
-
-
-                if(
-                    status === "preparo"
-                ){
-
-                    classeStatus =
-                        "status-preparo-pedido";
-
-
-                    textoStatus =
-                        "🟠 Em preparo";
-
-                }
-
-
-                if(
-                    status === "pronto"
-                ){
-
-                    classeStatus =
-                        "status-pronto-pedido";
-
-
-                    textoStatus =
-                        "🔵 Pronto";
-
-                }
-
-
-                let itensHTML =
-                    "";
-
-
-                (
-                    pedido.itens ||
-                    []
-                )
-                .forEach(
-                    item => {
-
-                        itensHTML += `
-
-                            <div class="item">
-
-                                <div class="item-linha">
-
-                                    <span
-                                        class="item-nome"
-                                    >
-
-                                        ${
-                                            item.quantidade
-                                        }x
-
-                                        ${
-                                            item.nome
-                                        }
-
-                                    </span>
-
-                                    <span>
-
-                                        R$
-
-                                        ${
-                                            formatarDinheiro(
-                                                Number(
-                                                    item.preco ||
-                                                    0
-                                                ) *
-                                                Number(
-                                                    item.quantidade ||
-                                                    0
-                                                )
-                                            )
-                                        }
-
-                                    </span>
-
-                                </div>
-
-                                ${
-                                    item.observacao
-                                    ?
-                                    `
-
-                                    <div class="item-obs">
-
-                                        📝 OBS:
-                                        ${item.observacao}
-
-                                    </div>
-
-                                    `
-                                    :
-                                    ""
-                                }
-
-                            </div>
-
-                        `;
-
-                    }
-                );
-
-
-                const numeroPedido =
-                    pedido.numeroPedido ||
-                    pedido.numero ||
-                    "—";
-
-
-                const dataPedido =
-                    pedido.data
-                    ?
-                    new Date(
-                        pedido.data
-                    )
-                    :
-                    null;
-
-
-                const horario =
-                    dataPedido &&
-                    !isNaN(
-                        dataPedido
-                    )
-                    ?
-                    dataPedido.toLocaleTimeString(
-                        "pt-BR",
-                        {
-                            hour:"2-digit",
-                            minute:"2-digit"
-                        }
-                    )
-                    :
-                    "--:--";
-
-
-                bloco.innerHTML = `
-
-                    <div class="pedido-cabecalho">
-
-                        <span>
-
-                            <strong>
-
-                                Pedido #${numeroPedido}
-
-                            </strong>
-
-                            <br>
-
-                            🕐 ${horario}
-
-                        </span>
-
-                        <span
-                            class="
-                                pedido-status
-                                ${classeStatus}
-                            "
-                        >
-
-                            ${textoStatus}
-
-                        </span>
-
-                    </div>
-
-                    ${itensHTML}
-
-                    <div class="botoes-status">
-
-                        <button
-                            class="
-                                btn-status
-                                btn-recebido
-                                ${
-                                    status === "recebido"
-                                    ?
-                                    "ativo"
-                                    :
-                                    ""
-                                }
-                            "
-                            onclick="
-                                alterarStatusPedido(
-                                    '${pedido.id}',
-                                    'recebido'
-                                )
-                            "
-                        >
-                            🔴 Recebido
-                        </button>
-
-                        <button
-                            class="
-                                btn-status
-                                btn-preparo
-                                ${
-                                    status === "preparo"
-                                    ?
-                                    "ativo"
-                                    :
-                                    ""
-                                }
-                            "
-                            onclick="
-                                alterarStatusPedido(
-                                    '${pedido.id}',
-                                    'preparo'
-                                )
-                            "
-                        >
-                            🟠 Em preparo
-                        </button>
-
-                        <button
-                            class="
-                                btn-status
-                                btn-pronto
-                                ${
-                                    status === "pronto"
-                                    ?
-                                    "ativo"
-                                    :
-                                    ""
-                                }
-                            "
-                            onclick="
-                                alterarStatusPedido(
-                                    '${pedido.id}',
-                                    'pronto'
-                                )
-                            "
-                        >
-                            🔵 Pronto
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                lista.appendChild(
-                    bloco
-                );
-
-            }
-        );
-
-    }
-
-
-    document.getElementById(
-        "totalComanda"
-    ).innerText =
-        formatarDinheiro(
-            total
-        );
-
-}
-
-
-/* =========================================================
-   ALTERAR STATUS
-========================================================= */
-
-window.alterarStatusPedido =
-async function(
-    id,
-    novoStatus
-){
-
-    try{
-
-        const referencia =
-            doc(
-                db,
-                "pedidos",
-                id
-            );
-
-
-        await updateDoc(
-            referencia,
-            {
-
-                status:
-                    novoStatus
-
-            }
-        );
-
-
-        console.log(
-            "✅ Status atualizado:",
-            novoStatus
-        );
-
-
-        /*
-           O onSnapshot vai atualizar
-           a mesa, os avisos e o som.
-        */
-
-    }
-
-    catch(erro){
-
-        console.error(
-            "Erro ao atualizar status:",
-            erro
-        );
-
-
-        alert(
-
-            "❌ Erro ao atualizar pedido.\n\n" +
-
-            (
-                erro.message ||
-                erro
-            )
-
-        );
-
-    }
-
-};
-
-
-/* =========================================================
-   FECHAR COMANDA
-========================================================= */
-
-window.fecharComanda =
-function(){
-
-    document.getElementById(
-        "modalComanda"
-    ).style.display =
-        "none";
-
-
-    mesaSelecionada =
-        null;
-
-};
-
-
-/* =========================================================
-   FINALIZAR MESA
-========================================================= */
-
-window.finalizarMesa =
-async function(){
-
-    if(!mesaSelecionada)
-        return;
-
-
-    const pedidosMesa =
-        pedidosDaMesa(
-            mesaSelecionada
-        );
-
-
-    if(!pedidosMesa.length){
-
-        alert(
-            "Esta mesa não possui pedidos."
-        );
-
-        return;
-
-    }
-
-
-    const total =
-        calcularTotalMesa(
-            pedidosMesa
-        );
-
-
-    const responsavel =
-        obterResponsavel(
-            pedidosMesa
-        );
-
-
-    const confirmar =
-        confirm(
-
-            "Finalizar Comanda da Mesa " +
-            mesaSelecionada +
-
-            "?\n\n" +
-
-            "Responsável: " +
-            responsavel +
-
-            "\n" +
-
-            "Total: R$ " +
-            formatarDinheiro(
-                total
-            ) +
-
-            "\n\n" +
-
-            "A mesa será liberada."
-
-        );
-
-
-    if(!confirmar)
-        return;
-
-
-    try{
-
-        const agora =
-            new Date();
-
-
-        const batch =
-            writeBatch(db);
-
-
-        pedidosMesa.forEach(
-            pedido => {
-
-                const pedidoRef =
-                    doc(
-                        db,
-                        "pedidos",
-                        pedido.id
-                    );
-
-
-                batch.update(
-                    pedidoRef,
-                    {
-
-                        status:
-                            "finalizado",
-
-                        dataFinalizacao:
-                            agora.toISOString()
-
-                    }
-                );
-
-            }
-        );
-
-
-        const historicoRef =
-            doc(
-                collection(
-                    db,
-                    "historicoComandas"
-                )
-            );
-
-
-        batch.set(
-            historicoRef,
-            {
-
-                mesa:
-                    mesaSelecionada,
-
-                responsavel:
-                    responsavel,
-
-                total:
-                    Number(
-                        total.toFixed(2)
-                    ),
-
-                data:
-                    agora.toLocaleDateString(
-                        "pt-BR"
-                    ),
-
-                horarioFinalizacao:
-                    agora.toLocaleTimeString(
-                        "pt-BR",
-                        {
-                            hour:"2-digit",
-                            minute:"2-digit"
-                        }
-                    ),
-
-                dataFinalizacao:
-                    agora.toISOString(),
-
-                pedidos:
-                    pedidosMesa.map(
-                        pedido => ({
-
-                            id:
-                                pedido.id,
-
-                            numeroPedido:
-                                pedido.numeroPedido ||
-                                pedido.numero ||
-                                0,
-
-                            total:
-                                Number(
-                                    pedido.total ||
-                                    0
-                                ),
-
-                            itens:
-                                pedido.itens ||
-                                []
-
-                        })
-                    )
-
-            }
-
-        );
-
-
-        await batch.commit();
-
-
-        const mesaFinalizada =
-            mesaSelecionada;
-
-
-        fecharComanda();
-
-
-        alert(
-
-            "✅ Comanda finalizada!\n\n" +
-
-            "Mesa " +
-            mesaFinalizada +
-            " liberada.\n\n" +
-
-            "Total: R$ " +
-            formatarDinheiro(
-                total
-            )
-
-        );
-
-    }
-
-    catch(erro){
-
-        console.error(
-            "Erro ao finalizar:",
-            erro
-        );
-
-
-        alert(
-
-            "❌ Erro ao finalizar comanda.\n\n" +
-
-            (
-                erro.message ||
-                erro
-            )
-
-        );
-
-    }
-
-};
-
-
-/* =========================================================
-   HISTÓRICO
-========================================================= */
-
-window.abrirHistorico =
-function(){
-
-    const lista =
-        document.getElementById(
-            "listaHistorico"
-        );
-
-
-    lista.innerHTML = "";
-
-
-    const hoje =
-        obterDataHoje();
-
-
-    const historicoHoje =
-        historico.filter(
-            item =>
-                item.data === hoje
-        );
-
-
-    const totalHoje =
-        historicoHoje.reduce(
-
-            (total,item) =>
-
-                total +
-                Number(
-                    item.total || 0
-                ),
-
-            0
-
-        );
-
-
-    lista.innerHTML += `
-
-        <div class="historico-resumo">
-
-            📊
-
-            <strong>
-                Resumo de hoje
-            </strong>
-
-            <div
-                style="
-                    color:#9ca3af;
-                    margin-top:5px;
-                "
-            >
-
-                ${historicoHoje.length}
-                comandas finalizadas
-
-            </div>
-
-            <strong>
-
-                R$
-                ${formatarDinheiro(
-                    totalHoje
-                )}
-
-            </strong>
-
-        </div>
-
-    `;
-
-
-    if(!historico.length){
-
-        lista.innerHTML += `
-
-            <div class="sem-pedidos">
-
-                📜 Nenhuma comanda
-                finalizada ainda.
-
-            </div>
-
-        `;
-
-    }
-
-    else{
-
-        historico.forEach(
-            comanda => {
-
-                const item =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                item.className =
-                    "historico-item";
-
-
-                const quantidadePedidos =
-                    (
-                        comanda.pedidos ||
-                        []
-                    ).length;
-
-
-                item.innerHTML = `
-
-                    <div class="historico-topo">
-
-                        <strong>
-
-                            🪑 Mesa
-                            ${comanda.mesa}
-
-                        </strong>
-
-                        <span
-                            class="historico-total"
-                        >
-
-                            R$
-                            ${
-                                formatarDinheiro(
-                                    comanda.total
-                                )
-                            }
-
-                        </span>
-
-                    </div>
-
-                    <div>
-
-                        👤
-                        ${
-                            comanda.responsavel ||
-                            "Não informado"
-                        }
-
-                    </div>
-
-                    <div
-                        class="historico-detalhes"
-                    >
-
-                        📅
-                        ${
-                            comanda.data ||
-                            "--/--/----"
-                        }
-
-                        —
-
-                        🕐
-                        ${
-                            comanda.horarioFinalizacao ||
-                            "--:--"
-                        }
-
-                    </div>
-
-                    <div
-                        class="historico-detalhes"
-                    >
-
-                        🍽️
-                        ${quantidadePedidos}
-                        pedido(s) nesta comanda
-
-                    </div>
-
-                `;
-
-
-                lista.appendChild(
-                    item
-                );
-
-            }
-        );
-
-    }
-
-
-    document.getElementById(
-        "modalHistorico"
-    ).style.display =
-        "flex";
-
-};
-
-
-window.fecharHistorico =
-function(){
-
-    document.getElementById(
-        "modalHistorico"
-    ).style.display =
-        "none";
-
-};
-
-
-/* =========================================================
-   FECHAR MODAIS CLICANDO FORA
-========================================================= */
-
-document.getElementById(
-    "modalComanda"
-)
-.addEventListener(
-    "click",
-    function(event){
-
-        if(
-            event.target === this
-        ){
-
-            fecharComanda();
-
-        }
-
-    }
-);
-
-
-document.getElementById(
-    "modalHistorico"
-)
-.addEventListener(
-    "click",
-    function(event){
-
-        if(
-            event.target === this
-        ){
-
-            fecharHistorico();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   INICIAR SISTEMA
-========================================================= */
-
-document.getElementById(
-    "quantidadeMesas"
-).value =
-    obterQuantidadeMesas();
-
-
-carregarPedidosFirebase();
-
-carregarHistoricoFirebase();
-
-
-console.log(
-    "🚀 Painel iniciado!"
-);
-
-</script>
-
-</body>
+<!DOCTYPE html>  <html lang="pt-BR">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Painel do Proprietário — Sabor da Casa</title>  
+<style>  
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}  
+body{background:#111827;color:#fff;padding-bottom:30px}  
+header{background:#1f2937;padding:20px;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.3)}  
+header h1{font-size:23px} header p{color:#9ca3af;margin-top:5px;font-size:14px}  
+.topo{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}  
+.btn-historico,.btn-menu{border:none;background:#374151;color:white;padding:11px 15px;border-radius:9px;cursor:pointer;font-weight:bold}  
+.topo-botoes{display:flex;gap:8px;flex-wrap:wrap}  
+.painel-avisos{max-width:1200px;margin:15px auto 0;padding:0 20px;position:sticky;top:86px;z-index:90}  
+.avisos-caixa{background:#1f2937;border-radius:13px;border:2px solid #374151;box-shadow:0 5px 15px rgba(0,0,0,.35);overflow:hidden}  
+.avisos-cabecalho{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 15px;background:#182231}  
+.avisos-titulo{font-size:15px;font-weight:bold}.contador-avisos{background:#b91c1c;color:white;min-width:28px;height:28px;padding:0 8px;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;margin-left:5px}  
+.btn-som{border:none;background:#374151;color:white;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:bold}  
+.lista-avisos{max-height:150px;overflow-y:auto}.aviso-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 15px;border-top:1px solid #374151;cursor:pointer}  
+.aviso-item:hover{background:#263244}.aviso-novo{border-left:5px solid #ef4444}.aviso-preparo{border-left:5px solid #f59e0b}.aviso-pronto{border-left:5px solid #3b82f6}  
+.aviso-info{display:flex;align-items:center;gap:9px;min-width:0}.aviso-mesa{font-weight:bold;white-space:nowrap}.aviso-detalhes{color:#d1d5db;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}  
+.aviso-status{font-size:11px;font-weight:bold;padding:5px 8px;border-radius:15px;white-space:nowrap}.aviso-status-novo{background:#7f1d1d;color:#fecaca}.aviso-status-preparo{background:#78350f;color:#fde68a}.aviso-status-pronto{background:#1e3a8a;color:#bfdbfe}.sem-avisos{padding:11px 15px;color:#9ca3af;font-size:13px}  
+@keyframes piscarMesa{0%,100%{box-shadow:0 0 0 rgba(239,68,68,0)}50%{box-shadow:0 0 22px rgba(239,68,68,.95)}}  
+.mesa.novo-pedido{animation:piscarMesa 1s infinite;border-color:#ef4444}  
+.container{max-width:1200px;margin:auto;padding:20px}  
+.configuracao{background:#1f2937;padding:18px;border-radius:14px;margin-bottom:20px}.configuracao label{display:block;font-size:14px;color:#d1d5db;margin-bottom:7px}  
+.configuracao input,.configuracao textarea,.configuracao select,.form-grid input,.form-grid textarea,.form-grid select{width:100%;padding:11px;border-radius:8px;border:2px solid #374151;background:#111827;color:white;font-size:15px}  
+.configuracao input{max-width:180px}.configuracao textarea{min-height:80px;resize:vertical}.btn-config{margin-top:10px;background:#2563eb;color:white;border:none;padding:11px 18px;border-radius:8px;cursor:pointer;font-weight:bold}  
+.titulo-secao{font-size:18px;margin-bottom:12px}.resumo{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:25px}.resumo-card{background:#1f2937;padding:15px;border-radius:12px}.resumo-card span{color:#9ca3af;font-size:13px}.resumo-card strong{display:block;font-size:24px;margin-top:6px}.resumo-total{border:2px solid #16a34a}.resumo-total strong{color:#4ade80}  
+.mesas-titulo{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.mesas-titulo h2{font-size:20px}.mesas{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:15px}  
+.mesa{background:#1f2937;border-radius:15px;padding:17px;border:2px solid #374151}.mesa.livre{border-color:#22c55e}.mesa.ocupada{border-color:#ef4444}.mesa.preparo{border-color:#f59e0b}.mesa.pronto{border-color:#3b82f6}  
+.mesa-topo{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.mesa-nome{font-size:20px;font-weight:bold}.status{padding:6px 9px;border-radius:20px;font-size:11px;font-weight:bold}.status-livre{background:#14532d;color:#86efac}.status-ocupada{background:#7f1d1d;color:#fecaca}.status-preparo{background:#78350f;color:#fde68a}.status-pronto{background:#1e3a8a;color:#bfdbfe}  
+.responsavel{background:#111827;padding:10px;border-radius:8px;margin-bottom:12px;color:#d1d5db;font-size:14px}.responsavel strong{color:white}.total-mesa{font-size:23px;font-weight:bold;color:#4ade80;margin:12px 0}.info-pedido{color:#9ca3af;font-size:13px;margin-bottom:12px}  
+.btn-abrir,.btn-acao{width:100%;border:none;background:#2563eb;color:white;padding:12px;border-radius:9px;cursor:pointer;font-weight:bold}.btn-acao{width:auto;padding:9px 13px}.btn-verde{background:#16a34a}.btn-vermelho{background:#b91c1c}.btn-cinza{background:#374151}  
+.modal-fundo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;justify-content:center;align-items:center;padding:15px}.modal{background:#1f2937;width:100%;max-width:850px;max-height:90vh;overflow-y:auto;border-radius:18px;padding:20px}  
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.btn-fechar{border:none;background:#374151;color:white;width:35px;height:35px;border-radius:50%;cursor:pointer;font-size:18px}  
+.comanda-responsavel{background:#111827;padding:12px;border-radius:9px;margin-bottom:15px}.pedido-bloco{background:#111827;border-radius:10px;padding:13px;margin-bottom:12px;border:1px solid #374151}.pedido-cabecalho{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;color:#9ca3af}  
+.pedido-status{font-weight:bold;padding:5px 8px;border-radius:6px}.status-recebido{background:#7f1d1d;color:#fecaca}.status-preparo-pedido{background:#78350f;color:#fde68a}.status-pronto-pedido{background:#1e3a8a;color:#bfdbfe}  
+.item{padding:8px 0;border-bottom:1px solid #374151}.item:last-child{border-bottom:none}.item-linha{display:flex;justify-content:space-between;gap:10px}.item-nome{font-weight:bold}.item-obs{color:#fbbf24;font-size:13px;margin-top:5px}  
+.botoes-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.btn-status{border:none;padding:9px 5px;border-radius:7px;cursor:pointer;color:white;font-weight:bold;font-size:12px}.btn-recebido{background:#b91c1c}.btn-preparo{background:#d97706}.btn-pronto{background:#2563eb}.btn-status.ativo{outline:3px solid white}  
+.comanda-total{border-top:2px dashed #4b5563;margin-top:15px;padding-top:15px;text-align:right;font-size:27px;font-weight:bold;color:#4ade80}.btn-finalizar{width:100%;margin-top:15px;border:none;background:#16a34a;color:white;padding:15px;border-radius:10px;cursor:pointer;font-size:17px;font-weight:bold}  
+.sem-pedidos{text-align:center;color:#9ca3af;padding:30px}.historico-resumo{background:#111827;border-radius:12px;padding:15px;margin-bottom:15px}.historico-resumo strong{display:block;color:#4ade80;font-size:25px;margin-top:5px}  
+.historico-item{background:#111827;border-radius:10px;padding:14px;margin-bottom:10px;border:1px solid #374151}.historico-topo{display:flex;justify-content:space-between;margin-bottom:8px}.historico-total{color:#4ade80;font-weight:bold}.historico-detalhes{color:#9ca3af;font-size:13px;margin-top:5px}  
+.abas{display:flex;gap:8px;overflow-x:auto;margin-bottom:15px}.aba{border:none;background:#374151;color:white;padding:11px 14px;border-radius:9px;cursor:pointer;font-weight:bold;white-space:nowrap}.aba.ativa{background:#2563eb}  
+.secao-painel{display:none}.secao-painel.ativa{display:block}  
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.form-grid .campo-full{grid-column:1/-1}.campo label{display:block;color:#d1d5db;font-size:13px;margin-bottom:5px;font-weight:bold}  
+.produtos-admin{display:grid;gap:10px}.produto-admin{background:#1f2937;border:1px solid #374151;border-radius:12px;padding:14px}.produto-admin-topo{display:flex;justify-content:space-between;gap:10px;align-items:center}.produto-admin h3{font-size:17px}.produto-admin-info{color:#9ca3af;font-size:13px;margin-top:6px}.produto-admin-acoes{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.badge{display:inline-block;padding:5px 8px;border-radius:15px;font-size:11px;font-weight:bold}.badge-ativo{background:#14532d;color:#86efac}.badge-inativo{background:#7f1d1d;color:#fecaca}.badge-promo{background:#7f1d1d;color:#fecaca}  
+.tabela-financeiro{width:100%;border-collapse:collapse}.tabela-financeiro th,.tabela-financeiro td{padding:9px;border-bottom:1px solid #374151;text-align:left}.tabela-financeiro th{color:#9ca3af;font-size:12px}  
+@media(max-width:800px){.resumo{grid-template-columns:repeat(2,1fr)}.resumo-card:last-child{grid-column:span 2}.form-grid{grid-template-columns:1fr}}  
+@media(max-width:500px){.mesas{grid-template-columns:1fr}.botoes-status{grid-template-columns:1fr}.painel-avisos{padding:0 10px}.avisos-cabecalho{flex-wrap:wrap}.topo{align-items:flex-start}.topo-botoes{justify-content:flex-end}}  
+</style>  
+</head>  
+<body>  
+<header>  
+<div class="topo">  
+<div><h1 id="tituloPainel">🍔 Sabor da Casa</h1><p>🔥 Painel do Proprietário — Online</p></div>  
+<div class="topo-botoes">  
+<button class="btn-menu" onclick="mostrarSecao('produtos')">🍔 Produtos</button>  
+<button class="btn-historico" onclick="abrirHistorico()">📜 Histórico</button>  
+</div>  
+</div>  
+</header>  <div class="painel-avisos">  
+<div class="avisos-caixa">  
+<div class="avisos-cabecalho">  
+<div class="avisos-titulo">🔔 Pedidos e avisos <span class="contador-avisos" id="contadorAvisos">0</span></div>  
+<button class="btn-som" id="btnSom" onclick="ativarSom()">🔇 Ativar som</button>  
+</div>  
+<div class="lista-avisos" id="listaAvisos"><div class="sem-avisos">✅ Nenhum pedido aguardando atenção.</div></div>  
+</div>  
+</div>  <div class="container">  
+<div class="abas">  
+<button class="aba ativa" id="abaMesas" onclick="mostrarSecao('mesas')">🪑 Mesas</button>  
+<button class="aba" id="abaProdutos" onclick="mostrarSecao('produtos')">🍔 Produtos</button>  
+<button class="aba" id="abaFinanceiro" onclick="mostrarSecao('financeiro')">💰 Financeiro</button>  
+<button class="aba" id="abaConfiguracoes" onclick="mostrarSecao('configuracoes')">⚙️ Configurações</button>  
+</div>  <section id="secaoMesas" class="secao-painel ativa">  
+<div class="configuracao">  
+<label>🪑 Quantidade de mesas</label>  
+<input type="number" id="quantidadeMesas" min="1" max="100" value="8"><br>  
+<button class="btn-config" onclick="salvarQuantidadeMesas()">💾 Salvar Mesas</button>  
+</div>  
+<h2 class="titulo-secao">📊 Resumo do Dia</h2>  
+<div class="resumo">  
+<div class="resumo-card"><span>🟢 Mesas livres</span><strong id="totalLivres">0</strong></div>  
+<div class="resumo-card"><span>🔴 Mesas ocupadas</span><strong id="totalOcupadas">0</strong></div>  
+<div class="resumo-card"><span>🍽️ Pedidos abertos</span><strong id="totalPedidosAbertos">0</strong></div>  
+<div class="resumo-card"><span>✅ Mesas finalizadas</span><strong id="totalMesasFinalizadas">0</strong></div>  
+<div class="resumo-card resumo-total"><span>💰 Total vendido hoje</span><strong id="totalVendidoHoje">R$ 0,00</strong></div>  
+</div>  
+<div class="mesas-titulo"><h2>🪑 Mesas</h2></div>  
+<div class="mesas" id="areaMesas"></div>  
+</section>  <section id="secaoProdutos" class="secao-painel">  
+<h2 class="titulo-secao">🍔 Produtos e Promoções</h2>  
+<div class="configuracao">  
+<div class="form-grid">  
+<div class="campo"><label>Nome do produto</label><input id="produtoNome"></div>  
+<div class="campo"><label>Categoria</label><input id="produtoCategoria" placeholder="Lanches, Pizzas..."></div>  
+<div class="campo"><label>Preço</label><input id="produtoPreco" type="number" step="0.01"></div>  
+<div class="campo"><label>Preço promocional</label><input id="produtoPrecoPromo" type="number" step="0.01"></div>  
+<div class="campo campo-full"><label>Descrição</label><textarea id="produtoDescricao"></textarea></div>  
+<div class="campo campo-full"><label>Foto (URL, opcional)</label><input id="produtoFoto" placeholder="https://..."></div>  
+<div class="campo"><label>Promoção</label><select id="produtoPromo"><option value="false">Desativada</option><option value="true">Ativada</option></select></div>  
+<div class="campo"><label>Disponibilidade</label><select id="produtoAtivo"><option value="true">Ativo</option><option value="false">Inativo</option></select></div>  
+</div>  
+<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">  
+<button class="btn-acao btn-verde" onclick="salvarProduto()">💾 Salvar produto</button>  
+<button class="btn-acao btn-cinza" onclick="limparFormularioProduto()">➕ Novo produto</button>  
+</div>  
+<input type="hidden" id="produtoId">  
+</div>  
+<div class="produtos-admin" id="listaProdutosAdmin"></div>  
+</section>  <section id="secaoFinanceiro" class="secao-painel">  
+<h2 class="titulo-secao">💰 Financeiro</h2>  
+<div class="configuracao">  
+<div class="form-grid">  
+<div class="campo"><label>Data inicial</label><input type="date" id="financeiroInicio"></div>  
+<div class="campo"><label>Data final</label><input type="date" id="financeiroFim"></div>  
+</div>  
+<button class="btn-config" onclick="calcularFinanceiro()">📊 Gerar relatório</button>  
+</div>  
+<div class="resumo">  
+<div class="resumo-card"><span>💰 Total vendido</span><strong id="finTotal">R$ 0,00</strong></div>  
+<div class="resumo-card"><span>📋 Comandas</span><strong id="finComandas">0</strong></div>  
+<div class="resumo-card"><span>📈 Média/comanda</span><strong id="finMedia">R$ 0,00</strong></div>  
+<div class="resumo-card"><span>🍔 Itens vendidos</span><strong id="finItens">0</strong></div>  
+<div class="resumo-card"><span>🪑 Mesas</span><strong id="finMesas">0</strong></div>  
+</div>  
+<div class="configuracao">  
+<h3 style="margin-bottom:10px">🍔 Produtos vendidos</h3>  
+<div id="rankingProdutos"></div>  
+</div>  
+</section>  <section id="secaoConfiguracoes" class="secao-painel">  
+<h2 class="titulo-secao">⚙️ Configurações do Restaurante</h2>  
+<div class="configuracao">  
+<div class="form-grid">  
+<div class="campo"><label>Nome do restaurante</label><input id="cfgNome"></div>  
+<div class="campo"><label>Emoji do restaurante</label><input id="cfgEmoji" placeholder="🍔"></div>  
+<div class="campo"><label>Subtítulo</label><input id="cfgSubtitulo" placeholder="Cardápio Digital"></div>  
+<div class="campo"><label>Telefone</label><input id="cfgTelefone" placeholder="5549999999999"></div>  
+<div class="campo campo-full"><label>Endereço</label><input id="cfgEndereco"></div>  
+<div class="campo campo-full"><label>Logo (URL, opcional)</label><input id="cfgLogo" placeholder="https://..."></div>  
+</div>  
+<button class="btn-config" onclick="salvarConfiguracoes()">💾 Salvar configurações</button>  
+</div>  
+</section>  
+</div>  <div class="modal-fundo" id="modalComanda"><div class="modal">  
+<div class="modal-header"><h2 id="tituloComanda">🪑 Mesa</h2><button class="btn-fechar" onclick="fecharComanda()">×</button></div>  
+<div class="comanda-responsavel" id="responsavelComanda"></div><div id="listaComanda"></div>  
+<div class="comanda-total">Total: R$ <span id="totalComanda">0,00</span></div>  
+<button class="btn-finalizar" onclick="finalizarMesa()">✅ Finalizar Comanda e Liberar Mesa</button>  
+</div></div>  <div class="modal-fundo" id="modalHistorico"><div class="modal">  
+<div class="modal-header"><h2>📜 Histórico</h2><button class="btn-fechar" onclick="fecharHistorico()">×</button></div>  
+<div id="listaHistorico"></div>  
+</div></div>  <script type="module">  
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";  
+import{initializeFirestore,collection,doc,getDocs,updateDoc,setDoc,onSnapshot,writeBatch}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";  
+  
+const firebaseConfig={apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",authDomain:"sistema-digital-f9df1.firebaseapp.com",projectId:"sistema-digital-f9df1",storageBucket:"sistema-digital-f9df1.firebasestorage.app",messagingSenderId:"783545984661",appId:"1:783545984661:web:5d0945907ad9db3990dd9c"};  
+const app=initializeApp(firebaseConfig);const db=initializeFirestore(app,{},"default");  
+  
+const CHAVE_MESAS="quantidadeMesas";  
+let pedidos=[],historico=[],produtos=[],mesaSelecionada=null,configRestaurante={};  
+let somLiberado=false,audioContext=null,intervaloSom=null;  
+  
+function formatarDinheiro(v){return Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}).replace("R$ ","R$ ")}  
+function obterDataHoje(){return new Date().toLocaleDateString("pt-BR")}  
+function obterQuantidadeMesas(){return Number(localStorage.getItem(CHAVE_MESAS)||8)}  
+function normalizarStatus(s){return String(s||"Recebido").trim().toLowerCase()}  
+function pedidoEhValido(d){return d.mesa!==undefined&&d.mesa!==null&&String(d.mesa).trim()!==""&&(String(d.numeroPedido||d.numero||"").trim()!=="")}  
+  
+window.mostrarSecao=function(secao){  
+document.querySelectorAll(".secao-painel").forEach(s=>s.classList.remove("ativa"));  
+document.querySelectorAll(".aba").forEach(a=>a.classList.remove("ativa"));  
+const mapa={mesas:["secaoMesas","abaMesas"],produtos:["secaoProdutos","abaProdutos"],financeiro:["secaoFinanceiro","abaFinanceiro"],configuracoes:["secaoConfiguracoes","abaConfiguracoes"]};  
+document.getElementById(mapa[secao][0]).classList.add("ativa");document.getElementById(mapa[secao][1]).classList.add("ativa");  
+if(secao==="produtos")renderizarProdutosAdmin();if(secao==="financeiro")calcularFinanceiro();  
+}  
+  
+window.ativarSom=function(){  
+try{  
+if(!audioContext)audioContext=new(window.AudioContext||window.webkitAudioContext)();  
+if(audioContext.state==="suspended")audioContext.resume();  
+somLiberado=true;document.getElementById("btnSom").textContent="🔊 Som ativo";document.getElementById("btnSom").style.background="#166534";tocarSomAviso();controlarSomContinuo();  
+}catch(e){console.error(e)}  
+}  
+function tocarSomAviso(){  
+if(!somLiberado)return;  
+try{  
+if(!audioContext)audioContext=new(window.AudioContext||window.webkitAudioContext)();  
+const t=audioContext.currentTime,o=audioContext.createOscillator(),g=audioContext.createGain();  
+o.type="sine";o.frequency.setValueAtTime(880,t);o.frequency.setValueAtTime(660,t+.15);  
+g.gain.setValueAtTime(.001,t);g.gain.exponentialRampToValueAtTime(.25,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+.45);  
+o.connect(g);g.connect(audioContext.destination);o.start(t);o.stop(t+.5);  
+}catch(e){console.error(e)}  
+}  
+function pararSomContinuo(){if(intervaloSom){clearInterval(intervaloSom);intervaloSom=null}}  
+function controlarSomContinuo(){  
+const temNovo=pedidos.some(p=>normalizarStatus(p.status)==="recebido");  
+if(temNovo&&somLiberado&&!intervaloSom)intervaloSom=setInterval(()=>{if(pedidos.some(p=>normalizarStatus(p.status)==="recebido"))tocarSomAviso();else pararSomContinuo()},3000);  
+else if(!temNovo)pararSomContinuo();  
+}  
+  
+window.salvarQuantidadeMesas=function(){  
+let q=Number(document.getElementById("quantidadeMesas").value);if(q<1)q=1;if(q>100)q=100;  
+localStorage.setItem(CHAVE_MESAS,q);document.getElementById("quantidadeMesas").value=q;renderizarMesas();  
+}  
+  
+function pedidosDaMesa(m){return pedidos.filter(p=>String(p.mesa)===String(m)&&normalizarStatus(p.status)!=="finalizado")}  
+function obterStatusMesa(m){const p=pedidosDaMesa(m);if(!p.length)return"livre";if(p.some(x=>normalizarStatus(x.status)==="pronto"))return"pronto";if(p.some(x=>normalizarStatus(x.status)==="preparo"))return"preparo";return"ocupada"}  
+function obterResponsavel(pm){const p=pm.find(x=>x.responsavel||x.nomeCliente);return p?(p.responsavel||p.nomeCliente):pm.length?"Não informado":"—"}  
+function calcularTotalMesa(pm){return pm.reduce((t,p)=>t+Number(p.total||0),0)}  
+  
+function atualizarResumo(){  
+const q=obterQuantidadeMesas();let livres=0,ocupadas=0,abertos=0;  
+for(let m=1;m<=q;m++){const p=pedidosDaMesa(m);if(p.length)ocupadas++;else livres++;abertos+=p.length}  
+const hoje=historico.filter(x=>x.data===obterDataHoje());  
+const total=hoje.reduce((t,x)=>t+Number(x.total||0),0);  
+document.getElementById("totalLivres").innerText=livres;document.getElementById("totalOcupadas").innerText=ocupadas;document.getElementById("totalPedidosAbertos").innerText=abertos;document.getElementById("totalMesasFinalizadas").innerText=hoje.length;document.getElementById("totalVendidoHoje").innerText=formatarDinheiro(total);  
+}  
+  
+function renderizarMesas(){  
+const area=document.getElementById("areaMesas");area.innerHTML="";  
+for(let mesa=1;mesa<=obterQuantidadeMesas();mesa++){  
+const pm=pedidosDaMesa(mesa),status=obterStatusMesa(mesa),total=calcularTotalMesa(pm),resp=obterResponsavel(pm);  
+const novo=pm.some(p=>normalizarStatus(p.status)==="recebido");  
+let texto=status==="livre"?"Livre":status==="ocupada"?"Ocupada":status==="preparo"?"Em preparo":"Pronto";  
+const card=document.createElement("div");card.className="mesa "+status+(novo?" novo-pedido":"");  
+card.innerHTML=`<div class="mesa-topo"><span class="mesa-nome">🪑 Mesa ${mesa}</span><span class="status status-${status}">${texto}</span></div>  
+<div class="responsavel">👤 <strong>Responsável:</strong> ${resp}</div>  
+<div class="info-pedido">${pm.length?pm.length+(pm.length===1?" pedido aberto":" pedidos abertos"):"Nenhum pedido"}</div>  
+<div class="total-mesa">R$ ${Number(total).toFixed(2).replace(".",",")}</div>  
+<button class="btn-abrir" onclick="abrirComanda(${mesa})">${pm.length?"📋 Abrir Comanda":"👀 Ver Mesa"}</button>`;  
+area.appendChild(card);  
+}  
+atualizarResumo();  
+}  
+  
+function renderizarAvisos(){  
+const lista=document.getElementById("listaAvisos"),contador=document.getElementById("contadorAvisos");  
+const abertos=pedidos.filter(p=>normalizarStatus(p.status)!=="finalizado");  
+const ordem={recebido:1,preparo:2,pronto:3};abertos.sort((a,b)=>(ordem[normalizarStatus(a.status)]||99)-(ordem[normalizarStatus(b.status)]||99));  
+contador.innerText=abertos.length;lista.innerHTML="";  
+if(!abertos.length){lista.innerHTML='<div class="sem-avisos">✅ Nenhum pedido aguardando atenção.</div>';return}  
+abertos.forEach(p=>{  
+const s=normalizarStatus(p.status),cl=s==="recebido"?"aviso-novo":s==="preparo"?"aviso-preparo":"aviso-pronto",cs=s==="recebido"?"aviso-status-novo":s==="preparo"?"aviso-status-preparo":"aviso-status-pronto",txt=s==="recebido"?"🔴 Novo pedido":s==="preparo"?"🟠 Em preparo":"🔵 Pronto";  
+const d=document.createElement("div");d.className="aviso-item "+cl;d.innerHTML=`<div class="aviso-info"><span class="aviso-mesa">🪑 Mesa ${p.mesa}</span><span class="aviso-detalhes">Pedido #${p.numeroPedido||p.numero}</span></div><span class="aviso-status ${cs}">${txt}</span>`;d.onclick=()=>abrirComanda(Number(p.mesa));lista.appendChild(d);  
+});  
+}  
+  
+function carregarPedidos(){  
+onSnapshot(collection(db,"pedidos"),snap=>{  
+pedidos=[];snap.forEach(d=>{const x=d.data();if(pedidoEhValido(x))pedidos.push({id:d.id,...x,status:normalizarStatus(x.status)})});  
+renderizarMesas();renderizarAvisos();controlarSomContinuo();if(mesaSelecionada)renderizarComanda();  
+});  
+}  
+function carregarHistorico(){  
+onSnapshot(collection(db,"historicoComandas"),snap=>{  
+historico=[];snap.forEach(d=>historico.push({id:d.id,...d.data()}));historico.sort((a,b)=>new Date(b.dataFinalizacao||0)-new Date(a.dataFinalizacao||0));atualizarResumo();  
+});  
+}  
+  
+window.abrirComanda=function(m){mesaSelecionada=m;document.getElementById("tituloComanda").innerText="🪑 Mesa "+m;renderizarComanda();document.getElementById("modalComanda").style.display="flex"}  
+function renderizarComanda(){  
+if(!mesaSelecionada)return;const pm=pedidosDaMesa(mesaSelecionada),lista=document.getElementById("listaComanda");  
+document.getElementById("responsavelComanda").innerHTML=`👤 <strong>Responsável:</strong> ${obterResponsavel(pm)}`;lista.innerHTML="";  
+if(!pm.length)lista.innerHTML='<div class="sem-pedidos">🟢 Esta mesa está livre.</div>';  
+pm.sort((a,b)=>Number(a.numeroPedido||a.numero||0)-Number(b.numeroPedido||b.numero||0)).forEach(p=>{  
+const s=normalizarStatus(p.status),classe=s==="preparo"?"status-preparo-pedido":s==="pronto"?"status-pronto-pedido":"status-recebido",txt=s==="preparo"?"🟠 Em preparo":s==="pronto"?"🔵 Pronto":"🔴 Recebido";  
+let itens="";(p.itens||[]).forEach(i=>{itens+=`<div class="item"><div class="item-linha"><span class="item-nome">${i.quantidade}x ${i.nome}</span><span>R$ ${Number(Number(i.preco||0)*Number(i.quantidade||0)).toFixed(2).replace(".",",")}</span></div>${i.observacao?`<div class="item-obs">📝 OBS: ${i.observacao}</div>`:""}</div>`});  
+const hora=p.data?new Date(p.data).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}):"--:--";  
+const bloco=document.createElement("div");bloco.className="pedido-bloco";bloco.innerHTML=`<div class="pedido-cabecalho"><span><strong>Pedido #${p.numeroPedido||p.numero||"—"}</strong><br>🕐 ${hora}</span><span class="pedido-status ${classe}">${txt}</span></div>${itens}  
+<div class="botoes-status">  
+<button class="btn-status btn-recebido ${s==="recebido"?"ativo":""}" onclick="alterarStatusPedido('${p.id}','recebido')">🔴 Recebido</button>  
+<button class="btn-status btn-preparo ${s==="preparo"?"ativo":""}" onclick="alterarStatusPedido('${p.id}','preparo')">🟠 Em preparo</button>  
+<button class="btn-status btn-pronto ${s==="pronto"?"ativo":""}" onclick="alterarStatusPedido('${p.id}','pronto')">🔵 Pronto</button></div>`;  
+lista.appendChild(bloco);  
+});  
+document.getElementById("totalComanda").innerText=Number(calcularTotalMesa(pm)).toFixed(2).replace(".",",");  
+}  
+  
+window.alterarStatusPedido=async(id,status)=>{try{await updateDoc(doc(db,"pedidos",id),{status})}catch(e){alert("❌ Erro ao atualizar pedido.\n\n"+(e.message||e))}};  
+window.fecharComanda=()=>{document.getElementById("modalComanda").style.display="none";mesaSelecionada=null};  
+  
+window.finalizarMesa=async()=>{  
+if(!mesaSelecionada)return;const pm=pedidosDaMesa(mesaSelecionada);if(!pm.length){alert("Esta mesa não possui pedidos.");return}  
+const total=calcularTotalMesa(pm),resp=obterResponsavel(pm);  
+if(!confirm(`Finalizar Comanda da Mesa ${mesaSelecionada}?\n\nResponsável: ${resp}\nTotal: ${formatarDinheiro(total)}\n\nA mesa será liberada.`))return;  
+try{  
+const agora=new Date(),batch=writeBatch(db);  
+pm.forEach(p=>batch.update(doc(db,"pedidos",p.id),{status:"finalizado",dataFinalizacao:agora.toISOString()}));  
+const href=doc(collection(db,"historicoComandas"));  
+batch.set(href,{mesa:mesaSelecionada,responsavel:resp,total:Number(total.toFixed(2)),data:agora.toLocaleDateString("pt-BR"),horarioFinalizacao:agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),dataFinalizacao:agora.toISOString(),pedidos:pm.map(p=>({id:p.id,numeroPedido:p.numeroPedido||p.numero||0,total:Number(p.total||0),itens:p.itens||[]}))});  
+await batch.commit();const m=mesaSelecionada;fecharComanda();alert(`✅ Comanda finalizada!\n\nMesa ${m} liberada.\n\nTotal: ${formatarDinheiro(total)}`);  
+}catch(e){alert("❌ Erro ao finalizar comanda.\n\n"+(e.message||e))}  
+};  
+  
+window.abrirHistorico=function(){  
+const lista=document.getElementById("listaHistorico"),hoje=obterDataHoje(),hh=historico.filter(x=>x.data===hoje),total=hh.reduce((t,x)=>t+Number(x.total||0),0);  
+lista.innerHTML=`<div class="historico-resumo">📊<strong>Resumo de hoje</strong><div style="color:#9ca3af;margin-top:5px">${hh.length} comandas finalizadas</div><strong>${formatarDinheiro(total)}</strong></div>`;  
+if(!historico.length)lista.innerHTML+='<div class="sem-pedidos">📜 Nenhuma comanda finalizada ainda.</div>';  
+else historico.forEach(c=>{const d=document.createElement("div");d.className="historico-item";d.innerHTML=`<div class="historico-topo"><strong>🪑 Mesa ${c.mesa}</strong><span class="historico-total">${formatarDinheiro(c.total)}</span></div><div>👤 ${c.responsavel||"Não informado"}</div><div class="historico-detalhes">📅 ${c.data||"--/--/----"} — 🕐 ${c.horarioFinalizacao||"--:--"}</div><div class="historico-detalhes">🍽️ ${(c.pedidos||[]).length} pedido(s) nesta comanda</div>`;lista.appendChild(d)});  
+document.getElementById("modalHistorico").style.display="flex";  
+}  
+window.fecharHistorico=()=>document.getElementById("modalHistorico").style.display="none";  
+  
+function carregarConfiguracoes(){  
+onSnapshot(collection(db,"configuracaoRestaurante"),snap=>{  
+configRestaurante={};snap.forEach(d=>configRestaurante={...d.data()});  
+document.getElementById("cfgNome").value=configRestaurante.nome||"Sabor da Casa";document.getElementById("cfgEmoji").value=configRestaurante.emoji||"🍔";document.getElementById("cfgSubtitulo").value=configRestaurante.subtitulo||"Cardápio Digital";document.getElementById("cfgTelefone").value=configRestaurante.telefone||"5549984121585";document.getElementById("cfgEndereco").value=configRestaurante.endereco||"Chapecó / Santa Catarina";document.getElementById("cfgLogo").value=configRestaurante.logo||"";  
+document.getElementById("tituloPainel").textContent=`${configRestaurante.emoji||"🍔"} ${configRestaurante.nome||"Sabor da Casa"}`;  
+});  
+}  
+  
+window.salvarConfiguracoes=async()=>{  
+try{  
+await setDoc(doc(db,"configuracaoRestaurante","restaurante"),{nome:document.getElementById("cfgNome").value.trim()||"Sabor da Casa",emoji:document.getElementById("cfgEmoji").value.trim()||"🍔",subtitulo:document.getElementById("cfgSubtitulo").value.trim()||"Cardápio Digital",telefone:document.getElementById("cfgTelefone").value.trim()||"5549984121585",endereco:document.getElementById("cfgEndereco").value.trim()||"Chapecó / Santa Catarina",logo:document.getElementById("cfgLogo").value.trim()},{merge:true});  
+alert("✅ Configurações salvas!");  
+}catch(e){alert("❌ Erro ao salvar configurações.\n\n"+(e.message||e))}  
+};  
+  
+function limparFormularioProduto(){["produtoNome","produtoCategoria","produtoPreco","produtoPrecoPromo","produtoDescricao","produtoFoto","produtoId"].forEach(id=>document.getElementById(id).value="");document.getElementById("produtoPromo").value="false";document.getElementById("produtoAtivo").value="true"}  
+window.limparFormularioProduto=limparFormularioProduto;  
+  
+window.salvarProduto=async()=>{  
+const nome=document.getElementById("produtoNome").value.trim(),categoria=document.getElementById("produtoCategoria").value.trim(),preco=Number(document.getElementById("produtoPreco").value||0),id=document.getElementById("produtoId").value;  
+if(!nome||!categoria||preco<=0){alert("⚠️ Informe nome, categoria e preço.");return}  
+const dados={nome,categoria,preco,precoPromocional:Number(document.getElementById("produtoPrecoPromo").value||0),descricao:document.getElementById("produtoDescricao").value.trim(),foto:document.getElementById("produtoFoto").value.trim(),promocaoAtiva:document.getElementById("produtoPromo").value==="true",ativo:document.getElementById("produtoAtivo").value==="true"};  
+try{await setDoc(doc(db,"produtos",id||crypto.randomUUID()),dados);alert("✅ Produto salvo!");limparFormularioProduto();}catch(e){alert("❌ Erro ao salvar produto.\n\n"+(e.message||e))}  
+};  
+  
+function renderizarProdutosAdmin(){  
+const lista=document.getElementById("listaProdutosAdmin");lista.innerHTML="";  
+if(!produtos.length){lista.innerHTML='<div class="sem-pedidos">Nenhum produto cadastrado.</div>';return}  
+produtos.forEach(p=>{  
+const d=document.createElement("div");d.className="produto-admin";  
+d.innerHTML=`<div class="produto-admin-topo"><h3>${p.nome}</h3><span class="badge ${p.ativo!==false?"badge-ativo":"badge-inativo"}">${p.ativo!==false?"Ativo":"Inativo"}</span></div>  
+<div class="produto-admin-info">${p.categoria||"Sem categoria"} · ${formatarDinheiro(p.preco)} ${p.promocaoAtiva?`· 🔥 Promoção ${formatarDinheiro(p.precoPromocional)}`:""}</div>  
+<div class="produto-admin-info">${p.descricao||""}</div>  
+<div class="produto-admin-acoes"><button class="btn-acao" onclick="editarProduto('${p.id}')">✏️ Editar</button><button class="btn-acao ${p.ativo!==false?"btn-vermelho":"btn-verde"}" onclick="alternarProduto('${p.id}',${p.ativo!==false})">${p.ativo!==false?"🚫 Desativar":"✅ Ativar"}</button></div>`;  
+lista.appendChild(d);  
+});  
+}  
+window.editarProduto=id=>{const p=produtos.find(x=>x.id===id);if(!p)return;document.getElementById("produtoId").value=p.id;document.getElementById("produtoNome").value=p.nome||"";document.getElementById("produtoCategoria").value=p.categoria||"";document.getElementById("produtoPreco").value=p.preco||"";document.getElementById("produtoPrecoPromo").value=p.precoPromocional||"";document.getElementById("produtoDescricao").value=p.descricao||"";document.getElementById("produtoFoto").value=p.foto||"";document.getElementById("produtoPromo").value=p.promocaoAtiva?"true":"false";document.getElementById("produtoAtivo").value=p.ativo!==false?"true":"false";window.scrollTo({top:0,behavior:"smooth"})}  
+window.alternarProduto=async(id,ativo)=>{try{await updateDoc(doc(db,"produtos",id),{ativo:!ativo})}catch(e){alert("❌ Erro.\n\n"+(e.message||e))}};  
+  
+onSnapshot(collection(db,"produtos"),snap=>{produtos=[];snap.forEach(d=>produtos.push({id:d.id,...d.data()}));renderizarProdutosAdmin()});  
+  
+async function calcularFinanceiro(){  
+const inicio=document.getElementById("financeiroInicio").value, fim=document.getElementById("financeiroFim").value;  
+const lista=historico.filter(h=>{  
+if(!h.dataFinalizacao)return false;  
+const dia=h.dataFinalizacao.slice(0,10);return (!inicio||dia>=inicio)&&(!fim||dia<=fim);  
+});  
+const total=lista.reduce((t,h)=>t+Number(h.total||0),0),comandas=lista.length;  
+let itens=0,mesas=new Set(),ranking={};  
+lista.forEach(h=>{mesas.add(String(h.mesa));(h.pedidos||[]).forEach(p=>(p.itens||[]).forEach(i=>{itens+=Number(i.quantidade||0);ranking[i.nome]=(ranking[i.nome]||0)+Number(i.quantidade||0)}))});  
+document.getElementById("finTotal").innerText=formatarDinheiro(total);document.getElementById("finComandas").innerText=comandas;document.getElementById("finMedia").innerText=formatarDinheiro(comandas?total/comandas:0);document.getElementById("finItens").innerText=itens;document.getElementById("finMesas").innerText=mesas.size;  
+const ordenado=Object.entries(ranking).sort((a,b)=>b[1]-a[1]);document.getElementById("rankingProdutos").innerHTML=ordenado.length?`<table class="tabela-financeiro"><thead><tr><th>Produto</th><th>Quantidade</th></tr></thead><tbody>${ordenado.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join("")}</tbody></table>`:"<div class='sem-pedidos'>Nenhuma venda no período.</div>";  
+}  
+window.calcularFinanceiro=calcularFinanceiro;  
+  
+document.getElementById("quantidadeMesas").value=obterQuantidadeMesas();  
+carregarPedidos();carregarHistorico();carregarConfiguracoes();  
+</script>  </body>  
 </html>
