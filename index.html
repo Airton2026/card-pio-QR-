@@ -204,7 +204,7 @@ box-shadow:0 0 18px rgba(57,255,20,.18);
 transform:translateY(-2px);
 }
 
-/* desenho do produto */
+/* desenho/foto do produto */
 .produto-visual{
 width:100%;
 height:175px;
@@ -217,6 +217,14 @@ font-size:92px;
 text-shadow:
 0 5px 12px rgba(0,0,0,.8),
 0 0 20px rgba(57,255,20,.08);
+overflow:hidden;
+}
+
+.produto-visual img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
 }
 
 .produto-info{
@@ -293,7 +301,6 @@ transform:scale(.97);
    BARRA CARRINHO
 ========================= */
 
-/* escondida porque agora usamos o carrinho no topo */
 .barra-carrinho{
 display:none;
 }
@@ -879,7 +886,8 @@ preco:34,
 categoria:"Lanches",
 descricao:"Pão, hambúrguer, bacon, calabresa e queijo.",
 ativo:true,
-promocaoAtiva:false
+promocaoAtiva:false,
+foto:""
 },
 
 {
@@ -1218,19 +1226,55 @@ p.promocaoAtiva &&
 Number(p.precoPromocional)>0;
 
 
-/*
-Nesta versão usamos desenhos/ícones.
-A URL da foto continua armazenada no Firebase
-e poderá ser ativada futuramente.
-*/
+/* =========================
+   FOTO DO PRODUTO
+========================= */
 
 const desenho=iconeProduto(p);
+
+
+/*
+   Aceita vários nomes de campo
+   para facilitar a leitura do Firebase.
+*/
+
+const imagemProduto=
+p.foto||
+p.fotoUrl||
+p.imagem||
+p.imagemUrl||
+"";
+
+
+let visualProduto;
+
+
+if(imagemProduto){
+
+visualProduto=`
+
+<img
+src="${escapar(imagemProduto)}"
+alt="${escapar(p.nome)}"
+loading="lazy"
+onerror="
+this.style.display='none';
+this.parentElement.innerHTML='${escapar(desenho)}';
+">
+
+`;
+
+}else{
+
+visualProduto=desenho;
+
+}
 
 
 div.innerHTML=`
 
 <div class="produto-visual">
-${desenho}
+${visualProduto}
 </div>
 
 <div class="produto-info">
