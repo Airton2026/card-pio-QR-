@@ -25,7 +25,48 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:li
 .conexao{color:#19ff9a}
 @media(max-width:850px){.sidebar{width:190px}.main-area{width:calc(100% - 190px);margin-left:190px}.topbar-neon{padding:15px 18px}.main-content{padding:20px 18px}.sidebar .nav button{font-size:13px;padding:11px 10px}}
 @media(max-width:650px){.site-shell{display:block}.sidebar{position:relative;width:100%;height:auto;padding:12px}.brand{display:flex;align-items:center;gap:12px;padding:5px 8px 12px;margin-bottom:10px}.brand-logo{width:42px;height:42px;font-size:24px;margin:0}.sidebar .nav{display:flex;overflow-x:auto;padding-bottom:3px}.sidebar .nav button{white-space:nowrap;width:auto}.sidebar-status{display:none}.main-area{width:100%;margin-left:0}.topbar-neon{position:relative;display:block}.top-actions{margin-top:12px}.main-content{padding:18px 14px}}
-</style></head><body>
+
+/* === PAINEL DE PEDIDOS EM COLUNAS === */
+.pedidos-kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.coluna-pedidos{background:rgba(3,18,45,.72);border:1px solid #12609a;border-radius:16px;padding:12px;min-height:180px;box-shadow:0 0 18px #00bfff12}
+.coluna-pedidos.recebidos{border-color:#eab30888}.coluna-pedidos.preparando{border-color:#f59e0b88}.coluna-pedidos.prontos{border-color:#22d3ee88}
+.coluna-titulo{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px 12px;margin-bottom:10px;border-bottom:1px solid #ffffff18}
+.coluna-titulo strong{font-size:15px}.contador-coluna{min-width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#071e43;border:1px solid currentColor;font-size:12px}
+.coluna-pedidos .pedido{margin-bottom:10px;padding:13px;border-radius:13px}.coluna-pedidos .pedido:last-child{margin-bottom:0}
+.fila{margin-top:7px;color:#8fe3ff;font-size:13px;font-weight:bold}.horachegada{margin-top:4px;color:#9fc5ff;font-size:12px}
+@media(max-width:850px){.pedidos-kanban{grid-template-columns:1fr}.coluna-pedidos{min-height:0}}
+</style>
+<style id="tema-cardapio-verde">
+/* === TEMA IGUAL AO CARDÁPIO: PRETO + VERDE NEON === */
+:root{--neon:#39ff14;--neon2:#8cff45;--violet:#39ff14;--bg:#050807;--panel:#0b1110;--line:#24322d;--muted:#9aa9a3}
+body{background:#050807}
+.sidebar{background:linear-gradient(180deg,#070b09,#0b1110);border-right-color:#39ff1488;box-shadow:8px 0 28px #39ff1410}
+.brand-logo{background:linear-gradient(135deg,#39ff14,#8cff45);color:#061006;box-shadow:0 0 22px #39ff1440}
+.brand strong{color:#f5f7f6}.brand small{color:#9aa9a3}
+.sidebar .nav button{background:#0b1110;color:#f5f7f6;border-color:#24322d}
+.sidebar .nav button:hover{border-color:#39ff14;color:#39ff14}
+.sidebar .nav button.ativo{background:linear-gradient(90deg,#39ff14,#7cff3c);color:#061006;box-shadow:0 0 18px #39ff1445}
+.sidebar-status{border-color:#39ff1488;background:#0b1110;box-shadow:0 0 18px #39ff1422}
+.sidebar-status .dot{color:#39ff14}
+.topbar-neon{background:linear-gradient(135deg,#050807ee,#0b1110ee 55%,#101816ee);border-bottom-color:#39ff1466;box-shadow:4px 0 24px #0008,0 0 25px #39ff1412}
+.topbar-neon p{color:#b8c6bf}.top-pill{border-color:#39ff1488;background:#07100bcc;color:#d8ffe0}.top-pill.online{border-color:#39ff1499;color:#39ff14}
+.topbar-neon .btn{border-color:#39ff1488;background:#101816;color:#fff;box-shadow:0 0 12px #39ff1422}
+.topbar-neon .btn:hover{background:#17301b;border-color:#39ff14}
+.conexao{color:#39ff14}
+.card,.pedido,.produto,.hist{background:linear-gradient(145deg,#0b1711,#09100d);border-color:#243b2c}
+.card small{color:#9aa9a3}.itens{color:#dce9df}.obs{color:#b8c6bf}.vazio{color:#9aa9a3}
+.coluna-pedidos{background:rgba(5,12,8,.82);border-color:#243b2c;box-shadow:0 0 18px #39ff1412}
+.coluna-pedidos.recebidos{border-color:#39ff1466}.coluna-pedidos.preparando{border-color:#8cff4566}.coluna-pedidos.prontos{border-color:#39ff1466}
+.coluna-titulo{border-bottom-color:#39ff1425}.contador-coluna{background:#07100b}
+.fila{color:#8cff45}.horachegada{color:#9aa9a3}
+.azul{background:#39ff14;color:#061006}.verde{background:#39ff14;color:#061006}.laranja{background:#8cff45;color:#061006}.cinza{background:#17301f;color:#fff}
+.badge.b-recebido{background:#27440f;color:#d8ffb8}.badge.b-preparo{background:#315018;color:#e3ffcf}.badge.b-pronto{background:#12451e;color:#c8ffd2}.badge.b-final{background:#075d36;color:#bfffdc}
+.box{background:#0b1110;border-color:#243b2c}.linha{border-bottom-color:#243b2c}.item{background:#101816}.campo input,.campo textarea,.campo select{border-color:#2b4636;background:#050807}.campo input:focus,.campo textarea:focus,.campo select:focus{border-color:#39ff14;box-shadow:0 0 0 2px #39ff1414}
+.btn-green{background:#39ff14;color:#061006;box-shadow:0 0 14px #39ff1430}
+
+/* As mesas permanecem exatamente com as cores/status já aprovadas. */
+</style>
+</head><body>
 <div class="site-shell">
 <aside class="sidebar">
   <div class="brand">
@@ -50,7 +91,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:li
 </header>
 <div id="conexao" style="display:none"></div><div id="erro" style="display:none"></div><div id="alerta" class="alerta" onclick="sec('pedidos')">🔔 NOVO PEDIDO RECEBIDO</div>
 <div class="main-content"><section id="inicio" class="secao ativa"><div class="resumo"><div class="card"><small>🪑 Livres</small><strong id="livres">0</strong></div><div class="card"><small>👥 Ocupadas</small><strong id="ocupadas">0</strong></div><div class="card"><small>🕐 Em preparo</small><strong id="preparo">0</strong></div><div class="card"><small>✓ Prontos</small><strong id="prontos">0</strong></div><div class="card"><small>📋 Pedidos ativos</small><strong id="ativos">0</strong></div></div><div style="margin-bottom:18px"><button class="btn azul" onclick="ativarSom()">🔊 Ativar som</button></div><div id="mesas" class="mesas"></div></section>
-<section id="pedidos" class="secao"><h2>📋 Pedidos</h2><div id="listaPedidos" class="lista"></div></section>
+<section id="pedidos" class="secao"><div class="section-title"><h2>📋 Pedidos</h2><div class="top-pill">Atualização em tempo real</div></div><div id="listaPedidos" class="pedidos-kanban"></div></section>
 <section id="produtos" class="secao"><h2>🍔 Produtos</h2><button class="btn azul" onclick="novoProduto()">➕ Novo produto</button><div id="listaProdutos" class="produtos" style="margin-top:15px"></div></section>
 <section id="financeiro" class="secao"><h2>💰 Financeiro</h2><div class="financeiro"><div class="card"><small>Comandas finalizadas</small><strong id="fQtd">0</strong></div><div class="card"><small>Faturamento</small><strong id="fTotal">R$ 0,00</strong></div><div class="card"><small>Ticket médio</small><strong id="fMedia">R$ 0,00</strong></div><div class="card"><small>Hoje</small><strong id="fHoje">R$ 0,00</strong></div></div></section>
 <section id="historico" class="secao"><h2>📜 Histórico</h2><div id="listaHistorico"></div></section>
@@ -68,7 +109,64 @@ window.sec=(n,b)=>{document.querySelectorAll('.secao').forEach(x=>x.classList.re
 function classeMesa(n){let p=pedidos.filter(x=>String(x.mesa)===String(n)&&ativo(x));if(!p.length)return['livre','Livre',0,false];let v=p.reduce((s,x)=>s+Number(x.total||0),0);if(p.some(x=>x.status==='Recebido'))return['ocupada','Recebido',v,true];if(p.some(x=>x.status==='Em preparo'))return['preparo','Em preparo',v,false];if(p.some(x=>x.status==='Pronto'))return['pronto','Pronto',v,false];return['ocupada','Ocupada',v,false]}
 function renderMesas(){let a=document.getElementById('mesas');a.innerHTML='';let c=[0,0,0,0];for(let n=1;n<=mesas;n++){let r=classeMesa(n),d=document.createElement('div');d.className='mesa '+r[0]+(r[3]?' nova':'');if(r[0]==='livre')c[0]++;else if(r[0]==='ocupada')c[1]++;else if(r[0]==='preparo')c[2]++;else c[3]++;d.innerHTML=`<div><h3>🪑 Mesa ${n}</h3><div style="font-weight:bold;margin-top:8px">${r[1]==='Livre'?'🟢':r[1]==='Recebido'?'🔴':r[1]==='Em preparo'?'🟠':'🔵'} ${r[1]}</div><div style="font-size:20px;font-weight:bold;margin-top:8px">${dinheiro(r[2])}</div></div><button onclick="abrirMesa(${n})">📋 Ver comanda</button>`;a.appendChild(d)}document.getElementById('livres').textContent=c[0];document.getElementById('ocupadas').textContent=c[1];document.getElementById('preparo').textContent=c[2];document.getElementById('prontos').textContent=c[3];document.getElementById('ativos').textContent=pedidos.filter(ativo).length}
 window.abrirMesa=n=>{let ps=pedidos.filter(x=>String(x.mesa)===String(n)&&ativo(x));if(ps.length)abrirComandaGrupo(ps);else alert('🟢 Mesa '+n+' está livre.')};
-function renderPedidos(){let a=document.getElementById('listaPedidos'),ps=pedidos.filter(ativo).sort((x,y)=>String(x.data).localeCompare(String(y.data)));if(!ps.length){a.innerHTML='<div class="vazio">Nenhum pedido ativo no momento.</div>';return}a.innerHTML=ps.map(p=>{let itens=(p.itens||[]).map(i=>`<div>• ${i.quantidade}x ${esc(i.nome)} — ${dinheiro(Number(i.preco||0)*Number(i.quantidade||1))}${i.observacao?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`:''}</div>`).join('');let ac=p.status==='Recebido'?`<button class="btn laranja" onclick="status('${p.id}','Em preparo')">🟠 Em preparo</button>`:p.status==='Em preparo'?`<button class="btn azul" onclick="status('${p.id}','Pronto')">🔵 Pronto</button>`:`<button class="btn verde" onclick="abrirId('${p.id}')">📋 Abrir comanda</button>`;return`<div class="pedido ${p.status==='Em preparo'?'prep':p.status==='Pronto'?'pron':''}"><div class="top"><div><strong style="font-size:20px">Pedido #${esc(p.numeroPedido)}</strong><br>🪑 Mesa ${esc(p.mesa)}${p.responsavel?' • 👤 '+esc(p.responsavel):''}<br>${badge(p.status)}${p.comandaId?`<br><small style="color:#9fc5ff">📋 Comanda da mesa</small>`:""}</div><strong style="font-size:21px">${dinheiro(p.total)}</strong></div><div class="itens">${itens}</div>${p.observacaoGeral?`<div class="obs">📝 ${esc(p.observacaoGeral)}</div>`:''}<div class="acoes" style="margin-top:12px">${ac}</div></div>`}).join('')}
+function renderPedidos(){
+const a=document.getElementById('listaPedidos');
+const ps=pedidos.filter(ativo).sort((x,y)=>String(x.data||'').localeCompare(String(y.data||'')));
+
+const grupos={
+  'Recebido':[],
+  'Em preparo':[],
+  'Pronto':[]
+};
+ps.forEach(p=>{if(grupos[p.status])grupos[p.status].push(p)});
+
+const coluna=(status,titulo,classe,emoji)=>{
+ const lista=grupos[status];
+ const cards=lista.map((p,index)=>{
+   const itens=(p.itens||[]).map(i=>
+     `<div>• ${i.quantidade}x ${esc(i.nome)} — ${dinheiro(Number(i.preco||0)*Number(i.quantidade||1))}${i.observacao?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`:''}</div>`
+   ).join('');
+
+   const hora=p.data&& !isNaN(new Date(p.data).getTime())
+     ?new Date(p.data).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})
+     :'--:--:--';
+   const posicao=ps.findIndex(x=>x.id===p.id)+1;
+   const medalha=posicao===1?'🥇':posicao===2?'🥈':posicao===3?'🥉':'🔢';
+
+   let ac=p.status==='Recebido'
+     ?`<button class="btn laranja" onclick="status('${p.id}','Em preparo')">🟠 Iniciar preparo</button>`
+     :p.status==='Em preparo'
+     ?`<button class="btn azul" onclick="status('${p.id}','Pronto')">🔵 Marcar pronto</button>`
+     :`<button class="btn verde" onclick="abrirId('${p.id}')">📋 Abrir comanda</button>`;
+
+   return `<div class="pedido ${p.status==='Em preparo'?'prep':p.status==='Pronto'?'pron':''}">
+     <div class="top">
+       <div>
+         <strong style="font-size:18px">Pedido #${esc(p.numeroPedido)}</strong>
+         <br>🪑 Mesa ${esc(p.mesa)}${p.responsavel?' • 👤 '+esc(p.responsavel):''}
+         <br>${badge(p.status)}
+         <div class="fila">${medalha} ${posicao}º na fila</div>
+         <div class="horachegada">🕐 Chegou às ${hora}</div>
+         ${p.comandaId?`<small style="color:#9fc5ff">📋 Comanda da mesa</small>`:""}
+       </div>
+       <strong style="font-size:19px">${dinheiro(p.total)}</strong>
+     </div>
+     <div class="itens">${itens}</div>
+     ${p.observacaoGeral?`<div class="obs">📝 ${esc(p.observacaoGeral)}</div>`:''}
+     <div class="acoes" style="margin-top:12px">${ac}</div>
+   </div>`;
+ }).join('');
+
+ return `<div class="coluna-pedidos ${classe}">
+   <div class="coluna-titulo"><strong>${emoji} ${titulo}</strong><span class="contador-coluna">${lista.length}</span></div>
+   ${cards||'<div class="vazio" style="padding:22px 8px">Nenhum pedido</div>'}
+ </div>`;
+};
+
+a.innerHTML=coluna('Recebido','Recebidos','recebidos','🔴')+
+            coluna('Em preparo','Em preparo','preparando','🟠')+
+            coluna('Pronto','Prontos','prontos','🔵');
+}
 window.status=async(id,s)=>{try{await updateDoc(doc(db,'pedidos',id),{status:s});const idx=pedidos.findIndex(p=>p.id===id);if(idx>=0)pedidos[idx]={...pedidos[idx],status:s};renderPedidos();renderMesas();if(comanda&&comanda.length){const grupoAtual=pedidos.filter(p=>comanda.some(x=>x.id===p.id)&&ativo(p));if(grupoAtual.length)abrirComandaGrupo(grupoAtual)}}catch(e){alert('Erro ao atualizar pedido:\n\n'+e.message)}};window.abrirId=id=>{let p=pedidos.find(x=>x.id===id);if(p){let grupo=pedidos.filter(x=>String(x.comandaId||"")===String(p.comandaId||"")&&ativo(x));if(!grupo.length)grupo=[p];abrirComandaGrupo(grupo)}};
 
 function abrirComandaGrupo(grupo){
