@@ -101,12 +101,12 @@ button{cursor:pointer}
 <aside class="sidebar">
   <div class="brand"><div class="brand-icon">🍔</div><div><strong>Sabor <span>da Casa</span></strong><small>PAINEL DO PROPRIETÁRIO</small></div></div>
   <nav class="menu">
-    <button class="active" onclick="abrirSecao('inicio',this)"><span>Início</span></button>
-    <button onclick="abrirSecao('mesas',this)"><span>Mesas</span></button><button onclick="abrirSecao('pedidos',this)"><span>Pedidos</span><b class="badge-count" id="contadorPedidos">0</b></button>
-    <button onclick="abrirSecao('produtos',this)"><span>Produtos</span></button>
-    <button onclick="abrirSecao('financeiro',this)"><span>Financeiro</span></button>
-    <button onclick="abrirSecao('historico',this)"><span>Histórico</span></button>
-    <button onclick="abrirSecao('config',this)"><span>Configurações</span></button>
+    <button class="active" data-section="inicio"><span>Início</span></button>
+    <button data-section="mesas"><span>Mesas</span></button><button data-section="pedidos"><span>Pedidos</span><b class="badge-count" id="contadorPedidos">0</b></button>
+    <button data-section="produtos"><span>Produtos</span></button>
+    <button data-section="financeiro"><span>Financeiro</span></button>
+    <button data-section="historico"><span>Histórico</span></button>
+    <button data-section="config"><span>Configurações</span></button>
   </nav>
   <div class="sidebar-bottom"><div class="online">● Restaurante Online</div><small style="color:var(--muted);display:block;margin-top:7px">Firebase conectado em tempo real</small></div>
 </aside>
@@ -128,7 +128,7 @@ button{cursor:pointer}
   </div>
 
   <div class="panel">
-    <div class="panel-head"><div><h2>📋 Pedidos em tempo real</h2><small>Acompanhe cada pedido pelo status</small></div><button class="btn btn-green btn-small" onclick="abrirSecao('pedidos')">Ver todos →</button></div>
+    <div class="panel-head"><div><h2>📋 Pedidos em tempo real</h2><small>Acompanhe cada pedido pelo status</small></div><button class="btn btn-green btn-small" data-section="pedidos">Ver todos →</button></div>
     <div class="order-columns">
       <div class="order-col recebidos"><div class="col-head red">🔴 Recebidos <span id="qRecebidos">0</span></div><div id="colRecebidos"></div></div>
       <div class="order-col preparo"><div class="col-head orange">🟠 Em preparo <span id="qPreparo">0</span></div><div id="colPreparo"></div></div>
@@ -137,15 +137,15 @@ button{cursor:pointer}
   </div>
 
   <div class="quick-grid">
-    <div class="panel"><div class="panel-head"><div><h2>🍔 Produtos</h2><small>Gerencie seu cardápio</small></div><button class="btn btn-green btn-small" onclick="abrirSecao('produtos')">Gerenciar</button></div><div id="miniProdutos" class="product-list"></div></div>
-    <div class="panel"><div class="panel-head"><div><h2>📊 Resumo financeiro</h2><small>Comandas finalizadas</small></div><button class="btn btn-dark btn-small" onclick="abrirSecao('financeiro')">Abrir</button></div><div class="mini-list"><div class="mini-line"><span>Comandas finalizadas</span><strong id="fQtd">0</strong></div><div class="mini-line"><span>Ticket médio</span><strong id="fMedia">R$ 0,00</strong></div><div class="mini-line"><span>Vendas de hoje</span><strong id="fHoje">R$ 0,00</strong></div><div class="mini-line"><span>Mesas livres</span><strong id="livres">0</strong></div></div></div>
+    <div class="panel"><div class="panel-head"><div><h2>🍔 Produtos</h2><small>Gerencie seu cardápio</small></div><button class="btn btn-green btn-small" data-section="produtos">Gerenciar</button></div><div id="miniProdutos" class="product-list"></div></div>
+    <div class="panel"><div class="panel-head"><div><h2>📊 Resumo financeiro</h2><small>Comandas finalizadas</small></div><button class="btn btn-dark btn-small" data-section="financeiro">Abrir</button></div><div class="mini-list"><div class="mini-line"><span>Comandas finalizadas</span><strong id="fQtd">0</strong></div><div class="mini-line"><span>Ticket médio</span><strong id="fMedia">R$ 0,00</strong></div><div class="mini-line"><span>Vendas de hoje</span><strong id="fHoje">R$ 0,00</strong></div><div class="mini-line"><span>Mesas livres</span><strong id="livres">0</strong></div></div></div>
   </div>
 
-  <div class="panel" style="margin-top:15px"><div class="panel-head"><div><h2>🪑 Salão</h2><small>Visão rápida das mesas</small></div><button class="btn btn-dark btn-small" onclick="abrirSecao('mesas')">Ver salão</button></div><div id="miniMesas" class="tables"></div></div>
+  <div class="panel" style="margin-top:15px"><div class="panel-head"><div><h2>🪑 Salão</h2><small>Visão rápida das mesas</small></div><button class="btn btn-dark btn-small" data-section="mesas">Ver salão</button></div><div id="miniMesas" class="tables"></div></div>
 </section>
 
 <section id="mesas" class="section">
-  <div class="panel-head"><div><h2>🪑 Mesas e comandas</h2><small>Controle do salão em tempo real</small></div><button class="btn btn-green" onclick="abrirSecao('inicio')">← Voltar</button></div>
+  <div class="panel-head"><div><h2>🪑 Mesas e comandas</h2><small>Controle do salão em tempo real</small></div><button class="btn btn-green" data-section="inicio">← Voltar</button></div>
   <div class="stats" style="margin-top:14px"><div class="stat"><small>🟢 Livres</small><strong id="livres2">0</strong></div><div class="stat"><small>🟠 Ocupadas</small><strong id="ocupadas2">0</strong></div><div class="stat"><small>🟡 Em preparo</small><strong id="preparo2">0</strong></div><div class="stat"><small>🔵 Prontos</small><strong id="prontos2">0</strong></div></div>
   <div class="panel"><div class="panel-head"><h2>Mesas</h2><div><button class="btn btn-dark btn-small" onclick="alterarMesas(-1)">➖</button> <span id="numeroMesasLabel">20</span> <button class="btn btn-dark btn-small" onclick="alterarMesas(1)">➕</button></div></div><div id="mesasGrid" class="tables"></div></div>
 </section>
@@ -192,6 +192,27 @@ button{cursor:pointer}
 
 <div id="modalProd" class="modal"><div class="modal-box"><div class="modal-head"><h2>🍔 Produto</h2><button class="close" onclick="fecharProd()">×</button></div><input id="pid" type="hidden"><div class="form-grid"><div class="field"><label>Nome</label><input id="pnome"></div><div class="field"><label>Categoria</label><input id="pcat"></div><div class="field full"><label>Descrição</label><textarea id="pdesc"></textarea></div><div class="field"><label>Preço</label><input id="ppreco" type="number" step="0.01"></div><div class="field"><label>Preço promocional</label><input id="ppromo" type="number" step="0.01"></div><div class="field full"><label>URL da foto</label><input id="pfoto"></div><div class="field"><label>Disponível?</label><select id="pativo"><option value="true">Sim</option><option value="false">Não</option></select></div><div class="field"><label>Promoção ativa?</label><select id="ppromoativa"><option value="false">Não</option><option value="true">Sim</option></select></div></div><div class="modal-actions"><button class="btn btn-dark" onclick="fecharProd()">Cancelar</button><button class="btn btn-green" onclick="salvarProd()">💾 Salvar produto</button></div></div></div>
 
+<script>
+(function(){
+  function navegar(secao, botao){
+    document.querySelectorAll(".section").forEach(function(el){el.classList.remove("active")});
+    var alvo=document.getElementById(secao);
+    if(!alvo)return;
+    alvo.classList.add("active");
+    document.querySelectorAll(".menu button").forEach(function(b){b.classList.remove("active")});
+    if(botao && botao.closest(".menu")) botao.classList.add("active");
+    window.scrollTo(0,0);
+  }
+  document.addEventListener("click",function(e){
+    var b=e.target.closest("[data-section]");
+    if(!b)return;
+    e.preventDefault();
+    navegar(b.getAttribute("data-section"),b);
+    if(window.abrirSecao) window.abrirSecao(b.getAttribute("data-section"),b);
+  });
+  window.__navegarPainel=navegar;
+})();
+</script>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 import{initializeFirestore,collection,doc,addDoc,setDoc,updateDoc,onSnapshot,writeBatch,getDocs}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -206,11 +227,13 @@ const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&
 const ativo=p=>p.status!=="Finalizado";
 
 function abrirSecao(id,btn){
+ const alvo=document.getElementById(id);
+ if(!alvo)return;
  document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
- document.getElementById(id).classList.add("active");
+ alvo.classList.add("active");
  document.querySelectorAll(".menu button").forEach(x=>x.classList.remove("active"));
- if(btn)btn.classList.add("active");
- window.scrollTo({top:0,behavior:"smooth"});
+ if(btn && btn.closest(".menu"))btn.classList.add("active");
+ window.scrollTo(0,0);
  if(id==="inicio")renderDashboard();
  if(id==="mesas")renderMesas();
 }
@@ -246,12 +269,12 @@ function renderMesas(){
  document.getElementById("miniMesas").innerHTML=html;
  let c=[0,0,0,0];
  for(let n=1;n<=mesas;n++){const cl=classeMesa(n)[0];if(cl==="free")c[0]++;else if(cl==="busy")c[1]++;else if(cl==="prep")c[2]++;else c[3]++;}
- ["livres","livres2"].forEach(id=>document.getElementById(id).textContent=c[0]);
- ["ocupadas","ocupadas2"].forEach(id=>document.getElementById(id).textContent=c[1]);
- ["preparo","preparo2"].forEach(id=>document.getElementById(id).textContent=c[2]);
- document.getElementById("prontos2").textContent=c[3];
- document.getElementById("numeroMesasLabel").textContent=mesas;
- document.getElementById("ativos").textContent=pedidos.filter(ativo).length;
+ ["livres","livres2"].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=c[0]});
+ ["ocupadas","ocupadas2"].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=c[1]});
+ ["preparo","preparo2"].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=c[2]});
+ const pr=document.getElementById("prontos2");if(pr)pr.textContent=c[3];
+ const nl=document.getElementById("numeroMesasLabel");if(nl)nl.textContent=mesas;
+ const at=document.getElementById("ativos");if(at)at.textContent=pedidos.filter(ativo).length;
 }
 window.abrirMesa=n=>{
  const ps=pedidos.filter(x=>String(x.mesa)===String(n)&&ativo(x));
