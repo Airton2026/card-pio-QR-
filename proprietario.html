@@ -265,8 +265,10 @@ function mesaCard(n){
 }
 function renderMesas(){
  const html=Array.from({length:mesas},(_,i)=>mesaCard(i+1)).join("");
- document.getElementById("mesasGrid").innerHTML=html;
- document.getElementById("miniMesas").innerHTML=html;
+ const grid=document.getElementById("mesasGrid");
+ const mini=document.getElementById("miniMesas");
+ if(grid)grid.innerHTML=html;
+ if(mini)mini.innerHTML=html;
  let c=[0,0,0,0];
  for(let n=1;n<=mesas;n++){const cl=classeMesa(n)[0];if(cl==="free")c[0]++;else if(cl==="busy")c[1]++;else if(cl==="prep")c[2]++;else c[3]++;}
  ["livres","livres2"].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=c[0]});
@@ -383,7 +385,7 @@ function renderProdutos(){
 }
 window.novoProduto=()=>{["pid","pnome","pcat","pdesc","ppreco","ppromo","pfoto"].forEach(id=>document.getElementById(id).value="");document.getElementById("pativo").value="true";document.getElementById("ppromoativa").value="false";document.getElementById("modalProd").style.display="block"};
 window.fecharProd=()=>document.getElementById("modalProd").style.display="none";
-window.editarProduto=id=>{const p=produtos.find(x=>x.id===id);if(!p)return;pid.value=id;pnome.value=p.nome||"";pcat.value=p.categoria||"";pdesc.value=p.descricao||"";ppreco.value=p.preco??"";ppromo.value=p.precoPromocional??"";pfoto.value=p.foto||"";pativo.value=String(p.ativo!==false);ppromoativa.value=String(p.promocaoAtiva===true);document.getElementById("modalProd").style.display="block"};
+window.editarProduto=id=>{const p=produtos.find(x=>x.id===id);if(!p)return;const g=document.getElementById.bind(document);g("pid").value=id;g("pnome").value=p.nome||"";g("pcat").value=p.categoria||"";g("pdesc").value=p.descricao||"";g("ppreco").value=p.preco??"";g("ppromo").value=p.precoPromocional??"";g("pfoto").value=p.foto||"";g("pativo").value=String(p.ativo!==false);g("ppromoativa").value=String(p.promocaoAtiva===true);g("modalProd").style.display="block"};
 window.alternarProduto=async id=>{const p=produtos.find(x=>x.id===id);if(!p)return;try{await updateDoc(doc(db,"produtos",id),{ativo:p.ativo===false})}catch(e){alert("Erro:\n\n"+e.message)}};
 window.salvarProd=async()=>{
  const id=pid.value,d={nome:pnome.value.trim(),categoria:pcat.value.trim(),descricao:pdesc.value.trim(),preco:Number(ppreco.value||0),precoPromocional:Number(ppromo.value||0),foto:pfoto.value.trim(),ativo:pativo.value==="true",promocaoAtiva:ppromoativa.value==="true"};
@@ -406,14 +408,23 @@ function renderHistorico(){
  el.innerHTML=arr.length?arr.map(x=>`<div class="history-item"><div><strong>${esc(x.numeroComanda||("Pedido #"+(x.numeroPedido||"")))}</strong><div style="color:var(--muted);margin-top:5px">🪑 Mesa ${esc(x.mesa||"—")} • ${x.finalizadoEm?new Date(x.finalizadoEm).toLocaleString("pt-BR"):""}</div></div><strong style="color:var(--green)">${dinheiro(x.total)}</strong></div>`).join(""):`<div class="empty">Nenhuma comanda finalizada.</div>`;
 }
 function preencherConfig(){
- cfgNome.value=config.nome||"Sabor da Casa";cfgSub.value=config.subtitulo||"Cardápio Digital";cfgEnd.value=config.endereco||"Chapecó / Santa Catarina";cfgEmoji.value=config.emoji||"🍔";cfgTelefone.value=config.telefone||"";cfgLogo.value=config.logo||"";cfgMesas.value=Number(config.quantidadeMesas||mesas);
+ const get=id=>document.getElementById(id);
+ get("cfgNome").value=config.nome||"Sabor da Casa";
+ get("cfgSub").value=config.subtitulo||"Cardápio Digital";
+ get("cfgEnd").value=config.endereco||"Chapecó / Santa Catarina";
+ get("cfgEmoji").value=config.emoji||"🍔";
+ get("cfgTelefone").value=config.telefone||"";
+ get("cfgLogo").value=config.logo||"";
+ get("cfgMesas").value=Number(config.quantidadeMesas||mesas);
 }
 window.alterarMesas=async n=>{
- let novo=Math.max(1,Math.min(100,Number(cfgMesas.value||mesas)+n));cfgMesas.value=novo;mesas=novo;document.getElementById("numeroMesasLabel").textContent=novo;renderMesas();
+ const campo=document.getElementById("cfgMesas");
+ let novo=Math.max(1,Math.min(100,Number(campo.value||mesas)+n));campo.value=novo;mesas=novo;document.getElementById("numeroMesasLabel").textContent=novo;renderMesas();
 };
 window.salvarConfig=async()=>{
- const qtd=Math.max(1,Math.min(100,Number(cfgMesas.value||20)));mesas=qtd;
- try{await setDoc(doc(db,"configuracaoRestaurante","principal"),{nome:cfgNome.value.trim()||"Sabor da Casa",subtitulo:cfgSub.value.trim()||"Cardápio Digital",endereco:cfgEnd.value.trim()||"Chapecó / Santa Catarina",emoji:cfgEmoji.value.trim()||"🍔",telefone:cfgTelefone.value.trim(),logo:cfgLogo.value.trim(),quantidadeMesas:qtd});renderMesas();alert("✅ Configurações salvas.")}catch(e){alert("Erro ao salvar configurações:\n\n"+e.message)}
+ const get=id=>document.getElementById(id);
+ const qtd=Math.max(1,Math.min(100,Number(get("cfgMesas").value||20)));mesas=qtd;
+ try{await setDoc(doc(db,"configuracaoRestaurante","principal"),{nome:get("cfgNome").value.trim()||"Sabor da Casa",subtitulo:get("cfgSub").value.trim()||"Cardápio Digital",endereco:get("cfgEnd").value.trim()||"Chapecó / Santa Catarina",emoji:get("cfgEmoji").value.trim()||"🍔",telefone:get("cfgTelefone").value.trim(),logo:get("cfgLogo").value.trim(),quantidadeMesas:qtd});renderMesas();alert("✅ Configurações salvas.")}catch(e){alert("Erro ao salvar configurações:\n\n"+e.message)}
 };
 
 async function prepararSom(){try{if(!audio)audio=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==="suspended")await audio.resume();return audio.state==="running"}catch(e){return false}}
@@ -428,7 +439,22 @@ function pedidosSnap(s){
  renderDashboard();
  document.getElementById("conexao").textContent=`Firebase conectado • ${pedidos.length} pedidos`;
 }
-onSnapshot(collection(db,"pedidos"),pedidosSnap,e=>{document.getElementById("conexao").textContent="Erro ao conectar aos pedidos";console.error(e)});
+onSnapshot(collection(db,"pedidos"),pedidosSnap,e=>{
+ document.getElementById("conexao").textContent="🔴 Erro ao conectar aos pedidos";
+ const er=document.getElementById("erro");
+ if(er){er.style.display="block";er.textContent="🔴 ERRO AO LER PEDIDOS: "+(e.message||e);}
+ console.error("Firestore pedidos:",e);
+});
+
+// Leitura inicial: garante que os pedidos existentes apareçam mesmo se o listener demorar a sincronizar.
+getDocs(collection(db,"pedidos")).then(s=>{
+ pedidosSnap(s);
+}).catch(e=>{
+ document.getElementById("conexao").textContent="🔴 Erro na leitura dos pedidos";
+ const er=document.getElementById("erro");
+ if(er){er.style.display="block";er.textContent="🔴 ERRO AO LER pedidos: "+(e.message||e);}
+ console.error("Leitura inicial pedidos:",e);
+});
 onSnapshot(collection(db,"historicoComandas"),s=>{hist=s.docs.map(d=>({id:d.id,...d.data()}));renderFinanceiro();renderHistorico()});
 onSnapshot(collection(db,"produtos"),s=>{produtos=s.docs.map(d=>({id:d.id,...d.data()}));renderProdutos();renderDashboard()});
 onSnapshot(collection(db,"configuracaoRestaurante"),s=>{config={};s.forEach(d=>config={...config,...d.data()});if(Number(config.quantidadeMesas)>0)mesas=Number(config.quantidadeMesas);preencherConfig();renderMesas()});
