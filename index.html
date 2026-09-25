@@ -647,6 +647,84 @@ gap:8px;
 text-align:center;
 }
 }
+
+/* =========================
+   SOFTGET IA — RODAPÉ
+========================= */
+.softget-bottom{
+max-width:1200px;
+margin:0 auto 22px;
+padding:14px 18px;
+border-top:1px solid #252525;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:12px;
+color:#777;
+font-size:12px;
+}
+
+.softget-bottom-info{
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:3px;
+}
+
+.softget-bottom-info strong{
+color:#fff;
+font-size:13px;
+letter-spacing:.8px;
+}
+
+.softget-bottom-info strong span{
+color:#39ff14;
+}
+
+.softget-bottom-info a{
+color:#bfffdc;
+text-decoration:none;
+font-size:10px;
+font-weight:bold;
+}
+
+.softget-bottom-info a:hover{
+color:#39ff14;
+}
+
+.softget-bottom-qr{
+width:48px;
+height:48px;
+padding:3px;
+background:#fff;
+border:1px solid #39ff14;
+border-radius:7px;
+box-shadow:0 0 10px rgba(57,255,20,.28);
+}
+
+.softget-bottom-qr img{
+width:100%;
+height:100%;
+display:block;
+border-radius:3px;
+}
+
+@media(max-width:520px){
+.softget-bottom{
+margin:0 12px 18px;
+padding:12px 8px;
+}
+.softget-bottom-info strong{
+font-size:12px;
+}
+.softget-bottom-info a{
+font-size:9px;
+}
+.softget-bottom-qr{
+width:44px;
+height:44px;
+}
+}
 </style>
 </head>
 
@@ -705,6 +783,22 @@ Carregando cardápio...
 <div>
 Obrigado pela preferência! <span class="coracao">❤️</span>
 </div>
+</div>
+
+<div class="softget-bottom">
+  <div class="softget-bottom-info">
+    <strong>SOFTGET <span>IA</span></strong>
+    <a href="https://wa.me/5549988901433" target="_blank" rel="noopener">
+      WhatsApp: (49) 98890-1433
+    </a>
+  </div>
+  <a class="softget-bottom-qr"
+     href="https://wa.me/5549988901433"
+     target="_blank"
+     rel="noopener"
+     title="Falar com a SoftGet IA pelo WhatsApp">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEXUlEQVR4nO3dS44bORAFwNHA979ye88F9RLJXxsRW0lV1dYDkabI5Ofn5+c/CPx/+wH4NWSFlKyQkhVSskJKVkjJCilZISUrpP7MX/58PmeeYz59PDzG8Ob5q/NLlR5j4VOVHuORb8G4QkpWSMkKKVkh9aW2HSxcwNCp1zpF5fzNC4vouVufHZS+BeMKKVkhJSukZIVUrbYdlCqjhVOincfozNt2isqFdfH8ynOd+xpXSMkKKVkhJSukWrXtMaWp2LnOz/376uJ9le9CxhVSskJKVkjJCqnfUdvOLVyO2qleF66UeJNxhZSskJIVUrJCqlXb3qrIHtk89siljn0LxhVSskJKVkjJCqlabXtsw/6gtJCg06CgVDV3dprtWxqxj3GFlKyQkhVSskLq8+av4fv2ki1c97qwxnzzWxgYV0jJCilZISUrpL7Utp050JJ9Jee+ZrhzC1dKPFJEG1dIyQopWSElK6Ra87adAu3YlOigUzbeOjNiXyFc+vaNK6RkhZSskJIVUiv7JNxanVoqDG/tQ+t89tg89ZxxhZSskJIVUrJCauOahM4ZtPvmMY8t3e14ZOHEwLhCSlZIyQopWSHV6pOwbz3DwvsunC+eP1VHqd3tsYnagXGFlKyQkhVSskJqY5+EfecglO57bJfawjcPjq3Gnd/IuEJKVkjJCilZIfVl3vZWNVd6qsHC2eSFxzGUziWbrxGe23fug3GFlKyQkhVSskLqS217rBnVwn4FHQu3h+07jqFUCC883Ne4QkpWSMkKKVkhtXHetvTqwnJ1Yal7bFHw3CNb+IwrpGSFlKyQkhVSrT4JK5/j1NliC9czLDzY4thnzdtygqyQkhVSskKqVtsObvXT2neyw6AzBzq/1ODNxR4D4wopWSElK6RkhVStT8Kx1gedX9Jvtcga7JuJ7rAmgRNkhZSskJIVUrX+tqU5wYU/2c/dOuJsfuXSfR9ZkjFnXCElK6RkhZSskPqV55KV3Fp+O3esUZm9ZFwgK6RkhZSskNq4l+zWettHTqO41Zls3z+7cYWUrJCSFVKyQmplbbvvMLF9HQlKjzF/c8exv6hzKeMKKVkhJSukZIVUbb3t3LHpxWN7yTrVa+nKx/r5dopo4wopWSElK6RkhVStT8Ixx9b5LnyMY+teO1ceWJPAFrJCSlZIyQqp2rlk+yw8GvZYf4ZjM8ILN9o5u4ETZIWUrJCSFVLXziW7NSU62Nf0q+TYnr2BeVu2kBVSskJKVki11tu+2fVqft/SQtdHVuN2LCzAjSukZIWUrJCSFVIr95LdcqxRwLHZ5M5TzXX+l2BcISUrpGSFlKyQ+hdq24WNAualX6fG3NfkrDOLXWJcISUrpGSFlKyQatW2+3os3Oo50LnvIz15S58tMa6QkhVSskJKVkjVattjbRNunea7sM/s/Ead6eOFf5E1CWwhK6RkhZSskHq0vy0PMq6QkhVSskJKVkjJCilZISUrpGSFlKyQ+gsWTB96egBkfgAAAABJRU5ErkJggg==" alt="QR Code WhatsApp SoftGet IA">
+  </a>
 </div>
 
 
