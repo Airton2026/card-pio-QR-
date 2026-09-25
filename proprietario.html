@@ -170,7 +170,7 @@ if(comanda&&comanda.length){const grupoAtual=pedidos.filter(p=>comanda.some(x=>x
 
 window.mudarComanda=async s=>{
 if(!comanda)return;
-for(const p of comanda){if(p.status!==s)await updateDoc(doc(db,'pedidos',p.id),{status:s})}
+for(const p of comanda){if(p.status!==s)await updateDoc(doc(db,'restaurantes','sabor-da-casa','pedidos',p.id),{status:s})}
 };
 
 window.finalizar=async()=>{
@@ -187,7 +187,7 @@ const b=writeBatch(db),now=new Date().toISOString();
 let itens=[];
 let totalGrupo=0;
 grupo.forEach(p=>{
-b.update(doc(db,'pedidos',p.id),{status:'Finalizado',finalizadoEm:now});
+b.update(doc(db,'restaurantes','sabor-da-casa','pedidos',p.id),{status:'Finalizado',finalizadoEm:now});
 itens=itens.concat((p.itens||[]).map(i=>({...i,pedidoOrigem:p.numeroPedido})));
 totalGrupo+=Number(p.total||0);
 });
