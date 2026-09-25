@@ -35,38 +35,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:li
 .coluna-pedidos .pedido{margin-bottom:10px;padding:13px;border-radius:13px}.coluna-pedidos .pedido:last-child{margin-bottom:0}
 .fila{margin-top:7px;color:#8fe3ff;font-size:13px;font-weight:bold}.horachegada{margin-top:4px;color:#9fc5ff;font-size:12px}
 @media(max-width:850px){.pedidos-kanban{grid-template-columns:1fr}.coluna-pedidos{min-height:0}}
-</style>
-<style id="tema-cardapio-verde">
-/* === TEMA IGUAL AO CARDÁPIO: PRETO + VERDE NEON === */
-:root{--neon:#39ff14;--neon2:#8cff45;--violet:#39ff14;--bg:#050807;--panel:#0b1110;--line:#24322d;--muted:#9aa9a3}
-body{background:#050807}
-.sidebar{background:linear-gradient(180deg,#070b09,#0b1110);border-right-color:#39ff1488;box-shadow:8px 0 28px #39ff1410}
-.brand-logo{background:linear-gradient(135deg,#39ff14,#8cff45);color:#061006;box-shadow:0 0 22px #39ff1440}
-.brand strong{color:#f5f7f6}.brand small{color:#9aa9a3}
-.sidebar .nav button{background:#0b1110;color:#f5f7f6;border-color:#24322d}
-.sidebar .nav button:hover{border-color:#39ff14;color:#39ff14}
-.sidebar .nav button.ativo{background:linear-gradient(90deg,#39ff14,#7cff3c);color:#061006;box-shadow:0 0 18px #39ff1445}
-.sidebar-status{border-color:#39ff1488;background:#0b1110;box-shadow:0 0 18px #39ff1422}
-.sidebar-status .dot{color:#39ff14}
-.topbar-neon{background:linear-gradient(135deg,#050807ee,#0b1110ee 55%,#101816ee);border-bottom-color:#39ff1466;box-shadow:4px 0 24px #0008,0 0 25px #39ff1412}
-.topbar-neon p{color:#b8c6bf}.top-pill{border-color:#39ff1488;background:#07100bcc;color:#d8ffe0}.top-pill.online{border-color:#39ff1499;color:#39ff14}
-.topbar-neon .btn{border-color:#39ff1488;background:#101816;color:#fff;box-shadow:0 0 12px #39ff1422}
-.topbar-neon .btn:hover{background:#17301b;border-color:#39ff14}
-.conexao{color:#39ff14}
-.card,.pedido,.produto,.hist{background:linear-gradient(145deg,#0b1711,#09100d);border-color:#243b2c}
-.card small{color:#9aa9a3}.itens{color:#dce9df}.obs{color:#b8c6bf}.vazio{color:#9aa9a3}
-.coluna-pedidos{background:rgba(5,12,8,.82);border-color:#243b2c;box-shadow:0 0 18px #39ff1412}
-.coluna-pedidos.recebidos{border-color:#39ff1466}.coluna-pedidos.preparando{border-color:#8cff4566}.coluna-pedidos.prontos{border-color:#39ff1466}
-.coluna-titulo{border-bottom-color:#39ff1425}.contador-coluna{background:#07100b}
-.fila{color:#8cff45}.horachegada{color:#9aa9a3}
-.azul{background:#39ff14;color:#061006}.verde{background:#39ff14;color:#061006}.laranja{background:#8cff45;color:#061006}.cinza{background:#17301f;color:#fff}
-.badge.b-recebido{background:#27440f;color:#d8ffb8}.badge.b-preparo{background:#315018;color:#e3ffcf}.badge.b-pronto{background:#12451e;color:#c8ffd2}.badge.b-final{background:#075d36;color:#bfffdc}
-.box{background:#0b1110;border-color:#243b2c}.linha{border-bottom-color:#243b2c}.item{background:#101816}.campo input,.campo textarea,.campo select{border-color:#2b4636;background:#050807}.campo input:focus,.campo textarea:focus,.campo select:focus{border-color:#39ff14;box-shadow:0 0 0 2px #39ff1414}
-.btn-green{background:#39ff14;color:#061006;box-shadow:0 0 14px #39ff1430}
-
-/* As mesas permanecem exatamente com as cores/status já aprovadas. */
-</style>
-</head><body>
+</style></head><body>
 <div class="site-shell">
 <aside class="sidebar">
   <div class="brand">
@@ -167,7 +136,7 @@ a.innerHTML=coluna('Recebido','Recebidos','recebidos','🔴')+
             coluna('Em preparo','Em preparo','preparando','🟠')+
             coluna('Pronto','Prontos','prontos','🔵');
 }
-window.status=async(id,s)=>{try{await updateDoc(doc(db,'pedidos',id),{status:s});const idx=pedidos.findIndex(p=>p.id===id);if(idx>=0)pedidos[idx]={...pedidos[idx],status:s};renderPedidos();renderMesas();if(comanda&&comanda.length){const grupoAtual=pedidos.filter(p=>comanda.some(x=>x.id===p.id)&&ativo(p));if(grupoAtual.length)abrirComandaGrupo(grupoAtual)}}catch(e){alert('Erro ao atualizar pedido:\n\n'+e.message)}};window.abrirId=id=>{let p=pedidos.find(x=>x.id===id);if(p){let grupo=pedidos.filter(x=>String(x.comandaId||"")===String(p.comandaId||"")&&ativo(x));if(!grupo.length)grupo=[p];abrirComandaGrupo(grupo)}};
+window.status=async(id,s)=>{try{await updateDoc(doc(db,'restaurantes','sabor-da-casa','pedidos',id),{status:s});const idx=pedidos.findIndex(p=>p.id===id);if(idx>=0)pedidos[idx]={...pedidos[idx],status:s};renderPedidos();renderMesas();if(comanda&&comanda.length){const grupoAtual=pedidos.filter(p=>comanda.some(x=>x.id===p.id)&&ativo(p));if(grupoAtual.length)abrirComandaGrupo(grupoAtual)}}catch(e){alert('Erro ao atualizar pedido:\n\n'+e.message)}};window.abrirId=id=>{let p=pedidos.find(x=>x.id===id);if(p){let grupo=pedidos.filter(x=>String(x.comandaId||"")===String(p.comandaId||"")&&ativo(x));if(!grupo.length)grupo=[p];abrirComandaGrupo(grupo)}};
 
 function abrirComandaGrupo(grupo){
 comanda=grupo;
@@ -194,14 +163,14 @@ window.mudarPedido=async(id,s)=>{
 try{
 const idx=pedidos.findIndex(p=>p.id===id);
 if(idx>=0){pedidos[idx]={...pedidos[idx],status:s};renderPedidos();renderMesas();atualizarAlarmeSom();}
-await updateDoc(doc(db,'pedidos',id),{status:s});
+await updateDoc(doc(db,'restaurantes','sabor-da-casa','pedidos',id),{status:s});
 if(comanda&&comanda.length){const grupoAtual=pedidos.filter(p=>comanda.some(x=>x.id===p.id)&&ativo(p));if(grupoAtual.length)abrirComandaGrupo(grupoAtual);}
 }catch(e){alert('Erro ao atualizar pedido:\n\n'+e.message)}
 };
 
 window.mudarComanda=async s=>{
 if(!comanda)return;
-for(const p of comanda){if(p.status!==s)await updateDoc(doc(db,'pedidos',p.id),{status:s})}
+for(const p of comanda){if(p.status!==s)await updateDoc(doc(db,'restaurantes','sabor-da-casa','pedidos',p.id),{status:s})}
 };
 
 window.finalizar=async()=>{
@@ -218,11 +187,11 @@ const b=writeBatch(db),now=new Date().toISOString();
 let itens=[];
 let totalGrupo=0;
 grupo.forEach(p=>{
-b.update(doc(db,'pedidos',p.id),{status:'Finalizado',finalizadoEm:now});
+b.update(doc(db,'restaurantes','sabor-da-casa','pedidos',p.id),{status:'Finalizado',finalizadoEm:now});
 itens=itens.concat((p.itens||[]).map(i=>({...i,pedidoOrigem:p.numeroPedido})));
 totalGrupo+=Number(p.total||0);
 });
-b.set(doc(collection(db,'historicoComandas')),{
+b.set(doc(collection(db,'restaurantes','sabor-da-casa','historicoComandas')),{
 comandaId:grupo[0].comandaId||("legacy-"+grupo[0].id),
 numeroComanda:"Mesa "+mesa,
 mesa,
@@ -241,7 +210,7 @@ alert(`🟢 Mesa ${mesa} finalizada.\n\n${grupo.length} pedido(s) encerrado(s).\
 };
 
 function renderProdutos(){let a=document.getElementById('listaProdutos');if(!produtos.length){a.innerHTML='<div class="vazio">Nenhum produto cadastrado.</div>';return}a.innerHTML=produtos.map(p=>`<div class="produto"><div><strong>${esc(p.nome)}</strong><br><span style="color:#a9c9ff">${esc(p.categoria||'')} • ${dinheiro(p.preco)}</span><br><small>${p.ativo===false?'🔴 Indisponível':'🟢 Disponível'}${p.promocaoAtiva?' • 🔥 Promoção':''}</small></div><button class="btn azul" onclick="editar('${p.id}')">✏️ Editar</button></div>`).join('')}
-window.novoProduto=()=>{['pid','pnome','pcat','pdesc','ppreco','ppromo','pfoto'].forEach(id=>document.getElementById(id).value='');document.getElementById('pfotoArquivo').value='';document.getElementById('fotoPreview').innerHTML='';document.getElementById('pativo').value='true';document.getElementById('ppromoativa').value='false';document.getElementById('modalProd').style.display='block'};window.fecharProd=()=>document.getElementById('modalProd').style.display='none';window.editar=id=>{let p=produtos.find(x=>x.id===id);if(!p)return;document.getElementById('pid').value=id;document.getElementById('pnome').value=p.nome||'';document.getElementById('pcat').value=p.categoria||'';document.getElementById('pdesc').value=p.descricao||'';document.getElementById('ppreco').value=p.preco??'';document.getElementById('ppromo').value=p.precoPromocional??'';document.getElementById('pfoto').value=p.foto||'';document.getElementById('pfotoArquivo').value='';document.getElementById('fotoPreview').innerHTML=p.foto?`<img src="${esc(p.foto)}" style="max-width:260px;max-height:180px;border-radius:10px;border:1px solid #315d98;object-fit:cover">`:'';document.getElementById('pativo').value=String(p.ativo!==false);document.getElementById('ppromoativa').value=String(p.promocaoAtiva===true);document.getElementById('modalProd').style.display='block'};window.previewFoto=e=>{let f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Escolha uma imagem.');e.target.value='';return}let u=URL.createObjectURL(f);document.getElementById('fotoPreview').innerHTML=`<img src="${u}" style="max-width:260px;max-height:180px;border-radius:10px;border:1px solid #315d98;object-fit:cover">`};function comprimirFoto(file){return new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let max=700,w=im.width,h=im.height;if(w>h){if(w>max){h=Math.round(h*max/w);w=max}}else{if(h>max){w=Math.round(w*max/h);h=max}}let c=document.createElement('canvas');c.width=w;c.height=h;let ctx=c.getContext('2d');ctx.drawImage(im,0,0,w,h);let qualidade=.72,out=c.toDataURL('image/jpeg',qualidade);while(out.length>850000&&qualidade>.45){qualidade-=.07;out=c.toDataURL('image/jpeg',qualidade)}resolve(out)};im.onerror=reject;im.src=r.result};r.onerror=reject;r.readAsDataURL(file)})}window.salvarProd=async()=>{let id=document.getElementById('pid').value,d={nome:pnome.value.trim(),categoria:pcat.value.trim(),descricao:pdesc.value.trim(),preco:Number(ppreco.value||0),precoPromocional:Number(ppromo.value||0),foto:document.getElementById('pfoto').value.trim(),ativo:pativo.value==='true',promocaoAtiva:ppromoativa.value==='true'};if(!d.nome||!d.preco){alert('Informe nome e preço.');return}try{let f=document.getElementById('pfotoArquivo').files[0];if(f)d.foto=await comprimirFoto(f);if(id)await updateDoc(doc(db,'produtos',id),d);else await addDoc(collection(db,'produtos'),d);fecharProd()}catch(e){console.error(e);alert('Erro ao salvar produto:\n\n'+e.message)}};
+window.novoProduto=()=>{['pid','pnome','pcat','pdesc','ppreco','ppromo','pfoto'].forEach(id=>document.getElementById(id).value='');document.getElementById('pfotoArquivo').value='';document.getElementById('fotoPreview').innerHTML='';document.getElementById('pativo').value='true';document.getElementById('ppromoativa').value='false';document.getElementById('modalProd').style.display='block'};window.fecharProd=()=>document.getElementById('modalProd').style.display='none';window.editar=id=>{let p=produtos.find(x=>x.id===id);if(!p)return;document.getElementById('pid').value=id;document.getElementById('pnome').value=p.nome||'';document.getElementById('pcat').value=p.categoria||'';document.getElementById('pdesc').value=p.descricao||'';document.getElementById('ppreco').value=p.preco??'';document.getElementById('ppromo').value=p.precoPromocional??'';document.getElementById('pfoto').value=p.foto||'';document.getElementById('pfotoArquivo').value='';document.getElementById('fotoPreview').innerHTML=p.foto?`<img src="${esc(p.foto)}" style="max-width:260px;max-height:180px;border-radius:10px;border:1px solid #315d98;object-fit:cover">`:'';document.getElementById('pativo').value=String(p.ativo!==false);document.getElementById('ppromoativa').value=String(p.promocaoAtiva===true);document.getElementById('modalProd').style.display='block'};window.previewFoto=e=>{let f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Escolha uma imagem.');e.target.value='';return}let u=URL.createObjectURL(f);document.getElementById('fotoPreview').innerHTML=`<img src="${u}" style="max-width:260px;max-height:180px;border-radius:10px;border:1px solid #315d98;object-fit:cover">`};function comprimirFoto(file){return new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let max=700,w=im.width,h=im.height;if(w>h){if(w>max){h=Math.round(h*max/w);w=max}}else{if(h>max){w=Math.round(w*max/h);h=max}}let c=document.createElement('canvas');c.width=w;c.height=h;let ctx=c.getContext('2d');ctx.drawImage(im,0,0,w,h);let qualidade=.72,out=c.toDataURL('image/jpeg',qualidade);while(out.length>850000&&qualidade>.45){qualidade-=.07;out=c.toDataURL('image/jpeg',qualidade)}resolve(out)};im.onerror=reject;im.src=r.result};r.onerror=reject;r.readAsDataURL(file)})}window.salvarProd=async()=>{let id=document.getElementById('pid').value,d={nome:pnome.value.trim(),categoria:pcat.value.trim(),descricao:pdesc.value.trim(),preco:Number(ppreco.value||0),precoPromocional:Number(ppromo.value||0),foto:document.getElementById('pfoto').value.trim(),ativo:pativo.value==='true',promocaoAtiva:ppromoativa.value==='true'};if(!d.nome||!d.preco){alert('Informe nome e preço.');return}try{let f=document.getElementById('pfotoArquivo').files[0];if(f)d.foto=await comprimirFoto(f);if(id)await updateDoc(doc(db,'restaurantes','sabor-da-casa','produtos',id),d);else await addDoc(collection(db,'restaurantes','sabor-da-casa','produtos'),d);fecharProd()}catch(e){console.error(e);alert('Erro ao salvar produto:\n\n'+e.message)}};
 function renderHist(){let a=document.getElementById('listaHistorico');let h=[...hist].sort((x,y)=>String(y.finalizadoEm||'').localeCompare(String(x.finalizadoEm||'')));if(!h.length){a.innerHTML='<div class="vazio">Nenhuma comanda finalizada.</div>';return}a.innerHTML=h.map(x=>{const qtd=Array.isArray(x.pedidos)?x.pedidos.length:1;const titulo=x.numeroComanda?x.numeroComanda:`Pedido #${esc(x.numeroPedido||'')}`;return`<div class="hist"><div class="top"><strong>${titulo} — Mesa ${esc(x.mesa)}</strong><strong>${dinheiro(x.total)}</strong></div><div style="margin-top:7px;color:#c9dcff">📋 ${qtd} pedido${qtd===1?'':'s'} na comanda</div><div class="obs">${x.finalizadoEm?new Date(x.finalizadoEm).toLocaleString('pt-BR'):''}</div></div>`}).join('')}
 function renderFin(){let t=hist.reduce((s,x)=>s+Number(x.total||0),0),q=hist.length,hoje=new Date().toLocaleDateString('pt-BR'),ht=hist.filter(x=>x.finalizadoEm&&new Date(x.finalizadoEm).toLocaleDateString('pt-BR')===hoje).reduce((s,x)=>s+Number(x.total||0),0);fQtd.textContent=q;fTotal.textContent=dinheiro(t);fMedia.textContent=dinheiro(q?t/q:0);fHoje.textContent=dinheiro(ht)}
 function el(id){return document.getElementById(id)}
@@ -263,7 +232,7 @@ window.salvarConfig=async()=>{
   try{
     const qtd=Math.max(1,Math.min(100,Number(el("cfgMesas").value||20)));
     mesas=qtd;
-    await setDoc(doc(db,"configuracaoRestaurante","principal"),{
+    await setDoc(doc(db,"restaurantes","sabor-da-casa","configuracaoRestaurante","principal"),{
       nome:el("cfgNome").value.trim()||"Sabor da Casa",
       subtitulo:el("cfgSub").value.trim()||"Cardápio Digital",
       endereco:el("cfgEnd").value.trim()||"Chapecó / Santa Catarina",
@@ -286,7 +255,7 @@ function pararAlarme(){if(alarmeInterval){clearInterval(alarmeInterval);alarmeIn
 function atualizarAlarmeSom(){let temRecebido=pedidos.some(p=>p.status==='Recebido');if(temRecebido)iniciarAlarme();else pararAlarme()}
 window.ativarSom=async()=>{try{let ok=await prepararSom();if(!ok){alert('O navegador não liberou o som. Toque novamente no botão 🔊 para autorizar.');return}som=true;localStorage.setItem('somPainelAtivado','1');document.querySelector('button[onclick="ativarSom()"]').textContent='🔊 Som ativado';await tocarAlarme();if(pedidos.some(p=>p.status==='Recebido'))iniciarAlarme();alert('🔊 Som ativado! O novo toque continuará repetindo enquanto houver pedido em Recebido e parará quando ele entrar em preparo.')}catch(e){alert('Não foi possível ativar o som.')}}
 function pedidosSnap(s){let antes=new Set(pedidos.map(p=>p.id));pedidos=s.docs.map(d=>({id:d.id,...d.data()}));let novos=pedidosInicializados?pedidos.filter(p=>p.status==='Recebido'&&!antes.has(p.id)):[];pedidosInicializados=true;renderPedidos();renderMesas();let n=pedidos.filter(p=>p.status==='Recebido').length;alerta.style.display=n?'block':'none';alerta.textContent=`🔔 ${n} NOVO${n>1?'S':''} PEDIDO${n>1?'S':''} RECEBIDO${n>1?'S':''} — clique para abrir`;if(novos.length&&som)iniciarAlarme();atualizarAlarmeSom();conexao.textContent=`● Firebase conectado — ${pedidos.length} pedido(s) lido(s)`;const tc=document.getElementById('topConexao');if(tc)tc.textContent=`${pedidos.length} pedido(s) lido(s)`;const sp=document.getElementById('sidebarPedidos');if(sp)sp.textContent=`${pedidos.length} pedido(s) lido(s)`;erro.style.display='none'}
-onSnapshot(collection(db,'pedidos'),pedidosSnap,e=>{console.error(e);conexao.textContent='● Erro na conexão com pedidos';erro.style.display='block';erro.textContent='🔴 ERRO AO LER pedidos: '+(e.message||e)});getDocs(collection(db,'pedidos')).then(pedidosSnap).catch(e=>console.error('Leitura inicial:',e));
-onSnapshot(collection(db,'historicoComandas'),s=>{hist=s.docs.map(d=>({id:d.id,...d.data()}));renderHist();renderFin()},e=>console.error(e));onSnapshot(collection(db,'produtos'),s=>{produtos=s.docs.map(d=>({id:d.id,...d.data()}));renderProdutos()},e=>console.error(e));onSnapshot(collection(db,"configuracaoRestaurante"),s=>{config={};s.forEach(d=>config={...config,...d.data()});const qtd=Number(config.quantidadeMesas);if(Number.isFinite(qtd)&&qtd>=1){mesas=Math.min(100,qtd);}preencher();renderMesas();},e=>console.error(e));
+onSnapshot(collection(db,'restaurantes','sabor-da-casa','pedidos'),pedidosSnap,e=>{console.error(e);conexao.textContent='● Erro na conexão com pedidos';erro.style.display='block';erro.textContent='🔴 ERRO AO LER pedidos: '+(e.message||e)});getDocs(collection(db,'restaurantes','sabor-da-casa','pedidos')).then(pedidosSnap).catch(e=>console.error('Leitura inicial:',e));
+onSnapshot(collection(db,'restaurantes','sabor-da-casa','historicoComandas'),s=>{hist=s.docs.map(d=>({id:d.id,...d.data()}));renderHist();renderFin()},e=>console.error(e));onSnapshot(collection(db,'restaurantes','sabor-da-casa','produtos'),s=>{produtos=s.docs.map(d=>({id:d.id,...d.data()}));renderProdutos()},e=>console.error(e));onSnapshot(collection(db,"restaurantes","sabor-da-casa","configuracaoRestaurante"),s=>{config={};s.forEach(d=>config={...config,...d.data()});const qtd=Number(config.quantidadeMesas);if(Number.isFinite(qtd)&&qtd>=1){mesas=Math.min(100,qtd);}preencher();renderMesas();},e=>console.error(e));
 renderMesas();renderPedidos();renderProdutos();renderHist();renderFin();if(som){const b=document.querySelector('button[onclick="ativarSom()"]');if(b)b.textContent='🔊 Som ativado';}
 </script></body></html>
