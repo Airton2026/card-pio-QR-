@@ -648,83 +648,62 @@ text-align:center;
 }
 }
 
-/* =========================
-   SOFTGET IA — RODAPÉ
-========================= */
+/* SoftGet IA — somente identificação no rodapé */
 .softget-bottom{
-max-width:1200px;
-margin:0 auto 22px;
-padding:14px 18px;
-border-top:1px solid #252525;
-display:flex;
-justify-content:center;
-align-items:center;
-gap:12px;
-color:#777;
-font-size:12px;
+  max-width:1200px;
+  margin:0 auto 22px;
+  padding:14px 18px;
+  border-top:1px solid #252525;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  color:#777;
+  font-size:12px;
 }
-
 .softget-bottom-info{
-display:flex;
-flex-direction:column;
-align-items:flex-end;
-gap:3px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:3px;
 }
-
 .softget-bottom-info strong{
-color:#fff;
-font-size:13px;
-letter-spacing:.8px;
+  color:#fff;
+  font-size:13px;
+  letter-spacing:.8px;
 }
-
-.softget-bottom-info strong span{
-color:#39ff14;
-}
-
+.softget-bottom-info strong span{color:#39ff14}
 .softget-bottom-info a{
-color:#bfffdc;
-text-decoration:none;
-font-size:10px;
-font-weight:bold;
+  color:#bfffdc;
+  text-decoration:none;
+  font-size:10px;
+  font-weight:bold;
 }
-
-.softget-bottom-info a:hover{
-color:#39ff14;
-}
-
 .softget-bottom-qr{
-width:48px;
-height:48px;
-padding:3px;
-background:#fff;
-border:1px solid #39ff14;
-border-radius:7px;
-box-shadow:0 0 10px rgba(57,255,20,.28);
+  width:48px;
+  height:48px;
+  padding:3px;
+  background:#fff;
+  border:1px solid #39ff14;
+  border-radius:7px;
+  box-shadow:0 0 10px rgba(57,255,20,.28);
 }
-
 .softget-bottom-qr img{
-width:100%;
-height:100%;
-display:block;
-border-radius:3px;
+  width:100%;
+  height:100%;
+  display:block;
+  border-radius:3px;
+}
+@media(max-width:520px){
+  .softget-bottom{
+    margin:0 12px 18px;
+    padding:12px 8px;
+  }
+  .softget-bottom-info strong{font-size:12px}
+  .softget-bottom-info a{font-size:9px}
+  .softget-bottom-qr{width:44px;height:44px}
 }
 
-@media(max-width:520px){
-.softget-bottom{
-margin:0 12px 18px;
-padding:12px 8px;
-}
-.softget-bottom-info strong{
-font-size:12px;
-}
-.softget-bottom-info a{
-font-size:9px;
-}
-.softget-bottom-qr{
-width:44px;
-height:44px;
-}
-}
 </style>
 </head>
 
