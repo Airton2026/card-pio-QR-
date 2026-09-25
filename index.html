@@ -1778,7 +1778,7 @@ try{
 
 const q=
 query(
-collection(db,"pedidos"),
+collection(db,"restaurantes","sabor-da-casa","pedidos"),
 where("mesa","==",mesa)
 );
 
@@ -1813,7 +1813,7 @@ String(comandaId)
 ){
 
 await updateDoc(
-doc(db,"pedidos",antigo.id),
+doc(db,"restaurantes","sabor-da-casa","pedidos",antigo.id),
 {comandaId}
 );
 
@@ -1862,7 +1862,7 @@ comandaId
 
 
 await addDoc(
-collection(db,"pedidos"),
+collection(db,"restaurantes","sabor-da-casa","pedidos"),
 pedido
 );
 
@@ -1877,7 +1877,7 @@ mesa;
 const mesaSnap=
 await getDocs(
 query(
-collection(db,"pedidos"),
+collection(db,"restaurantes","sabor-da-casa","pedidos"),
 where("mesa","==",mesa)
 )
 );
@@ -2208,7 +2208,7 @@ salvo.mesa;
 ========================= */
 
 onSnapshot(
-collection(db,"produtos"),
+collection(db,"restaurantes","sabor-da-casa","produtos"),
 snap=>{
 
 produtos=
@@ -2280,7 +2280,7 @@ mostrarProdutos();
 ========================= */
 
 onSnapshot(
-collection(db,"configuracaoRestaurante"),
+collection(db,"restaurantes","sabor-da-casa","configuracaoRestaurante"),
 snap=>{
 
 configuracao={};
@@ -2309,7 +2309,7 @@ err
 ========================= */
 
 onSnapshot(
-collection(db,"pedidos"),
+collection(db,"restaurantes","sabor-da-casa","pedidos"),
 snap=>{
 
 if(!comandaAtualId)return;
