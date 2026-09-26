@@ -648,62 +648,83 @@ text-align:center;
 }
 }
 
-/* SoftGet IA — somente identificação no rodapé */
+/* =========================
+   SOFTGET IA — RODAPÉ
+========================= */
 .softget-bottom{
-  max-width:1200px;
-  margin:0 auto 22px;
-  padding:14px 18px;
-  border-top:1px solid #252525;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:12px;
-  color:#777;
-  font-size:12px;
-}
-.softget-bottom-info{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  gap:3px;
-}
-.softget-bottom-info strong{
-  color:#fff;
-  font-size:13px;
-  letter-spacing:.8px;
-}
-.softget-bottom-info strong span{color:#39ff14}
-.softget-bottom-info a{
-  color:#bfffdc;
-  text-decoration:none;
-  font-size:10px;
-  font-weight:bold;
-}
-.softget-bottom-qr{
-  width:48px;
-  height:48px;
-  padding:3px;
-  background:#fff;
-  border:1px solid #39ff14;
-  border-radius:7px;
-  box-shadow:0 0 10px rgba(57,255,20,.28);
-}
-.softget-bottom-qr img{
-  width:100%;
-  height:100%;
-  display:block;
-  border-radius:3px;
-}
-@media(max-width:520px){
-  .softget-bottom{
-    margin:0 12px 18px;
-    padding:12px 8px;
-  }
-  .softget-bottom-info strong{font-size:12px}
-  .softget-bottom-info a{font-size:9px}
-  .softget-bottom-qr{width:44px;height:44px}
+max-width:1200px;
+margin:0 auto 22px;
+padding:14px 18px;
+border-top:1px solid #252525;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:12px;
+color:#777;
+font-size:12px;
 }
 
+.softget-bottom-info{
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:3px;
+}
+
+.softget-bottom-info strong{
+color:#fff;
+font-size:13px;
+letter-spacing:.8px;
+}
+
+.softget-bottom-info strong span{
+color:#39ff14;
+}
+
+.softget-bottom-info a{
+color:#bfffdc;
+text-decoration:none;
+font-size:10px;
+font-weight:bold;
+}
+
+.softget-bottom-info a:hover{
+color:#39ff14;
+}
+
+.softget-bottom-qr{
+width:48px;
+height:48px;
+padding:3px;
+background:#fff;
+border:1px solid #39ff14;
+border-radius:7px;
+box-shadow:0 0 10px rgba(57,255,20,.28);
+}
+
+.softget-bottom-qr img{
+width:100%;
+height:100%;
+display:block;
+border-radius:3px;
+}
+
+@media(max-width:520px){
+.softget-bottom{
+margin:0 12px 18px;
+padding:12px 8px;
+}
+.softget-bottom-info strong{
+font-size:12px;
+}
+.softget-bottom-info a{
+font-size:9px;
+}
+.softget-bottom-qr{
+width:44px;
+height:44px;
+}
+}
 </style>
 </head>
 
@@ -886,10 +907,6 @@ initializeFirestore,
 collection,
 addDoc,
 onSnapshot,
-getDocs,
-query,
-where,
-updateDoc,
 doc
 }from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
@@ -1099,6 +1116,7 @@ let configuracao={};
 let pedidosAcompanhamento=[];
 let comandaAtualId=null;
 let mesaAtual=null;
+const listenersPedidos=new Map();
 
 
 /* =========================
@@ -1806,21 +1824,17 @@ return;
 
 }
 
-
 const mesa=
 document.getElementById("mesa")
 .value.trim();
-
 
 const responsavel=
 document.getElementById("responsavel")
 .value.trim();
 
-
 const observacaoGeral=
 document.getElementById("observacaoGeral")
 .value.trim();
-
 
 if(!mesa){
 
@@ -1830,185 +1844,82 @@ return;
 
 }
 
+salvarDadosCliente(mesa,responsavel);
 
-salvarDadosCliente(
-mesa,
-responsavel
-);
-
-
-const btn=
-document.getElementById("btnEnviar");
-
-
+const btn=document.getElementById("btnEnviar");
 btn.disabled=true;
-
-btn.textContent=
-"⏳ Registrando...";
-
+btn.textContent="⏳ Registrando...";
 
 try{
 
-const q=
-query(
-collection(db,"restaurantes","sabor-da-casa","pedidos"),
-where("mesa","==",mesa)
-);
+/*
+   O cliente não consulta mais a coleção inteira de pedidos.
+   Isso evita expor pedidos de outras mesas.
+   A comanda é mantida pelo localStorage e cada pedido é
+   acompanhado individualmente pelo seu ID.
+*/
+const comandaId=
+comandaAtualId||gerarComandaId();
 
+const numeroPedido=gerarNumeroPedido();
 
-const snap=
-await getDocs(q);
-
-
-const ativos=
-snap.docs
-.map(d=>({
-id:d.id,
-...d.data()
-}))
-.filter(
-p=>p.status!=="Finalizado"
-);
-
-
-let comandaId=
-ativos.find(
-p=>p.comandaId
-)?.comandaId||
-gerarComandaId();
-
-
-for(const antigo of ativos){
-
-if(
-String(antigo.comandaId||"")!==
-String(comandaId)
-){
-
-await updateDoc(
-doc(db,"restaurantes","sabor-da-casa","pedidos",antigo.id),
-{comandaId}
-);
-
-}
-
-}
-
-
-const numeroPedido=
-gerarNumeroPedido();
-
-
-const itens=
-carrinho.map(i=>({
-
-id:i.id,
-nome:i.nome,
-preco:i.preco,
-quantidade:i.quantidade,
-observacao:i.observacao||""
-
+const itens=carrinho.map(i=>({
+  id:i.id,
+  nome:i.nome,
+  preco:i.preco,
+  quantidade:i.quantidade,
+  observacao:i.observacao||""
 }));
 
-
 const pedido={
-
-numeroPedido,
-
-mesa,
-
-responsavel,
-
-observacaoGeral,
-
-itens,
-
-total:total(),
-
-status:"Recebido",
-
-data:new Date().toISOString(),
-
-comandaId
-
+  numeroPedido,
+  mesa,
+  responsavel,
+  observacaoGeral,
+  itens,
+  total:total(),
+  status:"Recebido",
+  data:new Date().toISOString(),
+  comandaId
 };
 
-
-await addDoc(
-collection(db,"restaurantes","sabor-da-casa","pedidos"),
-pedido
+const pedidoRef=await addDoc(
+  collection(db,"restaurantes","sabor-da-casa","pedidos"),
+  pedido
 );
 
+comandaAtualId=comandaId;
+mesaAtual=mesa;
 
-comandaAtualId=
-comandaId;
+const item={id:pedidoRef.id,...pedido};
+pedidosAcompanhamento=[
+  ...pedidosAcompanhamento.filter(p=>p.id!==pedidoRef.id),
+  item
+];
 
-mesaAtual=
-mesa;
-
-
-const mesaSnap=
-await getDocs(
-query(
-collection(db,"restaurantes","sabor-da-casa","pedidos"),
-where("mesa","==",mesa)
-)
-);
-
-
-pedidosAcompanhamento=
-mesaSnap.docs
-.map(d=>({
-id:d.id,
-...d.data()
-}))
-.filter(
-p=>p.status!=="Finalizado"
-)
-.sort(
-(a,b)=>
-String(a.data||"")
-.localeCompare(
-String(b.data||"")
-)
-);
-
+const ids=pedidosAcompanhamento
+  .filter(p=>p.status!=="Finalizado")
+  .map(p=>p.id);
 
 localStorage.setItem(
-"comandaAcompanhamento",
-JSON.stringify({
-comandaId,
-mesa
-})
+  "comandaAcompanhamento",
+  JSON.stringify({comandaId,mesa,pedidoIds:ids})
 );
 
+monitorarPedido(pedidoRef.id);
 
 mostrarStatusUltimo();
 
-
 carrinho=[];
-
-document.getElementById(
-"observacaoGeral"
-).value="";
-
-
+document.getElementById("observacaoGeral").value="";
 atualizarCarrinho();
-
 fecharCarrinho();
 
-
 alert(
-`✅ Pedido registrado com sucesso!
-
-Número do pedido: #${numeroPedido}
-
-Você poderá acompanhar todos os pedidos desta mesa.`
+`✅ Pedido registrado com sucesso!\n\nNúmero do pedido: #${numeroPedido}\n\nVocê poderá acompanhar todos os pedidos desta mesa.`
 );
 
-
 abrirAcompanhamento();
-
 
 }catch(e){
 
@@ -2022,13 +1933,114 @@ alert(
 }finally{
 
 btn.disabled=false;
-
-btn.textContent=
-"✅ Confirmar pedido";
+btn.textContent="✅ Confirmar pedido";
 
 }
 
 };
+
+
+/* =========================
+   ACOMPANHAMENTO INDIVIDUAL
+========================= */
+
+function monitorarPedido(id){
+
+if(!id || listenersPedidos.has(id))return;
+
+const ref=doc(
+  db,
+  "restaurantes",
+  "sabor-da-casa",
+  "pedidos",
+  id
+);
+
+const unsubscribe=onSnapshot(
+  ref,
+  snap=>{
+
+    if(!snap.exists()){
+      listenersPedidos.get(id)?.();
+      listenersPedidos.delete(id);
+      pedidosAcompanhamento=pedidosAcompanhamento.filter(p=>p.id!==id);
+      salvarAcompanhamentoLocal();
+      atualizarAcompanhamento();
+      return;
+    }
+
+    const atualizado={id:snap.id,...snap.data()};
+    const idx=pedidosAcompanhamento.findIndex(p=>p.id===id);
+
+    if(idx>=0){
+      pedidosAcompanhamento[idx]=atualizado;
+    }else{
+      pedidosAcompanhamento.push(atualizado);
+    }
+
+    pedidosAcompanhamento.sort((a,b)=>
+      String(a.data||"").localeCompare(String(b.data||""))
+    );
+
+    if(atualizado.status==="Finalizado"){
+      pedidosAcompanhamento=pedidosAcompanhamento.filter(
+        p=>p.status!=="Finalizado"
+      );
+
+      const parar=listenersPedidos.get(id);
+      if(parar) parar();
+      listenersPedidos.delete(id);
+    }
+
+    salvarAcompanhamentoLocal();
+    atualizarAcompanhamento();
+  },
+  err=>{
+    console.warn("Acompanhamento do pedido indisponível:",err);
+  }
+);
+
+listenersPedidos.set(id,unsubscribe);
+}
+
+function salvarAcompanhamentoLocal(){
+
+if(!comandaAtualId || !mesaAtual)return;
+
+const ids=pedidosAcompanhamento
+  .filter(p=>p.status!=="Finalizado")
+  .map(p=>p.id);
+
+if(ids.length){
+  localStorage.setItem(
+    "comandaAcompanhamento",
+    JSON.stringify({comandaId:comandaAtualId,mesa:mesaAtual,pedidoIds:ids})
+  );
+}else{
+  localStorage.removeItem("comandaAcompanhamento");
+}
+}
+
+function atualizarAcompanhamento(){
+
+if(!pedidosAcompanhamento.length){
+  comandaAtualId=null;
+  mesaAtual=null;
+  localStorage.removeItem("comandaAcompanhamento");
+  liberarDadosCliente();
+  mostrarStatusUltimo();
+  if(document.getElementById("modalAcompanhamento").style.display==="block"){
+    fecharAcompanhamento();
+  }
+  return;
+}
+
+mostrarStatusUltimo();
+
+if(document.getElementById("modalAcompanhamento").style.display==="block"){
+  renderAcompanhamento();
+}
+}
 
 
 /* =========================
@@ -2255,25 +2267,22 @@ document.getElementById(
 
 try{
 
-const salvo=
-JSON.parse(
-localStorage.getItem(
-"comandaAcompanhamento"
-)||"null"
+const salvo=JSON.parse(
+  localStorage.getItem("comandaAcompanhamento")||"null"
 );
 
-
 if(salvo){
+  comandaAtualId=salvo.comandaId||null;
+  mesaAtual=salvo.mesa||null;
 
-comandaAtualId=
-salvo.comandaId;
+  const ids=Array.isArray(salvo.pedidoIds)?salvo.pedidoIds:[];
 
-mesaAtual=
-salvo.mesa;
-
+  ids.forEach(monitorarPedido);
 }
 
-}catch(e){}
+}catch(e){
+  console.warn("Não foi possível recuperar a comanda:",e);
+}
 
 
 /* =========================
@@ -2381,97 +2390,10 @@ err
    FIREBASE — PEDIDOS
 ========================= */
 
-onSnapshot(
-collection(db,"restaurantes","sabor-da-casa","pedidos"),
-snap=>{
-
-if(!comandaAtualId)return;
-
-
-const todos=
-snap.docs.map(
-d=>({
-id:d.id,
-...d.data()
-})
-);
-
-
-const daMesa=
-todos.filter(
-p=>
-String(p.mesa||"")===
-String(mesaAtual||"")
-);
-
-
-const ativos=
-daMesa.filter(
-p=>p.status!=="Finalizado"
-);
-
-
-if(!ativos.length){
-
-pedidosAcompanhamento=[];
-
-comandaAtualId=null;
-
-mesaAtual=null;
-
-localStorage.removeItem(
-"comandaAcompanhamento"
-);
-
-
-liberarDadosCliente();
-
-mostrarStatusUltimo();
-
-
-if(
-document.getElementById(
-"modalAcompanhamento"
-).style.display==="block"
-){
-
-fecharAcompanhamento();
-
-}
-
-return;
-
-}
-
-
-pedidosAcompanhamento=
-ativos.sort(
-(a,b)=>
-String(a.data||"")
-.localeCompare(
-String(b.data||"")
-)
-);
-
-
-mesaAtual=
-ativos[0].mesa;
-
-
-mostrarStatusUltimo();
-
-
-if(
-document.getElementById(
-"modalAcompanhamento"
-).style.display==="block"
-){
-
-renderAcompanhamento();
-
-}
-
-});
+/*
+   Não fazemos mais onSnapshot da coleção inteira de pedidos.
+   O cliente acompanha somente os IDs dos próprios pedidos.
+*/
 
 
 /* =========================
