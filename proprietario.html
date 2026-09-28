@@ -4,616 +4,93 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Painel do Proprietário — Sabor da Casa</title>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-
-body{
-font-family:Arial,Helvetica,sans-serif;
-background:radial-gradient(circle at 75% 0%,#082b66 0%,#03152f 38%,#020a1b 100%);
-color:#fff;
-min-height:100vh;
-padding-bottom:35px
-}
-
-body::before{
-content:"";
-position:fixed;
-inset:0;
-pointer-events:none;
-background:linear-gradient(120deg,transparent 0%,rgba(0,234,255,.025) 48%,transparent 52%);
-z-index:-1
-}
-
+body{font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 75% 0%,#082b66 0%,#03152f 38%,#020a1b 100%);color:#fff;min-height:100vh;padding-bottom:35px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 0%,rgba(0,234,255,.025) 48%,transparent 52%);z-index:-1}
 .site-shell{display:flex;min-height:100vh}
-
-.sidebar{
-position:fixed;
-left:0;
-top:0;
-bottom:0;
-width:245px;
-padding:24px 16px;
-background:linear-gradient(180deg,#03112d,#020a1b 72%);
-border-right:1px solid #00eaff88;
-box-shadow:4px 0 30px #00bfff22,inset -1px 0 0 #7b5cff33;
-z-index:50
-}
-
-.brand{
-padding:8px 10px 24px;
-border-bottom:1px solid #14619b66;
-margin-bottom:18px
-}
-
-.brand-logo{
-width:54px;
-height:54px;
-border-radius:16px;
-display:grid;
-place-items:center;
-font-size:30px;
-background:linear-gradient(145deg,#082d67,#073f82);
-border:1px solid #00eaff;
-box-shadow:0 0 20px #00eaff55;
-margin-bottom:12px
-}
-
-.brand strong{display:block;font-size:20px}
-.brand strong span{color:#00eaff}
-.brand small{
-display:block;
-color:#8fb8e8;
-font-size:10px;
-letter-spacing:1.5px;
-margin-top:5px
-}
-
-.sidebar .nav{
-display:grid;
-gap:8px;
-margin-top:0
-}
-
-.sidebar .nav button,.btn{
-border:0;
-border-radius:10px;
-padding:11px 15px;
-font-weight:bold;
-cursor:pointer
-}
-
-.sidebar .nav button{
-width:100%;
-text-align:left;
-padding:13px 14px;
-background:transparent;
-color:#cfe5ff;
-border:1px solid transparent;
-border-radius:12px;
-box-shadow:none;
-font-size:14px
-}
-
-.sidebar .nav button:hover{
-border-color:#00eaff55;
-background:#06306488
-}
-
-.sidebar .nav button.ativo{
-background:linear-gradient(90deg,#073d86,#0751a8);
-border-color:#00eaff;
-box-shadow:0 0 16px #00eaff44;
-color:#fff
-}
-
-.main-area{
-width:calc(100% - 245px);
-margin-left:245px;
-min-width:0
-}
-
-.topbar-neon{
-position:sticky;
-top:0;
-z-index:40;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:20px;
-padding:18px 28px;
-background:linear-gradient(135deg,#06245aee,#073b91ee 55%,#06275fee);
-border-bottom:1px solid #00eaff66;
-box-shadow:0 4px 24px #0008,0 0 25px #006dff22
-}
-
-.topbar-neon h1{
-font-size:26px;
-margin-bottom:5px
-}
-
-.topbar-neon p{
-color:#c9dcff;
-font-size:14px
-}
-
-.top-actions{
-display:flex;
-gap:9px;
-align-items:center;
-flex-wrap:wrap
-}
-
-.top-pill{
-padding:9px 12px;
-border:1px solid #168cf0aa;
-border-radius:11px;
-background:#04152fcc;
-color:#bfe7ff;
-font-size:12px
-}
-
-.top-pill.online{
-border-color:#19ff9a99;
-color:#19ff9a
-}
-
-.topbar-neon .btn{
-border:1px solid #00eaff88;
-background:#07366d;
-color:#fff;
-box-shadow:0 0 12px #00eaff22
-}
-
-.main-content{
-padding:25px 30px;
-max-width:1250px;
-margin:auto
-}
-
-.secao{display:none}
-.secao.ativa{display:block}
-
-h2{margin-bottom:18px}
-
-.section-title{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:15px;
-margin-bottom:18px
-}
-
-.section-title h2{margin:0}
-
-.resumo{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:14px;
-margin-bottom:22px
-}
-
-.card,.pedido,.produto,.hist{
-background:linear-gradient(145deg,#06285d,#061f48);
-border:1px solid #1455a0;
-border-radius:15px;
-padding:16px;
-box-shadow:0 6px 18px #0003
-}
-
-.resumo .card{
-border-color:#168cf0aa;
-box-shadow:0 0 0 1px #00eaff12,0 7px 24px #0005,0 0 18px #006dff18
-}
-
-.resumo .card:hover{
-border-color:#00eaff;
-box-shadow:0 0 20px #00eaff25,0 7px 24px #0005
-}
-
-.card small{
-display:block;
-color:#a9c9ff;
-margin-bottom:8px
-}
-
-.card strong{font-size:24px}
-
-.mesas{
-display:grid;
-grid-template-columns:repeat(6,1fr);
-gap:15px
-}
-
-.mesa{
-border-radius:15px;
-padding:15px;
-min-height:150px;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-border:2px solid transparent;
-box-shadow:0 6px 16px #0003
-}
-
-.livre{
-background:linear-gradient(145deg,#064f42,#075f4a);
-border-color:#10c878
-}
-
-.ocupada{
-background:linear-gradient(145deg,#56340a,#75460e);
-border-color:#e0a52b
-}
-
-.preparo{
-background:linear-gradient(145deg,#6b2c0b,#8a3b10);
-border-color:#ff8a22
-}
-
-.pronto{
-background:linear-gradient(145deg,#073d6a,#075789);
-border-color:#2fa5ff
-}
-
-.nova{animation:piscamesa 1s infinite}
-
-@keyframes piscamesa{
-50%{box-shadow:0 0 0 5px #ffc107bf,0 8px 18px #0003}
-}
-
-.mesa button{
-border:0;
-border-radius:9px;
-padding:9px;
-background:#ffffff24;
-color:#fff;
-font-weight:bold;
-cursor:pointer
-}
-
-.alerta{
-display:none;
-background:#d99a00;
-color:#201600;
-padding:13px 17px;
-border-radius:13px;
-font-weight:bold;
-animation:pulse 1s infinite;
-cursor:pointer;
-border:1px solid #ffcc33;
-box-shadow:0 0 18px #ffb00033
-}
-
-@keyframes pulse{
-50%{opacity:.65;transform:scale(1.01)}
-}
-
-.conexao{
-margin-top:9px;
-font-size:13px;
-color:#19ff9a
-}
-
-.erro{
-display:none;
-margin-top:10px;
-background:#8b1e1e;
-padding:11px;
-border-radius:9px;
-font-weight:bold
-}
-
-.pedido{
-border-left:6px solid #facc15
-}
-
-.pedido.prep{border-left-color:#f59e0b}
-.pedido.pron{border-left-color:#38bdf8}
-
-.top{
-display:flex;
-justify-content:space-between;
-gap:10px;
-flex-wrap:wrap
-}
-
-.itens{
-margin:12px 0;
-color:#dce9ff
-}
-
-.obs{
-color:#c6d9f7;
-font-size:13px;
-margin-top:6px
-}
-
-.acoes{
-display:flex;
-gap:8px;
-flex-wrap:wrap
-}
-
-.azul{background:#0d8df7;color:#fff}
-.laranja{background:#f59e0b;color:#111}
-.verde{background:#22c55e;color:#07120b}
-.vermelho{background:#dc2626;color:#fff}
-.cinza{background:#173a73;color:#fff}
-
-.btn-excluir{
-background:#dc2626;
-color:#fff;
-border:1px solid #ff6b6b;
-box-shadow:0 0 10px #ff000033
-}
-
-.badge{
-display:inline-block;
-padding:6px 10px;
-border-radius:999px;
-font-weight:bold;
-font-size:13px;
-margin-top:5px
-}
-
-.b-recebido{background:#7a5a00;color:#ffe99a}
-.b-preparo{background:#7a3f00;color:#ffd1a0}
-.b-pronto{background:#075789;color:#bfe7ff}
-.b-final{background:#075d36;color:#bfffdc}
-
-.modal{
-display:none;
-position:fixed;
-inset:0;
-background:#000c;
-z-index:100;
-padding:15px;
-overflow:auto
-}
-
-.box{
-max-width:760px;
-background:#071e43;
-margin:30px auto;
-border-radius:18px;
-padding:20px;
-border:1px solid #1b5aa8
-}
-
-.linha{
-display:flex;
-justify-content:space-between;
-padding:10px 0;
-border-bottom:1px solid #17457e
-}
-
-.item{
-background:#0b2c5c;
-border-radius:10px;
-padding:12px;
-margin:8px 0
-}
-
-.campo{margin:12px 0}
-
-.campo label{
-display:block;
-margin-bottom:6px;
-font-weight:bold
-}
-
-.campo input,.campo textarea,.campo select{
-width:100%;
-padding:11px;
-border-radius:9px;
-border:1px solid #315d98;
-background:#04152f;
-color:#fff;
-font-size:15px
-}
-
-.campo textarea{min-height:75px}
-
-.botoes{
-display:flex;
-gap:9px;
-flex-wrap:wrap
-}
-
-.vazio{
-text-align:center;
-color:#a9c9ff;
-padding:30px
-}
-
-.produtos{
-display:grid;
-gap:10px
-}
-
-.produto{
-display:flex;
-justify-content:space-between;
-gap:12px;
-align-items:center
-}
-
-.financeiro{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:14px
-}
-
-.hist{margin-bottom:10px}
-
-.categoria-ajuda{
-display:block;
-color:#9fc5ff;
-font-size:12px;
-margin-top:6px
-}
-
-.pedidos-kanban{
-display:grid;
-grid-template-columns:repeat(3,minmax(0,1fr));
-gap:16px;
-align-items:start
-}
-
-.coluna-pedidos{
-background:rgba(3,18,45,.72);
-border:1px solid #12609a;
-border-radius:16px;
-padding:12px;
-min-height:180px;
-box-shadow:0 0 18px #00bfff12
-}
-
-.coluna-pedidos.recebidos{border-color:#eab30888}
-.coluna-pedidos.preparando{border-color:#f59e0b88}
-.coluna-pedidos.prontos{border-color:#22d3ee88}
-
-.coluna-titulo{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:8px;
-padding:8px 10px 12px;
-margin-bottom:10px;
-border-bottom:1px solid #ffffff18
-}
-
-.coluna-titulo strong{font-size:15px}
-
-.contador-coluna{
-min-width:27px;
-height:27px;
-border-radius:50%;
-display:grid;
-place-items:center;
-background:#071e43;
-border:1px solid currentColor;
-font-size:12px
-}
-
-.coluna-pedidos .pedido{
-margin-bottom:10px;
-padding:13px;
-border-radius:13px
-}
-
-.coluna-pedidos .pedido:last-child{margin-bottom:0}
-
-.fila{
-margin-top:7px;
-color:#8fe3ff;
-font-size:13px;
-font-weight:bold
-}
-
-.horachegada{
-margin-top:4px;
-color:#9fc5ff;
-font-size:12px
-}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;padding:24px 16px;background:linear-gradient(180deg,#03112d,#020a1b 72%);border-right:1px solid #00eaff88;box-shadow:4px 0 30px #00bfff22,inset -1px 0 0 #7b5cff33;z-index:50}
+.brand{padding:8px 10px 24px;border-bottom:1px solid #14619b66;margin-bottom:18px}
+.brand-logo{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:linear-gradient(145deg,#082d67,#073f82);border:1px solid #00eaff;box-shadow:0 0 20px #00eaff55;margin-bottom:12px}
+.brand strong{display:block;font-size:20px}.brand strong span{color:#00eaff}.brand small{display:block;color:#8fb8e8;font-size:10px;letter-spacing:1.5px;margin-top:5px}
+.sidebar .nav{display:grid;gap:8px;margin-top:0}
+.sidebar .nav button,.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:bold;cursor:pointer}
+.sidebar .nav button{width:100%;text-align:left;padding:13px 14px;background:transparent;color:#cfe5ff;border:1px solid transparent;border-radius:12px;box-shadow:none;font-size:14px}
+.sidebar .nav button:hover{border-color:#00eaff55;background:#06306488}
+.sidebar .nav button.ativo{background:linear-gradient(90deg,#073d86,#0751a8);border-color:#00eaff;box-shadow:0 0 16px #00eaff44;color:#fff}
+.main-area{width:calc(100% - 245px);margin-left:245px;min-width:0}
+.topbar-neon{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 28px;background:linear-gradient(135deg,#06245aee,#073b91ee 55%,#06275fee);border-bottom:1px solid #00eaff66;box-shadow:0 4px 24px #0008,0 0 25px #006dff22}
+.topbar-neon h1{font-size:26px;margin-bottom:5px}.topbar-neon p{color:#c9dcff;font-size:14px}
+.top-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.top-pill{padding:9px 12px;border:1px solid #168cf0aa;border-radius:11px;background:#04152fcc;color:#bfe7ff;font-size:12px}.top-pill.online{border-color:#19ff9a99;color:#19ff9a}
+.topbar-neon .btn{border:1px solid #00eaff88;background:#07366d;color:#fff;box-shadow:0 0 12px #00eaff22}
+.main-content{padding:25px 30px;max-width:1250px;margin:auto}
+.secao{display:none}.secao.ativa{display:block}h2{margin-bottom:18px}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:18px}.section-title h2{margin:0}
+.resumo{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
+.card,.pedido,.produto,.hist{background:linear-gradient(145deg,#06285d,#061f48);border:1px solid #1455a0;border-radius:15px;padding:16px;box-shadow:0 6px 18px #0003}
+.resumo .card{border-color:#168cf0aa;box-shadow:0 0 0 1px #00eaff12,0 7px 24px #0005,0 0 18px #006dff18}
+.resumo .card:hover{border-color:#00eaff;box-shadow:0 0 20px #00eaff25,0 7px 24px #0005}
+.card small{display:block;color:#a9c9ff;margin-bottom:8px}.card strong{font-size:24px}
+.mesas{display:grid;grid-template-columns:repeat(6,1fr);gap:15px}
+.mesa{border-radius:15px;padding:15px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;border:2px solid transparent;box-shadow:0 6px 16px #0003}
+.livre{background:linear-gradient(145deg,#064f42,#075f4a);border-color:#10c878}.ocupada{background:linear-gradient(145deg,#56340a,#75460e);border-color:#e0a52b}.preparo{background:linear-gradient(145deg,#6b2c0b,#8a3b10);border-color:#ff8a22}.pronto{background:linear-gradient(145deg,#073d6a,#075789);border-color:#2fa5ff}
+.nova{animation:piscamesa 1s infinite}@keyframes piscamesa{50%{box-shadow:0 0 0 5px #ffc107bf,0 8px 18px #0003}}
+.mesa button{border:0;border-radius:9px;padding:9px;background:#ffffff24;color:#fff;font-weight:bold;cursor:pointer}
+.alerta{display:none;background:#d99a00;color:#201600;padding:13px 17px;border-radius:13px;font-weight:bold;animation:pulse 1s infinite;cursor:pointer;border:1px solid #ffcc33;box-shadow:0 0 18px #ffb00033}
+@keyframes pulse{50%{opacity:.65;transform:scale(1.01)}}
+.conexao{margin-top:9px;font-size:13px;color:#19ff9a}.erro{display:none;margin-top:10px;background:#8b1e1e;padding:11px;border-radius:9px;font-weight:bold}
+.pedido{border-left:6px solid #facc15}.pedido.prep{border-left-color:#f59e0b}.pedido.pron{border-left-color:#38bdf8}
+.top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.itens{margin:12px 0;color:#dce9ff}.obs{color:#c6d9f7;font-size:13px;margin-top:6px}
+.acoes{display:flex;gap:8px;flex-wrap:wrap}.azul{background:#0d8df7;color:#fff}.laranja{background:#f59e0b;color:#111}.verde{background:#22c55e;color:#07120b}.vermelho{background:#dc2626;color:#fff}.cinza{background:#173a73;color:#fff}
+.btn-excluir{background:#dc2626;color:#fff;border:1px solid #ff6b6b;box-shadow:0 0 10px #ff000033}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:bold;font-size:13px;margin-top:5px}.b-recebido{background:#7a5a00;color:#ffe99a}.b-preparo{background:#7a3f00;color:#ffd1a0}.b-pronto{background:#075789;color:#bfe7ff}.b-final{background:#075d36;color:#bfffdc}
+.modal{display:none;position:fixed;inset:0;background:#000c;z-index:100;padding:15px;overflow:auto}
+.box{max-width:760px;background:#071e43;margin:30px auto;border-radius:18px;padding:20px;border:1px solid #1b5aa8}
+.linha{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #17457e}.item{background:#0b2c5c;border-radius:10px;padding:12px;margin:8px 0}
+.campo{margin:12px 0}.campo label{display:block;margin-bottom:6px;font-weight:bold}
+.campo input,.campo textarea,.campo select{width:100%;padding:11px;border-radius:9px;border:1px solid #315d98;background:#04152f;color:#fff;font-size:15px}.campo textarea{min-height:75px}
+.botoes{display:flex;gap:9px;flex-wrap:wrap}.vazio{text-align:center;color:#a9c9ff;padding:30px}.produtos{display:grid;gap:10px}.produto{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.financeiro{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.hist{margin-bottom:10px}.categoria-ajuda{display:block;color:#9fc5ff;font-size:12px;margin-top:6px}
+.pedidos-kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.coluna-pedidos{background:rgba(3,18,45,.72);border:1px solid #12609a;border-radius:16px;padding:12px;min-height:180px;box-shadow:0 0 18px #00bfff12}
+.coluna-pedidos.recebidos{border-color:#eab30888}.coluna-pedidos.preparando{border-color:#f59e0b88}.coluna-pedidos.prontos{border-color:#22d3ee88}
+.coluna-titulo{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px 12px;margin-bottom:10px;border-bottom:1px solid #ffffff18}
+.coluna-titulo strong{font-size:15px}.contador-coluna{min-width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#071e43;border:1px solid currentColor;font-size:12px}
+.coluna-pedidos .pedido{margin-bottom:10px;padding:13px;border-radius:13px}.coluna-pedidos .pedido:last-child{margin-bottom:0}
+.fila{margin-top:7px;color:#8fe3ff;font-size:13px;font-weight:bold}.horachegada{margin-top:4px;color:#9fc5ff;font-size:12px}
+.login-screen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 0%,#0b3478 0%,#03152f 45%,#020a1b 100%)}
+.login-box{width:min(430px,100%);background:linear-gradient(145deg,#061f48,#04152f);border:1px solid #00eaff88;border-radius:20px;padding:28px;box-shadow:0 0 35px #00bfff22,0 18px 50px #0008}
+.login-logo{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;margin:0 auto 15px;font-size:34px;background:linear-gradient(145deg,#082d67,#073f82);border:1px solid #00eaff;box-shadow:0 0 22px #00eaff55}
+.login-box h1{text-align:center;font-size:24px;margin-bottom:5px}.login-box p{text-align:center;color:#9fc5ff;font-size:13px;margin-bottom:22px}.login-box label{display:block;font-weight:bold;margin:12px 0 6px}
+.login-box input{width:100%;padding:13px;border-radius:10px;border:1px solid #315d98;background:#020f25;color:#fff;font-size:15px;outline:none}.login-box input:focus{border-color:#00eaff;box-shadow:0 0 12px #00eaff22}
+.login-box button{width:100%;margin-top:16px}.login-erro{display:none;margin-top:12px;padding:10px;border-radius:9px;background:#7f1d1d;color:#ffd7d7;font-size:13px}.logout-btn{background:#7f1d1d!important;border-color:#ff5c5c!important}
 
 /* ================================
-   LOGIN
-   ================================ */
-
-.login-screen{
-position:fixed;
-inset:0;
-z-index:1000;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px;
-background:radial-gradient(circle at 50% 0%,#0b3478 0%,#03152f 45%,#020a1b 100%)
-}
-
-.login-box{
-width:min(430px,100%);
-background:linear-gradient(145deg,#061f48,#04152f);
-border:1px solid #00eaff88;
-border-radius:20px;
-padding:28px;
-box-shadow:0 0 35px #00bfff22,0 18px 50px #0008
-}
-
-.login-logo{
-width:64px;
-height:64px;
-border-radius:18px;
+   ACESSOS COMPACTOS
+================================ */
+#listaAcessos{
 display:grid;
-place-items:center;
-margin:0 auto 15px;
-font-size:34px;
-background:linear-gradient(145deg,#082d67,#073f82);
-border:1px solid #00eaff;
-box-shadow:0 0 22px #00eaff55
+gap:7px
 }
-
-.login-box h1{
-text-align:center;
-font-size:24px;
-margin-bottom:5px
-}
-
-.login-box p{
-text-align:center;
-color:#9fc5ff;
-font-size:13px;
-margin-bottom:22px
-}
-
-.login-box label{
-display:block;
-font-weight:bold;
-margin:12px 0 6px
-}
-
-.login-box input{
-width:100%;
-padding:13px;
+#listaAcessos .card{
+padding:10px 13px;
 border-radius:10px;
-border:1px solid #315d98;
-background:#020f25;
-color:#fff;
-font-size:15px;
-outline:none
+margin-bottom:0!important
 }
-
-.login-box input:focus{
-border-color:#00eaff;
-box-shadow:0 0 12px #00eaff22
-}
-
-.login-box button{
-width:100%;
-margin-top:16px
-}
-
-.login-erro{
-display:none;
-margin-top:12px;
-padding:10px;
-border-radius:9px;
-background:#7f1d1d;
-color:#ffd7d7;
-font-size:13px
-}
-
-.logout-btn{
-background:#7f1d1d!important;
-border-color:#ff5c5c!important
+#listaAcessos .card .top{align-items:center}
+#listaAcessos .card strong{font-size:14px}
+#listaAcessos .card small{font-size:11px}
+#listaAcessos .card .acoes{margin-top:7px!important}
+#listaAcessos .card .acoes .btn{
+padding:7px 11px;
+font-size:11px;
+border-radius:8px
 }
 
 /* ================================
    TELA DE ACESSO BLOQUEADO
-   ================================ */
-
+================================ */
 .bloqueio-screen{
 position:fixed;
 inset:0;
@@ -624,7 +101,6 @@ justify-content:center;
 padding:20px;
 background:radial-gradient(circle at 50% 0%,#3a1111 0%,#16080d 45%,#070308 100%)
 }
-
 .bloqueio-box{
 width:min(430px,100%);
 background:linear-gradient(145deg,#351014,#18080c);
@@ -634,7 +110,6 @@ padding:30px;
 text-align:center;
 box-shadow:0 0 35px #ff304422,0 18px 50px #0008
 }
-
 .bloqueio-icone{
 width:72px;
 height:72px;
@@ -647,912 +122,238 @@ background:#5b111b;
 border:1px solid #ff5364;
 box-shadow:0 0 22px #ff304433
 }
+.bloqueio-box h1{font-size:25px;margin-bottom:10px}
+.bloqueio-box p{color:#ffcdd2;line-height:1.5;margin-bottom:18px}
+.bloqueio-nome{font-weight:bold;font-size:18px;color:#fff;margin-bottom:22px}
+.bloqueio-box button{width:100%}
 
-.bloqueio-box h1{
-font-size:25px;
-margin-bottom:10px
-}
-
-.bloqueio-box p{
-color:#ffcdd2;
-line-height:1.5;
-margin-bottom:18px
-}
-
-.bloqueio-nome{
-font-weight:bold;
-font-size:18px;
-color:#fff;
-margin-bottom:22px
-}
-
-.bloqueio-box button{
-width:100%
-}
-
-/* ================================
-   LISTA DE ACESSOS COMPACTA
-   ================================ */
-
-#listaAcessos{
-display:grid;
-gap:7px
-}
-
-#listaAcessos .card{
-padding:10px 13px;
-border-radius:10px;
-margin-bottom:0!important
-}
-
-#listaAcessos .card .top{
-align-items:center
-}
-
-#listaAcessos .card strong{
-font-size:14px
-}
-
-#listaAcessos .card small{
-font-size:11px
-}
-
-#listaAcessos .card .acoes{
-margin-top:7px!important
-}
-
-#listaAcessos .card .acoes .btn{
-padding:7px 11px;
-font-size:11px;
-border-radius:8px
-}
-
-@media(max-width:950px){
-.mesas{grid-template-columns:repeat(4,1fr)}
-.resumo{grid-template-columns:repeat(3,1fr)}
-}
-
-@media(max-width:850px){
-.sidebar{width:190px}
-.main-area{
-width:calc(100% - 190px);
-margin-left:190px
-}
-.topbar-neon{padding:15px 18px}
-.main-content{padding:20px 18px}
-.sidebar .nav button{
-font-size:13px;
-padding:11px 10px
-}
-.pedidos-kanban{grid-template-columns:1fr}
-.coluna-pedidos{min-height:0}
-}
-
-@media(max-width:650px){
-.site-shell{display:block}
-.sidebar{
-position:relative;
-width:100%;
-height:auto;
-padding:12px
-}
-.brand{
-display:flex;
-align-items:center;
-gap:12px;
-padding:5px 8px 12px;
-margin-bottom:10px
-}
-.brand-logo{
-width:42px;
-height:42px;
-font-size:24px;
-margin:0
-}
-.sidebar .nav{
-display:flex;
-overflow-x:auto;
-padding-bottom:3px
-}
-.sidebar .nav button{
-white-space:nowrap;
-width:auto
-}
-.main-area{
-width:100%;
-margin-left:0
-}
-.topbar-neon{
-position:relative;
-display:block
-}
-.top-actions{margin-top:12px}
-.main-content{padding:18px 14px}
-.resumo{grid-template-columns:repeat(2,1fr)}
-.financeiro{grid-template-columns:1fr 1fr}
-.login-box{padding:22px}
-}
-
-@media(max-width:430px){
-.financeiro{grid-template-columns:1fr}
-.sidebar .nav button{
-padding:9px 10px;
-font-size:12px
-}
-}
+@media(max-width:950px){.mesas{grid-template-columns:repeat(4,1fr)}.resumo{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:850px){.sidebar{width:190px}.main-area{width:calc(100% - 190px);margin-left:190px}.topbar-neon{padding:15px 18px}.main-content{padding:20px 18px}.sidebar .nav button{font-size:13px;padding:11px 10px}.pedidos-kanban{grid-template-columns:1fr}.coluna-pedidos{min-height:0}}
+@media(max-width:650px){.site-shell{display:block}.sidebar{position:relative;width:100%;height:auto;padding:12px}.brand{display:flex;align-items:center;gap:12px;padding:5px 8px 12px;margin-bottom:10px}.brand-logo{width:42px;height:42px;font-size:24px;margin:0}.sidebar .nav{display:flex;overflow-x:auto;padding-bottom:3px}.sidebar .nav button{white-space:nowrap;width:auto}.main-area{width:100%;margin-left:0}.topbar-neon{position:relative;display:block}.top-actions{margin-top:12px}.main-content{padding:18px 14px}.resumo{grid-template-columns:repeat(2,1fr)}.financeiro{grid-template-columns:1fr 1fr}.login-box{padding:22px}}
+@media(max-width:430px){.financeiro{grid-template-columns:1fr}.sidebar .nav button{padding:9px 10px;font-size:12px}}
 </style>
 </head>
-
 <body>
 
-<!-- ================================
-     LOGIN
-================================ -->
-
 <div id="loginScreen" class="login-screen">
-
 <div class="login-box">
-
 <div class="login-logo">🍔</div>
-
 <h1>Sabor da Casa</h1>
-
 <p id="loginDescricao">Acesso ao painel do estabelecimento</p>
-
 <form onsubmit="entrarPainel(event)">
-
-<label id="loginCampoLabel" for="loginEmail">
-E-mail administrativo
-</label>
-
-<input
-id="loginEmail"
-type="text"
-autocomplete="username"
-required
-placeholder="Seu e-mail ou usuário">
-
+<label id="loginCampoLabel" for="loginEmail">E-mail administrativo</label>
+<input id="loginEmail" type="text" autocomplete="username" required placeholder="Seu e-mail ou usuário">
 <label for="loginSenha">Senha</label>
-
-<input
-id="loginSenha"
-type="password"
-autocomplete="current-password"
-required
-placeholder="Sua senha">
-
-<button id="loginBtn" class="btn azul" type="submit">
-🔐 Entrar no painel
-</button>
-
+<input id="loginSenha" type="password" autocomplete="current-password" required placeholder="Sua senha">
+<button id="loginBtn" class="btn azul" type="submit">🔐 Entrar no painel</button>
 <div id="loginErro" class="login-erro"></div>
-
 </form>
-
 </div>
 </div>
-
 
 <!-- ================================
      ACESSO BLOQUEADO
 ================================ -->
-
 <div id="bloqueioScreen" class="bloqueio-screen">
-
 <div class="bloqueio-box">
-
 <div class="bloqueio-icone">🔒</div>
-
 <h1>🔴 Acesso bloqueado</h1>
-
 <p>
 Este estabelecimento está temporariamente bloqueado.
 <br>
 Entre em contato com o administrador.
 </p>
-
 <div id="bloqueioNome" class="bloqueio-nome"></div>
-
 <button class="btn vermelho" onclick="voltarLoginBloqueio()">
 ↩️ Voltar para o login
 </button>
-
 </div>
 </div>
-
-
-<!-- ================================
-     PAINEL
-================================ -->
 
 <div id="appShell" class="site-shell" style="display:none">
-
 <aside class="sidebar">
-
 <div class="brand">
-
 <div class="brand-logo">🍔</div>
-
-<strong id="brandNome">
-Sabor <span>da Casa</span>
-</strong>
-
+<strong id="brandNome">Sabor <span>da Casa</span></strong>
 <small>PAINEL DO PROPRIETÁRIO</small>
-
 </div>
-
 <div class="nav">
-
-<button class="ativo" onclick="sec('inicio',this)">
-🏠 Início
-</button>
-
-<button onclick="sec('pedidos',this)">
-📋 Pedidos
-</button>
-
-<button onclick="sec('produtos',this)">
-🍔 Produtos
-</button>
-
-<button onclick="sec('financeiro',this)">
-💰 Financeiro
-</button>
-
-<button onclick="sec('historico',this)">
-📜 Histórico
-</button>
-
-<button onclick="sec('config',this)">
-⚙️ Configurações
-</button>
-
-<button id="btnAcessos" style="display:none" onclick="sec('acessos',this)">
-🔐 Acessos
-</button>
-
-<button id="btnNovoRestaurante" style="display:none" onclick="sec('novoRestaurante',this)">
-🏪 Novo estabelecimento
-</button>
-
+<button class="ativo" onclick="sec('inicio',this)">🏠 Início</button>
+<button onclick="sec('pedidos',this)">📋 Pedidos</button>
+<button onclick="sec('produtos',this)">🍔 Produtos</button>
+<button onclick="sec('financeiro',this)">💰 Financeiro</button>
+<button onclick="sec('historico',this)">📜 Histórico</button>
+<button onclick="sec('config',this)">⚙️ Configurações</button>
+<button id="btnAcessos" style="display:none" onclick="sec('acessos',this)">🔐 Acessos</button>
+<button id="btnNovoRestaurante" style="display:none" onclick="sec('novoRestaurante',this)">🏪 Novo estabelecimento</button>
 </div>
 
 </aside>
 
-
 <div class="main-area">
-
 <header class="topbar-neon">
-
 <div>
-
-<h1 id="tituloPainel">
-🍔 Sabor da Casa — Painel do Proprietário
-</h1>
-
-<p id="subtituloPainel">
-Controle do salão, pedidos, produtos e financeiro
-</p>
-
+<h1 id="tituloPainel">🍔 Sabor da Casa — Painel do Proprietário</h1>
+<p id="subtituloPainel">Controle do salão, pedidos, produtos e financeiro</p>
 </div>
-
 <div class="top-actions">
-
-<div class="top-pill online">
-● Online
+<div class="top-pill online">● Online</div>
+<button class="btn azul" onclick="ativarSom()">🔊 Som</button>
+<button class="btn logout-btn" onclick="sairPainel()">🚪 Sair</button>
 </div>
-
-<button class="btn azul" onclick="ativarSom()">
-🔊 Som
-</button>
-
-<button class="btn logout-btn" onclick="sairPainel()">
-🚪 Sair
-</button>
-
-</div>
-
 </header>
 
-
 <div id="erro" class="erro"></div>
-
-<div id="alerta" class="alerta" onclick="sec('pedidos')">
-🔔 NOVO PEDIDO RECEBIDO
-</div>
-
+<div id="alerta" class="alerta" onclick="sec('pedidos')">🔔 NOVO PEDIDO RECEBIDO</div>
 
 <div class="main-content">
 
-
-<!-- INÍCIO -->
-
 <section id="inicio" class="secao ativa">
-
 <div class="resumo">
-
-<div class="card">
-<small>🪑 Livres</small>
-<strong id="livres">0</strong>
+<div class="card"><small>🪑 Livres</small><strong id="livres">0</strong></div>
+<div class="card"><small>👥 Ocupadas</small><strong id="ocupadas">0</strong></div>
+<div class="card"><small>🕐 Em preparo</small><strong id="preparo">0</strong></div>
+<div class="card"><small>✓ Prontos</small><strong id="prontos">0</strong></div>
+<div class="card"><small>📋 Pedidos ativos</small><strong id="ativos">0</strong></div>
 </div>
-
-<div class="card">
-<small>👥 Ocupadas</small>
-<strong id="ocupadas">0</strong>
-</div>
-
-<div class="card">
-<small>🕐 Em preparo</small>
-<strong id="preparo">0</strong>
-</div>
-
-<div class="card">
-<small>✓ Prontos</small>
-<strong id="prontos">0</strong>
-</div>
-
-<div class="card">
-<small>📋 Pedidos ativos</small>
-<strong id="ativos">0</strong>
-</div>
-
-</div>
-
-<div style="margin-bottom:18px">
-<button class="btn azul" onclick="ativarSom()">
-🔊 Ativar som
-</button>
-</div>
-
+<div style="margin-bottom:18px"><button class="btn azul" onclick="ativarSom()">🔊 Ativar som</button></div>
 <div id="mesas" class="mesas"></div>
-
 </section>
-
-
-<!-- PEDIDOS -->
 
 <section id="pedidos" class="secao">
-
-<div class="section-title">
-
-<h2>📋 Pedidos</h2>
-
-<div class="top-pill">
-Atualização em tempo real
-</div>
-
-</div>
-
+<div class="section-title"><h2>📋 Pedidos</h2><div class="top-pill">Atualização em tempo real</div></div>
 <div id="listaPedidos" class="pedidos-kanban"></div>
-
 </section>
-
-
-<!-- PRODUTOS -->
 
 <section id="produtos" class="secao">
-
 <h2>🍔 Produtos</h2>
-
-<button class="btn azul" onclick="novoProduto()">
-➕ Novo produto
-</button>
-
+<button class="btn azul" onclick="novoProduto()">➕ Novo produto</button>
 <div id="listaProdutos" class="produtos" style="margin-top:15px"></div>
-
 </section>
-
-
-<!-- FINANCEIRO -->
 
 <section id="financeiro" class="secao">
-
 <h2>💰 Financeiro</h2>
-
 <div class="financeiro">
-
-<div class="card">
-<small>Comandas finalizadas</small>
-<strong id="fQtd">0</strong>
+<div class="card"><small>Comandas finalizadas</small><strong id="fQtd">0</strong></div>
+<div class="card"><small>Faturamento</small><strong id="fTotal">R$ 0,00</strong></div>
+<div class="card"><small>Ticket médio</small><strong id="fMedia">R$ 0,00</strong></div>
+<div class="card"><small>Hoje</small><strong id="fHoje">R$ 0,00</strong></div>
 </div>
-
-<div class="card">
-<small>Faturamento</small>
-<strong id="fTotal">R$ 0,00</strong>
-</div>
-
-<div class="card">
-<small>Ticket médio</small>
-<strong id="fMedia">R$ 0,00</strong>
-</div>
-
-<div class="card">
-<small>Hoje</small>
-<strong id="fHoje">R$ 0,00</strong>
-</div>
-
-</div>
-
 </section>
-
-
-<!-- HISTÓRICO -->
 
 <section id="historico" class="secao">
-
 <h2>📜 Histórico</h2>
-
 <div id="listaHistorico"></div>
-
 </section>
-
-
-<!-- CONFIGURAÇÕES -->
 
 <section id="config" class="secao">
-
 <h2>⚙️ Configurações</h2>
-
 <div class="card">
-
+<div class="campo"><label>Nome</label><input id="cfgNome"></div>
+<div class="campo"><label>Subtítulo</label><input id="cfgSub"></div>
+<div class="campo"><label>Endereço</label><input id="cfgEnd"></div>
+<div class="campo"><label>Emoji</label><input id="cfgEmoji"></div>
+<div class="campo"><label>URL da logo</label><input id="cfgLogo"></div>
 <div class="campo">
-<label>Nome</label>
-<input id="cfgNome">
-</div>
-
-<div class="campo">
-<label>Subtítulo</label>
-<input id="cfgSub">
-</div>
-
-<div class="campo">
-<label>Endereço</label>
-<input id="cfgEnd">
-</div>
-
-<div class="campo">
-<label>Emoji</label>
-<input id="cfgEmoji">
-</div>
-
-<div class="campo">
-<label>URL da logo</label>
-<input id="cfgLogo">
-</div>
-
-<div class="campo">
-
 <label>Quantidade de mesas</label>
-
 <div style="display:flex;align-items:center;gap:10px">
-
-<button class="btn cinza" type="button" onclick="alterarMesas(-1)">
-➖
-</button>
-
-<input
-id="cfgMesas"
-type="number"
-min="1"
-max="100"
-style="max-width:130px;text-align:center">
-
-<button class="btn azul" type="button" onclick="alterarMesas(1)">
-➕
-</button>
-
+<button class="btn cinza" type="button" onclick="alterarMesas(-1)">➖</button>
+<input id="cfgMesas" type="number" min="1" max="100" style="max-width:130px;text-align:center">
+<button class="btn azul" type="button" onclick="alterarMesas(1)">➕</button>
 </div>
-
-<small style="display:block;color:#a9c9ff;margin-top:6px">
-Escolha de 1 a 100 mesas.
-</small>
-
+<small style="display:block;color:#a9c9ff;margin-top:6px">Escolha de 1 a 100 mesas.</small>
 </div>
-
-<button class="btn verde" onclick="salvarConfig()">
-💾 Salvar
-</button>
-
+<button class="btn verde" onclick="salvarConfig()">💾 Salvar</button>
 </div>
-
 </section>
-
-
-<!-- NOVO RESTAURANTE -->
 
 <section id="novoRestaurante" class="secao">
-
 <div class="section-title">
-
 <h2>🏪 Novo estabelecimento</h2>
-
-<div class="top-pill">
-Somente administração
+<div class="top-pill">Somente administração</div>
 </div>
-
-</div>
-
 <div class="card" style="max-width:760px">
-
-<p style="color:#a9c9ff;margin-bottom:16px">
-Cadastre um estabelecimento e já deixe o acesso pronto para o proprietário.
-</p>
-
-<div class="campo">
-<label>Nome do estabelecimento</label>
-<input id="novoNome" placeholder="Ex.: Pizzaria Central">
-</div>
-
-<div class="campo">
-
-<label>ID do restaurante (slug)</label>
-
-<input id="novoId" placeholder="ex.: pizzaria-central">
-
-<small style="display:block;color:#a9c9ff;margin-top:6px">
-Use somente letras minúsculas, números e hífen.
-</small>
-
-</div>
-
-<div class="campo">
-
-<label>Usuário de acesso</label>
-
-<input id="novoUsuario" placeholder="Ex.: Ponto 63">
-
-<small style="display:block;color:#a9c9ff;margin-top:6px">
-Será o usuário que o proprietário digitará no login.
-</small>
-
-</div>
-
-<div class="campo">
-
-<label>Senha de acesso</label>
-
-<input
-id="novoSenha"
-type="password"
-minlength="6"
-placeholder="Crie uma senha com pelo menos 6 caracteres">
-
-<small style="display:block;color:#a9c9ff;margin-top:6px">
-Você entrega essa senha ao proprietário. O sistema não salva a senha em texto.
-</small>
-
-</div>
-
-<div class="campo">
-<label>Subtítulo</label>
-<input id="novoSub" value="Cardápio Digital">
-</div>
-
-<div class="campo">
-<label>Endereço</label>
-<input id="novoEnd" placeholder="Chapecó / SC">
-</div>
-
-<div class="campo">
-<label>Quantidade de mesas</label>
-<input id="novoMesas" type="number" min="1" max="100" value="20">
-</div>
-
-<div class="botoes">
-
-<button
-id="btnCriarRestaurante"
-class="btn verde"
-onclick="criarRestaurante()">
-
-🏪 Criar estabelecimento e acesso
-
-</button>
-
-</div>
-
+<p style="color:#a9c9ff;margin-bottom:16px">Cadastre um estabelecimento e já deixe o acesso pronto para o proprietário.</p>
+<div class="campo"><label>Nome do estabelecimento</label><input id="novoNome" placeholder="Ex.: Pizzaria Central"></div>
+<div class="campo"><label>ID do restaurante (slug)</label><input id="novoId" placeholder="ex.: pizzaria-central"><small style="display:block;color:#a9c9ff;margin-top:6px">Use somente letras minúsculas, números e hífen.</small></div>
+<div class="campo"><label>Usuário de acesso</label><input id="novoUsuario" placeholder="Ex.: Ponto 63"><small style="display:block;color:#a9c9ff;margin-top:6px">Será o usuário que o proprietário digitará no login.</small></div>
+<div class="campo"><label>Senha de acesso</label><input id="novoSenha" type="password" minlength="6" placeholder="Crie uma senha com pelo menos 6 caracteres"><small style="display:block;color:#a9c9ff;margin-top:6px">Você entrega essa senha ao proprietário. O sistema não salva a senha em texto.</small></div>
+<div class="campo"><label>Subtítulo</label><input id="novoSub" value="Cardápio Digital"></div>
+<div class="campo"><label>Endereço</label><input id="novoEnd" placeholder="Chapecó / SC"></div>
+<div class="campo"><label>Quantidade de mesas</label><input id="novoMesas" type="number" min="1" max="100" value="20"></div>
+<div class="botoes"><button id="btnCriarRestaurante" class="btn verde" onclick="criarRestaurante()">🏪 Criar estabelecimento e acesso</button></div>
 <div id="novoResultado" style="margin-top:14px;color:#9fc5ff"></div>
-
 </div>
-
 </section>
-
-
-<!-- ACESSOS -->
 
 <section id="acessos" class="secao">
-
-<div class="section-title">
-
-<h2>🔐 Acessos dos estabelecimentos</h2>
-
-<div class="top-pill">
-Controle administrativo
-</div>
-
-</div>
-
+<div class="section-title"><h2>🔐 Acessos dos estabelecimentos</h2><div class="top-pill">Controle administrativo</div></div>
 <div class="card" style="max-width:760px">
-
-<p style="color:#a9c9ff;margin-bottom:16px">
-
-Aqui você cadastra o acesso de um estabelecimento já existente,
-como o Ponto 63, e pode bloquear ou liberar o acesso sem apagar os dados.
-
-</p>
-
-<div class="campo">
-
-<label>Estabelecimento</label>
-
-<select id="acessoRestauranteId"></select>
-
-</div>
-
-<div class="campo">
-
-<label>Usuário de acesso</label>
-
-<input id="acessoUsuario" placeholder="Ex.: Ponto 63">
-
-</div>
-
-<div class="campo">
-
-<label>Senha inicial</label>
-
-<input
-id="acessoSenha"
-type="password"
-minlength="6"
-placeholder="Mínimo de 6 caracteres">
-
-</div>
-
-<div class="botoes">
-
-<button
-id="btnCriarAcesso"
-class="btn azul"
-onclick="criarAcessoRestaurante()">
-
-🔐 Criar acesso
-
-</button>
-
-</div>
-
+<p style="color:#a9c9ff;margin-bottom:16px">Aqui você cadastra o acesso de um estabelecimento já existente, como o Ponto 63, e pode bloquear ou liberar o acesso sem apagar os dados.</p>
+<div class="campo"><label>Estabelecimento</label><select id="acessoRestauranteId"></select></div>
+<div class="campo"><label>Usuário de acesso</label><input id="acessoUsuario" placeholder="Ex.: Ponto 63"></div>
+<div class="campo"><label>Senha inicial</label><input id="acessoSenha" type="password" minlength="6" placeholder="Mínimo de 6 caracteres"></div>
+<div class="botoes"><button id="btnCriarAcesso" class="btn azul" onclick="criarAcessoRestaurante()">🔐 Criar acesso</button></div>
 <div id="acessoResultado" style="margin-top:14px;color:#9fc5ff"></div>
-
 </div>
-
-
 <div id="listaAcessos" style="margin-top:16px"></div>
-
 </section>
 
 </div>
 </div>
 </div>
 
-
-<!-- MODAL COMANDA -->
-
 <div id="modal" class="modal">
-
 <div class="box">
-
 <h2 id="modalTitulo">📋 Comanda</h2>
-
 <div id="modalConteudo"></div>
-
 <div class="botoes">
-
-<button class="btn cinza" onclick="fecharModal()">
-Fechar
-</button>
-
-<button
-id="btnPreparo"
-class="btn laranja"
-onclick="mudarComanda('Em preparo')">
-
-🟠 Em preparo
-
-</button>
-
-<button
-id="btnPronto"
-class="btn azul"
-onclick="mudarComanda('Pronto')">
-
-🔵 Pronto
-
-</button>
-
-<button
-id="finalizar"
-class="btn verde"
-onclick="finalizar()">
-
-🟢 Finalizar e liberar mesa
-
-</button>
-
-</div>
-
+<button class="btn cinza" onclick="fecharModal()">Fechar</button>
+<button id="btnPreparo" class="btn laranja" onclick="mudarComanda('Em preparo')">🟠 Em preparo</button>
+<button id="btnPronto" class="btn azul" onclick="mudarComanda('Pronto')">🔵 Pronto</button>
+<button id="finalizar" class="btn verde" onclick="finalizar()">🟢 Finalizar e liberar mesa</button>
 </div>
 </div>
-
-
-<!-- MODAL PRODUTO -->
+</div>
 
 <div id="modalProd" class="modal">
-
 <div class="box">
-
 <h2 id="tituloModalProduto">🍔 Produto</h2>
-
 <input id="pid" type="hidden">
-
+<div class="campo"><label>Nome</label><input id="pnome"></div>
 <div class="campo">
-
-<label>Nome</label>
-<input id="pnome">
-
-</div>
-
-<div class="campo">
-
 <label>Categoria</label>
-
-<select id="pcat">
-
-<option value="">
-Selecione uma categoria
-</option>
-
-</select>
-
-<span class="categoria-ajuda">
-Escolha uma categoria existente.
-</span>
-
+<select id="pcat"><option value="">Selecione uma categoria</option></select>
+<span class="categoria-ajuda">Escolha uma categoria existente.</span>
 </div>
-
 <div class="campo">
-
 <label>Nova categoria (somente se precisar)</label>
-
 <input id="pnovaCategoria" placeholder="Ex.: Sobremesas">
-
-<span class="categoria-ajuda">
-Se preencher, ela terá prioridade sobre a categoria selecionada.
-</span>
-
+<span class="categoria-ajuda">Se preencher, ela terá prioridade sobre a categoria selecionada.</span>
 </div>
-
+<div class="campo"><label>Descrição</label><textarea id="pdesc"></textarea></div>
+<div class="campo"><label>Preço</label><input id="ppreco" type="number" step="0.01"></div>
+<div class="campo"><label>Preço promocional</label><input id="ppromo" type="number" step="0.01"></div>
 <div class="campo">
-
-<label>Descrição</label>
-<textarea id="pdesc"></textarea>
-
-</div>
-
-<div class="campo">
-
-<label>Preço</label>
-<input id="ppreco" type="number" step="0.01">
-
-</div>
-
-<div class="campo">
-
-<label>Preço promocional</label>
-<input id="ppromo" type="number" step="0.01">
-
-</div>
-
-<div class="campo">
-
 <label>📷 Foto do produto</label>
-
-<input
-id="pfotoArquivo"
-type="file"
-accept="image/*"
-onchange="previewFoto(event)">
-
+<input id="pfotoArquivo" type="file" accept="image/*" onchange="previewFoto(event)">
 <input id="pfoto" type="hidden">
-
-<small style="display:block;color:#a9c9ff;margin-top:6px">
-Escolha uma foto. A imagem será reduzida automaticamente.
-</small>
-
+<small style="display:block;color:#a9c9ff;margin-top:6px">Escolha uma foto. A imagem será reduzida automaticamente.</small>
 <div id="fotoPreview" style="margin-top:10px"></div>
-
 </div>
-
-<div class="campo">
-
-<label>Disponível?</label>
-
-<select id="pativo">
-
-<option value="true">Sim</option>
-<option value="false">Não</option>
-
-</select>
-
-</div>
-
-<div class="campo">
-
-<label>Promoção ativa?</label>
-
-<select id="ppromoativa">
-
-<option value="false">Não</option>
-<option value="true">Sim</option>
-
-</select>
-
-</div>
-
+<div class="campo"><label>Disponível?</label><select id="pativo"><option value="true">Sim</option><option value="false">Não</option></select></div>
+<div class="campo"><label>Promoção ativa?</label><select id="ppromoativa"><option value="false">Não</option><option value="true">Sim</option></select></div>
 <div class="botoes">
-
-<button class="btn cinza" onclick="fecharProd()">
-Cancelar
-</button>
-
-<button
-id="btnSalvarProduto"
-class="btn verde"
-onclick="salvarProd()">
-
-💾 Salvar
-
-</button>
-
-</div>
-
+<button class="btn cinza" onclick="fecharProd()">Cancelar</button>
+<button id="btnSalvarProduto" class="btn verde" onclick="salvarProd()">💾 Salvar</button>
 </div>
 </div>
-
+</div>
 
 <script type="module">
-
-import{initializeApp}
-from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-import{
-getAuth,
-onAuthStateChanged,
-signInWithEmailAndPassword,
-signOut,
-createUserWithEmailAndPassword
-}
-from"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-
-import{
-initializeFirestore,
-collection,
-doc,
-addDoc,
-setDoc,
-updateDoc,
-deleteDoc,
-getDoc,
-onSnapshot,
-writeBatch,
-getDocs
-}
-from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-
-/* ================================
-   FIREBASE
-================================ */
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,createUserWithEmailAndPassword,setPersistence,browserSessionPersistence}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import{initializeFirestore,collection,doc,addDoc,setDoc,updateDoc,deleteDoc,getDoc,onSnapshot,writeBatch,getDocs}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const cfg={
 apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
@@ -1564,4097 +365,814 @@ appId:"1:783545984661:web:5d0945907ad9db3990dd9c"
 };
 
 const app=initializeApp(cfg);
-
 const auth=getAuth(app);
-
-const appCadastro=initializeApp(
-cfg,
-"cadastro-restaurantes"
-);
-
+const appCadastro=initializeApp(cfg,"cadastro-restaurantes");
 const authCadastro=getAuth(appCadastro);
+const db=initializeFirestore(app,{},"default");
 
-const db=initializeFirestore(
-app,
-{},
-"default"
-);
+/*
+  Usa sessão por guia para permitir que o Sabor da Casa e um
+  restaurante permaneçam logados ao mesmo tempo em abas diferentes.
+  O padrão LOCAL do Firebase sincroniza o login entre abas da mesma origem.
+*/
+await setPersistence(auth,browserSessionPersistence);
+await setPersistence(authCadastro,browserSessionPersistence);
 
+const parametros=new URLSearchParams(window.location.search);
+const idInformado=(parametros.get("restaurante")||"sabor-da-casa").trim().toLowerCase();
+const RESTAURANTE_ID=/^[a-z0-9-]+$/.test(idInformado)?idInformado:"sabor-da-casa";
+const EH_SABOR_DA_CASA=RESTAURANTE_ID==="sabor-da-casa";
 
-/* ================================
-   RESTAURANTE
-================================ */
+function colecaoRestaurante(nome){return collection(db,"restaurantes",RESTAURANTE_ID,nome)}
+function documentoRestaurante(nome,id){return doc(db,"restaurantes",RESTAURANTE_ID,nome,id)}
 
-const parametros=new URLSearchParams(
-window.location.search
-);
-
-const idInformado=(
-parametros.get("restaurante")||
-"sabor-da-casa"
-).trim().toLowerCase();
-
-const RESTAURANTE_ID=
-/^[a-z0-9-]+$/.test(idInformado)
-?idInformado
-:"sabor-da-casa";
-
-const EH_SABOR_DA_CASA=
-RESTAURANTE_ID==="sabor-da-casa";
-
-
-function colecaoRestaurante(nome){
-return collection(
-db,
-"restaurantes",
-RESTAURANTE_ID,
-nome
-);
-}
-
-function documentoRestaurante(nome,id){
-return doc(
-db,
-"restaurantes",
-RESTAURANTE_ID,
-nome,
-id
-);
-}
-
-
-/* ================================
-   ESTADO
-================================ */
-
-let pedidos=[];
-let hist=[];
-let produtos=[];
-let config={};
-let mesas=20;
-let comanda=null;
-let audio=null;
-
-let som=
-localStorage.getItem("somPainelAtivado")==="1";
-
-let pedidosInicializados=false;
-let painelIniciado=false;
-
-let salvandoProduto=false;
-let criandoRestaurante=false;
-let criandoAcesso=false;
-
-let usuarioAtual=null;
-let acessoAtual=null;
-
+let pedidos=[],hist=[],produtos=[],config={},mesas=20,comanda=null,audio=null;
+let som=localStorage.getItem("somPainelAtivado")==="1";
+let pedidosInicializados=false,painelIniciado=false;
+let salvandoProduto=false, criandoRestaurante=false, criandoAcesso=false;
+let usuarioAtual=null, acessoAtual=null;
 let canceladoresDados=[];
 let canceladorAcesso=null;
 
+const el=id=>document.getElementById(id);
+const loginScreen=el("loginScreen"),appShell=el("appShell"),loginErro=el("loginErro"),loginBtn=el("loginBtn");
 
-/* ================================
-   ELEMENTOS
-================================ */
+const dinheiro=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const ativo=p=>p.status!=="Finalizado";
 
-const el=id=>
-document.getElementById(id);
-
-const loginScreen=
-el("loginScreen");
-
-const appShell=
-el("appShell");
-
-const loginErro=
-el("loginErro");
-
-const loginBtn=
-el("loginBtn");
-
-
-/* ================================
-   FUNÇÕES BÁSICAS
-================================ */
-
-const dinheiro=v=>
-Number(v||0).toLocaleString(
-"pt-BR",
-{
-style:"currency",
-currency:"BRL"
-}
-);
-
-const esc=v=>
-String(v??"").replace(
-/[&<>"']/g,
-m=>({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#39;"
-}[m])
-);
-
-const ativo=p=>
-p.status!=="Finalizado";
-
-
-/* ================================
-   CATEGORIAS
-================================ */
-
-const categoriasPadrao=[
-"Lanches",
-"Bebidas",
-"Pizzas",
-"Porções",
-"Combos",
-"Sobremesas",
-"Pratos",
-"Saladas",
-"Cafés",
-"Outros"
-];
+const categoriasPadrao=["Lanches","Bebidas","Pizzas","Porções","Combos","Sobremesas","Pratos","Saladas","Cafés","Outros"];
 
 function chaveCategoria(valor){
-
-return String(valor||"")
-.trim()
-.toLowerCase()
-.normalize("NFD")
-.replace(/[\u0300-\u036f]/g,"")
-.replace(/\s+/g," ");
-
+return String(valor||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ");
 }
 
 function normalizarCategoria(valor){
-
-const original=
-String(valor||"").trim();
-
-if(!original)return"";
-
-const chave=
-chaveCategoria(original);
-
+const original=String(valor||"").trim();
+if(!original)return "";
+const chave=chaveCategoria(original);
 const mapa={
-
-"lanche":"Lanches",
-"lanches":"Lanches",
-
-"bebida":"Bebidas",
-"bebidas":"Bebidas",
-
-"pizzaria":"Pizzas",
-"pizza":"Pizzas",
-"pizzas":"Pizzas",
-
-"porcao":"Porções",
-"porcoes":"Porções",
-"porção":"Porções",
-"porções":"Porções",
-
-"combo":"Combos",
-"combos":"Combos",
-
-"sobremesa":"Sobremesas",
-"sobremesas":"Sobremesas",
-
-"prato":"Pratos",
-"pratos":"Pratos",
-
-"salada":"Saladas",
-"saladas":"Saladas",
-
-"cafe":"Cafés",
-"cafes":"Cafés",
-
-"outro":"Outros",
-"outros":"Outros"
-
+"lanche":"Lanches","lanches":"Lanches",
+"bebida":"Bebidas","bebidas":"Bebidas",
+"pizzaria":"Pizzas","pizza":"Pizzas","pizzas":"Pizzas",
+"porcao":"Porções","porcoes":"Porções","porção":"Porções","porções":"Porções",
+"combo":"Combos","combos":"Combos",
+"sobremesa":"Sobremesas","sobremesas":"Sobremesas",
+"prato":"Pratos","pratos":"Pratos",
+"salada":"Saladas","saladas":"Saladas",
+"cafe":"Cafés","cafes":"Cafés",
+"outro":"Outros","outros":"Outros"
 };
-
-if(mapa[chave])
-return mapa[chave];
-
-const padrao=
-categoriasPadrao.find(
-x=>chaveCategoria(x)===chave
-);
-
+if(mapa[chave])return mapa[chave];
+const padrao=categoriasPadrao.find(x=>chaveCategoria(x)===chave);
 return padrao||original;
 }
 
-
 function obterCategorias(){
-
 const conjunto=new Map();
-
-categoriasPadrao.forEach(
-c=>conjunto.set(
-chaveCategoria(c),
-c
-)
-);
-
+categoriasPadrao.forEach(c=>conjunto.set(chaveCategoria(c),c));
 produtos.forEach(p=>{
-
-const c=
-normalizarCategoria(p.categoria);
-
-if(c)
-conjunto.set(
-chaveCategoria(c),
-c
-);
-
+const c=normalizarCategoria(p.categoria);
+if(c)conjunto.set(chaveCategoria(c),c);
 });
-
-return Array.from(
-conjunto.values()
-);
-
+return Array.from(conjunto.values());
 }
-
 
 function preencherCategorias(){
-
 const select=el("pcat");
-
 if(!select)return;
-
 const atual=select.value;
-
-select.innerHTML=
-'<option value="">Selecione uma categoria</option>';
-
+select.innerHTML='<option value="">Selecione uma categoria</option>';
 obterCategorias().forEach(c=>{
-
-const o=
-document.createElement("option");
-
-o.value=c;
-o.textContent=c;
-
-select.appendChild(o);
-
+const o=document.createElement("option");
+o.value=c;o.textContent=c;select.appendChild(o);
 });
-
-if(atual)
-select.value=
-normalizarCategoria(atual);
-
+if(atual)select.value=normalizarCategoria(atual);
 }
-
 
 async function corrigirCategoriasExistentes(lista){
-
 for(const p of lista){
-
-const original=
-String(p.categoria||"").trim();
-
-const correta=
-normalizarCategoria(original);
-
-if(
-original&&
-correta&&
-original!==correta
-){
-
-try{
-
-await updateDoc(
-documentoRestaurante(
-"produtos",
-p.id
-),
-{
-categoria:correta
+const original=String(p.categoria||"").trim();
+const correta=normalizarCategoria(original);
+if(original&&correta&&original!==correta){
+try{await updateDoc(documentoRestaurante("produtos",p.id),{categoria:correta})}
+catch(e){console.warn("Categoria não corrigida:",p.id,e)}
 }
-);
-
-}catch(e){
-
-console.warn(
-"Categoria não corrigida:",
-p.id,
-e
-);
-
 }
-
 }
-
-}
-
-}
-
-
-/* ================================
-   USUÁRIO
-================================ */
 
 function normalizarUsuario(valor){
-
-return String(valor||"")
-.trim()
-.toLowerCase()
-.normalize("NFD")
-.replace(/[\u0300-\u036f]/g,"")
-.replace(/[^a-z0-9]+/g,"-")
-.replace(/^-+|-+$/g,"");
-
+return String(valor||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
 }
-
 
 /*
-Firebase Authentication trabalha
-com e-mail/senha.
-
-Restaurantes usam e-mail interno.
+  O Firebase Authentication trabalha com e-mail/senha.
+  Para os restaurantes usamos um e-mail interno, invisível para o proprietário.
+  Ex.: usuário "Ponto 63" -> ponto-63@acesso-restaurante.local
 */
-
 function emailInternoRestaurante(usuarioKey){
-
 return `${usuarioKey}@acesso-restaurante.local`;
-
 }
-
-
-/* ================================
-   ADMINISTRAÇÃO
-================================ */
 
 function configurarBotoesAdministracao(){
-
-const admin=
-EH_SABOR_DA_CASA;
-
-const bNovo=
-el("btnNovoRestaurante");
-
-const bAcessos=
-el("btnAcessos");
-
-if(bNovo)
-bNovo.style.display=
-admin?"block":"none";
-
-if(bAcessos)
-bAcessos.style.display=
-admin?"block":"none";
-
+const admin=EH_SABOR_DA_CASA;
+const bNovo=el("btnNovoRestaurante"),bAcessos=el("btnAcessos");
+if(bNovo)bNovo.style.display=admin?"block":"none";
+if(bAcessos)bAcessos.style.display=admin?"block":"none";
 }
 
-function configurarBotaoNovoRestaurante(){
-
-configurarBotoesAdministracao();
-
-}
-
-
-/* ================================
-   LOGIN
-================================ */
+function configurarBotaoNovoRestaurante(){configurarBotoesAdministracao()}
 
 window.entrarPainel=async e=>{
-
 e.preventDefault();
-
 loginErro.style.display="none";
-
 loginBtn.disabled=true;
-
-loginBtn.textContent=
-"⏳ Entrando...";
-
+loginBtn.textContent="⏳ Entrando...";
 try{
-
-const entrada=
-el("loginEmail").value.trim();
-
-const senha=
-el("loginSenha").value;
-
-if(!entrada||!senha)
-throw new Error(
-"Informe usuário e senha."
-);
+const entrada=el("loginEmail").value.trim();
+const senha=el("loginSenha").value;
+if(!entrada||!senha)throw new Error("Informe usuário e senha.");
 
 if(EH_SABOR_DA_CASA){
-
-if(!entrada.includes("@"))
-throw new Error(
-"No Sabor da Casa, use o seu e-mail administrativo."
-);
-
-await signInWithEmailAndPassword(
-auth,
-entrada,
-senha
-);
-
+if(!entrada.includes("@"))throw new Error("No Sabor da Casa, use o seu e-mail administrativo.");
+await signInWithEmailAndPassword(auth,entrada,senha);
 }else{
-
-const usuarioKey=
-normalizarUsuario(entrada);
-
-if(!usuarioKey)
-throw new Error(
-"Informe um usuário válido."
-);
-
-const emailInterno=
-emailInternoRestaurante(
-usuarioKey
-);
-
-await signInWithEmailAndPassword(
-auth,
-emailInterno,
-senha
-);
-
+const usuarioKey=normalizarUsuario(entrada);
+if(!usuarioKey)throw new Error("Informe um usuário válido.");
+const emailInterno=emailInternoRestaurante(usuarioKey);
+/* Não precisamos consultar o Firestore antes do login. O próprio Firebase Authentication valida usuário e senha. */
+await signInWithEmailAndPassword(auth,emailInterno,senha);
 }
 
 el("loginSenha").value="";
-
 }catch(err){
-
 console.error(err);
-
-loginErro.textContent=
-err.message||
-"E-mail, usuário ou senha incorretos.";
-
+loginErro.textContent=err.message||"E-mail, usuário ou senha incorretos.";
 loginErro.style.display="block";
-
 }finally{
-
 loginBtn.disabled=false;
-
-loginBtn.textContent=
-"🔐 Entrar no painel";
-
+loginBtn.textContent="🔐 Entrar no painel";
 }
-
 };
-
 
 window.sairPainel=async()=>{
-
-try{
-
-localStorage.removeItem(
-`acessoBloqueado_${RESTAURANTE_ID}`
-);
-
-await signOut(auth);
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"Não foi possível sair.\n\n"+
-e.message
-);
-
-}
-
+try{await signOut(auth)}catch(e){console.error(e);alert("Não foi possível sair.\n\n"+e.message)}
 };
-
-
-/* ================================
-   TELAS
-================================ */
 
 function mostrarLogin(){
-
-if(canceladorAcesso){
-
-try{
-canceladorAcesso();
-}catch(e){}
-
-canceladorAcesso=null;
-
-}
-
-const bloqueio=
-el("bloqueioScreen");
-
-if(bloqueio)
-bloqueio.style.display="none";
-
+if(canceladorAcesso){try{canceladorAcesso()}catch(e){};canceladorAcesso=null}
+const bloqueio=el("bloqueioScreen");
+if(bloqueio)bloqueio.style.display="none";
 loginScreen.style.display="flex";
-
 appShell.style.display="none";
-
-const label=
-el("loginCampoLabel");
-
-const campo=
-el("loginEmail");
-
-if(label)
-label.textContent=
-EH_SABOR_DA_CASA
-?"E-mail administrativo"
-:"Usuário do estabelecimento";
-
-if(campo){
-
-campo.type="text";
-
-campo.placeholder=
-EH_SABOR_DA_CASA
-?"Seu e-mail"
-:"Ex.: Ponto 63";
-
+const label=el("loginCampoLabel");
+const campo=el("loginEmail");
+if(label)label.textContent=EH_SABOR_DA_CASA?"E-mail administrativo":"Usuário do estabelecimento";
+if(campo){campo.type="text";campo.placeholder=EH_SABOR_DA_CASA?"Seu e-mail":"Ex.: Ponto 63"}
 }
-
-}
-
 
 function mostrarPainel(){
-
-const bloqueio=
-el("bloqueioScreen");
-
-if(bloqueio)
-bloqueio.style.display="none";
-
+const bloqueio=el("bloqueioScreen");
+if(bloqueio)bloqueio.style.display="none";
 loginScreen.style.display="none";
-
 appShell.style.display="flex";
-
 }
-
 
 function mostrarAcessoBloqueado(){
-
 loginScreen.style.display="none";
-
 appShell.style.display="none";
-
-const tela=
-el("bloqueioScreen");
-
-const nome=
-el("bloqueioNome");
-
-if(nome){
-
-nome.textContent=
-config.nome||
-RESTAURANTE_ID;
-
+const tela=el("bloqueioScreen");
+const nome=el("bloqueioNome");
+if(nome)nome.textContent=config.nome||RESTAURANTE_ID;
+if(tela)tela.style.display="flex";
 }
-
-if(tela)
-tela.style.display="flex";
-
-}
-
 
 window.voltarLoginBloqueio=async()=>{
-
-const chave=
-`acessoBloqueado_${RESTAURANTE_ID}`;
-
+const chave=`acessoBloqueado_${RESTAURANTE_ID}`;
 localStorage.removeItem(chave);
-
-const tela=
-el("bloqueioScreen");
-
-if(tela)
-tela.style.display="none";
-
+const tela=el("bloqueioScreen");
+if(tela)tela.style.display="none";
 mostrarLogin();
-
 };
-
-
-/* ================================
-   BADGES
-================================ */
 
 function badge(s){
-
-return s==="Recebido"
-?
-'<span class="badge b-recebido">🔴 Recebido</span>'
-:
-s==="Em preparo"
-?
-'<span class="badge b-preparo">🟠 Em preparo</span>'
-:
-s==="Pronto"
-?
-'<span class="badge b-pronto">🔵 Pronto</span>'
-:
+return s==="Recebido"?'<span class="badge b-recebido">🔴 Recebido</span>':
+s==="Em preparo"?'<span class="badge b-preparo">🟠 Em preparo</span>':
+s==="Pronto"?'<span class="badge b-pronto">🔵 Pronto</span>':
 '<span class="badge b-final">🟢 Finalizado</span>';
-
 }
-
-
-/* ================================
-   SEÇÕES
-================================ */
 
 window.sec=(n,b)=>{
-
-if(
-(n==="novoRestaurante"||
-n==="acessos")&&
-!EH_SABOR_DA_CASA
-)return;
-
+if((n==="novoRestaurante"||n==="acessos")&&!EH_SABOR_DA_CASA)return;
 const alvo=el(n);
-
 if(!alvo)return;
-
-document
-.querySelectorAll(".secao")
-.forEach(
-x=>x.classList.remove("ativa")
-);
-
+document.querySelectorAll(".secao").forEach(x=>x.classList.remove("ativa"));
 alvo.classList.add("ativa");
-
-document
-.querySelectorAll(".nav button")
-.forEach(
-x=>x.classList.remove("ativo")
-);
-
-if(b)
-b.classList.add("ativo");
-
+document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("ativo"));
+if(b)b.classList.add("ativo");
 };
-
-
-/* ================================
-   MESAS
-================================ */
 
 function classeMesa(n){
-
-const p=
-pedidos.filter(
-x=>String(x.mesa)===String(n)&&ativo(x)
-);
-
-if(!p.length)
-return[
-"livre",
-"Livre",
-0,
-false
-];
-
-const v=
-p.reduce(
-(s,x)=>s+Number(x.total||0),
-0
-);
-
-if(
-p.some(
-x=>x.status==="Recebido"
-)
-)
-return[
-"ocupada",
-"Recebido",
-v,
-true
-];
-
-if(
-p.some(
-x=>x.status==="Em preparo"
-)
-)
-return[
-"preparo",
-"Em preparo",
-v,
-false
-];
-
-if(
-p.some(
-x=>x.status==="Pronto"
-)
-)
-return[
-"pronto",
-"Pronto",
-v,
-false
-];
-
-return[
-"ocupada",
-"Ocupada",
-v,
-false
-];
-
+const p=pedidos.filter(x=>String(x.mesa)===String(n)&&ativo(x));
+if(!p.length)return["livre","Livre",0,false];
+const v=p.reduce((s,x)=>s+Number(x.total||0),0);
+if(p.some(x=>x.status==="Recebido"))return["ocupada","Recebido",v,true];
+if(p.some(x=>x.status==="Em preparo"))return["preparo","Em preparo",v,false];
+if(p.some(x=>x.status==="Pronto"))return["pronto","Pronto",v,false];
+return["ocupada","Ocupada",v,false];
 }
-
 
 function renderMesas(){
-
-const a=
-el("mesas");
-
-a.innerHTML="";
-
+const a=el("mesas");a.innerHTML="";
 let c=[0,0,0,0];
-
-for(
-let n=1;
-n<=mesas;
-n++
-){
-
-const r=
-classeMesa(n);
-
-const d=
-document.createElement("div");
-
-d.className=
-"mesa "+
-r[0]+
-(r[3]?" nova":"");
-
-if(r[0]==="livre")
-c[0]++;
-else if(r[0]==="ocupada")
-c[1]++;
-else if(r[0]==="preparo")
-c[2]++;
-else
-c[3]++;
-
+for(let n=1;n<=mesas;n++){
+const r=classeMesa(n),d=document.createElement("div");
+d.className="mesa "+r[0]+(r[3]?" nova":"");
+if(r[0]==="livre")c[0]++;else if(r[0]==="ocupada")c[1]++;else if(r[0]==="preparo")c[2]++;else c[3]++;
 d.innerHTML=`
-
 <div>
-
 <h3>🪑 Mesa ${n}</h3>
-
-<div style="font-weight:bold;margin-top:8px">
-${
-r[1]==="Livre"
-?"🟢"
-:r[1]==="Recebido"
-?"🔴"
-:r[1]==="Em preparo"
-?"🟠"
-:"🔵"
-}
-${r[1]}
+<div style="font-weight:bold;margin-top:8px">${r[1]==="Livre"?"🟢":r[1]==="Recebido"?"🔴":r[1]==="Em preparo"?"🟠":"🔵"} ${r[1]}</div>
+<div style="font-size:20px;font-weight:bold;margin-top:8px">${dinheiro(r[2])}</div>
 </div>
-
-<div style="font-size:20px;font-weight:bold;margin-top:8px">
-${dinheiro(r[2])}
-</div>
-
-</div>
-
-<button onclick="abrirMesa(${n})">
-📋 Ver comanda
-</button>
-
-`;
-
+<button onclick="abrirMesa(${n})">📋 Ver comanda</button>`;
 a.appendChild(d);
-
 }
-
-el("livres").textContent=c[0];
-el("ocupadas").textContent=c[1];
-el("preparo").textContent=c[2];
-el("prontos").textContent=c[3];
-el("ativos").textContent=
-pedidos.filter(ativo).length;
-
+el("livres").textContent=c[0];el("ocupadas").textContent=c[1];el("preparo").textContent=c[2];el("prontos").textContent=c[3];el("ativos").textContent=pedidos.filter(ativo).length;
 }
-
 
 window.abrirMesa=n=>{
-
-const ps=
-pedidos.filter(
-x=>String(x.mesa)===String(n)&&ativo(x)
-);
-
-if(ps.length)
-abrirComandaGrupo(ps);
-else
-alert(
-"🟢 Mesa "+n+" está livre."
-);
-
+const ps=pedidos.filter(x=>String(x.mesa)===String(n)&&ativo(x));
+if(ps.length)abrirComandaGrupo(ps);else alert("🟢 Mesa "+n+" está livre.");
 };
-
-
-/* ================================
-   PEDIDOS
-================================ */
 
 function renderPedidos(){
+const a=el("listaPedidos");
+const ps=pedidos.filter(ativo).sort((x,y)=>String(x.data||"").localeCompare(String(y.data||"")));
+const grupos={"Recebido":[],"Em preparo":[],"Pronto":[]};
+ps.forEach(p=>{if(grupos[p.status])grupos[p.status].push(p)});
 
-const a=
-el("listaPedidos");
-
-const ps=
-pedidos
-.filter(ativo)
-.sort(
-(x,y)=>
-String(x.data||"")
-.localeCompare(
-String(y.data||"")
-)
-);
-
-const grupos={
-"Recebido":[],
-"Em preparo":[],
-"Pronto":[]
-};
-
-ps.forEach(p=>{
-
-if(grupos[p.status])
-grupos[p.status].push(p);
-
-});
-
-
-const coluna=(
-status,
-titulo,
-classe,
-emoji
-)=>{
-
-const lista=
-grupos[status];
-
-const cards=
-lista.map(p=>{
-
-const itens=
-(p.itens||[])
-.map(i=>
-`
-<div>
-• ${i.quantidade}x
-${esc(i.nome)}
-—
-${dinheiro(
-Number(i.preco||0)*
-Number(i.quantidade||1)
-)}
-
-${
-i.observacao
-?
-`<div class="obs">
-Obs.: ${esc(i.observacao)}
-</div>`
-:""
-}
-
-</div>
-`
-).join("");
-
-const hora=
-p.data&&
-!isNaN(
-new Date(p.data).getTime()
-)
-?
-new Date(p.data)
-.toLocaleTimeString(
-"pt-BR",
-{
-hour:"2-digit",
-minute:"2-digit",
-second:"2-digit"
-}
-)
-:"--:--:--";
-
-const posicao=
-ps.findIndex(
-x=>x.id===p.id
-)+1;
-
-const medalha=
-posicao===1
-?"🥇"
-:posicao===2
-?"🥈"
-:posicao===3
-?"🥉"
-:"🔢";
-
-const ac=
-p.status==="Recebido"
-?
-`
-<button
-class="btn laranja"
-onclick="status('${p.id}','Em preparo')">
-
-🟠 Iniciar preparo
-
-</button>
-`
-:
-p.status==="Em preparo"
-?
-`
-<button
-class="btn azul"
-onclick="status('${p.id}','Pronto')">
-
-🔵 Marcar pronto
-
-</button>
-`
-:
-`
-<button
-class="btn verde"
-onclick="abrirId('${p.id}')">
-
-📋 Abrir comanda
-
-</button>
-`;
-
-return`
-
-<div class="pedido ${
-p.status==="Em preparo"
-?"prep"
-:p.status==="Pronto"
-?"pron"
-:""
-}">
-
-<div class="top">
-
-<div>
-
-<strong style="font-size:18px">
-Pedido #${esc(p.numeroPedido)}
-</strong>
-
-<br>
-
-🪑 Mesa ${esc(p.mesa)}
-
-${
-p.responsavel
-?
-" • 👤 "+esc(p.responsavel)
-:""
-}
-
-<br>
-
-${badge(p.status)}
-
-<div class="fila">
-${medalha} ${posicao}º na fila
-</div>
-
-<div class="horachegada">
-🕐 Chegou às ${hora}
-</div>
-
-${
-p.comandaId
-?
-`
-<small style="color:#9fc5ff">
-📋 Comanda da mesa
-</small>
-`
-:""
-}
-
-</div>
-
-<strong style="font-size:19px">
-${dinheiro(p.total)}
-</strong>
-
-</div>
-
-<div class="itens">
-${itens}
-</div>
-
-${
-p.observacaoGeral
-?
-`
-<div class="obs">
-📝 ${esc(p.observacaoGeral)}
-</div>
-`
-:""
-}
-
-<div class="acoes" style="margin-top:12px">
-${ac}
-</div>
-
-</div>
-
-`;
-
+const coluna=(status,titulo,classe,emoji)=>{
+const lista=grupos[status];
+const cards=lista.map(p=>{
+const itens=(p.itens||[]).map(i=>`<div>• ${i.quantidade}x ${esc(i.nome)} — ${dinheiro(Number(i.preco||0)*Number(i.quantidade||1))}${i.observacao?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`:""}</div>`).join("");
+const hora=p.data&&!isNaN(new Date(p.data).getTime())?new Date(p.data).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",second:"2-digit"}):"--:--:--";
+const posicao=ps.findIndex(x=>x.id===p.id)+1;
+const medalha=posicao===1?"🥇":posicao===2?"🥈":posicao===3?"🥉":"🔢";
+const ac=p.status==="Recebido"?`<button class="btn laranja" onclick="status('${p.id}','Em preparo')">🟠 Iniciar preparo</button>`:p.status==="Em preparo"?`<button class="btn azul" onclick="status('${p.id}','Pronto')">🔵 Marcar pronto</button>`:`<button class="btn verde" onclick="abrirId('${p.id}')">📋 Abrir comanda</button>`;
+return `<div class="pedido ${p.status==="Em preparo"?"prep":p.status==="Pronto"?"pron":""}">
+<div class="top"><div><strong style="font-size:18px">Pedido #${esc(p.numeroPedido)}</strong><br>🪑 Mesa ${esc(p.mesa)}${p.responsavel?" • 👤 "+esc(p.responsavel):""}<br>${badge(p.status)}
+<div class="fila">${medalha} ${posicao}º na fila</div>
+<div class="horachegada">🕐 Chegou às ${hora}</div>
+${p.comandaId?`<small style="color:#9fc5ff">📋 Comanda da mesa</small>`:""}</div>
+<strong style="font-size:19px">${dinheiro(p.total)}</strong></div>
+<div class="itens">${itens}</div>
+${p.observacaoGeral?`<div class="obs">📝 ${esc(p.observacaoGeral)}</div>`:""}
+<div class="acoes" style="margin-top:12px">${ac}</div>
+</div>`;
 }).join("");
-
-return`
-
-<div class="coluna-pedidos ${classe}">
-
-<div class="coluna-titulo">
-
-<strong>
-${emoji} ${titulo}
-</strong>
-
-<span class="contador-coluna">
-${lista.length}
-</span>
-
-</div>
-
-${
-cards||
-'<div class="vazio" style="padding:22px 8px">Nenhum pedido</div>'
-}
-
-</div>
-
-`;
-
+return `<div class="coluna-pedidos ${classe}">
+<div class="coluna-titulo"><strong>${emoji} ${titulo}</strong><span class="contador-coluna">${lista.length}</span></div>
+${cards||'<div class="vazio" style="padding:22px 8px">Nenhum pedido</div>'}
+</div>`;
 };
-
-
-a.innerHTML=
-coluna(
-"Recebido",
-"Recebidos",
-"recebidos",
-"🔴"
-)+
-coluna(
-"Em preparo",
-"Em preparo",
-"preparando",
-"🟠"
-)+
-coluna(
-"Pronto",
-"Prontos",
-"prontos",
-"🔵"
-);
-
+a.innerHTML=coluna("Recebido","Recebidos","recebidos","🔴")+coluna("Em preparo","Em preparo","preparando","🟠")+coluna("Pronto","Prontos","prontos","🔵");
 }
-
 
 window.status=async(id,s)=>{
-
 try{
-
-await updateDoc(
-documentoRestaurante(
-"pedidos",
-id
-),
-{
-status:s
+await updateDoc(documentoRestaurante("pedidos",id),{status:s});
+const idx=pedidos.findIndex(p=>p.id===id);
+if(idx>=0)pedidos[idx]={...pedidos[idx],status:s};
+renderPedidos();renderMesas();atualizarAlarmeSom();
+if(comanda&&comanda.length){
+const grupoAtual=pedidos.filter(p=>comanda.some(x=>x.id===p.id)&&ativo(p));
+if(grupoAtual.length)abrirComandaGrupo(grupoAtual);
 }
-);
-
-const idx=
-pedidos.findIndex(
-p=>p.id===id
-);
-
-if(idx>=0){
-
-pedidos[idx]={
-...pedidos[idx],
-status:s
+}catch(e){alert("Erro ao atualizar pedido:\n\n"+e.message)}
 };
-
-}
-
-renderPedidos();
-renderMesas();
-atualizarAlarmeSom();
-
-if(
-comanda&&
-comanda.length
-){
-
-const grupoAtual=
-pedidos.filter(
-p=>
-comanda.some(
-x=>x.id===p.id
-)&&
-ativo(p)
-);
-
-if(grupoAtual.length)
-abrirComandaGrupo(
-grupoAtual
-);
-
-}
-
-}catch(e){
-
-alert(
-"Erro ao atualizar pedido:\n\n"+
-e.message
-);
-
-}
-
-};
-
 
 window.abrirId=id=>{
-
-const p=
-pedidos.find(
-x=>x.id===id
-);
-
+const p=pedidos.find(x=>x.id===id);
 if(p){
-
-let grupo=
-pedidos.filter(
-x=>
-String(x.comandaId||"")===
-String(p.comandaId||"")&&
-ativo(x)
-);
-
-if(!grupo.length)
-grupo=[p];
-
+let grupo=pedidos.filter(x=>String(x.comandaId||"")===String(p.comandaId||"")&&ativo(x));
+if(!grupo.length)grupo=[p];
 abrirComandaGrupo(grupo);
-
 }
-
 };
-
 
 function abrirComandaGrupo(grupo){
-
 comanda=grupo;
-
-const mesa=
-grupo[0]?.mesa||"";
-
-el("modalTitulo").textContent=
-`📋 Mesa ${mesa} — Comanda aberta`;
-
-const totalGrupo=
-grupo.reduce(
-(s,p)=>
-s+Number(p.total||0),
-0
-);
-
+const mesa=grupo[0]?.mesa||"";
+el("modalTitulo").textContent=`📋 Mesa ${mesa} — Comanda aberta`;
+const totalGrupo=grupo.reduce((s,p)=>s+Number(p.total||0),0);
 el("modalConteudo").innerHTML=`
-
-<div class="linha">
-
-<span>
-Pedidos na comanda
-</span>
-
-<strong>
-${grupo.length}
-</strong>
-
-</div>
-
-<div class="linha">
-
-<span>
-Total acumulado
-</span>
-
-<strong>
-${dinheiro(totalGrupo)}
-</strong>
-
-</div>
-
-${
-grupo.map(p=>{
-
-const itens=
-(p.itens||[])
-.map(i=>
-`
-<div class="item">
-
-<b>
-${i.quantidade}x
-${esc(i.nome)}
-</b>
-
-—
-${dinheiro(
-Number(i.preco||0)*
-Number(i.quantidade||1)
-)}
-
-${
-i.observacao
-?
-`
-<div class="obs">
-Obs.: ${esc(i.observacao)}
-</div>
-`
-:""
-}
-
-</div>
-`
-).join("");
-
-const ac=
-p.status==="Recebido"
-?
-`
-<button
-class="btn laranja"
-onclick="mudarPedido('${p.id}','Em preparo')">
-
-🟠 Em preparo
-
-</button>
-`
-:
-p.status==="Em preparo"
-?
-`
-<button
-class="btn azul"
-onclick="mudarPedido('${p.id}','Pronto')">
-
-🔵 Pronto
-
-</button>
-`
-:
-`
-<span class="badge b-pronto">
-🔵 Pronto
-</span>
-`;
-
-return`
-
-<div
-class="card"
-style="margin:12px 0;background:#0b2c5c">
-
-<div class="top">
-
-<div>
-
-<strong>
-Pedido #${esc(p.numeroPedido)}
-</strong>
-
-<br>
-
-${badge(p.status)}
-
-${
-p.comandaId
-?
-`
-<br>
-<small style="color:#9fc5ff">
-📋 Comanda da mesa
-</small>
-`
-:""
-}
-
-</div>
-
-<strong>
-${dinheiro(p.total)}
-</strong>
-
-</div>
-
-<div class="itens">
-${itens}
-</div>
-
-<div class="acoes">
-${ac}
-</div>
-
-</div>
-
-`;
-
-}).join("")
-}
-
-`;
-
-el("btnPreparo").style.display="none";
-el("btnPronto").style.display="none";
-
-el("finalizar").style.display=
-grupo.length&&
-grupo.every(
-p=>p.status==="Pronto"
-)
-?
-"inline-block"
-:
-"none";
-
+<div class="linha"><span>Pedidos na comanda</span><strong>${grupo.length}</strong></div>
+<div class="linha"><span>Total acumulado</span><strong>${dinheiro(totalGrupo)}</strong></div>
+${grupo.map(p=>{
+const itens=(p.itens||[]).map(i=>`<div class="item"><b>${i.quantidade}x ${esc(i.nome)}</b> — ${dinheiro(Number(i.preco||0)*Number(i.quantidade||1))}${i.observacao?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`:""}</div>`).join("");
+const ac=p.status==="Recebido"?`<button class="btn laranja" onclick="mudarPedido('${p.id}','Em preparo')">🟠 Em preparo</button>`:p.status==="Em preparo"?`<button class="btn azul" onclick="mudarPedido('${p.id}','Pronto')">🔵 Pronto</button>`:`<span class="badge b-pronto">🔵 Pronto</span>`;
+return `<div class="card" style="margin:12px 0;background:#0b2c5c"><div class="top"><div><strong>Pedido #${esc(p.numeroPedido)}</strong><br>${badge(p.status)}${p.comandaId?`<br><small style="color:#9fc5ff">📋 Comanda da mesa</small>`:""}</div><strong>${dinheiro(p.total)}</strong></div><div class="itens">${itens}</div><div class="acoes">${ac}</div></div>`;
+}).join("")}`;
+el("btnPreparo").style.display="none";el("btnPronto").style.display="none";
+el("finalizar").style.display=grupo.length&&grupo.every(p=>p.status==="Pronto")?"inline-block":"none";
 el("modal").style.display="block";
-
 }
 
-
-window.fecharModal=()=>{
-el("modal").style.display="none";
-comanda=null;
-};
-
+window.fecharModal=()=>{el("modal").style.display="none";comanda=null};
 
 window.mudarPedido=async(id,s)=>{
-
 try{
-
-const idx=
-pedidos.findIndex(
-p=>p.id===id
-);
-
-if(idx>=0){
-
-pedidos[idx]={
-...pedidos[idx],
-status:s
+const idx=pedidos.findIndex(p=>p.id===id);
+if(idx>=0){pedidos[idx]={...pedidos[idx],status:s};renderPedidos();renderMesas();atualizarAlarmeSom()}
+await updateDoc(documentoRestaurante("pedidos",id),{status:s});
+if(comanda&&comanda.length){
+const grupoAtual=pedidos.filter(p=>comanda.some(x=>x.id===p.id)&&ativo(p));
+if(grupoAtual.length)abrirComandaGrupo(grupoAtual);
+}
+}catch(e){alert("Erro ao atualizar pedido:\n\n"+e.message)}
 };
-
-renderPedidos();
-renderMesas();
-atualizarAlarmeSom();
-
-}
-
-await updateDoc(
-documentoRestaurante(
-"pedidos",
-id
-),
-{
-status:s
-}
-);
-
-if(
-comanda&&
-comanda.length
-){
-
-const grupoAtual=
-pedidos.filter(
-p=>
-comanda.some(
-x=>x.id===p.id
-)&&
-ativo(p)
-);
-
-if(grupoAtual.length)
-abrirComandaGrupo(
-grupoAtual
-);
-
-}
-
-}catch(e){
-
-alert(
-"Erro ao atualizar pedido:\n\n"+
-e.message
-);
-
-}
-
-};
-
 
 window.mudarComanda=async s=>{
-
 if(!comanda)return;
-
-for(
-const p of comanda
-){
-
-if(p.status!==s){
-
-await updateDoc(
-documentoRestaurante(
-"pedidos",
-p.id
-),
-{
-status:s
-}
-);
-
-}
-
-}
-
+for(const p of comanda)if(p.status!==s)await updateDoc(documentoRestaurante("pedidos",p.id),{status:s});
 };
-
 
 window.finalizar=async()=>{
-
-if(!comanda||!comanda.length)
-return;
-
-const grupo=
-pedidos.filter(
-p=>
-comanda.some(
-x=>x.id===p.id
-)&&
-ativo(p)
-);
-
+if(!comanda||!comanda.length)return;
+const grupo=pedidos.filter(p=>comanda.some(x=>x.id===p.id)&&ativo(p));
 if(!grupo.length)return;
-
-if(
-!grupo.every(
-p=>p.status==="Pronto"
-)
-){
-
-alert(
-"⚠️ Só é possível finalizar a mesa quando todos os pedidos estiverem prontos."
-);
-
-return;
-
-}
-
-const mesa=
-grupo[0].mesa;
-
+if(!grupo.every(p=>p.status==="Pronto")){alert("⚠️ Só é possível finalizar a mesa quando todos os pedidos estiverem prontos.");return}
+const mesa=grupo[0].mesa;
 try{
-
-const b=
-writeBatch(db);
-
-const now=
-new Date().toISOString();
-
-let itens=[];
-let totalGrupo=0;
-
+const b=writeBatch(db),now=new Date().toISOString();
+let itens=[],totalGrupo=0;
 grupo.forEach(p=>{
-
-b.update(
-documentoRestaurante(
-"pedidos",
-p.id
-),
-{
-status:"Finalizado",
-finalizadoEm:now
-}
-);
-
-itens=
-itens.concat(
-(p.itens||[]).map(
-i=>({
-...i,
-pedidoOrigem:p.numeroPedido
-})
-)
-);
-
-totalGrupo+=
-Number(p.total||0);
-
+b.update(documentoRestaurante("pedidos",p.id),{status:"Finalizado",finalizadoEm:now});
+itens=itens.concat((p.itens||[]).map(i=>({...i,pedidoOrigem:p.numeroPedido})));
+totalGrupo+=Number(p.total||0);
 });
-
-b.set(
-doc(
-colecaoRestaurante(
-"historicoComandas"
-)
-),
-{
-
-comandaId:
-grupo[0].comandaId||
-("legacy-"+grupo[0].id),
-
-numeroComanda:
-"Mesa "+mesa,
-
-mesa,
-
-pedidos:
-grupo.map(
-p=>({
-numeroPedido:p.numeroPedido,
-total:Number(p.total||0),
-status:"Finalizado"
-})
-),
-
-responsavel:
-grupo[0].responsavel||"",
-
-observacaoGeral:
-grupo
-.map(
-p=>p.observacaoGeral||""
-)
-.filter(Boolean)
-.join(" | "),
-
-itens,
-
-total:totalGrupo,
-
-data:
-grupo
-.map(p=>p.data)
-.sort()[0]||now,
-
-finalizadoEm:now
-
-}
-);
-
+b.set(doc(colecaoRestaurante("historicoComandas")),{
+comandaId:grupo[0].comandaId||("legacy-"+grupo[0].id),
+numeroComanda:"Mesa "+mesa,mesa,
+pedidos:grupo.map(p=>({numeroPedido:p.numeroPedido,total:Number(p.total||0),status:"Finalizado"})),
+responsavel:grupo[0].responsavel||"",
+observacaoGeral:grupo.map(p=>p.observacaoGeral||"").filter(Boolean).join(" | "),
+itens,total:totalGrupo,data:grupo.map(p=>p.data).sort()[0]||now,finalizadoEm:now
+});
 await b.commit();
-
 fecharModal();
-
-alert(
-`🟢 Mesa ${mesa} finalizada.
-
-${grupo.length} pedido(s) encerrado(s).
-Total: ${dinheiro(totalGrupo)}
-
-Mesa liberada.`
-);
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"Erro ao finalizar a comanda da mesa:\n\n"+
-e.message
-);
-
-}
-
+alert(`🟢 Mesa ${mesa} finalizada.\n\n${grupo.length} pedido(s) encerrado(s).\nTotal: ${dinheiro(totalGrupo)}\n\nMesa liberada.`);
+}catch(e){console.error(e);alert("Erro ao finalizar a comanda da mesa:\n\n"+e.message)}
 };
 
-
-/* ================================
-   PRODUTOS
-================================ */
-
+/* PRODUTOS */
 function renderProdutos(){
-
-const a=
-el("listaProdutos");
-
-if(!produtos.length){
-
-a.innerHTML=
-'<div class="vazio">Nenhum produto cadastrado.</div>';
-
-return;
-
-}
-
-a.innerHTML=
-produtos.map(p=>{
-
-const categoria=
-normalizarCategoria(
-p.categoria
-);
-
-return`
-
-<div class="produto">
-
-<div>
-
-<strong>
-${esc(p.nome)}
-</strong>
-
-<br>
-
-<span style="color:#a9c9ff">
-${esc(categoria||"Sem categoria")}
-•
-${dinheiro(p.preco)}
-</span>
-
-<br>
-
-<small>
-${
-p.ativo===false
-?"🔴 Indisponível"
-:"🟢 Disponível"
-}
-
-${
-p.promocaoAtiva
-?" • 🔥 Promoção"
-:""
-}
-
-</small>
-
-</div>
-
-<div class="acoes">
-
-<button
-class="btn azul"
-onclick="editar('${p.id}')">
-
-✏️ Editar
-
-</button>
-
-<button
-class="btn btn-excluir"
-onclick="excluirProduto('${p.id}')">
-
-🗑️ Excluir
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
+const a=el("listaProdutos");
+if(!produtos.length){a.innerHTML='<div class="vazio">Nenhum produto cadastrado.</div>';return}
+a.innerHTML=produtos.map(p=>{
+const categoria=normalizarCategoria(p.categoria);
+return `<div class="produto"><div><strong>${esc(p.nome)}</strong><br><span style="color:#a9c9ff">${esc(categoria||"Sem categoria")} • ${dinheiro(p.preco)}</span><br><small>${p.ativo===false?"🔴 Indisponível":"🟢 Disponível"}${p.promocaoAtiva?" • 🔥 Promoção":""}</small></div>
+<div class="acoes"><button class="btn azul" onclick="editar('${p.id}')">✏️ Editar</button><button class="btn btn-excluir" onclick="excluirProduto('${p.id}')">🗑️ Excluir</button></div></div>`;
 }).join("");
-
 }
-
 
 window.novoProduto=()=>{
-
-[
-"pid",
-"pnome",
-"pdesc",
-"ppreco",
-"ppromo",
-"pfoto"
-].forEach(
-id=>el(id).value=""
-);
-
-el("pnovaCategoria").value="";
-el("pfotoArquivo").value="";
-el("fotoPreview").innerHTML="";
-
-el("pativo").value="true";
-el("ppromoativa").value="false";
-
-preencherCategorias();
-
-el("pcat").value="";
-
-el("tituloModalProduto").textContent=
-"🍔 Novo produto";
-
-el("modalProd").style.display="block";
-
+["pid","pnome","pdesc","ppreco","ppromo","pfoto"].forEach(id=>el(id).value="");
+el("pnovaCategoria").value="";el("pfotoArquivo").value="";el("fotoPreview").innerHTML="";
+el("pativo").value="true";el("ppromoativa").value="false";preencherCategorias();el("pcat").value="";
+el("tituloModalProduto").textContent="🍔 Novo produto";el("modalProd").style.display="block";
 };
 
-
-window.fecharProd=()=>
-el("modalProd").style.display="none";
-
+window.fecharProd=()=>el("modalProd").style.display="none";
 
 window.editar=id=>{
-
-const p=
-produtos.find(
-x=>x.id===id
-);
-
-if(!p)return;
-
-el("pid").value=id;
-
-el("pnome").value=
-p.nome||"";
-
-preencherCategorias();
-
-el("pcat").value=
-normalizarCategoria(
-p.categoria||""
-);
-
-el("pnovaCategoria").value="";
-
-el("pdesc").value=
-p.descricao||"";
-
-el("ppreco").value=
-p.preco??"";
-
-el("ppromo").value=
-p.precoPromocional??"";
-
-el("pfoto").value=
-p.foto||"";
-
+const p=produtos.find(x=>x.id===id);if(!p)return;
+el("pid").value=id;el("pnome").value=p.nome||"";
+preencherCategorias();el("pcat").value=normalizarCategoria(p.categoria||"");el("pnovaCategoria").value="";
+el("pdesc").value=p.descricao||"";el("ppreco").value=p.preco??"";el("ppromo").value=p.precoPromocional??"";el("pfoto").value=p.foto||"";
 el("pfotoArquivo").value="";
-
-el("fotoPreview").innerHTML=
-p.foto
-?
-`
-<img
-src="${esc(p.foto)}"
-style="
-max-width:260px;
-max-height:180px;
-border-radius:10px;
-border:1px solid #315d98;
-object-fit:cover">
-`
-:"";
-
-el("pativo").value=
-String(p.ativo!==false);
-
-el("ppromoativa").value=
-String(p.promocaoAtiva===true);
-
-el("tituloModalProduto").textContent=
-"✏️ Editar produto";
-
-el("modalProd").style.display="block";
-
+el("fotoPreview").innerHTML=p.foto?`<img src="${esc(p.foto)}" style="max-width:260px;max-height:180px;border-radius:10px;border:1px solid #315d98;object-fit:cover">`:"";
+el("pativo").value=String(p.ativo!==false);el("ppromoativa").value=String(p.promocaoAtiva===true);
+el("tituloModalProduto").textContent="✏️ Editar produto";el("modalProd").style.display="block";
 };
-
 
 window.excluirProduto=async id=>{
-
-const p=
-produtos.find(
-x=>x.id===id
-);
-
-if(!p)return;
-
-if(!confirm(
-`⚠️ Excluir produto?
-
-${p.nome}
-
-Essa ação não poderá ser desfeita.`
-))
-return;
-
+const p=produtos.find(x=>x.id===id);if(!p)return;
+if(!confirm(`⚠️ Excluir produto?\n\n${p.nome}\n\nEssa ação não poderá ser desfeita.`))return;
 try{
-
-await deleteDoc(
-documentoRestaurante(
-"produtos",
-id
-)
-);
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"❌ Não foi possível excluir o produto:\n\n"+
-e.message
-);
-
-}
-
+await deleteDoc(documentoRestaurante("produtos",id));
+}catch(e){console.error(e);alert("❌ Não foi possível excluir o produto:\n\n"+e.message)}
 };
-
 
 window.previewFoto=e=>{
-
-const f=
-e.target.files&&
-e.target.files[0];
-
-if(!f)return;
-
-if(
-!f.type.startsWith("image/")
-){
-
-alert("Escolha uma imagem.");
-
-e.target.value="";
-
-return;
-
-}
-
-const u=
-URL.createObjectURL(f);
-
-el("fotoPreview").innerHTML=
-`
-<img
-src="${u}"
-style="
-max-width:260px;
-max-height:180px;
-border-radius:10px;
-border:1px solid #315d98;
-object-fit:cover">
-`;
-
+const f=e.target.files&&e.target.files[0];if(!f)return;
+if(!f.type.startsWith("image/")){alert("Escolha uma imagem.");e.target.value="";return}
+const u=URL.createObjectURL(f);
+el("fotoPreview").innerHTML=`<img src="${u}" style="max-width:260px;max-height:180px;border-radius:10px;border:1px solid #315d98;object-fit:cover">`;
 };
-
 
 function comprimirFoto(file){
-
-return new Promise(
-(resolve,reject)=>{
-
-const r=
-new FileReader();
-
+return new Promise((resolve,reject)=>{
+const r=new FileReader();
 r.onload=()=>{
-
-const im=
-new Image();
-
+const im=new Image();
 im.onload=()=>{
-
-let max=700;
-let w=im.width;
-let h=im.height;
-
-if(w>h){
-
-if(w>max){
-
-h=
-Math.round(
-h*max/w
-);
-
-w=max;
-
-}
-
-}else{
-
-if(h>max){
-
-w=
-Math.round(
-w*max/h
-);
-
-h=max;
-
-}
-
-}
-
-const c=
-document.createElement(
-"canvas"
-);
-
-c.width=w;
-c.height=h;
-
-const ctx=
-c.getContext("2d");
-
-ctx.drawImage(
-im,
-0,
-0,
-w,
-h
-);
-
-let qualidade=.72;
-
-let out=
-c.toDataURL(
-"image/jpeg",
-qualidade
-);
-
-while(
-out.length>850000&&
-qualidade>.45
-){
-
-qualidade-=.07;
-
-out=
-c.toDataURL(
-"image/jpeg",
-qualidade
-);
-
-}
-
+let max=700,w=im.width,h=im.height;
+if(w>h){if(w>max){h=Math.round(h*max/w);w=max}}else{if(h>max){w=Math.round(w*max/h);h=max}}
+const c=document.createElement("canvas");c.width=w;c.height=h;
+const ctx=c.getContext("2d");ctx.drawImage(im,0,0,w,h);
+let qualidade=.72,out=c.toDataURL("image/jpeg",qualidade);
+while(out.length>850000&&qualidade>.45){qualidade-=.07;out=c.toDataURL("image/jpeg",qualidade)}
 resolve(out);
-
 };
-
-im.onerror=reject;
-
-im.src=r.result;
-
+im.onerror=reject;im.src=r.result;
 };
-
-r.onerror=reject;
-
-r.readAsDataURL(file);
-
+r.onerror=reject;r.readAsDataURL(file);
 });
-
 }
-
 
 window.salvarProd=async()=>{
-
 if(salvandoProduto)return;
-
 salvandoProduto=true;
-
-const botao=
-el("btnSalvarProduto");
-
-if(botao){
-
-botao.disabled=true;
-
-botao.textContent=
-"⏳ Salvando...";
-
-}
-
+const botao=el("btnSalvarProduto");
+if(botao){botao.disabled=true;botao.textContent="⏳ Salvando...";}
 try{
-
-const id=
-el("pid").value;
-
-const novaCategoria=
-el("pnovaCategoria").value.trim();
-
-const categoriaSelecionada=
-el("pcat").value.trim();
-
-const categoriaFinal=
-normalizarCategoria(
-novaCategoria||
-categoriaSelecionada
-);
-
+const id=el("pid").value;
+const novaCategoria=el("pnovaCategoria").value.trim();
+const categoriaSelecionada=el("pcat").value.trim();
+const categoriaFinal=normalizarCategoria(novaCategoria||categoriaSelecionada);
 const d={
-
-nome:
-el("pnome").value.trim(),
-
-categoria:
-categoriaFinal,
-
-descricao:
-el("pdesc").value.trim(),
-
-preco:
-Number(
-el("ppreco").value||0
-),
-
-precoPromocional:
-Number(
-el("ppromo").value||0
-),
-
-foto:
-el("pfoto").value.trim(),
-
-ativo:
-el("pativo").value==="true",
-
-promocaoAtiva:
-el("ppromoativa").value==="true"
-
+nome:el("pnome").value.trim(),
+categoria:categoriaFinal,
+descricao:el("pdesc").value.trim(),
+preco:Number(el("ppreco").value||0),
+precoPromocional:Number(el("ppromo").value||0),
+foto:el("pfoto").value.trim(),
+ativo:el("pativo").value==="true",
+promocaoAtiva:el("ppromoativa").value==="true"
 };
-
-if(!d.nome||!d.preco){
-
-alert(
-"Informe nome e preço."
-);
-
-return;
-
-}
-
-if(!d.categoria){
-
-alert(
-"⚠️ Selecione uma categoria ou informe uma nova categoria."
-);
-
-return;
-
-}
-
-const f=
-el("pfotoArquivo").files[0];
-
-if(f)
-d.foto=
-await comprimirFoto(f);
-
+if(!d.nome||!d.preco){alert("Informe nome e preço.");return}
+if(!d.categoria){alert("⚠️ Selecione uma categoria ou informe uma nova categoria.");return}
+const f=el("pfotoArquivo").files[0];
+if(f)d.foto=await comprimirFoto(f);
 if(id){
-
-await updateDoc(
-documentoRestaurante(
-"produtos",
-id
-),
-d
-);
-
-alert(
-`✅ Produto "${d.nome}" atualizado.`
-);
-
+await updateDoc(documentoRestaurante("produtos",id),d);
+alert(`✅ Produto "${d.nome}" atualizado.`);
 }else{
-
-await addDoc(
-colecaoRestaurante(
-"produtos"
-),
-d
-);
-
-alert(
-`✅ Produto "${d.nome}" cadastrado em "${d.categoria}".`
-);
-
+await addDoc(colecaoRestaurante("produtos"),d);
+alert(`✅ Produto "${d.nome}" cadastrado em "${d.categoria}".`);
 }
-
 fecharProd();
-
 }catch(e){
-
 console.error(e);
-
-alert(
-"Erro ao salvar produto:\n\n"+
-e.message
-);
-
+alert("Erro ao salvar produto:\n\n"+e.message);
 }finally{
-
 salvandoProduto=false;
-
-if(botao){
-
-botao.disabled=false;
-
-botao.textContent=
-"💾 Salvar";
-
+if(botao){botao.disabled=false;botao.textContent="💾 Salvar";}
 }
-
-}
-
 };
 
-
-/* ================================
-   HISTÓRICO
-================================ */
-
+/* HISTÓRICO E FINANCEIRO */
 function renderHist(){
-
-const a=
-el("listaHistorico");
-
-const h=
-[...hist].sort(
-(x,y)=>
-String(y.finalizadoEm||"")
-.localeCompare(
-String(x.finalizadoEm||"")
-)
-);
-
-if(!h.length){
-
-a.innerHTML=
-'<div class="vazio">Nenhuma comanda finalizada.</div>';
-
-return;
-
-}
-
-a.innerHTML=
-h.map(x=>{
-
-const qtd=
-Array.isArray(x.pedidos)
-?
-x.pedidos.length
-:1;
-
-const titulo=
-x.numeroComanda
-?
-x.numeroComanda
-:
-`Pedido #${esc(x.numeroPedido||"")}`;
-
-return`
-
-<div class="hist">
-
-<div class="top">
-
-<strong>
-${titulo} — Mesa ${esc(x.mesa)}
-</strong>
-
-<strong>
-${dinheiro(x.total)}
-</strong>
-
-</div>
-
-<div style="margin-top:7px;color:#c9dcff">
-
-📋 ${qtd} pedido
-${qtd===1?"":"s"} na comanda
-
-</div>
-
-<div class="obs">
-
-${
-x.finalizadoEm
-?
-new Date(
-x.finalizadoEm
-).toLocaleString("pt-BR")
-:""
-}
-
-</div>
-
-</div>
-
-`;
-
+const a=el("listaHistorico");
+const h=[...hist].sort((x,y)=>String(y.finalizadoEm||"").localeCompare(String(x.finalizadoEm||"")));
+if(!h.length){a.innerHTML='<div class="vazio">Nenhuma comanda finalizada.</div>';return}
+a.innerHTML=h.map(x=>{
+const qtd=Array.isArray(x.pedidos)?x.pedidos.length:1;
+const titulo=x.numeroComanda?x.numeroComanda:`Pedido #${esc(x.numeroPedido||"")}`;
+return `<div class="hist"><div class="top"><strong>${titulo} — Mesa ${esc(x.mesa)}</strong><strong>${dinheiro(x.total)}</strong></div><div style="margin-top:7px;color:#c9dcff">📋 ${qtd} pedido${qtd===1?"":"s"} na comanda</div><div class="obs">${x.finalizadoEm?new Date(x.finalizadoEm).toLocaleString("pt-BR"):""}</div></div>`;
 }).join("");
-
 }
-
 
 function renderFin(){
-
-const t=
-hist.reduce(
-(s,x)=>
-s+Number(x.total||0),
-0
-);
-
-const q=
-hist.length;
-
-const hoje=
-new Date()
-.toLocaleDateString(
-"pt-BR"
-);
-
-const ht=
-hist
-.filter(
-x=>
-x.finalizadoEm&&
-new Date(
-x.finalizadoEm
-)
-.toLocaleDateString(
-"pt-BR"
-)===hoje
-)
-.reduce(
-(s,x)=>
-s+Number(x.total||0),
-0
-);
-
-el("fQtd").textContent=q;
-el("fTotal").textContent=
-dinheiro(t);
-
-el("fMedia").textContent=
-dinheiro(q?t/q:0);
-
-el("fHoje").textContent=
-dinheiro(ht);
-
+const t=hist.reduce((s,x)=>s+Number(x.total||0),0),q=hist.length;
+const hoje=new Date().toLocaleDateString("pt-BR");
+const ht=hist.filter(x=>x.finalizadoEm&&new Date(x.finalizadoEm).toLocaleDateString("pt-BR")===hoje).reduce((s,x)=>s+Number(x.total||0),0);
+el("fQtd").textContent=q;el("fTotal").textContent=dinheiro(t);el("fMedia").textContent=dinheiro(q?t/q:0);el("fHoje").textContent=dinheiro(ht);
 }
-
-
-/* ================================
-   CONFIGURAÇÕES
-================================ */
 
 function preencher(){
-
-el("cfgNome").value=
-config.nome||"";
-
-el("cfgSub").value=
-config.subtitulo||"";
-
-el("cfgEnd").value=
-config.endereco||"";
-
-el("cfgEmoji").value=
-config.emoji||"🍔";
-
-el("cfgLogo").value=
-config.logo||"";
-
-el("cfgMesas").value=
-Number(
-config.quantidadeMesas||
-mesas||
-20
-);
-
+el("cfgNome").value=config.nome||"";
+el("cfgSub").value=config.subtitulo||"";
+el("cfgEnd").value=config.endereco||"";
+el("cfgEmoji").value=config.emoji||"🍔";
+el("cfgLogo").value=config.logo||"";
+el("cfgMesas").value=Number(config.quantidadeMesas||mesas||20);
 }
-
 
 window.alterarMesas=n=>{
-
-const campo=
-el("cfgMesas");
-
-let v=
-Number(
-campo.value||
-mesas||
-20
-)+n;
-
-campo.value=
-Math.max(
-1,
-Math.min(
-100,
-v
-)
-);
-
+const campo=el("cfgMesas");
+let v=Number(campo.value||mesas||20)+n;
+campo.value=Math.max(1,Math.min(100,v));
 };
-
 
 window.salvarConfig=async()=>{
-
 try{
-
-const qtd=
-Math.max(
-1,
-Math.min(
-100,
-Number(
-el("cfgMesas").value||20
-)
-)
-);
-
+const qtd=Math.max(1,Math.min(100,Number(el("cfgMesas").value||20)));
 mesas=qtd;
-
-await setDoc(
-documentoRestaurante(
-"configuracaoRestaurante",
-"principal"
-),
-{
-
-nome:
-el("cfgNome").value.trim()||
-"Sabor da Casa",
-
-subtitulo:
-el("cfgSub").value.trim()||
-"Cardápio Digital",
-
-endereco:
-el("cfgEnd").value.trim()||
-"Chapecó / Santa Catarina",
-
-emoji:
-el("cfgEmoji").value.trim()||
-"🍔",
-
-logo:
-el("cfgLogo").value.trim(),
-
+await setDoc(documentoRestaurante("configuracaoRestaurante","principal"),{
+nome:el("cfgNome").value.trim()||"Sabor da Casa",
+subtitulo:el("cfgSub").value.trim()||"Cardápio Digital",
+endereco:el("cfgEnd").value.trim()||"Chapecó / Santa Catarina",
+emoji:el("cfgEmoji").value.trim()||"🍔",
+logo:el("cfgLogo").value.trim(),
 quantidadeMesas:qtd
-
-}
-);
-
+});
 renderMesas();
-
-alert(
-"✅ Configurações salvas. "+
-qtd+
-" mesa(s) configurada(s)."
-);
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"Erro ao salvar:\n\n"+
-e.message
-);
-
-}
-
+alert("✅ Configurações salvas. "+qtd+" mesa(s) configurada(s).");
+}catch(e){console.error(e);alert("Erro ao salvar:\n\n"+e.message)}
 };
 
-
-/* ================================
-   SOM
-================================ */
-
+/* SOM */
 let alarmeInterval=null;
-
 async function prepararSom(){
-
 try{
-
-if(!audio)
-audio=
-new(
-window.AudioContext||
-window.webkitAudioContext
-)();
-
-if(audio.state==="suspended")
-await audio.resume();
-
+if(!audio)audio=new(window.AudioContext||window.webkitAudioContext)();
+if(audio.state==="suspended")await audio.resume();
 return audio.state==="running";
-
-}catch(e){
-
-console.warn("Áudio:",e);
-
-return false;
-
+}catch(e){console.warn("Áudio:",e);return false}
 }
-
-}
-
-
 async function tocarAlarme(){
-
 if(!som)return;
-
 try{
-
-if(!await prepararSom())
-return;
-
-const agora=
-audio.currentTime;
-
-const notas=[
-660,
-880,
-1040,
-880
-];
-
-notas.forEach(
-(freq,i)=>{
-
-const o=
-audio.createOscillator();
-
-const g=
-audio.createGain();
-
-const t=
-agora+i*.16;
-
-o.type="sine";
-
-o.frequency.value=
-freq;
-
-g.gain.setValueAtTime(
-.0001,
-t
-);
-
-g.gain.exponentialRampToValueAtTime(
-.13,
-t+.025
-);
-
-g.gain.exponentialRampToValueAtTime(
-.0001,
-t+.13
-);
-
-o.connect(g);
-g.connect(audio.destination);
-
-o.start(t);
-o.stop(t+.15);
-
+if(!await prepararSom())return;
+const agora=audio.currentTime,notas=[660,880,1040,880];
+notas.forEach((freq,i)=>{
+const o=audio.createOscillator(),g=audio.createGain(),t=agora+i*.16;
+o.type="sine";o.frequency.value=freq;
+g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.13,t+.025);g.gain.exponentialRampToValueAtTime(.0001,t+.13);
+o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+.15);
+});
+}catch(e){console.warn("Som:",e)}
 }
-);
-
-}catch(e){
-
-console.warn("Som:",e);
-
-}
-
-}
-
-
 function iniciarAlarme(){
-
-if(!som||alarmeInterval)
-return;
-
+if(!som||alarmeInterval)return;
 tocarAlarme();
-
-alarmeInterval=
-setInterval(
-()=>{
-if(
-pedidos.some(
-p=>p.status==="Recebido"
-)
-)
-tocarAlarme();
-else
-pararAlarme();
-},
-1500
-);
-
+alarmeInterval=setInterval(()=>{if(pedidos.some(p=>p.status==="Recebido"))tocarAlarme();else pararAlarme()},1500);
 }
-
-
-function pararAlarme(){
-
-if(alarmeInterval){
-
-clearInterval(
-alarmeInterval
-);
-
-alarmeInterval=null;
-
-}
-
-}
-
-
-function atualizarAlarmeSom(){
-
-if(
-pedidos.some(
-p=>p.status==="Recebido"
-)
-)
-iniciarAlarme();
-else
-pararAlarme();
-
-}
-
+function pararAlarme(){if(alarmeInterval){clearInterval(alarmeInterval);alarmeInterval=null}}
+function atualizarAlarmeSom(){if(pedidos.some(p=>p.status==="Recebido"))iniciarAlarme();else pararAlarme()}
 
 window.ativarSom=async()=>{
-
 try{
-
-if(!await prepararSom()){
-
-alert(
-"O navegador não liberou o som. Toque novamente no botão 🔊 para autorizar."
-);
-
-return;
-
-}
-
-som=true;
-
-localStorage.setItem(
-"somPainelAtivado",
-"1"
-);
-
-document
-.querySelectorAll(
-'button[onclick="ativarSom()"]'
-)
-.forEach(
-b=>b.textContent=
-"🔊 Som ativado"
-);
-
+if(!await prepararSom()){alert("O navegador não liberou o som. Toque novamente no botão 🔊 para autorizar.");return}
+som=true;localStorage.setItem("somPainelAtivado","1");
+document.querySelectorAll('button[onclick="ativarSom()"]').forEach(b=>b.textContent="🔊 Som ativado");
 await tocarAlarme();
-
-if(
-pedidos.some(
-p=>p.status==="Recebido"
-)
-)
-iniciarAlarme();
-
-alert(
-"🔊 Som ativado! O toque continuará enquanto houver pedido em Recebido."
-);
-
-}catch(e){
-
-alert(
-"Não foi possível ativar o som."
-);
-
-}
-
+if(pedidos.some(p=>p.status==="Recebido"))iniciarAlarme();
+alert("🔊 Som ativado! O toque continuará enquanto houver pedido em Recebido.");
+}catch(e){alert("Não foi possível ativar o som.")}
 };
-
-
-/* ================================
-   PEDIDOS SNAPSHOT
-================================ */
 
 function pedidosSnap(s){
-
-const antes=
-new Set(
-pedidos.map(
-p=>p.id
-)
-);
-
-pedidos=
-s.docs.map(
-d=>({
-id:d.id,
-...d.data()
-})
-);
-
-const novos=
-pedidosInicializados
-?
-pedidos.filter(
-p=>
-p.status==="Recebido"&&
-!antes.has(p.id)
-)
-:
-[];
-
+const antes=new Set(pedidos.map(p=>p.id));
+pedidos=s.docs.map(d=>({id:d.id,...d.data()}));
+const novos=pedidosInicializados?pedidos.filter(p=>p.status==="Recebido"&&!antes.has(p.id)):[];
 pedidosInicializados=true;
-
-renderPedidos();
-renderMesas();
-
-const n=
-pedidos.filter(
-p=>p.status==="Recebido"
-).length;
-
-el("alerta").style.display=
-n?"block":"none";
-
-el("alerta").textContent=
-`🔔 ${n} NOVO${
-n>1?"S":""
-} PEDIDO${
-n>1?"S":""
-} RECEBIDO${
-n>1?"S":""
-} — clique para abrir`;
-
-if(
-novos.length&&
-som
-)
-iniciarAlarme();
-
+renderPedidos();renderMesas();
+const n=pedidos.filter(p=>p.status==="Recebido").length;
+el("alerta").style.display=n?"block":"none";
+el("alerta").textContent=`🔔 ${n} NOVO${n>1?"S":""} PEDIDO${n>1?"S":""} RECEBIDO${n>1?"S":""} — clique para abrir`;
+if(novos.length&&som)iniciarAlarme();
 atualizarAlarmeSom();
-
 el("erro").style.display="none";
-
 }
-
-
-/* ================================
-   CARREGAR RESTAURANTE
-================================ */
 
 async function carregarDadosRestaurante(){
-
 try{
-
-const r=
-await getDoc(
-doc(
-db,
-"restaurantes",
-RESTAURANTE_ID
-)
-);
-
+const r=await getDoc(doc(db,"restaurantes",RESTAURANTE_ID));
 if(r.exists()){
-
-const d=
-r.data();
-
-const nome=
-d.nome||
-RESTAURANTE_ID;
-
-const end=
-d.endereco||"";
-
-el("tituloPainel").textContent=
-`🍔 ${nome} — Painel do Proprietário`;
-
-document.title=
-`Painel do Proprietário — ${nome}`;
-
-el("brandNome").textContent=
-nome;
-
-el("loginScreen")
-.querySelector("h1")
-.textContent=
-nome;
-
-el("loginDescricao")
-.textContent=
-EH_SABOR_DA_CASA
-?
-"Acesso administrativo"
-:
-"Acesso do estabelecimento";
-
-el("subtituloPainel").textContent=
-(
-d.subtitulo||
-"Painel do Proprietário"
-)+
-(
-end
-?
-` • ${end}`
-:""
-);
-
+const d=r.data(),nome=d.nome||RESTAURANTE_ID,end=d.endereco||"";
+el("tituloPainel").textContent=`🍔 ${nome} — Painel do Proprietário`;
+document.title=`Painel do Proprietário — ${nome}`;
+el("brandNome").textContent=nome;
+el("loginScreen").querySelector("h1").textContent=nome;
+el("loginDescricao").textContent=EH_SABOR_DA_CASA?"Acesso administrativo":"Acesso do estabelecimento";
+el("subtituloPainel").textContent=(d.subtitulo||"Painel do Proprietário")+(end?` • ${end}`:"");
+}
+}catch(e){console.error("Restaurante:",e)}
 }
 
-}catch(e){
-
-console.error(
-"Restaurante:",
-e
-);
-
+/* NOVO RESTAURANTE — somente Sabor da Casa */
+async function criarContaInterna(usuario,senha,restauranteId){
+const usuarioKey=normalizarUsuario(usuario);
+if(!usuarioKey)throw new Error("Usuário inválido.");
+if(!senha||senha.length<6)throw new Error("A senha precisa ter pelo menos 6 caracteres.");
+const loginRef=doc(db,"loginUsuarios",usuarioKey);
+const existente=await getDoc(loginRef);
+if(existente.exists())throw new Error("Esse usuário de acesso já está cadastrado.");
+const emailInterno=emailInternoRestaurante(usuarioKey);
+const cred=await createUserWithEmailAndPassword(authCadastro,emailInterno,senha);
+await setDoc(doc(db,"acessosRestaurantes",cred.user.uid),{
+uid:cred.user.uid,usuario,usuarioKey,restauranteId,emailInterno,ativo:true,criadoEm:new Date().toISOString()
+});
+await setDoc(loginRef,{uid:cred.user.uid,usuario,usuarioKey,restauranteId,emailInterno,ativo:true,criadoEm:new Date().toISOString()});
+await signOut(authCadastro);
+return {uid:cred.user.uid,usuarioKey,emailInterno};
 }
-
-}
-
-
-/* ================================
-   CONTA INTERNA
-================================ */
-
-async function criarContaInterna(
-usuario,
-senha,
-restauranteId
-){
-
-const usuarioKey=
-normalizarUsuario(usuario);
-
-if(!usuarioKey)
-throw new Error(
-"Usuário inválido."
-);
-
-if(
-!senha||
-senha.length<6
-)
-throw new Error(
-"A senha precisa ter pelo menos 6 caracteres."
-);
-
-const loginRef=
-doc(
-db,
-"loginUsuarios",
-usuarioKey
-);
-
-const existente=
-await getDoc(loginRef);
-
-if(existente.exists())
-throw new Error(
-"Esse usuário de acesso já está cadastrado."
-);
-
-const emailInterno=
-emailInternoRestaurante(
-usuarioKey
-);
-
-const cred=
-await createUserWithEmailAndPassword(
-authCadastro,
-emailInterno,
-senha
-);
-
-await setDoc(
-doc(
-db,
-"acessosRestaurantes",
-cred.user.uid
-),
-{
-
-uid:
-cred.user.uid,
-
-usuario,
-
-usuarioKey,
-
-restauranteId,
-
-emailInterno,
-
-ativo:true,
-
-criadoEm:
-new Date().toISOString()
-
-}
-);
-
-await setDoc(
-loginRef,
-{
-
-uid:
-cred.user.uid,
-
-usuario,
-
-usuarioKey,
-
-restauranteId,
-
-emailInterno,
-
-ativo:true,
-
-criadoEm:
-new Date().toISOString()
-
-}
-);
-
-await signOut(
-authCadastro
-);
-
-return{
-uid:cred.user.uid,
-usuarioKey,
-emailInterno
-};
-
-}
-
-
-/* ================================
-   CRIAR RESTAURANTE
-================================ */
 
 window.criarRestaurante=async()=>{
-
-if(!EH_SABOR_DA_CASA){
-
-alert(
-"Apenas o painel do Sabor da Casa pode cadastrar novos estabelecimentos."
-);
-
-return;
-
-}
-
-if(criandoRestaurante)
-return;
-
+if(!EH_SABOR_DA_CASA){alert("Apenas o painel do Sabor da Casa pode cadastrar novos estabelecimentos.");return}
+if(criandoRestaurante)return;
 criandoRestaurante=true;
-
-const out=
-el("novoResultado");
-
-const botao=
-el("btnCriarRestaurante");
-
-if(botao){
-
-botao.disabled=true;
-
-botao.textContent=
-"⏳ Criando...";
-
-}
-
+const out=el("novoResultado"),botao=el("btnCriarRestaurante");
+if(botao){botao.disabled=true;botao.textContent="⏳ Criando...";}
 try{
-
-const nome=
-el("novoNome").value.trim();
-
-const id=
-el("novoId").value
-.trim()
-.toLowerCase();
-
-const usuario=
-el("novoUsuario").value.trim();
-
-const senha=
-el("novoSenha").value;
-
-const sub=
-el("novoSub").value.trim()||
-"Cardápio Digital";
-
-const end=
-el("novoEnd").value.trim();
-
-const qtd=
-Math.max(
-1,
-Math.min(
-100,
-Number(
-el("novoMesas").value||20
-)
-)
-);
-
-if(
-!nome||
-!/^[a-z0-9-]+$/.test(id)
-){
-
-out.textContent=
-"⚠️ Informe um nome e um ID válido: somente letras minúsculas, números e hífen.";
-
-return;
-
-}
-
-if(id==="sabor-da-casa"){
-
-out.textContent=
-"⚠️ Esse ID é reservado para o Sabor da Casa.";
-
-return;
-
-}
-
-if(
-!usuario||
-!normalizarUsuario(usuario)
-){
-
-out.textContent=
-"⚠️ Informe o usuário de acesso.";
-
-return;
-
-}
-
-if(
-!senha||
-senha.length<6
-){
-
-out.textContent=
-"⚠️ A senha precisa ter pelo menos 6 caracteres.";
-
-return;
-
-}
-
-const existente=
-await getDoc(
-doc(
-db,
-"restaurantes",
-id
-)
-);
-
-if(existente.exists()){
-
-out.textContent=
-"⚠️ Esse ID já existe. Para ele, use a área 🔐 Acessos.";
-
-return;
-
-}
-
-await setDoc(
-doc(
-db,
-"restaurantes",
-id
-),
-{
-
-nome,
-slug:id,
-subtitulo:sub,
-endereco:end,
-ativo:true,
-criadoEm:
-new Date().toISOString()
-
-}
-);
-
-await setDoc(
-doc(
-db,
-"restaurantes",
-id,
-"configuracaoRestaurante",
-"principal"
-),
-{
-
-nome,
-slug:id,
-subtitulo:sub,
-endereco:end,
-emoji:"🍔",
-logo:"",
-quantidadeMesas:qtd
-
-}
-);
-
-const acesso=
-await criarContaInterna(
-usuario,
-senha,
-id
-);
-
-const url=
-`${window.location.origin}${window.location.pathname}?restaurante=${encodeURIComponent(id)}`;
-
-out.innerHTML=
-`
-✅ <strong>${esc(nome)}</strong> criado com sucesso.
-<br><br>
-👤 Usuário:
-<strong>${esc(usuario)}</strong>
-<br>
-🔐 Senha definida por você.
-<br><br>
-🔗
-<code style="word-break:break-all">
-${esc(url)}
-</code>
-`;
-
-[
-"novoNome",
-"novoId",
-"novoUsuario",
-"novoSenha",
-"novoEnd"
-].forEach(
-x=>el(x).value=""
-);
-
-el("acessoUsuario").value=
-usuario;
-
+const nome=el("novoNome").value.trim();
+const id=el("novoId").value.trim().toLowerCase();
+const usuario=el("novoUsuario").value.trim();
+const senha=el("novoSenha").value;
+const sub=el("novoSub").value.trim()||"Cardápio Digital";
+const end=el("novoEnd").value.trim();
+const qtd=Math.max(1,Math.min(100,Number(el("novoMesas").value||20)));
+if(!nome||!/^[a-z0-9-]+$/.test(id)){out.textContent="⚠️ Informe um nome e um ID válido: somente letras minúsculas, números e hífen.";return}
+if(id==="sabor-da-casa"){out.textContent="⚠️ Esse ID é reservado para o Sabor da Casa.";return}
+if(!usuario||!normalizarUsuario(usuario)){out.textContent="⚠️ Informe o usuário de acesso.";return}
+if(!senha||senha.length<6){out.textContent="⚠️ A senha precisa ter pelo menos 6 caracteres.";return}
+const existente=await getDoc(doc(db,"restaurantes",id));
+if(existente.exists()){out.textContent="⚠️ Esse ID já existe. Para ele, use a área 🔐 Acessos.";return}
+await setDoc(doc(db,"restaurantes",id),{nome,slug:id,subtitulo:sub,endereco:end,ativo:true,criadoEm:new Date().toISOString()});
+await setDoc(doc(db,"restaurantes",id,"configuracaoRestaurante","principal"),{nome,slug:id,subtitulo:sub,endereco:end,emoji:"🍔",logo:"",quantidadeMesas:qtd});
+const acesso=await criarContaInterna(usuario,senha,id);
+const url=`${window.location.origin}${window.location.pathname}?restaurante=${encodeURIComponent(id)}`;
+out.innerHTML=`✅ <strong>${esc(nome)}</strong> criado com sucesso.<br><br>👤 Usuário: <strong>${esc(usuario)}</strong><br>🔐 Senha definida por você.<br><br>🔗 <code style="word-break:break-all">${esc(url)}</code>`;
+["novoNome","novoId","novoUsuario","novoSenha","novoEnd"].forEach(x=>el(x).value="");
+el("acessoUsuario").value=usuario;
 carregarAcessosAdmin();
-
-}catch(e){
-
-console.error(e);
-
-out.textContent=
-"❌ Erro ao criar: "+
-e.message;
-
-}finally{
-
-criandoRestaurante=false;
-
-if(botao){
-
-botao.disabled=false;
-
-botao.textContent=
-"🏪 Criar estabelecimento e acesso";
-
-}
-
-}
-
+}catch(e){console.error(e);out.textContent="❌ Erro ao criar: "+e.message}
+finally{criandoRestaurante=false;if(botao){botao.disabled=false;botao.textContent="🏪 Criar estabelecimento e acesso";}}
 };
-
-
-/* ================================
-   CRIAR ACESSO
-================================ */
 
 window.criarAcessoRestaurante=async()=>{
-
-if(
-!EH_SABOR_DA_CASA||
-criandoAcesso
-)
-return;
-
+if(!EH_SABOR_DA_CASA||criandoAcesso)return;
 criandoAcesso=true;
-
-const out=
-el("acessoResultado");
-
-const botao=
-el("btnCriarAcesso");
-
-if(botao){
-
-botao.disabled=true;
-
-botao.textContent=
-"⏳ Criando...";
-
-}
-
+const out=el("acessoResultado"),botao=el("btnCriarAcesso");
+if(botao){botao.disabled=true;botao.textContent="⏳ Criando...";}
 try{
-
-const restauranteId=
-el("acessoRestauranteId").value;
-
-const usuario=
-el("acessoUsuario").value.trim();
-
-const senha=
-el("acessoSenha").value;
-
-if(
-!restauranteId||
-!usuario||
-!senha
-)
-throw new Error(
-"Preencha estabelecimento, usuário e senha."
-);
-
-if(senha.length<6)
-throw new Error(
-"A senha precisa ter pelo menos 6 caracteres."
-);
-
-const r=
-await getDoc(
-doc(
-db,
-"restaurantes",
-restauranteId
-)
-);
-
-if(!r.exists())
-throw new Error(
-"Estabelecimento não encontrado."
-);
-
-await criarContaInterna(
-usuario,
-senha,
-restauranteId
-);
-
-out.textContent=
-`✅ Acesso criado para ${usuario}.`;
-
+const restauranteId=el("acessoRestauranteId").value;
+const usuario=el("acessoUsuario").value.trim();
+const senha=el("acessoSenha").value;
+if(!restauranteId||!usuario||!senha)throw new Error("Preencha estabelecimento, usuário e senha.");
+if(senha.length<6)throw new Error("A senha precisa ter pelo menos 6 caracteres.");
+const r=await getDoc(doc(db,"restaurantes",restauranteId));
+if(!r.exists())throw new Error("Estabelecimento não encontrado.");
+await criarContaInterna(usuario,senha,restauranteId);
+out.textContent=`✅ Acesso criado para ${usuario}.`;
 el("acessoSenha").value="";
-
 await carregarAcessosAdmin();
-
-}catch(e){
-
-console.error(e);
-
-out.textContent=
-"❌ "+e.message;
-
-}finally{
-
-criandoAcesso=false;
-
-if(botao){
-
-botao.disabled=false;
-
-botao.textContent=
-"🔐 Criar acesso";
-
-}
-
-}
-
+}catch(e){console.error(e);out.textContent="❌ "+e.message}
+finally{criandoAcesso=false;if(botao){botao.disabled=false;botao.textContent="🔐 Criar acesso";}}
 };
-
-
-/* ================================
-   LISTA DE ACESSOS
-================================ */
 
 async function carregarAcessosAdmin(){
-
-if(!EH_SABOR_DA_CASA)
-return;
-
+if(!EH_SABOR_DA_CASA)return;
 try{
-
-const[
-restSnap,
-loginSnap,
-acessoSnap
-]=await Promise.all([
-
-getDocs(
-collection(
-db,
-"restaurantes"
-)
-),
-
-getDocs(
-collection(
-db,
-"loginUsuarios"
-)
-),
-
-getDocs(
-collection(
-db,
-"acessosRestaurantes"
-)
-)
-
-]);
-
-const restaurantes=
-restSnap.docs
-.map(
-d=>({
-id:d.id,
-...d.data()
-})
-)
-.filter(
-r=>r.id!=="sabor-da-casa"
-)
-.sort(
-(a,b)=>
-String(a.nome||a.id)
-.localeCompare(
-String(b.nome||b.id)
-)
-);
-
-const logins={};
-
-loginSnap.forEach(
-d=>
-logins[d.id]={
-id:d.id,
-...d.data()
-}
-);
-
-const acessos={};
-
-acessoSnap.forEach(
-d=>
-acessos[d.id]={
-id:d.id,
-...d.data()
-}
-);
-
-const select=
-el("acessoRestauranteId");
-
-if(select){
-
-const atual=
-select.value;
-
-select.innerHTML=
-'<option value="">Selecione...</option>'+
-restaurantes
-.map(
-r=>
-`
-<option value="${esc(r.id)}">
-${esc(r.nome||r.id)}
-</option>
-`
-)
-.join("");
-
-if(
-atual&&
-restaurantes.some(
-r=>r.id===atual
-)
-)
-select.value=atual;
-
+const [restSnap,loginSnap,acessoSnap]=await Promise.all([getDocs(collection(db,"restaurantes")),getDocs(collection(db,"loginUsuarios")),getDocs(collection(db,"acessosRestaurantes"))]);
+const restaurantes=restSnap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.id!=="sabor-da-casa").sort((a,b)=>String(a.nome||a.id).localeCompare(String(b.nome||b.id)));
+const logins={};loginSnap.forEach(d=>logins[d.id]={id:d.id,...d.data()});
+const acessos={};acessoSnap.forEach(d=>acessos[d.id]={id:d.id,...d.data()});
+const select=el("acessoRestauranteId");
+if(select){const atual=select.value;select.innerHTML='<option value="">Selecione...</option>'+restaurantes.map(r=>`<option value="${esc(r.id)}">${esc(r.nome||r.id)}</option>`).join("");if(atual&&restaurantes.some(r=>r.id===atual))select.value=atual;}
+const lista=el("listaAcessos");
+if(!restaurantes.length){lista.innerHTML='<div class="vazio">Nenhum estabelecimento cadastrado além do Sabor da Casa.</div>';return}
+lista.innerHTML=restaurantes.map(r=>{
+const login=Object.values(logins).find(x=>x.restauranteId===r.id);
+const acesso=login?acessos[login.uid]:null;
+const ativoAcesso=login&&login.ativo!==false&&acesso?.ativo!==false;
+return `<div class="card"><div class="top"><div><strong>🏪 ${esc(r.nome||r.id)}</strong><br><small style="color:#9fc5ff">ID: ${esc(r.id)}</small>${login?`<br><small style="color:#9fc5ff">👤 ${esc(login.usuario)}</small>`:'<br><small style="color:#ffd27a">⚠️ Sem acesso cadastrado</small>'}</div><strong style="color:${ativoAcesso?'#19ff9a':'#ff7777'}">${ativoAcesso?'🟢 ATIVO':'🔴 BLOQUEADO'}</strong></div>${login?`<div class="acoes" style="margin-top:12px"><button class="btn ${ativoAcesso?'vermelho':'verde'}" onclick="alternarAcesso('${esc(login.uid)}',${ativoAcesso})">${ativoAcesso?'🔴 Bloquear acesso':'🟢 Liberar acesso'}</button></div>`:'<div style="margin-top:10px;color:#a9c9ff">Selecione este estabelecimento acima e cadastre o acesso.</div>'}</div>`;
+}).join("");
+}catch(e){console.error(e);el("listaAcessos").innerHTML=`<div class="erro" style="display:block">❌ Não foi possível carregar os acessos: ${esc(e.message)}</div>`}
 }
 
-const lista=
-el("listaAcessos");
-
-if(!restaurantes.length){
-
-lista.innerHTML=
-`
-<div class="vazio">
-Nenhum estabelecimento cadastrado além do Sabor da Casa.
-</div>
-`;
-
-return;
-
-}
-
-
-/*
-   LISTA COMPACTA
-*/
-
-lista.innerHTML=
-restaurantes
-.map(r=>{
-
-const login=
-Object.values(logins)
-.find(
-x=>x.restauranteId===r.id
-);
-
-const acesso=
-login
-?
-acessos[login.uid]
-:null;
-
-const ativoAcesso=
-login&&
-login.ativo!==false&&
-acesso?.ativo!==false;
-
-return`
-
-<div class="card">
-
-<div class="top">
-
-<div>
-
-<strong>
-🏪 ${esc(r.nome||r.id)}
-</strong>
-
-<br>
-
-<small style="color:#9fc5ff">
-ID: ${esc(r.id)}
-</small>
-
-${
-login
-?
-`
-<br>
-<small style="color:#9fc5ff">
-👤 ${esc(login.usuario)}
-</small>
-`
-:
-`
-<br>
-<small style="color:#ffd27a">
-⚠️ Sem acesso cadastrado
-</small>
-`
-}
-
-</div>
-
-<strong
-style="
-color:${ativoAcesso
-?'#19ff9a'
-:'#ff7777'};
-white-space:nowrap;
-font-size:13px">
-
-${
-ativoAcesso
-?
-"🟢 ATIVO"
-:
-"🔴 BLOQUEADO"
-}
-
-</strong>
-
-</div>
-
-${
-login
-?
-`
-<div
-class="acoes"
-style="margin-top:7px!important">
-
-<button
-class="btn ${
-ativoAcesso
-?"vermelho"
-:"verde"
-}"
-onclick="alternarAcesso(
-'${esc(login.uid)}',
-${ativoAcesso}
-)">
-
-${
-ativoAcesso
-?
-"🔴 Bloquear acesso"
-:
-"🟢 Liberar acesso"
-}
-
-</button>
-
-</div>
-`
-:
-`
-<div
-style="
-margin-top:7px;
-color:#a9c9ff;
-font-size:11px">
-
-Selecione este estabelecimento acima
-e cadastre o acesso.
-
-</div>
-`
-}
-
-</div>
-
-`;
-
-})
-.join("");
-
-}catch(e){
-
-console.error(e);
-
-el("listaAcessos").innerHTML=
-`
-<div
-class="erro"
-style="display:block">
-
-❌ Não foi possível carregar os acessos:
-${esc(e.message)}
-
-</div>
-`;
-
-}
-
-}
-
-
-/* ================================
-   BLOQUEAR / LIBERAR
-================================ */
-
-window.alternarAcesso=async(
-uid,
-estaAtivo
-)=>{
-
-if(!EH_SABOR_DA_CASA)
-return;
-
+window.alternarAcesso=async(uid,estaAtivo)=>{
+if(!EH_SABOR_DA_CASA)return;
 try{
-
-const novo=
-!estaAtivo;
-
-await updateDoc(
-doc(
-db,
-"acessosRestaurantes",
-uid
-),
-{
-ativo:novo
-}
-);
-
-const a=
-await getDoc(
-doc(
-db,
-"acessosRestaurantes",
-uid
-)
-);
-
-if(a.exists()){
-
-const d=
-a.data();
-
-await updateDoc(
-doc(
-db,
-"loginUsuarios",
-d.usuarioKey
-),
-{
-ativo:novo
-}
-);
-
-}
-
+const novo=!estaAtivo;
+await updateDoc(doc(db,"acessosRestaurantes",uid),{ativo:novo});
+const a=await getDoc(doc(db,"acessosRestaurantes",uid));
+if(a.exists()){const d=a.data();await updateDoc(doc(db,"loginUsuarios",d.usuarioKey),{ativo:novo});}
 await carregarAcessosAdmin();
-
-}catch(e){
-
-alert(
-"❌ Não foi possível alterar o acesso.\n\n"+
-e.message
-);
-
-}
-
+}catch(e){alert("❌ Não foi possível alterar o acesso.\n\n"+e.message)}
 };
 
-
-/* ================================
-   DADOS
-================================ */
-
+/* DADOS */
 function pararDadosPainel(){
-
-canceladoresDados.forEach(
-fn=>{
-try{
-fn();
-}catch(e){
-console.warn(
-"Listener:",
-e
-);
-}
-}
-);
-
+canceladoresDados.forEach(fn=>{try{fn()}catch(e){console.warn("Listener:",e)}});
 canceladoresDados=[];
-
 }
-
 
 function iniciarDadosPainel(){
-
 pararDadosPainel();
-
-canceladoresDados.push(
-
-onSnapshot(
-colecaoRestaurante("pedidos"),
-pedidosSnap,
-e=>{
-
-console.error(e);
-
-el("erro").style.display=
-"block";
-
-el("erro").textContent=
-"🔴 ERRO AO LER pedidos: "+
-(e.message||e);
-
-}
-)
-
-);
-
-canceladoresDados.push(
-
-onSnapshot(
-colecaoRestaurante(
-"historicoComandas"
-),
-s=>{
-
-hist=
-s.docs.map(
-d=>({
-id:d.id,
-...d.data()
-})
-);
-
-renderHist();
-renderFin();
-
-},
-e=>console.error(e)
-
-)
-
-);
-
-canceladoresDados.push(
-
-onSnapshot(
-colecaoRestaurante("produtos"),
-async s=>{
-
-const lista=
-s.docs.map(
-d=>({
-id:d.id,
-...d.data()
-})
-);
-
+canceladoresDados.push(onSnapshot(colecaoRestaurante("pedidos"),pedidosSnap,e=>{
+console.error(e);el("erro").style.display="block";el("erro").textContent="🔴 ERRO AO LER pedidos: "+(e.message||e);
+}));
+canceladoresDados.push(onSnapshot(colecaoRestaurante("historicoComandas"),s=>{
+hist=s.docs.map(d=>({id:d.id,...d.data()}));renderHist();renderFin();
+},e=>console.error(e)));
+canceladoresDados.push(onSnapshot(colecaoRestaurante("produtos"),async s=>{
+const lista=s.docs.map(d=>({id:d.id,...d.data()}));
 produtos=lista;
+renderProdutos();preencherCategorias();
+await corrigirCategoriasExistentes(lista);
+},e=>console.error(e)));
+canceladoresDados.push(onSnapshot(colecaoRestaurante("configuracaoRestaurante"),s=>{
+config={};s.forEach(d=>config={...config,...d.data()});
+const qtd=Number(config.quantidadeMesas);
+if(Number.isFinite(qtd)&&qtd>=1)mesas=Math.min(100,qtd);
+preencher();renderMesas();
+},e=>console.error(e)));
 
-renderProdutos();
-
-preencherCategorias();
-
-await corrigirCategoriasExistentes(
-lista
-);
-
-},
-e=>console.error(e)
-
-)
-
-);
-
-canceladoresDados.push(
-
-onSnapshot(
-colecaoRestaurante(
-"configuracaoRestaurante"
-),
-s=>{
-
-config={};
-
-s.forEach(
-d=>
-config={
-...config,
-...d.data()
-}
-);
-
-const qtd=
-Number(
-config.quantidadeMesas
-);
-
-if(
-Number.isFinite(qtd)&&
-qtd>=1
-)
-mesas=
-Math.min(
-100,
-qtd
-);
-
-preencher();
-
-renderMesas();
-
-},
-e=>console.error(e)
-
-)
-
-);
-
-renderMesas();
-renderPedidos();
-renderProdutos();
-renderHist();
-renderFin();
-
-if(som)
-
-document
-.querySelectorAll(
-'button[onclick="ativarSom()"]'
-)
-.forEach(
-b=>
-b.textContent=
-"🔊 Som ativado"
-);
-
+renderMesas();renderPedidos();renderProdutos();renderHist();renderFin();
+if(som)document.querySelectorAll('button[onclick="ativarSom()"]').forEach(b=>b.textContent="🔊 Som ativado");
 }
 
-
-/* ================================
-   AUTENTICAÇÃO
-================================ */
 
 configurarBotaoNovoRestaurante();
 
+onAuthStateChanged(auth,async user=>{
 
-onAuthStateChanged(
-auth,
-async user=>{
-
-const chaveBloqueio=
-`acessoBloqueado_${RESTAURANTE_ID}`;
-
-
-/* ================================
-   SEM USUÁRIO
-================================ */
+const chaveBloqueio=`acessoBloqueado_${RESTAURANTE_ID}`;
 
 if(!user){
-
 pararDadosPainel();
-
-if(canceladorAcesso){
-
-try{
-canceladorAcesso();
-}catch(e){}
-
-canceladorAcesso=null;
-
-}
-
+if(canceladorAcesso){try{canceladorAcesso()}catch(e){};canceladorAcesso=null}
 painelIniciado=false;
-
 usuarioAtual=null;
-
 acessoAtual=null;
 
-
-/*
-   Se o restaurante foi bloqueado,
-   não volta para a tela administrativa.
-*/
-
-if(
-!EH_SABOR_DA_CASA&&
-localStorage.getItem(chaveBloqueio)==="1"
-){
-
+if(!EH_SABOR_DA_CASA&&localStorage.getItem(chaveBloqueio)==="1"){
 mostrarAcessoBloqueado();
-
 return;
-
 }
 
 mostrarLogin();
-
 return;
-
 }
 
-
 try{
-
 usuarioAtual=user;
 
-
-/* ================================
-   SABOR DA CASA
-================================ */
-
 if(EH_SABOR_DA_CASA){
-
-const email=
-(user.email||"").toLowerCase();
-
-if(!email.includes("@"))
-throw new Error(
-"Acesso administrativo inválido."
-);
-
-acessoAtual={
-administrador:true,
-restauranteId:"sabor-da-casa",
-ativo:true
-};
-
+const email=(user.email||"").toLowerCase();
+if(!email.includes("@"))throw new Error("Acesso administrativo inválido.");
+acessoAtual={administrador:true,restauranteId:"sabor-da-casa",ativo:true};
 }else{
-
-
-/* ================================
-   RESTAURANTE
-================================ */
-
-const aRef=
-doc(
-db,
-"acessosRestaurantes",
-user.uid
-);
-
-const a=
-await getDoc(aRef);
-
-if(!a.exists())
-throw new Error(
-"Este usuário não possui acesso de restaurante cadastrado."
-);
-
-const dados=
-a.data();
-
-if(
-dados.restauranteId!==
-RESTAURANTE_ID
-)
-throw new Error(
-"Este acesso não pertence a este estabelecimento."
-);
-
-
-/*
-   RESTAURANTE JÁ BLOQUEADO
-*/
+const aRef=doc(db,"acessosRestaurantes",user.uid);
+const a=await getDoc(aRef);
+if(!a.exists())throw new Error("Este usuário não possui acesso de restaurante cadastrado.");
+const dados=a.data();
+if(dados.restauranteId!==RESTAURANTE_ID)throw new Error("Este acesso não pertence a este estabelecimento.");
 
 if(dados.ativo===false){
-
-localStorage.setItem(
-chaveBloqueio,
-"1"
-);
-
+localStorage.setItem(chaveBloqueio,"1");
 acessoAtual=dados;
-
 mostrarAcessoBloqueado();
-
-await signOut(auth);
-
+try{await signOut(auth)}catch(err){console.error(err)}
 return;
-
 }
 
-
-/*
-   RESTAURANTE LIBERADO
-*/
-
-localStorage.removeItem(
-chaveBloqueio
-);
-
+localStorage.removeItem(chaveBloqueio);
 acessoAtual=dados;
 
-
-/*
-   MONITORAMENTO EM TEMPO REAL
-*/
-
-if(canceladorAcesso){
-
-try{
-canceladorAcesso();
-}catch(e){}
-
-}
-
-canceladorAcesso=
-onSnapshot(
-aRef,
-snap=>{
-
-if(!snap.exists())
-return;
-
-const dadosAtual=
-snap.data();
-
-if(
-dadosAtual.ativo===false
-){
-
-/*
-   Marca bloqueio
-*/
-
-localStorage.setItem(
-chaveBloqueio,
-"1"
-);
-
-
-/*
-   Para dados
-*/
-
+if(canceladorAcesso){try{canceladorAcesso()}catch(e){}}
+canceladorAcesso=onSnapshot(aRef,snap=>{
+if(!snap.exists())return;
+const dadosAtual=snap.data();
+if(dadosAtual.ativo===false){
+localStorage.setItem(chaveBloqueio,"1");
 pararDadosPainel();
-
 pararAlarme();
-
-
-/*
-   Fecha modais
-*/
-
-if(el("modal"))
-el("modal").style.display="none";
-
-if(el("modalProd"))
-el("modalProd").style.display="none";
-
-
-/*
-   MOSTRA TELA DE BLOQUEIO
-*/
-
+if(el("modal"))el("modal").style.display="none";
+if(el("modalProd"))el("modalProd").style.display="none";
 mostrarAcessoBloqueado();
-
-
-/*
-   Encerra sessão
-*/
-
-signOut(auth);
-
+signOut(auth).catch(err=>console.error("Logout bloqueio:",err));
 }
-
-},
-err=>
-console.error(
-"Acesso:",
-err
-)
-
-);
-
+},err=>console.error("Acesso:",err));
 }
-
-
-/* ================================
-   MOSTRAR PAINEL
-================================ */
 
 mostrarPainel();
-
 configurarBotoesAdministracao();
-
 carregarDadosRestaurante();
-
-if(EH_SABOR_DA_CASA)
-carregarAcessosAdmin();
-
-if(!painelIniciado){
-
-painelIniciado=true;
-
-iniciarDadosPainel();
-
-}
+if(EH_SABOR_DA_CASA)carregarAcessosAdmin();
+if(!painelIniciado){painelIniciado=true;iniciarDadosPainel();}
 
 }catch(e){
-
 console.error(e);
 
-
-/*
-   Erro de bloqueio
-*/
-
-if(
-!EH_SABOR_DA_CASA&&
-String(
-e.message||""
-)
-.toLowerCase()
-.includes("bloqueado")
-){
-
-localStorage.setItem(
-chaveBloqueio,
-"1"
-);
-
+if(!EH_SABOR_DA_CASA&&String(e.message||"").toLowerCase().includes("bloqueado")){
+localStorage.setItem(chaveBloqueio,"1");
 mostrarAcessoBloqueado();
-
-try{
-await signOut(auth);
-}catch(err){
-console.error(err);
-}
-
+try{await signOut(auth)}catch(err){console.error(err)}
 return;
-
 }
 
-
-/*
-   Outros erros
-*/
-
-await signOut(auth);
-
-loginErro.textContent=
-e.message||
-"Acesso não autorizado.";
-
-loginErro.style.display=
-"block";
-
+try{await signOut(auth)}catch(err){console.error(err)}
+loginErro.textContent=e.message||"Acesso não autorizado.";
+loginErro.style.display="block";
 mostrarLogin();
-
 }
-
-}
-);
-
+});
 </script>
-
 </body>
 </html>
