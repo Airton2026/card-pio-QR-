@@ -69,6 +69,20 @@ h2{margin-bottom:18px}
 .financeiro{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .hist{margin-bottom:10px}
 
+.btn-excluir{
+background:#dc2626;
+color:#fff;
+border:1px solid #ff6b6b;
+box-shadow:0 0 10px #ff000033
+}
+
+.categoria-ajuda{
+display:block;
+color:#9fc5ff;
+font-size:12px;
+margin-top:6px
+}
+
 @media(max-width:950px){
 .mesas{grid-template-columns:repeat(4,1fr)}
 .resumo{grid-template-columns:repeat(3,1fr)}
@@ -85,7 +99,7 @@ header{padding:20px 16px}
 .nav button{padding:9px 10px;font-size:12px}
 }
 
-/* === NOVO SHELL NEON — lógica original preservada === */
+/* === NOVO SHELL NEON === */
 :root{
 --neon:#00eaff;
 --neon2:#19ff9a;
@@ -321,7 +335,7 @@ display:block
 .main-content{padding:18px 14px}
 }
 
-/* === PAINEL DE PEDIDOS EM COLUNAS === */
+/* === PEDIDOS EM COLUNAS === */
 .pedidos-kanban{
 display:grid;
 grid-template-columns:repeat(3,minmax(0,1fr));
@@ -381,7 +395,7 @@ font-size:12px
 .coluna-pedidos{min-height:0}
 }
 
-/* === LOGIN SEGURO DO PROPRIETÁRIO === */
+/* === LOGIN === */
 .login-screen{
 position:fixed;
 inset:0;
@@ -468,51 +482,51 @@ border-color:#ff5c5c!important
 <body>
 
 <div id="loginScreen" class="login-screen">
-  <div class="login-box">
-    <div class="login-logo">🍔</div>
-    <h1>Sabor da Casa</h1>
-    <p>Acesso exclusivo ao Painel do Proprietário</p>
+<div class="login-box">
+<div class="login-logo">🍔</div>
+<h1>Sabor da Casa</h1>
+<p>Acesso exclusivo ao Painel do Proprietário</p>
 
-    <form onsubmit="entrarPainel(event)">
-      <label for="loginEmail">E-mail</label>
-      <input id="loginEmail" type="email" autocomplete="username" required placeholder="Seu e-mail">
+<form onsubmit="entrarPainel(event)">
+<label for="loginEmail">E-mail</label>
+<input id="loginEmail" type="email" autocomplete="username" required placeholder="Seu e-mail">
 
-      <label for="loginSenha">Senha</label>
-      <input id="loginSenha" type="password" autocomplete="current-password" required placeholder="Sua senha">
+<label for="loginSenha">Senha</label>
+<input id="loginSenha" type="password" autocomplete="current-password" required placeholder="Sua senha">
 
-      <button id="loginBtn" class="btn azul" type="submit">
-        🔐 Entrar no painel
-      </button>
+<button id="loginBtn" class="btn azul" type="submit">
+🔐 Entrar no painel
+</button>
 
-      <div id="loginErro" class="login-erro"></div>
-    </form>
-  </div>
+<div id="loginErro" class="login-erro"></div>
+</form>
+</div>
 </div>
 
 <div id="appShell" class="site-shell" style="display:none">
 
 <aside class="sidebar">
 
-  <div class="brand">
-    <div class="brand-logo">🍔</div>
-    <strong>Sabor <span>da Casa</span></strong>
-    <small>PAINEL DO PROPRIETÁRIO</small>
-  </div>
+<div class="brand">
+<div class="brand-logo">🍔</div>
+<strong>Sabor <span>da Casa</span></strong>
+<small>PAINEL DO PROPRIETÁRIO</small>
+</div>
 
-  <div class="nav">
-    <button class="ativo" onclick="sec('inicio',this)">🏠 Início</button>
-    <button onclick="sec('pedidos',this)">📋 Pedidos</button>
-    <button onclick="sec('produtos',this)">🍔 Produtos</button>
-    <button onclick="sec('financeiro',this)">💰 Financeiro</button>
-    <button onclick="sec('historico',this)">📜 Histórico</button>
-    <button onclick="sec('config',this)">⚙️ Configurações</button>
-  </div>
+<div class="nav">
+<button class="ativo" onclick="sec('inicio',this)">🏠 Início</button>
+<button onclick="sec('pedidos',this)">📋 Pedidos</button>
+<button onclick="sec('produtos',this)">🍔 Produtos</button>
+<button onclick="sec('financeiro',this)">💰 Financeiro</button>
+<button onclick="sec('historico',this)">📜 Histórico</button>
+<button onclick="sec('config',this)">⚙️ Configurações</button>
+</div>
 
-  <div class="sidebar-status">
-    <div class="dot">● Conectado</div>
-    <small>Firebase online</small>
-    <small id="sidebarPedidos">Aguardando dados...</small>
-  </div>
+<div class="sidebar-status">
+<div class="dot">● Conectado</div>
+<small>Firebase online</small>
+<small id="sidebarPedidos">Aguardando dados...</small>
+</div>
 
 </aside>
 
@@ -520,17 +534,17 @@ border-color:#ff5c5c!important
 
 <header class="topbar-neon">
 
-  <div>
-    <h1>🍔 Sabor da Casa — Painel do Proprietário</h1>
-    <p>Controle do salão, pedidos, produtos e financeiro</p>
-  </div>
+<div>
+<h1>🍔 Sabor da Casa — Painel do Proprietário</h1>
+<p>Controle do salão, pedidos, produtos e financeiro</p>
+</div>
 
-  <div class="top-actions">
-    <div class="top-pill online">● Online</div>
-    <div class="top-pill" id="topConexao">Firebase...</div>
-    <button class="btn azul" onclick="ativarSom()">🔊 Som</button>
-    <button class="btn logout-btn" onclick="sairPainel()">🚪 Sair</button>
-  </div>
+<div class="top-actions">
+<div class="top-pill online">● Online</div>
+<div class="top-pill" id="topConexao">Firebase...</div>
+<button class="btn azul" onclick="ativarSom()">🔊 Som</button>
+<button class="btn logout-btn" onclick="sairPainel()">🚪 Sair</button>
+</div>
 
 </header>
 
@@ -545,170 +559,170 @@ border-color:#ff5c5c!important
 
 <section id="inicio" class="secao ativa">
 
-  <div class="resumo">
+<div class="resumo">
 
-    <div class="card">
-      <small>🪑 Livres</small>
-      <strong id="livres">0</strong>
-    </div>
+<div class="card">
+<small>🪑 Livres</small>
+<strong id="livres">0</strong>
+</div>
 
-    <div class="card">
-      <small>👥 Ocupadas</small>
-      <strong id="ocupadas">0</strong>
-    </div>
+<div class="card">
+<small>👥 Ocupadas</small>
+<strong id="ocupadas">0</strong>
+</div>
 
-    <div class="card">
-      <small>🕐 Em preparo</small>
-      <strong id="preparo">0</strong>
-    </div>
+<div class="card">
+<small>🕐 Em preparo</small>
+<strong id="preparo">0</strong>
+</div>
 
-    <div class="card">
-      <small>✓ Prontos</small>
-      <strong id="prontos">0</strong>
-    </div>
+<div class="card">
+<small>✓ Prontos</small>
+<strong id="prontos">0</strong>
+</div>
 
-    <div class="card">
-      <small>📋 Pedidos ativos</small>
-      <strong id="ativos">0</strong>
-    </div>
+<div class="card">
+<small>📋 Pedidos ativos</small>
+<strong id="ativos">0</strong>
+</div>
 
-  </div>
+</div>
 
-  <div style="margin-bottom:18px">
-    <button class="btn azul" onclick="ativarSom()">🔊 Ativar som</button>
-  </div>
+<div style="margin-bottom:18px">
+<button class="btn azul" onclick="ativarSom()">🔊 Ativar som</button>
+</div>
 
-  <div id="mesas" class="mesas"></div>
+<div id="mesas" class="mesas"></div>
 
 </section>
 
 <section id="pedidos" class="secao">
 
-  <div class="section-title">
-    <h2>📋 Pedidos</h2>
-    <div class="top-pill">Atualização em tempo real</div>
-  </div>
+<div class="section-title">
+<h2>📋 Pedidos</h2>
+<div class="top-pill">Atualização em tempo real</div>
+</div>
 
-  <div id="listaPedidos" class="pedidos-kanban"></div>
+<div id="listaPedidos" class="pedidos-kanban"></div>
 
 </section>
 
 <section id="produtos" class="secao">
 
-  <h2>🍔 Produtos</h2>
+<h2>🍔 Produtos</h2>
 
-  <button class="btn azul" onclick="novoProduto()">
-    ➕ Novo produto
-  </button>
+<button class="btn azul" onclick="novoProduto()">
+➕ Novo produto
+</button>
 
-  <div id="listaProdutos" class="produtos" style="margin-top:15px"></div>
+<div id="listaProdutos" class="produtos" style="margin-top:15px"></div>
 
 </section>
 
 <section id="financeiro" class="secao">
 
-  <h2>💰 Financeiro</h2>
+<h2>💰 Financeiro</h2>
 
-  <div class="financeiro">
+<div class="financeiro">
 
-    <div class="card">
-      <small>Comandas finalizadas</small>
-      <strong id="fQtd">0</strong>
-    </div>
+<div class="card">
+<small>Comandas finalizadas</small>
+<strong id="fQtd">0</strong>
+</div>
 
-    <div class="card">
-      <small>Faturamento</small>
-      <strong id="fTotal">R$ 0,00</strong>
-    </div>
+<div class="card">
+<small>Faturamento</small>
+<strong id="fTotal">R$ 0,00</strong>
+</div>
 
-    <div class="card">
-      <small>Ticket médio</small>
-      <strong id="fMedia">R$ 0,00</strong>
-    </div>
+<div class="card">
+<small>Ticket médio</small>
+<strong id="fMedia">R$ 0,00</strong>
+</div>
 
-    <div class="card">
-      <small>Hoje</small>
-      <strong id="fHoje">R$ 0,00</strong>
-    </div>
+<div class="card">
+<small>Hoje</small>
+<strong id="fHoje">R$ 0,00</strong>
+</div>
 
-  </div>
+</div>
 
 </section>
 
 <section id="historico" class="secao">
 
-  <h2>📜 Histórico</h2>
+<h2>📜 Histórico</h2>
 
-  <div id="listaHistorico"></div>
+<div id="listaHistorico"></div>
 
 </section>
 
 <section id="config" class="secao">
 
-  <h2>⚙️ Configurações</h2>
+<h2>⚙️ Configurações</h2>
 
-  <div class="card">
+<div class="card">
 
-    <div class="campo">
-      <label>Nome</label>
-      <input id="cfgNome">
-    </div>
+<div class="campo">
+<label>Nome</label>
+<input id="cfgNome">
+</div>
 
-    <div class="campo">
-      <label>Subtítulo</label>
-      <input id="cfgSub">
-    </div>
+<div class="campo">
+<label>Subtítulo</label>
+<input id="cfgSub">
+</div>
 
-    <div class="campo">
-      <label>Endereço</label>
-      <input id="cfgEnd">
-    </div>
+<div class="campo">
+<label>Endereço</label>
+<input id="cfgEnd">
+</div>
 
-    <div class="campo">
-      <label>Emoji</label>
-      <input id="cfgEmoji">
-    </div>
+<div class="campo">
+<label>Emoji</label>
+<input id="cfgEmoji">
+</div>
 
-    <div class="campo">
-      <label>URL da logo</label>
-      <input id="cfgLogo">
-    </div>
+<div class="campo">
+<label>URL da logo</label>
+<input id="cfgLogo">
+</div>
 
-    <div class="campo">
+<div class="campo">
 
-      <label>Quantidade de mesas</label>
+<label>Quantidade de mesas</label>
 
-      <div style="display:flex;align-items:center;gap:10px">
+<div style="display:flex;align-items:center;gap:10px">
 
-        <button class="btn cinza" type="button" onclick="alterarMesas(-1)">
-          ➖
-        </button>
+<button class="btn cinza" type="button" onclick="alterarMesas(-1)">
+➖
+</button>
 
-        <input
-          id="cfgMesas"
-          type="number"
-          min="1"
-          max="100"
-          style="max-width:130px;text-align:center"
-        >
+<input
+id="cfgMesas"
+type="number"
+min="1"
+max="100"
+style="max-width:130px;text-align:center"
+>
 
-        <button class="btn azul" type="button" onclick="alterarMesas(1)">
-          ➕
-        </button>
+<button class="btn azul" type="button" onclick="alterarMesas(1)">
+➕
+</button>
 
-      </div>
+</div>
 
-      <small style="display:block;color:#a9c9ff;margin-top:6px">
-        Escolha de 1 a 100 mesas.
-      </small>
+<small style="display:block;color:#a9c9ff;margin-top:6px">
+Escolha de 1 a 100 mesas.
+</small>
 
-    </div>
+</div>
 
-    <button class="btn verde" onclick="salvarConfig()">
-      💾 Salvar
-    </button>
+<button class="btn verde" onclick="salvarConfig()">
+💾 Salvar
+</button>
 
-  </div>
+</div>
 
 </section>
 
@@ -718,162 +732,185 @@ border-color:#ff5c5c!important
 
 <div id="modal" class="modal">
 
-  <div class="box">
+<div class="box">
 
-    <h2 id="modalTitulo">📋 Comanda</h2>
+<h2 id="modalTitulo">📋 Comanda</h2>
 
-    <div id="modalConteudo"></div>
+<div id="modalConteudo"></div>
 
-    <div class="botoes">
+<div class="botoes">
 
-      <button class="btn cinza" onclick="fecharModal()">
-        Fechar
-      </button>
+<button class="btn cinza" onclick="fecharModal()">
+Fechar
+</button>
 
-      <button id="btnPreparo" class="btn laranja" onclick="mudarComanda('Em preparo')">
-        🟠 Em preparo
-      </button>
+<button id="btnPreparo" class="btn laranja" onclick="mudarComanda('Em preparo')">
+🟠 Em preparo
+</button>
 
-      <button id="btnPronto" class="btn azul" onclick="mudarComanda('Pronto')">
-        🔵 Pronto
-      </button>
+<button id="btnPronto" class="btn azul" onclick="mudarComanda('Pronto')">
+🔵 Pronto
+</button>
 
-      <button id="finalizar" class="btn verde" onclick="finalizar()">
-        🟢 Finalizar e liberar mesa
-      </button>
+<button id="finalizar" class="btn verde" onclick="finalizar()">
+🟢 Finalizar e liberar mesa
+</button>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
 </div>
 
 <div id="modalProd" class="modal">
 
-  <div class="box">
+<div class="box">
 
-    <h2>🍔 Produto</h2>
+<h2 id="tituloModalProduto">🍔 Produto</h2>
 
-    <input id="pid" type="hidden">
+<input id="pid" type="hidden">
 
-    <div class="campo">
-      <label>Nome</label>
-      <input id="pnome">
-    </div>
+<div class="campo">
+<label>Nome</label>
+<input id="pnome">
+</div>
 
-    <div class="campo">
-      <label>Categoria</label>
-      <input id="pcat">
-    </div>
+<div class="campo">
 
-    <div class="campo">
-      <label>Descrição</label>
-      <textarea id="pdesc"></textarea>
-    </div>
+<label>Categoria</label>
 
-    <div class="campo">
-      <label>Preço</label>
-      <input id="ppreco" type="number" step="0.01">
-    </div>
+<select id="pcat">
+<option value="">Selecione uma categoria</option>
+</select>
 
-    <div class="campo">
-      <label>Preço promocional</label>
-      <input id="ppromo" type="number" step="0.01">
-    </div>
+<span class="categoria-ajuda">
+Escolha uma categoria existente para o produto aparecer junto dos outros produtos dessa categoria.
+</span>
 
-    <div class="campo">
+</div>
 
-      <label>📷 Foto do produto</label>
+<div class="campo">
 
-      <input
-        id="pfotoArquivo"
-        type="file"
-        accept="image/*"
-        onchange="previewFoto(event)"
-      >
+<label>Nova categoria (somente se precisar)</label>
 
-      <input id="pfoto" type="hidden">
+<input
+id="pnovaCategoria"
+placeholder="Ex.: Sobremesas"
+>
 
-      <small style="display:block;color:#a9c9ff;margin-top:6px">
-        Escolha uma foto do computador ou celular.
-        A imagem será reduzida automaticamente.
-      </small>
+<span class="categoria-ajuda">
+Se deixar em branco, será usada a categoria selecionada acima.
+</span>
 
-      <div id="fotoPreview" style="margin-top:10px"></div>
+</div>
 
-    </div>
+<div class="campo">
+<label>Descrição</label>
+<textarea id="pdesc"></textarea>
+</div>
 
-    <div class="campo">
+<div class="campo">
+<label>Preço</label>
+<input id="ppreco" type="number" step="0.01">
+</div>
 
-      <label>Disponível?</label>
+<div class="campo">
+<label>Preço promocional</label>
+<input id="ppromo" type="number" step="0.01">
+</div>
 
-      <select id="pativo">
-        <option value="true">Sim</option>
-        <option value="false">Não</option>
-      </select>
+<div class="campo">
 
-    </div>
+<label>📷 Foto do produto</label>
 
-    <div class="campo">
+<input
+id="pfotoArquivo"
+type="file"
+accept="image/*"
+onchange="previewFoto(event)"
+>
 
-      <label>Promoção ativa?</label>
+<input id="pfoto" type="hidden">
 
-      <select id="ppromoativa">
-        <option value="false">Não</option>
-        <option value="true">Sim</option>
-      </select>
+<small style="display:block;color:#a9c9ff;margin-top:6px">
+Escolha uma foto do computador ou celular.
+A imagem será reduzida automaticamente.
+</small>
 
-    </div>
+<div id="fotoPreview" style="margin-top:10px"></div>
 
-    <div class="botoes">
+</div>
 
-      <button class="btn cinza" onclick="fecharProd()">
-        Cancelar
-      </button>
+<div class="campo">
 
-      <button class="btn verde" onclick="salvarProd()">
-        💾 Salvar
-      </button>
+<label>Disponível?</label>
 
-    </div>
+<select id="pativo">
+<option value="true">Sim</option>
+<option value="false">Não</option>
+</select>
 
-  </div>
+</div>
+
+<div class="campo">
+
+<label>Promoção ativa?</label>
+
+<select id="ppromoativa">
+<option value="false">Não</option>
+<option value="true">Sim</option>
+</select>
+
+</div>
+
+<div class="botoes">
+
+<button class="btn cinza" onclick="fecharProd()">
+Cancelar
+</button>
+
+<button class="btn verde" onclick="salvarProd()">
+💾 Salvar
+</button>
+
+</div>
+
+</div>
 
 </div>
 
 <script type="module">
 
-import{
-  initializeApp
-}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import{
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut
+getAuth,
+onAuthStateChanged,
+signInWithEmailAndPassword,
+signOut
 }from"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import{
-  initializeFirestore,
-  collection,
-  doc,
-  addDoc,
-  setDoc,
-  updateDoc,
-  onSnapshot,
-  writeBatch,
-  getDocs
+initializeFirestore,
+collection,
+doc,
+addDoc,
+setDoc,
+updateDoc,
+deleteDoc,
+onSnapshot,
+writeBatch,
+getDocs
 }from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
 const cfg={
-  apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
-  authDomain:"sistema-digital-f9df1.firebaseapp.com",
-  projectId:"sistema-digital-f9df1",
-  storageBucket:"sistema-digital-f9df1.firebasestorage.app",
-  messagingSenderId:"783545984661",
-  appId:"1:783545984661:web:5d0945907ad9db3990dd9c"
+apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+authDomain:"sistema-digital-f9df1.firebaseapp.com",
+projectId:"sistema-digital-f9df1",
+storageBucket:"sistema-digital-f9df1.firebasestorage.app",
+messagingSenderId:"783545984661",
+appId:"1:783545984661:web:5d0945907ad9db3990dd9c"
 };
 
 const app=initializeApp(cfg);
@@ -884,38 +921,38 @@ const db=initializeFirestore(app,{},"default");
 const parametros=new URLSearchParams(window.location.search);
 
 const idInformado=
-  (parametros.get("restaurante")||"sabor-da-casa")
-  .trim()
-  .toLowerCase();
+(parametros.get("restaurante")||"sabor-da-casa")
+.trim()
+.toLowerCase();
 
 const RESTAURANTE_ID=
-  /^[a-z0-9-]+$/.test(idInformado)
-  ?idInformado
-  :"sabor-da-casa";
+/^[a-z0-9-]+$/.test(idInformado)
+?idInformado
+:"sabor-da-casa";
 
 
 const restauranteRef=
-  doc(db,"restaurantes",RESTAURANTE_ID);
+doc(db,"restaurantes",RESTAURANTE_ID);
 
 
 function colecaoRestaurante(nome){
-  return collection(
-    db,
-    "restaurantes",
-    RESTAURANTE_ID,
-    nome
-  );
+return collection(
+db,
+"restaurantes",
+RESTAURANTE_ID,
+nome
+);
 }
 
 
 function documentoRestaurante(nome,id){
-  return doc(
-    db,
-    "restaurantes",
-    RESTAURANTE_ID,
-    nome,
-    id
-  );
+return doc(
+db,
+"restaurantes",
+RESTAURANTE_ID,
+nome,
+id
+);
 }
 
 
@@ -931,1557 +968,1924 @@ let pedidosInicializados=false;
 let painelIniciado=false;
 
 
-const loginScreen=document.getElementById('loginScreen');
-const appShell=document.getElementById('appShell');
-const loginErro=document.getElementById('loginErro');
-const loginBtn=document.getElementById('loginBtn');
+/* =========================
+   CATEGORIAS
+========================= */
+
+const categoriasPadrao=[
+"Lanches",
+"Bebidas",
+"Pizzas",
+"Porções",
+"Combos",
+"Sobremesas",
+"Pratos",
+"Saladas",
+"Cafés",
+"Outros"
+];
+
+
+function chaveCategoria(valor){
+
+return String(valor||"")
+.trim()
+.toLowerCase()
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"")
+.replace(/\s+/g," ");
+
+}
+
+
+function normalizarCategoria(valor){
+
+const original=
+String(valor||"")
+.trim();
+
+if(!original)
+return "";
+
+
+const chave=chaveCategoria(original);
+
+
+/* Variações conhecidas */
+const mapa={
+
+"lanche":"Lanches",
+"lanches":"Lanches",
+
+"bebida":"Bebidas",
+"bebidas":"Bebidas",
+
+"pizzaria":"Pizzas",
+"pizza":"Pizzas",
+"pizzas":"Pizzas",
+
+"porcao":"Porções",
+"porcoes":"Porções",
+"porção":"Porções",
+"porções":"Porções",
+
+"combo":"Combos",
+"combos":"Combos",
+
+"sobremesa":"Sobremesas",
+"sobremesas":"Sobremesas",
+
+"prato":"Pratos",
+"pratos":"Pratos",
+
+"salada":"Saladas",
+"saladas":"Saladas",
+
+"cafe":"Cafés",
+"cafes":"Cafés",
+
+"outro":"Outros",
+"outros":"Outros"
+
+};
+
+
+if(mapa[chave])
+return mapa[chave];
+
+
+/* Procura uma categoria padrão */
+const padrao=
+categoriasPadrao.find(
+x=>chaveCategoria(x)===chave
+);
+
+if(padrao)
+return padrao;
+
+
+/* Mantém categoria personalizada */
+return original;
+
+}
+
+
+function obterCategorias(){
+
+const conjunto=new Map();
+
+categoriasPadrao.forEach(
+categoria=>{
+conjunto.set(
+chaveCategoria(categoria),
+categoria
+);
+}
+);
+
+produtos.forEach(p=>{
+
+const categoria=
+normalizarCategoria(p.categoria);
+
+if(categoria)
+conjunto.set(
+chaveCategoria(categoria),
+categoria
+);
+
+});
+
+return Array.from(conjunto.values());
+
+}
+
+
+function preencherCategorias(){
+
+const select=
+document.getElementById("pcat");
+
+if(!select)
+return;
+
+const atual=
+select.value;
+
+const categorias=
+obterCategorias();
+
+select.innerHTML=
+'<option value="">Selecione uma categoria</option>';
+
+categorias.forEach(categoria=>{
+
+const option=
+document.createElement("option");
+
+option.value=categoria;
+option.textContent=categoria;
+
+select.appendChild(option);
+
+});
+
+if(atual)
+select.value=
+normalizarCategoria(atual);
+
+}
+
+
+async function corrigirCategoriasExistentes(lista){
+
+for(const p of lista){
+
+const categoriaOriginal=
+String(p.categoria||"").trim();
+
+if(!categoriaOriginal)
+continue;
+
+const categoriaCorreta=
+normalizarCategoria(categoriaOriginal);
+
+if(
+categoriaCorreta&&
+categoriaOriginal!==categoriaCorreta
+){
+
+try{
+
+await updateDoc(
+documentoRestaurante(
+"produtos",
+p.id
+),
+{
+categoria:categoriaCorreta
+}
+);
+
+}catch(e){
+
+console.warn(
+"Não foi possível corrigir categoria:",
+p.id,
+e
+);
+
+}
+
+}
+
+}
+
+}
+
+
+const loginScreen=
+document.getElementById('loginScreen');
+
+const appShell=
+document.getElementById('appShell');
+
+const loginErro=
+document.getElementById('loginErro');
+
+const loginBtn=
+document.getElementById('loginBtn');
 
 
 window.entrarPainel=async e=>{
 
-  e.preventDefault();
+e.preventDefault();
 
-  loginErro.style.display='none';
+loginErro.style.display='none';
 
-  loginBtn.disabled=true;
-  loginBtn.textContent='⏳ Entrando...';
+loginBtn.disabled=true;
+loginBtn.textContent='⏳ Entrando...';
 
-  try{
+try{
 
-    await signInWithEmailAndPassword(
-      auth,
-      document.getElementById('loginEmail').value.trim(),
-      document.getElementById('loginSenha').value
-    );
+await signInWithEmailAndPassword(
+auth,
+document.getElementById('loginEmail').value.trim(),
+document.getElementById('loginSenha').value
+);
 
-    document.getElementById('loginSenha').value='';
+document.getElementById('loginSenha').value='';
 
-  }catch(err){
+}catch(err){
 
-    console.error(err);
+console.error(err);
 
-    loginErro.textContent=
-      'E-mail ou senha incorretos. Verifique os dados e tente novamente.';
+loginErro.textContent=
+'E-mail ou senha incorretos. Verifique os dados e tente novamente.';
 
-    loginErro.style.display='block';
+loginErro.style.display='block';
 
-  }finally{
+}finally{
 
-    loginBtn.disabled=false;
-    loginBtn.textContent='🔐 Entrar no painel';
+loginBtn.disabled=false;
+loginBtn.textContent='🔐 Entrar no painel';
 
-  }
+}
 
 };
 
 
 window.sairPainel=async()=>{
 
-  try{
+try{
 
-    await signOut(auth);
+await signOut(auth);
 
-  }catch(e){
+}catch(e){
 
-    console.error(e);
+console.error(e);
 
-    alert(
-      'Não foi possível sair.\n\n'+e.message
-    );
+alert(
+'Não foi possível sair.\n\n'+e.message
+);
 
-  }
+}
 
 };
 
 
 function mostrarLogin(){
 
-  loginScreen.style.display='flex';
-  appShell.style.display='none';
+loginScreen.style.display='flex';
+appShell.style.display='none';
 
 }
 
 
 function mostrarPainel(){
 
-  loginScreen.style.display='none';
-  appShell.style.display='flex';
+loginScreen.style.display='none';
+appShell.style.display='flex';
 
 }
 
 
 const dinheiro=v=>
-  Number(v||0).toLocaleString(
-    "pt-BR",
-    {
-      style:"currency",
-      currency:"BRL"
-    }
-  );
+Number(v||0).toLocaleString(
+"pt-BR",
+{
+style:"currency",
+currency:"BRL"
+}
+);
 
 
 const esc=v=>
-  String(v??"").replace(
-    /[&<>"']/g,
-    m=>({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    }[m])
-  );
+String(v??"").replace(
+/[&<>"']/g,
+m=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[m])
+);
 
 
 const ativo=p=>
-  p.status!=="Finalizado";
+p.status!=="Finalizado";
 
 
 function badge(s){
 
-  return s==="Recebido"
-    ?'<span class="badge b-recebido">🔴 Recebido</span>'
+return s==="Recebido"
+?'<span class="badge b-recebido">🔴 Recebido</span>'
 
-    :s==="Em preparo"
-    ?'<span class="badge b-preparo">🟠 Em preparo</span>'
+:s==="Em preparo"
+?'<span class="badge b-preparo">🟠 Em preparo</span>'
 
-    :s==="Pronto"
-    ?'<span class="badge b-pronto">🔵 Pronto</span>'
+:s==="Pronto"
+?'<span class="badge b-pronto">🔵 Pronto</span>'
 
-    :'<span class="badge b-final">🟢 Finalizado</span>';
+:'<span class="badge b-final">🟢 Finalizado</span>';
 
 }
 
 
 window.sec=(n,b)=>{
 
-  document
-    .querySelectorAll('.secao')
-    .forEach(x=>x.classList.remove('ativa'));
+document
+.querySelectorAll('.secao')
+.forEach(x=>x.classList.remove('ativa'));
 
-  document
-    .getElementById(n)
-    .classList.add('ativa');
+document
+.getElementById(n)
+.classList.add('ativa');
 
-  document
-    .querySelectorAll('.nav button')
-    .forEach(x=>x.classList.remove('ativo'));
+document
+.querySelectorAll('.nav button')
+.forEach(x=>x.classList.remove('ativo'));
 
-  if(b)b.classList.add('ativo');
+if(b)b.classList.add('ativo');
 
 };
 
 
 function classeMesa(n){
 
-  let p=pedidos.filter(
-    x=>String(x.mesa)===String(n)&&ativo(x)
-  );
+let p=pedidos.filter(
+x=>String(x.mesa)===String(n)&&ativo(x)
+);
 
-  if(!p.length)
-    return['livre','Livre',0,false];
+if(!p.length)
+return['livre','Livre',0,false];
 
-  let v=p.reduce(
-    (s,x)=>s+Number(x.total||0),
-    0
-  );
+let v=p.reduce(
+(s,x)=>s+Number(x.total||0),
+0
+);
 
-  if(p.some(x=>x.status==='Recebido'))
-    return['ocupada','Recebido',v,true];
+if(p.some(x=>x.status==='Recebido'))
+return['ocupada','Recebido',v,true];
 
-  if(p.some(x=>x.status==='Em preparo'))
-    return['preparo','Em preparo',v,false];
+if(p.some(x=>x.status==='Em preparo'))
+return['preparo','Em preparo',v,false];
 
-  if(p.some(x=>x.status==='Pronto'))
-    return['pronto','Pronto',v,false];
+if(p.some(x=>x.status==='Pronto'))
+return['pronto','Pronto',v,false];
 
-  return['ocupada','Ocupada',v,false];
+return['ocupada','Ocupada',v,false];
 
 }
 
 
 function renderMesas(){
 
-  let a=document.getElementById('mesas');
+let a=document.getElementById('mesas');
 
-  a.innerHTML='';
+a.innerHTML='';
 
-  let c=[0,0,0,0];
+let c=[0,0,0,0];
 
-  for(let n=1;n<=mesas;n++){
+for(let n=1;n<=mesas;n++){
 
-    let r=classeMesa(n);
+let r=classeMesa(n);
 
-    let d=document.createElement('div');
+let d=document.createElement('div');
 
-    d.className=
-      'mesa '+r[0]+(r[3]?' nova':'');
+d.className=
+'mesa '+r[0]+(r[3]?' nova':'');
 
-    if(r[0]==='livre')c[0]++;
-    else if(r[0]==='ocupada')c[1]++;
-    else if(r[0]==='preparo')c[2]++;
-    else c[3]++;
+if(r[0]==='livre')c[0]++;
+else if(r[0]==='ocupada')c[1]++;
+else if(r[0]==='preparo')c[2]++;
+else c[3]++;
 
-    d.innerHTML=`
+d.innerHTML=`
 
-      <div>
+<div>
 
-        <h3>🪑 Mesa ${n}</h3>
+<h3>🪑 Mesa ${n}</h3>
 
-        <div style="font-weight:bold;margin-top:8px">
-          ${
-            r[1]==='Livre'
-            ?'🟢'
-            :r[1]==='Recebido'
-            ?'🔴'
-            :r[1]==='Em preparo'
-            ?'🟠'
-            :'🔵'
-          }
-          ${r[1]}
-        </div>
+<div style="font-weight:bold;margin-top:8px">
+${
+r[1]==='Livre'
+?'🟢'
+:r[1]==='Recebido'
+?'🔴'
+:r[1]==='Em preparo'
+?'🟠'
+:'🔵'
+}
+${r[1]}
+</div>
 
-        <div style="font-size:20px;font-weight:bold;margin-top:8px">
-          ${dinheiro(r[2])}
-        </div>
+<div style="font-size:20px;font-weight:bold;margin-top:8px">
+${dinheiro(r[2])}
+</div>
 
-      </div>
+</div>
 
-      <button onclick="abrirMesa(${n})">
-        📋 Ver comanda
-      </button>
+<button onclick="abrirMesa(${n})">
+📋 Ver comanda
+</button>
 
-    `;
+`;
 
-    a.appendChild(d);
+a.appendChild(d);
 
-  }
+}
 
-  document.getElementById('livres').textContent=c[0];
-  document.getElementById('ocupadas').textContent=c[1];
-  document.getElementById('preparo').textContent=c[2];
-  document.getElementById('prontos').textContent=c[3];
-  document.getElementById('ativos').textContent=
-    pedidos.filter(ativo).length;
+document.getElementById('livres').textContent=c[0];
+document.getElementById('ocupadas').textContent=c[1];
+document.getElementById('preparo').textContent=c[2];
+document.getElementById('prontos').textContent=c[3];
+document.getElementById('ativos').textContent=
+pedidos.filter(ativo).length;
 
 }
 
 
 window.abrirMesa=n=>{
 
-  let ps=pedidos.filter(
-    x=>String(x.mesa)===String(n)&&ativo(x)
-  );
+let ps=pedidos.filter(
+x=>String(x.mesa)===String(n)&&ativo(x)
+);
 
-  if(ps.length)
-    abrirComandaGrupo(ps);
-  else
-    alert('🟢 Mesa '+n+' está livre.');
+if(ps.length)
+abrirComandaGrupo(ps);
+else
+alert('🟢 Mesa '+n+' está livre.');
 
 };
 
 
 function renderPedidos(){
 
-  const a=document.getElementById('listaPedidos');
+const a=document.getElementById('listaPedidos');
 
-  const ps=pedidos
-    .filter(ativo)
-    .sort(
-      (x,y)=>
-        String(x.data||'').localeCompare(
-          String(y.data||'')
-        )
-    );
+const ps=pedidos
+.filter(ativo)
+.sort(
+(x,y)=>
+String(x.data||'').localeCompare(
+String(y.data||'')
+)
+);
 
+const grupos={
+'Recebido':[],
+'Em preparo':[],
+'Pronto':[]
+};
 
-  const grupos={
-    'Recebido':[],
-    'Em preparo':[],
-    'Pronto':[]
-  };
-
-
-  ps.forEach(p=>{
-
-    if(grupos[p.status])
-      grupos[p.status].push(p);
-
-  });
+ps.forEach(p=>{
+if(grupos[p.status])
+grupos[p.status].push(p);
+});
 
 
-  const coluna=(status,titulo,classe,emoji)=>{
+const coluna=(status,titulo,classe,emoji)=>{
 
-    const lista=grupos[status];
+const lista=grupos[status];
 
-    const cards=lista.map((p,index)=>{
+const cards=lista.map((p,index)=>{
 
-      const itens=(p.itens||[])
-        .map(i=>
-          `<div>
-            • ${i.quantidade}x ${esc(i.nome)} — ${dinheiro(
-              Number(i.preco||0)*Number(i.quantidade||1)
-            )}
-            ${
-              i.observacao
-              ?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`
-              :''
-            }
-          </div>`
-        )
-        .join('');
+const itens=(p.itens||[])
+.map(i=>
+`<div>
+• ${i.quantidade}x ${esc(i.nome)} — ${dinheiro(
+Number(i.preco||0)*Number(i.quantidade||1)
+)}
+${
+i.observacao
+?`<div class="obs">Obs.: ${esc(i.observacao)}</div>`
+:''
+}
+</div>`
+)
+.join('');
 
+const hora=
+p.data&&
+!isNaN(new Date(p.data).getTime())
+?new Date(p.data).toLocaleTimeString(
+'pt-BR',
+{
+hour:'2-digit',
+minute:'2-digit',
+second:'2-digit'
+}
+)
+:'--:--:--';
 
-      const hora=
-        p.data&&
-        !isNaN(new Date(p.data).getTime())
-        ?new Date(p.data).toLocaleTimeString(
-          'pt-BR',
-          {
-            hour:'2-digit',
-            minute:'2-digit',
-            second:'2-digit'
-          }
-        )
-        :'--:--:--';
+const posicao=
+ps.findIndex(x=>x.id===p.id)+1;
 
+const medalha=
+posicao===1
+?'🥇'
+:posicao===2
+?'🥈'
+:posicao===3
+?'🥉'
+:'🔢';
 
-      const posicao=
-        ps.findIndex(x=>x.id===p.id)+1;
+let ac=
+p.status==='Recebido'
+?`<button class="btn laranja" onclick="status('${p.id}','Em preparo')">🟠 Iniciar preparo</button>`
 
-      const medalha=
-        posicao===1
-        ?'🥇'
-        :posicao===2
-        ?'🥈'
-        :posicao===3
-        ?'🥉'
-        :'🔢';
+:p.status==='Em preparo'
+?`<button class="btn azul" onclick="status('${p.id}','Pronto')">🔵 Marcar pronto</button>`
 
+:`<button class="btn verde" onclick="abrirId('${p.id}')">📋 Abrir comanda</button>`;
 
-      let ac=
-        p.status==='Recebido'
-        ?`<button class="btn laranja" onclick="status('${p.id}','Em preparo')">🟠 Iniciar preparo</button>`
+return `
 
-        :p.status==='Em preparo'
-        ?`<button class="btn azul" onclick="status('${p.id}','Pronto')">🔵 Marcar pronto</button>`
+<div class="pedido ${
+p.status==='Em preparo'
+?'prep'
+:p.status==='Pronto'
+?'pron'
+:''
+}">
 
-        :`<button class="btn verde" onclick="abrirId('${p.id}')">📋 Abrir comanda</button>`;
+<div class="top">
 
+<div>
 
-      return `
+<strong style="font-size:18px">
+Pedido #${esc(p.numeroPedido)}
+</strong>
 
-        <div class="pedido ${
-          p.status==='Em preparo'
-          ?'prep'
-          :p.status==='Pronto'
-          ?'pron'
-          :''
-        }">
+<br>
+🪑 Mesa ${esc(p.mesa)}
+${p.responsavel
+?' • 👤 '+esc(p.responsavel)
+:''
+}
 
-          <div class="top">
+<br>
 
-            <div>
+${badge(p.status)}
 
-              <strong style="font-size:18px">
-                Pedido #${esc(p.numeroPedido)}
-              </strong>
+<div class="fila">
+${medalha} ${posicao}º na fila
+</div>
 
-              <br>
-              🪑 Mesa ${esc(p.mesa)}
-              ${p.responsavel
-                ?' • 👤 '+esc(p.responsavel)
-                :''
-              }
+<div class="horachegada">
+🕐 Chegou às ${hora}
+</div>
 
-              <br>
+${
+p.comandaId
+?`<small style="color:#9fc5ff">
+📋 Comanda da mesa
+</small>`
+:""
+}
 
-              ${badge(p.status)}
+</div>
 
-              <div class="fila">
-                ${medalha} ${posicao}º na fila
-              </div>
+<strong style="font-size:19px">
+${dinheiro(p.total)}
+</strong>
 
-              <div class="horachegada">
-                🕐 Chegou às ${hora}
-              </div>
+</div>
 
-              ${
-                p.comandaId
-                ?`<small style="color:#9fc5ff">
-                    📋 Comanda da mesa
-                  </small>`
-                :""
-              }
+<div class="itens">
+${itens}
+</div>
 
-            </div>
+${
+p.observacaoGeral
+?`<div class="obs">
+📝 ${esc(p.observacaoGeral)}
+</div>`
+:''
+}
 
-            <strong style="font-size:19px">
-              ${dinheiro(p.total)}
-            </strong>
+<div class="acoes" style="margin-top:12px">
+${ac}
+</div>
 
-          </div>
+</div>
 
-          <div class="itens">
-            ${itens}
-          </div>
+`;
 
-          ${
-            p.observacaoGeral
-            ?`<div class="obs">
-                📝 ${esc(p.observacaoGeral)}
-              </div>`
-            :''
-          }
+}).join('');
 
-          <div class="acoes" style="margin-top:12px">
-            ${ac}
-          </div>
+return `
 
-        </div>
+<div class="coluna-pedidos ${classe}">
 
-      `;
+<div class="coluna-titulo">
 
-    }).join('');
+<strong>
+${emoji} ${titulo}
+</strong>
 
+<span class="contador-coluna">
+${lista.length}
+</span>
 
-    return `
+</div>
 
-      <div class="coluna-pedidos ${classe}">
+${
+cards ||
+'<div class="vazio" style="padding:22px 8px">Nenhum pedido</div>'
+}
 
-        <div class="coluna-titulo">
+</div>
 
-          <strong>
-            ${emoji} ${titulo}
-          </strong>
+`;
 
-          <span class="contador-coluna">
-            ${lista.length}
-          </span>
+};
 
-        </div>
+a.innerHTML=
+coluna(
+'Recebido',
+'Recebidos',
+'recebidos',
+'🔴'
+)+
 
-        ${
-          cards ||
-          '<div class="vazio" style="padding:22px 8px">Nenhum pedido</div>'
-        }
+coluna(
+'Em preparo',
+'Em preparo',
+'preparando',
+'🟠'
+)+
 
-      </div>
-
-    `;
-
-  };
-
-
-  a.innerHTML=
-    coluna(
-      'Recebido',
-      'Recebidos',
-      'recebidos',
-      '🔴'
-    )+
-
-    coluna(
-      'Em preparo',
-      'Em preparo',
-      'preparando',
-      '🟠'
-    )+
-
-    coluna(
-      'Pronto',
-      'Prontos',
-      'prontos',
-      '🔵'
-    );
+coluna(
+'Pronto',
+'Prontos',
+'prontos',
+'🔵'
+);
 
 }
 
 
 window.status=async(id,s)=>{
 
-  try{
+try{
 
-    await updateDoc(
-      documentoRestaurante('pedidos',id),
-      {status:s}
-    );
+await updateDoc(
+documentoRestaurante('pedidos',id),
+{status:s}
+);
 
-    const idx=pedidos.findIndex(
-      p=>p.id===id
-    );
+const idx=pedidos.findIndex(
+p=>p.id===id
+);
 
-    if(idx>=0)
-      pedidos[idx]={
-        ...pedidos[idx],
-        status:s
-      };
+if(idx>=0)
+pedidos[idx]={
+...pedidos[idx],
+status:s
+};
 
-    renderPedidos();
-    renderMesas();
+renderPedidos();
+renderMesas();
 
-    if(comanda&&comanda.length){
+if(comanda&&comanda.length){
 
-      const grupoAtual=
-        pedidos.filter(
-          p=>
-            comanda.some(x=>x.id===p.id)&&
-            ativo(p)
-        );
+const grupoAtual=
+pedidos.filter(
+p=>
+comanda.some(x=>x.id===p.id)&&
+ativo(p)
+);
 
-      if(grupoAtual.length)
-        abrirComandaGrupo(grupoAtual);
+if(grupoAtual.length)
+abrirComandaGrupo(grupoAtual);
 
-    }
+}
 
-  }catch(e){
+}catch(e){
 
-    alert(
-      'Erro ao atualizar pedido:\n\n'+
-      e.message
-    );
+alert(
+'Erro ao atualizar pedido:\n\n'+
+e.message
+);
 
-  }
+}
 
 };
 
 
 window.abrirId=id=>{
 
-  let p=pedidos.find(
-    x=>x.id===id
-  );
+let p=pedidos.find(
+x=>x.id===id
+);
 
-  if(p){
+if(p){
 
-    let grupo=
-      pedidos.filter(
-        x=>
-          String(x.comandaId||"")===
-          String(p.comandaId||"")&&
-          ativo(x)
-      );
+let grupo=
+pedidos.filter(
+x=>
+String(x.comandaId||"")===
+String(p.comandaId||"")&&
+ativo(x)
+);
 
-    if(!grupo.length)
-      grupo=[p];
+if(!grupo.length)
+grupo=[p];
 
-    abrirComandaGrupo(grupo);
+abrirComandaGrupo(grupo);
 
-  }
+}
 
 };
 
 
 function abrirComandaGrupo(grupo){
 
-  comanda=grupo;
+comanda=grupo;
 
-  const mesa=
-    grupo[0]?.mesa||"";
+const mesa=
+grupo[0]?.mesa||"";
 
-  document.getElementById('modalTitulo')
-    .textContent=
-      `📋 Mesa ${mesa} — Comanda aberta`;
+document.getElementById('modalTitulo')
+.textContent=
+`📋 Mesa ${mesa} — Comanda aberta`;
 
-  const totalGrupo=
-    grupo.reduce(
-      (s,p)=>s+Number(p.total||0),
-      0
-    );
+const totalGrupo=
+grupo.reduce(
+(s,p)=>s+Number(p.total||0),
+0
+);
 
-  document.getElementById('modalConteudo')
-    .innerHTML=`
+document.getElementById('modalConteudo')
+.innerHTML=`
 
-      <div class="linha">
-        <span>Pedidos na comanda</span>
-        <strong>${grupo.length}</strong>
-      </div>
+<div class="linha">
+<span>Pedidos na comanda</span>
+<strong>${grupo.length}</strong>
+</div>
 
-      <div class="linha">
-        <span>Total acumulado</span>
-        <strong>${dinheiro(totalGrupo)}</strong>
-      </div>
+<div class="linha">
+<span>Total acumulado</span>
+<strong>${dinheiro(totalGrupo)}</strong>
+</div>
 
-      ${
-        grupo.map(p=>{
+${
+grupo.map(p=>{
 
-          const itens=
-            (p.itens||[])
-            .map(i=>
-              `<div class="item">
-                <b>${i.quantidade}x ${esc(i.nome)}</b>
-                —
-                ${dinheiro(
-                  Number(i.preco||0)*
-                  Number(i.quantidade||1)
-                )}
-                ${
-                  i.observacao
-                  ?`<div class="obs">
-                      Obs.: ${esc(i.observacao)}
-                    </div>`
-                  :''
-                }
-              </div>`
-            )
-            .join('');
+const itens=
+(p.itens||[])
+.map(i=>
+`<div class="item">
+<b>${i.quantidade}x ${esc(i.nome)}</b>
+—
+${dinheiro(
+Number(i.preco||0)*
+Number(i.quantidade||1)
+)}
+${
+i.observacao
+?`<div class="obs">
+Obs.: ${esc(i.observacao)}
+</div>`
+:''
+}
+</div>`
+)
+.join('');
 
-          const ac=
-            p.status==='Recebido'
-            ?`<button class="btn laranja" onclick="mudarPedido('${p.id}','Em preparo')">
-                🟠 Em preparo
-              </button>`
+const ac=
+p.status==='Recebido'
+?`<button class="btn laranja" onclick="mudarPedido('${p.id}','Em preparo')">
+🟠 Em preparo
+</button>`
 
-            :p.status==='Em preparo'
-            ?`<button class="btn azul" onclick="mudarPedido('${p.id}','Pronto')">
-                🔵 Pronto
-              </button>`
+:p.status==='Em preparo'
+?`<button class="btn azul" onclick="mudarPedido('${p.id}','Pronto')">
+🔵 Pronto
+</button>`
 
-            :`<span class="badge b-pronto">
-                🔵 Pronto
-              </span>`;
+:`<span class="badge b-pronto">
+🔵 Pronto
+</span>`;
 
-          return `
+return `
 
-            <div class="card"
-              style="margin:12px 0;background:#0b2c5c">
+<div class="card"
+style="margin:12px 0;background:#0b2c5c">
 
-              <div class="top">
+<div class="top">
 
-                <div>
+<div>
 
-                  <strong>
-                    Pedido #${esc(p.numeroPedido)}
-                  </strong>
+<strong>
+Pedido #${esc(p.numeroPedido)}
+</strong>
 
-                  <br>
+<br>
 
-                  ${badge(p.status)}
+${badge(p.status)}
 
-                  ${
-                    p.comandaId
-                    ?`<br>
-                      <small style='color:#9fc5ff'>
-                        📋 Comanda da mesa
-                      </small>`
-                    :''
-                  }
+${
+p.comandaId
+?`<br>
+<small style='color:#9fc5ff'>
+📋 Comanda da mesa
+</small>`
+:''
+}
 
-                </div>
+</div>
 
-                <strong>
-                  ${dinheiro(p.total)}
-                </strong>
+<strong>
+${dinheiro(p.total)}
+</strong>
 
-              </div>
+</div>
 
-              <div class="itens">
-                ${itens}
-              </div>
+<div class="itens">
+${itens}
+</div>
 
-              <div class="acoes">
-                ${ac}
-              </div>
+<div class="acoes">
+${ac}
+</div>
 
-            </div>
+</div>
 
-          `;
+`;
 
-        }).join("")
-      }
+}).join("")
+}
 
-    `;
+`;
 
-  document.getElementById('btnPreparo')
-    .style.display='none';
+document.getElementById('btnPreparo')
+.style.display='none';
 
-  document.getElementById('btnPronto')
-    .style.display='none';
+document.getElementById('btnPronto')
+.style.display='none';
 
-  document.getElementById('finalizar')
-    .style.display=
-      grupo.length&&
-      grupo.every(p=>p.status==='Pronto')
-      ?'inline-block'
-      :'none';
+document.getElementById('finalizar')
+.style.display=
+grupo.length&&
+grupo.every(p=>p.status==='Pronto')
+?'inline-block'
+:'none';
 
-  document.getElementById('modal')
-    .style.display='block';
+document.getElementById('modal')
+.style.display='block';
 
 }
 
 
 window.fecharModal=()=>{
 
-  document.getElementById('modal')
-    .style.display='none';
+document.getElementById('modal')
+.style.display='none';
 
-  comanda=null;
+comanda=null;
 
 };
 
 
 window.mudarPedido=async(id,s)=>{
 
-  try{
+try{
 
-    const idx=
-      pedidos.findIndex(
-        p=>p.id===id
-      );
+const idx=
+pedidos.findIndex(
+p=>p.id===id
+);
 
-    if(idx>=0){
+if(idx>=0){
 
-      pedidos[idx]={
-        ...pedidos[idx],
-        status:s
-      };
+pedidos[idx]={
+...pedidos[idx],
+status:s
+};
 
-      renderPedidos();
-      renderMesas();
-      atualizarAlarmeSom();
+renderPedidos();
+renderMesas();
+atualizarAlarmeSom();
 
-    }
+}
 
-    await updateDoc(
-      documentoRestaurante('pedidos',id),
-      {status:s}
-    );
+await updateDoc(
+documentoRestaurante('pedidos',id),
+{status:s}
+);
 
-    if(comanda&&comanda.length){
+if(comanda&&comanda.length){
 
-      const grupoAtual=
-        pedidos.filter(
-          p=>
-            comanda.some(x=>x.id===p.id)&&
-            ativo(p)
-        );
+const grupoAtual=
+pedidos.filter(
+p=>
+comanda.some(x=>x.id===p.id)&&
+ativo(p)
+);
 
-      if(grupoAtual.length)
-        abrirComandaGrupo(grupoAtual);
+if(grupoAtual.length)
+abrirComandaGrupo(grupoAtual);
 
-    }
+}
 
-  }catch(e){
+}catch(e){
 
-    alert(
-      'Erro ao atualizar pedido:\n\n'+
-      e.message
-    );
+alert(
+'Erro ao atualizar pedido:\n\n'+
+e.message
+);
 
-  }
+}
 
 };
 
 
 window.mudarComanda=async s=>{
 
-  if(!comanda)return;
+if(!comanda)return;
 
-  for(const p of comanda){
+for(const p of comanda){
 
-    if(p.status!==s){
+if(p.status!==s){
 
-      await updateDoc(
-        documentoRestaurante('pedidos',p.id),
-        {status:s}
-      );
+await updateDoc(
+documentoRestaurante('pedidos',p.id),
+{status:s}
+);
 
-    }
+}
 
-  }
+}
 
 };
 
 
 window.finalizar=async()=>{
 
-  if(!comanda||!comanda.length)
-    return;
+if(!comanda||!comanda.length)
+return;
 
-  const grupo=
-    pedidos.filter(
-      p=>
-        comanda.some(x=>x.id===p.id)&&
-        ativo(p)
-    );
+const grupo=
+pedidos.filter(
+p=>
+comanda.some(x=>x.id===p.id)&&
+ativo(p)
+);
 
-  if(!grupo.length)
-    return;
+if(!grupo.length)
+return;
 
-  if(!grupo.every(p=>p.status==='Pronto')){
+if(!grupo.every(p=>p.status==='Pronto')){
 
-    alert(
-      "⚠️ Só é possível finalizar a mesa quando todos os pedidos estiverem prontos."
-    );
+alert(
+"⚠️ Só é possível finalizar a mesa quando todos os pedidos estiverem prontos."
+);
 
-    return;
+return;
 
-  }
+}
 
-  const mesa=grupo[0].mesa;
+const mesa=grupo[0].mesa;
 
-  try{
+try{
 
-    const b=writeBatch(db);
-    const now=new Date().toISOString();
+const b=writeBatch(db);
+const now=new Date().toISOString();
 
-    let itens=[];
-    let totalGrupo=0;
+let itens=[];
+let totalGrupo=0;
 
-    grupo.forEach(p=>{
+grupo.forEach(p=>{
 
-      b.update(
-        documentoRestaurante(
-          'pedidos',
-          p.id
-        ),
-        {
-          status:'Finalizado',
-          finalizadoEm:now
-        }
-      );
+b.update(
+documentoRestaurante(
+'pedidos',
+p.id
+),
+{
+status:'Finalizado',
+finalizadoEm:now
+}
+);
 
-      itens=
-        itens.concat(
-          (p.itens||[])
-          .map(i=>({
-            ...i,
-            pedidoOrigem:p.numeroPedido
-          }))
-        );
+itens=
+itens.concat(
+(p.itens||[])
+.map(i=>({
+...i,
+pedidoOrigem:p.numeroPedido
+}))
+);
 
-      totalGrupo+=
-        Number(p.total||0);
+totalGrupo+=
+Number(p.total||0);
 
-    });
+});
 
 
-    b.set(
-      doc(
-        colecaoRestaurante(
-          'historicoComandas'
-        )
-      ),
-      {
-        comandaId:
-          grupo[0].comandaId||
-          ("legacy-"+grupo[0].id),
+b.set(
+doc(
+colecaoRestaurante(
+'historicoComandas'
+)
+),
+{
+comandaId:
+grupo[0].comandaId||
+("legacy-"+grupo[0].id),
 
-        numeroComanda:
-          "Mesa "+mesa,
+numeroComanda:
+"Mesa "+mesa,
 
-        mesa,
+mesa,
 
-        pedidos:
-          grupo.map(
-            p=>({
-              numeroPedido:p.numeroPedido,
-              total:Number(p.total||0),
-              status:"Finalizado"
-            })
-          ),
+pedidos:
+grupo.map(
+p=>({
+numeroPedido:p.numeroPedido,
+total:Number(p.total||0),
+status:"Finalizado"
+})
+),
 
-        responsavel:
-          grupo[0].responsavel||"",
+responsavel:
+grupo[0].responsavel||"",
 
-        observacaoGeral:
-          grupo
-          .map(
-            p=>p.observacaoGeral||""
-          )
-          .filter(Boolean)
-          .join(" | "),
+observacaoGeral:
+grupo
+.map(
+p=>p.observacaoGeral||""
+)
+.filter(Boolean)
+.join(" | "),
 
-        itens,
+itens,
 
-        total:totalGrupo,
+total:totalGrupo,
 
-        data:
-          grupo.map(p=>p.data)
-          .sort()[0]||now,
+data:
+grupo.map(p=>p.data)
+.sort()[0]||now,
 
-        finalizadoEm:now
-      }
-    );
+finalizadoEm:now
+}
+);
 
-    await b.commit();
+await b.commit();
 
-    fecharModal();
+fecharModal();
 
-    alert(
-      `🟢 Mesa ${mesa} finalizada.\n\n`+
-      `${grupo.length} pedido(s) encerrado(s).\n`+
-      `Total: ${dinheiro(totalGrupo)}\n\n`+
-      `Mesa liberada.`
-    );
+alert(
+`🟢 Mesa ${mesa} finalizada.\n\n`+
+`${grupo.length} pedido(s) encerrado(s).\n`+
+`Total: ${dinheiro(totalGrupo)}\n\n`+
+`Mesa liberada.`
+);
 
-  }catch(e){
+}catch(e){
 
-    console.error(e);
+console.error(e);
 
-    alert(
-      'Erro ao finalizar a comanda da mesa:\n\n'+
-      e.message
-    );
+alert(
+'Erro ao finalizar a comanda da mesa:\n\n'+
+e.message
+);
 
-  }
+}
 
 };
 
 
+/* =========================
+   PRODUTOS
+========================= */
+
 function renderProdutos(){
 
-  let a=
-    document.getElementById(
-      'listaProdutos'
-    );
+let a=
+document.getElementById(
+'listaProdutos'
+);
 
-  if(!produtos.length){
+if(!produtos.length){
 
-    a.innerHTML=
-      '<div class="vazio">Nenhum produto cadastrado.</div>';
+a.innerHTML=
+'<div class="vazio">Nenhum produto cadastrado.</div>';
 
-    return;
+return;
 
-  }
+}
 
-  a.innerHTML=
-    produtos.map(
-      p=>
-        `<div class="produto">
+a.innerHTML=
+produtos.map(p=>{
 
-          <div>
+const categoria=
+normalizarCategoria(p.categoria);
 
-            <strong>
-              ${esc(p.nome)}
-            </strong>
+return `<div class="produto">
 
-            <br>
+<div>
 
-            <span style="color:#a9c9ff">
-              ${esc(p.categoria||'')}
-              •
-              ${dinheiro(p.preco)}
-            </span>
+<strong>
+${esc(p.nome)}
+</strong>
 
-            <br>
+<br>
 
-            <small>
-              ${
-                p.ativo===false
-                ?'🔴 Indisponível'
-                :'🟢 Disponível'
-              }
+<span style="color:#a9c9ff">
+${esc(categoria||'Sem categoria')}
+•
+${dinheiro(p.preco)}
+</span>
 
-              ${
-                p.promocaoAtiva
-                ?' • 🔥 Promoção'
-                :''
-              }
+<br>
 
-            </small>
+<small>
+${
+p.ativo===false
+?'🔴 Indisponível'
+:'🟢 Disponível'
+}
 
-          </div>
+${
+p.promocaoAtiva
+?' • 🔥 Promoção'
+:''
+}
 
-          <button
-            class="btn azul"
-            onclick="editar('${p.id}')"
-          >
-            ✏️ Editar
-          </button>
+</small>
 
-        </div>`
-    ).join('');
+</div>
+
+<div class="acoes">
+
+<button
+class="btn azul"
+onclick="editar('${p.id}')"
+>
+✏️ Editar
+</button>
+
+<button
+class="btn btn-excluir"
+onclick="excluirProduto('${p.id}')"
+>
+🗑️ Excluir
+</button>
+
+</div>
+
+</div>`;
+
+}).join('');
 
 }
 
 
 window.novoProduto=()=>{
 
-  [
-    'pid',
-    'pnome',
-    'pcat',
-    'pdesc',
-    'ppreco',
-    'ppromo',
-    'pfoto'
-  ]
-  .forEach(
-    id=>
-      document.getElementById(id).value=''
-  );
+[
+'pid',
+'pnome',
+'pdesc',
+'ppreco',
+'ppromo',
+'pfoto'
+]
+.forEach(
+id=>
+document.getElementById(id).value=''
+);
 
-  document.getElementById(
-    'pfotoArquivo'
-  ).value='';
+document.getElementById(
+'pnovaCategoria'
+).value='';
 
-  document.getElementById(
-    'fotoPreview'
-  ).innerHTML='';
+document.getElementById(
+'pfotoArquivo'
+).value='';
 
-  document.getElementById(
-    'pativo'
-  ).value='true';
+document.getElementById(
+'fotoPreview'
+).innerHTML='';
 
-  document.getElementById(
-    'ppromoativa'
-  ).value='false';
+document.getElementById(
+'pativo'
+).value='true';
 
-  document.getElementById(
-    'modalProd'
-  ).style.display='block';
+document.getElementById(
+'ppromoativa'
+).value='false';
+
+preencherCategorias();
+
+document.getElementById(
+'pcat'
+).value='';
+
+document.getElementById(
+'tituloModalProduto'
+).textContent='🍔 Novo produto';
+
+document.getElementById(
+'modalProd'
+).style.display='block';
 
 };
 
 
 window.fecharProd=()=>
-  document.getElementById(
-    'modalProd'
-  ).style.display='none';
+document.getElementById(
+'modalProd'
+).style.display='none';
 
 
 window.editar=id=>{
 
-  let p=
-    produtos.find(
-      x=>x.id===id
-    );
+let p=
+produtos.find(
+x=>x.id===id
+);
 
-  if(!p)return;
+if(!p)return;
 
-  document.getElementById('pid').value=id;
-  document.getElementById('pnome').value=p.nome||'';
-  document.getElementById('pcat').value=p.categoria||'';
-  document.getElementById('pdesc').value=p.descricao||'';
-  document.getElementById('ppreco').value=p.preco??'';
-  document.getElementById('ppromo').value=p.precoPromocional??'';
-  document.getElementById('pfoto').value=p.foto||'';
+document.getElementById('pid').value=id;
+document.getElementById('pnome').value=p.nome||'';
 
-  document.getElementById(
-    'pfotoArquivo'
-  ).value='';
+preencherCategorias();
 
-  document.getElementById(
-    'fotoPreview'
-  ).innerHTML=
-    p.foto
-    ?`<img
-        src="${esc(p.foto)}"
-        style="
-          max-width:260px;
-          max-height:180px;
-          border-radius:10px;
-          border:1px solid #315d98;
-          object-fit:cover
-        "
-      >`
-    :'';
+document.getElementById('pcat').value=
+normalizarCategoria(p.categoria||'');
 
-  document.getElementById(
-    'pativo'
-  ).value=
-    String(p.ativo!==false);
+document.getElementById('pnovaCategoria').value='';
 
-  document.getElementById(
-    'ppromoativa'
-  ).value=
-    String(p.promocaoAtiva===true);
+document.getElementById('pdesc').value=p.descricao||'';
+document.getElementById('ppreco').value=p.preco??'';
+document.getElementById('ppromo').value=p.precoPromocional??'';
+document.getElementById('pfoto').value=p.foto||'';
 
-  document.getElementById(
-    'modalProd'
-  ).style.display='block';
+document.getElementById(
+'pfotoArquivo'
+).value='';
+
+document.getElementById(
+'fotoPreview'
+).innerHTML=
+p.foto
+?`<img
+src="${esc(p.foto)}"
+style="
+max-width:260px;
+max-height:180px;
+border-radius:10px;
+border:1px solid #315d98;
+object-fit:cover
+"
+>`
+:'';
+
+document.getElementById(
+'pativo'
+).value=
+String(p.ativo!==false);
+
+document.getElementById(
+'ppromoativa'
+).value=
+String(p.promocaoAtiva===true);
+
+document.getElementById(
+'tituloModalProduto'
+).textContent=
+'✏️ Editar produto';
+
+document.getElementById(
+'modalProd'
+).style.display='block';
+
+};
+
+
+/* EXCLUIR PRODUTO */
+
+window.excluirProduto=async id=>{
+
+const p=
+produtos.find(
+x=>x.id===id
+);
+
+if(!p)
+return;
+
+const confirmar=
+confirm(
+`⚠️ Excluir produto?\n\n`+
+`${p.nome}\n\n`+
+`Essa ação não poderá ser desfeita.`
+);
+
+if(!confirmar)
+return;
+
+try{
+
+await deleteDoc(
+documentoRestaurante(
+'produtos',
+id
+)
+);
+
+alert(
+`🗑️ Produto "${p.nome}" excluído com sucesso.`
+);
+
+}catch(e){
+
+console.error(e);
+
+alert(
+'❌ Não foi possível excluir o produto:\n\n'+
+e.message
+);
+
+}
 
 };
 
 
 window.previewFoto=e=>{
 
-  let f=
-    e.target.files&&
-    e.target.files[0];
+let f=
+e.target.files&&
+e.target.files[0];
 
-  if(!f)return;
+if(!f)return;
 
-  if(!f.type.startsWith('image/')){
+if(!f.type.startsWith('image/')){
 
-    alert('Escolha uma imagem.');
+alert('Escolha uma imagem.');
 
-    e.target.value='';
+e.target.value='';
 
-    return;
+return;
 
-  }
+}
 
-  let u=
-    URL.createObjectURL(f);
+let u=
+URL.createObjectURL(f);
 
-  document.getElementById(
-    'fotoPreview'
-  ).innerHTML=
-    `<img
-      src="${u}"
-      style="
-        max-width:260px;
-        max-height:180px;
-        border-radius:10px;
-        border:1px solid #315d98;
-        object-fit:cover
-      "
-    >`;
+document.getElementById(
+'fotoPreview'
+).innerHTML=
+`<img
+src="${u}"
+style="
+max-width:260px;
+max-height:180px;
+border-radius:10px;
+border:1px solid #315d98;
+object-fit:cover
+"
+>`;
 
 };
 
 
 function comprimirFoto(file){
 
-  return new Promise(
-    (resolve,reject)=>{
+return new Promise(
+(resolve,reject)=>{
 
-      let r=new FileReader();
+let r=new FileReader();
 
-      r.onload=()=>{
+r.onload=()=>{
 
-        let im=new Image();
+let im=new Image();
 
-        im.onload=()=>{
+im.onload=()=>{
 
-          let max=700;
-          let w=im.width;
-          let h=im.height;
+let max=700;
+let w=im.width;
+let h=im.height;
 
-          if(w>h){
+if(w>h){
 
-            if(w>max){
+if(w>max){
 
-              h=Math.round(
-                h*max/w
-              );
+h=Math.round(
+h*max/w
+);
 
-              w=max;
+w=max;
 
-            }
+}
 
-          }else{
+}else{
 
-            if(h>max){
+if(h>max){
 
-              w=Math.round(
-                w*max/h
-              );
+w=Math.round(
+w*max/h
+);
 
-              h=max;
+h=max;
 
-            }
+}
 
-          }
+}
 
-          let c=
-            document.createElement(
-              'canvas'
-            );
+let c=
+document.createElement(
+'canvas'
+);
 
-          c.width=w;
-          c.height=h;
+c.width=w;
+c.height=h;
 
-          let ctx=
-            c.getContext('2d');
+let ctx=
+c.getContext('2d');
 
-          ctx.drawImage(
-            im,
-            0,
-            0,
-            w,
-            h
-          );
+ctx.drawImage(
+im,
+0,
+0,
+w,
+h
+);
 
-          let qualidade=.72;
+let qualidade=.72;
 
-          let out=
-            c.toDataURL(
-              'image/jpeg',
-              qualidade
-            );
+let out=
+c.toDataURL(
+'image/jpeg',
+qualidade
+);
 
-          while(
-            out.length>850000&&
-            qualidade>.45
-          ){
+while(
+out.length>850000&&
+qualidade>.45
+){
 
-            qualidade-=.07;
+qualidade-=.07;
 
-            out=
-              c.toDataURL(
-                'image/jpeg',
-                qualidade
-              );
+out=
+c.toDataURL(
+'image/jpeg',
+qualidade
+);
 
-          }
+}
 
-          resolve(out);
+resolve(out);
 
-        };
+};
 
-        im.onerror=reject;
-        im.src=r.result;
+im.onerror=reject;
+im.src=r.result;
 
-      };
+};
 
-      r.onerror=reject;
-      r.readAsDataURL(file);
+r.onerror=reject;
+r.readAsDataURL(file);
 
-    }
-  );
+}
+);
 
 }
 
 
 window.salvarProd=async()=>{
 
-  let id=
-    document.getElementById(
-      'pid'
-    ).value;
-
-  let d={
-
-    nome:
-      pnome.value.trim(),
-
-    categoria:
-      pcat.value.trim(),
-
-    descricao:
-      pdesc.value.trim(),
-
-    preco:
-      Number(ppreco.value||0),
-
-    precoPromocional:
-      Number(ppromo.value||0),
-
-    foto:
-      document.getElementById(
-        'pfoto'
-      ).value.trim(),
-
-    ativo:
-      pativo.value==='true',
-
-    promocaoAtiva:
-      ppromoativa.value==='true'
-
-  };
+let id=
+document.getElementById(
+'pid'
+).value;
 
 
-  if(!d.nome||!d.preco){
+/* Se informou uma nova categoria,
+ela tem prioridade. */
+let novaCategoria=
+document.getElementById(
+'pnovaCategoria'
+).value.trim();
 
-    alert(
-      'Informe nome e preço.'
-    );
+let categoriaSelecionada=
+document.getElementById(
+'pcat'
+).value.trim();
 
-    return;
+let categoriaFinal=
+novaCategoria||
+categoriaSelecionada;
 
-  }
-
-
-  try{
-
-    let f=
-      document.getElementById(
-        'pfotoArquivo'
-      ).files[0];
-
-    if(f)
-      d.foto=
-        await comprimirFoto(f);
+categoriaFinal=
+normalizarCategoria(
+categoriaFinal
+);
 
 
-    if(id){
+let d={
 
-      await updateDoc(
-        documentoRestaurante(
-          'produtos',
-          id
-        ),
-        d
-      );
+nome:
+document.getElementById(
+'pnome'
+).value.trim(),
 
-    }else{
+categoria:
+categoriaFinal,
 
-      await addDoc(
-        colecaoRestaurante(
-          'produtos'
-        ),
-        d
-      );
+descricao:
+document.getElementById(
+'pdesc'
+).value.trim(),
 
-    }
+preco:
+Number(
+document.getElementById(
+'ppreco'
+).value||0
+),
 
-    fecharProd();
+precoPromocional:
+Number(
+document.getElementById(
+'ppromo'
+).value||0
+),
 
-  }catch(e){
+foto:
+document.getElementById(
+'pfoto'
+).value.trim(),
 
-    console.error(e);
+ativo:
+document.getElementById(
+'pativo'
+).value==='true',
 
-    alert(
-      'Erro ao salvar produto:\n\n'+
-      e.message
-    );
-
-  }
+promocaoAtiva:
+document.getElementById(
+'ppromoativa'
+).value==='true'
 
 };
 
 
+if(!d.nome||!d.preco){
+
+alert(
+'Informe nome e preço.'
+);
+
+return;
+
+}
+
+if(!d.categoria){
+
+alert(
+'⚠️ Selecione uma categoria ou informe uma nova categoria.'
+);
+
+return;
+
+}
+
+
+try{
+
+let f=
+document.getElementById(
+'pfotoArquivo'
+).files[0];
+
+if(f)
+d.foto=
+await comprimirFoto(f);
+
+
+if(id){
+
+await updateDoc(
+documentoRestaurante(
+'produtos',
+id
+),
+d
+);
+
+alert(
+`✅ Produto "${d.nome}" atualizado.`
+);
+
+}else{
+
+await addDoc(
+colecaoRestaurante(
+'produtos'
+),
+d
+);
+
+alert(
+`✅ Produto "${d.nome}" cadastrado em "${d.categoria}".`
+);
+
+}
+
+fecharProd();
+
+}catch(e){
+
+console.error(e);
+
+alert(
+'Erro ao salvar produto:\n\n'+
+e.message
+);
+
+}
+
+};
+
+
+/* =========================
+   HISTÓRICO
+========================= */
+
 function renderHist(){
 
-  let a=
-    document.getElementById(
-      'listaHistorico'
-    );
+let a=
+document.getElementById(
+'listaHistorico'
+);
 
-  let h=
-    [...hist].sort(
-      (x,y)=>
-        String(y.finalizadoEm||'')
-        .localeCompare(
-          String(x.finalizadoEm||'')
-        )
-    );
+let h=
+[...hist].sort(
+(x,y)=>
+String(y.finalizadoEm||'')
+.localeCompare(
+String(x.finalizadoEm||'')
+)
+);
 
-  if(!h.length){
+if(!h.length){
 
-    a.innerHTML=
-      '<div class="vazio">Nenhuma comanda finalizada.</div>';
+a.innerHTML=
+'<div class="vazio">Nenhuma comanda finalizada.</div>';
 
-    return;
+return;
 
-  }
+}
 
-  a.innerHTML=
-    h.map(x=>{
+a.innerHTML=
+h.map(x=>{
 
-      const qtd=
-        Array.isArray(x.pedidos)
-        ?x.pedidos.length
-        :1;
+const qtd=
+Array.isArray(x.pedidos)
+?x.pedidos.length
+:1;
 
-      const titulo=
-        x.numeroComanda
-        ?x.numeroComanda
-        :`Pedido #${esc(x.numeroPedido||'')}`;
+const titulo=
+x.numeroComanda
+?x.numeroComanda
+:`Pedido #${esc(x.numeroPedido||'')}`;
 
-      return `
+return `
 
-        <div class="hist">
+<div class="hist">
 
-          <div class="top">
+<div class="top">
 
-            <strong>
-              ${titulo} — Mesa ${esc(x.mesa)}
-            </strong>
+<strong>
+${titulo} — Mesa ${esc(x.mesa)}
+</strong>
 
-            <strong>
-              ${dinheiro(x.total)}
-            </strong>
+<strong>
+${dinheiro(x.total)}
+</strong>
 
-          </div>
+</div>
 
-          <div style="margin-top:7px;color:#c9dcff">
-            📋 ${qtd} pedido${qtd===1?'':'s'} na comanda
-          </div>
+<div style="margin-top:7px;color:#c9dcff">
+📋 ${qtd} pedido${qtd===1?'':'s'} na comanda
+</div>
 
-          <div class="obs">
-            ${
-              x.finalizadoEm
-              ?new Date(x.finalizadoEm)
-                .toLocaleString('pt-BR')
-              :''
-            }
-          </div>
+<div class="obs">
+${
+x.finalizadoEm
+?new Date(x.finalizadoEm)
+.toLocaleString('pt-BR')
+:''
+}
+</div>
 
-        </div>
+</div>
 
-      `;
+`;
 
-    }).join('');
+}).join('');
 
 }
 
 
 function renderFin(){
 
-  let t=
-    hist.reduce(
-      (s,x)=>s+Number(x.total||0),
-      0
-    );
+let t=
+hist.reduce(
+(s,x)=>s+Number(x.total||0),
+0
+);
 
-  let q=hist.length;
+let q=hist.length;
 
-  let hoje=
-    new Date()
-    .toLocaleDateString('pt-BR');
+let hoje=
+new Date()
+.toLocaleDateString('pt-BR');
 
-  let ht=
-    hist
-    .filter(
-      x=>
-        x.finalizadoEm&&
-        new Date(
-          x.finalizadoEm
-        ).toLocaleDateString('pt-BR')===
-        hoje
-    )
-    .reduce(
-      (s,x)=>s+Number(x.total||0),
-      0
-    );
+let ht=
+hist
+.filter(
+x=>
+x.finalizadoEm&&
+new Date(
+x.finalizadoEm
+).toLocaleDateString('pt-BR')===
+hoje
+)
+.reduce(
+(s,x)=>s+Number(x.total||0),
+0
+);
 
-  fQtd.textContent=q;
-  fTotal.textContent=dinheiro(t);
-  fMedia.textContent=
-    dinheiro(q?t/q:0);
-  fHoje.textContent=
-    dinheiro(ht);
+fQtd.textContent=q;
+fTotal.textContent=dinheiro(t);
+fMedia.textContent=
+dinheiro(q?t/q:0);
+fHoje.textContent=
+dinheiro(ht);
 
 }
 
 
 function el(id){
-  return document.getElementById(id);
+return document.getElementById(id);
 }
 
 
 function preencher(){
 
-  el("cfgNome").value=
-    config.nome||"";
+el("cfgNome").value=
+config.nome||"";
 
-  el("cfgSub").value=
-    config.subtitulo||"";
+el("cfgSub").value=
+config.subtitulo||"";
 
-  el("cfgEnd").value=
-    config.endereco||"";
+el("cfgEnd").value=
+config.endereco||"";
 
-  el("cfgEmoji").value=
-    config.emoji||"🍔";
+el("cfgEmoji").value=
+config.emoji||"🍔";
 
-  el("cfgLogo").value=
-    config.logo||"";
+el("cfgLogo").value=
+config.logo||"";
 
-  el("cfgMesas").value=
-    Number(
-      config.quantidadeMesas||
-      mesas||
-      20
-    );
+el("cfgMesas").value=
+Number(
+config.quantidadeMesas||
+mesas||
+20
+);
 
 }
 
 
 window.alterarMesas=n=>{
 
-  const campo=
-    el("cfgMesas");
+const campo=
+el("cfgMesas");
 
-  let v=
-    Number(
-      campo.value||
-      mesas||
-      20
-    )+n;
+let v=
+Number(
+campo.value||
+mesas||
+20
+)+n;
 
-  v=
-    Math.max(
-      1,
-      Math.min(
-        100,
-        v
-      )
-    );
+v=
+Math.max(
+1,
+Math.min(
+100,
+v
+)
+);
 
-  campo.value=v;
+campo.value=v;
 
 };
 
 
 window.salvarConfig=async()=>{
 
-  try{
+try{
 
-    const qtd=
-      Math.max(
-        1,
-        Math.min(
-          100,
-          Number(
-            el("cfgMesas").value||20
-          )
-        )
-      );
+const qtd=
+Math.max(
+1,
+Math.min(
+100,
+Number(
+el("cfgMesas").value||20
+)
+)
+);
 
-    mesas=qtd;
+mesas=qtd;
 
-    await setDoc(
-      documentoRestaurante(
-        'configuracaoRestaurante',
-        'principal'
-      ),
-      {
-        nome:
-          el("cfgNome")
-          .value
-          .trim()||
-          "Sabor da Casa",
+await setDoc(
+documentoRestaurante(
+'configuracaoRestaurante',
+'principal'
+),
+{
+nome:
+el("cfgNome")
+.value
+.trim()||
+"Sabor da Casa",
 
-        subtitulo:
-          el("cfgSub")
-          .value
-          .trim()||
-          "Cardápio Digital",
+subtitulo:
+el("cfgSub")
+.value
+.trim()||
+"Cardápio Digital",
 
-        endereco:
-          el("cfgEnd")
-          .value
-          .trim()||
-          "Chapecó / Santa Catarina",
+endereco:
+el("cfgEnd")
+.value
+.trim()||
+"Chapecó / Santa Catarina",
 
-        emoji:
-          el("cfgEmoji")
-          .value
-          .trim()||
-          "🍔",
+emoji:
+el("cfgEmoji")
+.value
+.trim()||
+"🍔",
 
-        logo:
-          el("cfgLogo")
-          .value
-          .trim(),
+logo:
+el("cfgLogo")
+.value
+.trim(),
 
-        quantidadeMesas:qtd
-      }
-    );
+quantidadeMesas:qtd
+}
+);
 
-    renderMesas();
+renderMesas();
 
-    alert(
-      "✅ Configurações salvas. "+
-      qtd+
-      " mesa(s) configurada(s)."
-    );
+alert(
+"✅ Configurações salvas. "+
+qtd+
+" mesa(s) configurada(s)."
+);
 
-  }catch(e){
+}catch(e){
 
-    console.error(e);
+console.error(e);
 
-    alert(
-      "Erro ao salvar:\n\n"+
-      e.message
-    );
+alert(
+"Erro ao salvar:\n\n"+
+e.message
+);
 
-  }
+}
 
 };
 
@@ -2491,538 +2895,550 @@ let alarmeInterval=null;
 
 async function prepararSom(){
 
-  try{
+try{
 
-    if(!audio)
-      audio=
-        new(
-          window.AudioContext||
-          window.webkitAudioContext
-        )();
+if(!audio)
+audio=
+new(
+window.AudioContext||
+window.webkitAudioContext
+)();
 
-    if(audio.state==='suspended')
-      await audio.resume();
+if(audio.state==='suspended')
+await audio.resume();
 
-    return audio.state==='running';
+return audio.state==='running';
 
-  }catch(e){
+}catch(e){
 
-    console.warn(
-      'Áudio:',
-      e
-    );
+console.warn(
+'Áudio:',
+e
+);
 
-    return false;
+return false;
 
-  }
+}
 
 }
 
 
 async function tocarAlarme(){
 
-  if(!som)return;
+if(!som)return;
 
-  try{
+try{
 
-    let ok=
-      await prepararSom();
+let ok=
+await prepararSom();
 
-    if(!ok)return;
+if(!ok)return;
 
-    let agora=
-      audio.currentTime;
+let agora=
+audio.currentTime;
 
-    let notas=[
-      660,
-      880,
-      1040,
-      880
-    ];
+let notas=[
+660,
+880,
+1040,
+880
+];
 
-    notas.forEach(
-      (freq,i)=>{
+notas.forEach(
+(freq,i)=>{
 
-        let o=
-          audio.createOscillator();
+let o=
+audio.createOscillator();
 
-        let g=
-          audio.createGain();
+let g=
+audio.createGain();
 
-        let t=
-          agora+i*.16;
+let t=
+agora+i*.16;
 
-        o.type='sine';
-        o.frequency.value=freq;
+o.type='sine';
+o.frequency.value=freq;
 
-        g.gain.setValueAtTime(
-          .0001,
-          t
-        );
+g.gain.setValueAtTime(
+.0001,
+t
+);
 
-        g.gain.exponentialRampToValueAtTime(
-          .13,
-          t+.025
-        );
+g.gain.exponentialRampToValueAtTime(
+.13,
+t+.025
+);
 
-        g.gain.exponentialRampToValueAtTime(
-          .0001,
-          t+.13
-        );
+g.gain.exponentialRampToValueAtTime(
+.0001,
+t+.13
+);
 
-        o.connect(g);
-        g.connect(audio.destination);
+o.connect(g);
+g.connect(audio.destination);
 
-        o.start(t);
-        o.stop(t+.15);
+o.start(t);
+o.stop(t+.15);
 
-      }
-    );
+}
+);
 
-  }catch(e){
+}catch(e){
 
-    console.warn(
-      'Som:',
-      e
-    );
+console.warn(
+'Som:',
+e
+);
 
-  }
+}
 
 }
 
 
 function iniciarAlarme(){
 
-  if(!som||alarmeInterval)
-    return;
+if(!som||alarmeInterval)
+return;
 
-  tocarAlarme();
+tocarAlarme();
 
-  alarmeInterval=
-    setInterval(
-      ()=>{
-        if(
-          pedidos.some(
-            p=>p.status==='Recebido'
-          )
-        )
-          tocarAlarme();
-        else
-          pararAlarme();
-      },
-      1500
-    );
+alarmeInterval=
+setInterval(
+()=>{
+
+if(
+pedidos.some(
+p=>p.status==='Recebido'
+)
+)
+tocarAlarme();
+else
+pararAlarme();
+
+},
+1500
+);
 
 }
 
 
 function pararAlarme(){
 
-  if(alarmeInterval){
+if(alarmeInterval){
 
-    clearInterval(
-      alarmeInterval
-    );
+clearInterval(
+alarmeInterval
+);
 
-    alarmeInterval=null;
+alarmeInterval=null;
 
-  }
+}
 
 }
 
 
 function atualizarAlarmeSom(){
 
-  let temRecebido=
-    pedidos.some(
-      p=>p.status==='Recebido'
-    );
+let temRecebido=
+pedidos.some(
+p=>p.status==='Recebido'
+);
 
-  if(temRecebido)
-    iniciarAlarme();
-  else
-    pararAlarme();
+if(temRecebido)
+iniciarAlarme();
+else
+pararAlarme();
 
 }
 
 
 window.ativarSom=async()=>{
 
-  try{
+try{
 
-    let ok=
-      await prepararSom();
+let ok=
+await prepararSom();
 
-    if(!ok){
+if(!ok){
 
-      alert(
-        'O navegador não liberou o som. Toque novamente no botão 🔊 para autorizar.'
-      );
+alert(
+'O navegador não liberou o som. Toque novamente no botão 🔊 para autorizar.'
+);
 
-      return;
+return;
 
-    }
+}
 
-    som=true;
+som=true;
 
-    localStorage.setItem(
-      'somPainelAtivado',
-      '1'
-    );
+localStorage.setItem(
+'somPainelAtivado',
+'1'
+);
 
-    document
-      .querySelector(
-        'button[onclick="ativarSom()"]'
-      )
-      .textContent=
-        '🔊 Som ativado';
+document
+.querySelector(
+'button[onclick="ativarSom()"]'
+)
+.textContent=
+'🔊 Som ativado';
 
-    await tocarAlarme();
+await tocarAlarme();
 
-    if(
-      pedidos.some(
-        p=>p.status==='Recebido'
-      )
-    )
-      iniciarAlarme();
+if(
+pedidos.some(
+p=>p.status==='Recebido'
+)
+)
+iniciarAlarme();
 
-    alert(
-      '🔊 Som ativado! O novo toque continuará repetindo enquanto houver pedido em Recebido e parará quando ele entrar em preparo.'
-    );
+alert(
+'🔊 Som ativado! O novo toque continuará repetindo enquanto houver pedido em Recebido e parará quando ele entrar em preparo.'
+);
 
-  }catch(e){
+}catch(e){
 
-    alert(
-      'Não foi possível ativar o som.'
-    );
+alert(
+'Não foi possível ativar o som.'
+);
 
-  }
+}
 
 };
 
 
 function pedidosSnap(s){
 
-  let antes=
-    new Set(
-      pedidos.map(
-        p=>p.id
-      )
-    );
+let antes=
+new Set(
+pedidos.map(
+p=>p.id
+)
+);
 
-  pedidos=
-    s.docs.map(
-      d=>({
-        id:d.id,
-        ...d.data()
-      })
-    );
+pedidos=
+s.docs.map(
+d=>({
+id:d.id,
+...d.data()
+})
+);
 
-  let novos=
-    pedidosInicializados
-    ?pedidos.filter(
-      p=>
-        p.status==='Recebido'&&
-        !antes.has(p.id)
-    )
-    :[];
+let novos=
+pedidosInicializados
+?pedidos.filter(
+p=>
+p.status==='Recebido'&&
+!antes.has(p.id)
+)
+:[];
 
-  pedidosInicializados=true;
+pedidosInicializados=true;
 
-  renderPedidos();
-  renderMesas();
+renderPedidos();
+renderMesas();
 
-  let n=
-    pedidos.filter(
-      p=>p.status==='Recebido'
-    ).length;
+let n=
+pedidos.filter(
+p=>p.status==='Recebido'
+).length;
 
-  alerta.style.display=
-    n?'block':'none';
+alerta.style.display=
+n?'block':'none';
 
-  alerta.textContent=
-    `🔔 ${n} NOVO${n>1?'S':''} PEDIDO${n>1?'S':''} RECEBIDO${n>1?'S':''} — clique para abrir`;
+alerta.textContent=
+`🔔 ${n} NOVO${n>1?'S':''} PEDIDO${n>1?'S':''} RECEBIDO${n>1?'S':''} — clique para abrir`;
 
-  if(novos.length&&som)
-    iniciarAlarme();
+if(novos.length&&som)
+iniciarAlarme();
 
-  atualizarAlarmeSom();
+atualizarAlarmeSom();
 
-  conexao.textContent=
-    `● Firebase conectado — ${pedidos.length} pedido(s) lido(s)`;
+conexao.textContent=
+`● Firebase conectado — ${pedidos.length} pedido(s) lido(s)`;
 
-  const tc=
-    document.getElementById(
-      'topConexao'
-    );
+const tc=
+document.getElementById(
+'topConexao'
+);
 
-  if(tc)
-    tc.textContent=
-      `${pedidos.length} pedido(s) lido(s)`;
+if(tc)
+tc.textContent=
+`${pedidos.length} pedido(s) lido(s)`;
 
-  const sp=
-    document.getElementById(
-      'sidebarPedidos'
-    );
+const sp=
+document.getElementById(
+'sidebarPedidos'
+);
 
-  if(sp)
-    sp.textContent=
-      `${pedidos.length} pedido(s) lido(s)`;
+if(sp)
+sp.textContent=
+`${pedidos.length} pedido(s) lido(s)`;
 
-  erro.style.display='none';
+erro.style.display='none';
 
 }
 
 
 async function carregarDadosRestaurante(){
 
-  try{
+try{
 
-    const snap=
-      await getDocs(
-        collection(
-          db,
-          "restaurantes"
-        )
-      );
+const snap=
+await getDocs(
+collection(
+db,
+"restaurantes"
+)
+);
 
-    const r=
-      snap.docs.find(
-        d=>d.id===RESTAURANTE_ID
-      );
+const r=
+snap.docs.find(
+d=>d.id===RESTAURANTE_ID
+);
 
-    if(r){
+if(r){
 
-      const d=r.data();
+const d=r.data();
 
-      const nome=
-        d.nome||RESTAURANTE_ID;
+const nome=
+d.nome||RESTAURANTE_ID;
 
-      const end=
-        d.endereco||"";
+const end=
+d.endereco||"";
 
-      const titulo=
-        document.querySelector(
-          '.topbar-neon h1'
-        );
+const titulo=
+document.querySelector(
+'.topbar-neon h1'
+);
 
-      if(titulo)
-        titulo.textContent=
-          `🍔 ${nome} — Painel do Proprietário`;
+if(titulo)
+titulo.textContent=
+`🍔 ${nome} — Painel do Proprietário`;
 
-      document.title=
-        `Painel do Proprietário — ${nome}`;
+document.title=
+`Painel do Proprietário — ${nome}`;
 
-      const brand=
-        document.querySelector(
-          '.brand strong'
-        );
+const brand=
+document.querySelector(
+'.brand strong'
+);
 
-      if(brand)
-        brand.innerHTML=
-          esc(nome);
+if(brand)
+brand.innerHTML=
+esc(nome);
 
-      const login=
-        document.querySelector(
-          '.login-box h1'
-        );
+const login=
+document.querySelector(
+'.login-box h1'
+);
 
-      if(login)
-        login.textContent=
-          nome;
+if(login)
+login.textContent=
+nome;
 
-      const sub=
-        document.querySelector(
-          '.topbar-neon p'
-        );
+const sub=
+document.querySelector(
+'.topbar-neon p'
+);
 
-      if(sub)
-        sub.textContent=
-          (d.subtitulo||"Painel do Proprietário")+
-          (end?` • ${end}`:"");
+if(sub)
+sub.textContent=
+(d.subtitulo||"Painel do Proprietário")+
+(end?` • ${end}`:"");
 
-    }
+}
 
-  }catch(e){
+}catch(e){
 
-    console.error(
-      "Restaurante:",
-      e
-    );
+console.error(
+"Restaurante:",
+e
+);
 
-  }
+}
 
 }
 
 
 function iniciarDadosPainel(){
 
-  onSnapshot(
-    colecaoRestaurante('pedidos'),
-    pedidosSnap,
-    e=>{
+onSnapshot(
+colecaoRestaurante('pedidos'),
+pedidosSnap,
+e=>{
 
-      console.error(e);
+console.error(e);
 
-      conexao.textContent=
-        '● Erro na conexão com pedidos';
+conexao.textContent=
+'● Erro na conexão com pedidos';
 
-      erro.style.display='block';
+erro.style.display='block';
 
-      erro.textContent=
-        '🔴 ERRO AO LER pedidos: '+
-        (e.message||e);
+erro.textContent=
+'🔴 ERRO AO LER pedidos: '+
+(e.message||e);
 
-    }
-  );
-
-
-  getDocs(
-    colecaoRestaurante('pedidos')
-  )
-  .then(pedidosSnap)
-  .catch(
-    e=>
-      console.error(
-        'Leitura inicial:',
-        e
-      )
-  );
+}
+);
 
 
-  onSnapshot(
-    colecaoRestaurante(
-      'historicoComandas'
-    ),
-    s=>{
-
-      hist=
-        s.docs.map(
-          d=>({
-            id:d.id,
-            ...d.data()
-          })
-        );
-
-      renderHist();
-      renderFin();
-
-    },
-    e=>console.error(e)
-  );
+getDocs(
+colecaoRestaurante('pedidos')
+)
+.then(pedidosSnap)
+.catch(
+e=>
+console.error(
+'Leitura inicial:',
+e
+)
+);
 
 
-  onSnapshot(
-    colecaoRestaurante('produtos'),
-    s=>{
+onSnapshot(
+colecaoRestaurante(
+'historicoComandas'
+),
+s=>{
 
-      produtos=
-        s.docs.map(
-          d=>({
-            id:d.id,
-            ...d.data()
-          })
-        );
+hist=
+s.docs.map(
+d=>({
+id:d.id,
+...d.data()
+})
+);
 
-      renderProdutos();
+renderHist();
+renderFin();
 
-    },
-    e=>console.error(e)
-  );
-
-
-  onSnapshot(
-    colecaoRestaurante(
-      'configuracaoRestaurante'
-    ),
-    s=>{
-
-      config={};
-
-      s.forEach(
-        d=>
-          config={
-            ...config,
-            ...d.data()
-          }
-      );
-
-      const qtd=
-        Number(
-          config.quantidadeMesas
-        );
-
-      if(
-        Number.isFinite(qtd)&&
-        qtd>=1
-      ){
-
-        mesas=
-          Math.min(
-            100,
-            qtd
-          );
-
-      }
-
-      preencher();
-      renderMesas();
-
-    },
-    e=>console.error(e)
-  );
+},
+e=>console.error(e)
+);
 
 
-  renderMesas();
-  renderPedidos();
-  renderProdutos();
-  renderHist();
-  renderFin();
+onSnapshot(
+colecaoRestaurante('produtos'),
+async s=>{
+
+const lista=
+s.docs.map(
+d=>({
+id:d.id,
+...d.data()
+})
+);
+
+produtos=lista;
+
+renderProdutos();
+preencherCategorias();
+
+/*
+Corrige automaticamente categorias
+como "bebida" para "Bebidas"
+e "lanche" para "Lanches".
+*/
+await corrigirCategoriasExistentes(lista);
+
+},
+e=>console.error(e)
+);
 
 
-  if(som){
+onSnapshot(
+colecaoRestaurante(
+'configuracaoRestaurante'
+),
+s=>{
 
-    const b=
-      document.querySelector(
-        'button[onclick="ativarSom()"]'
-      );
+config={};
 
-    if(b)
-      b.textContent=
-        '🔊 Som ativado';
+s.forEach(
+d=>
+config={
+...config,
+...d.data()
+}
+);
 
-  }
+const qtd=
+Number(
+config.quantidadeMesas
+);
+
+if(
+Number.isFinite(qtd)&&
+qtd>=1
+){
+
+mesas=
+Math.min(
+100,
+qtd
+);
+
+}
+
+preencher();
+renderMesas();
+
+},
+e=>console.error(e)
+);
+
+
+renderMesas();
+renderPedidos();
+renderProdutos();
+renderHist();
+renderFin();
+
+
+if(som){
+
+const b=
+document.querySelector(
+'button[onclick="ativarSom()"]'
+);
+
+if(b)
+b.textContent=
+'🔊 Som ativado';
+
+}
 
 }
 
 
 onAuthStateChanged(
-  auth,
-  user=>{
+auth,
+user=>{
 
-    if(user){
+if(user){
 
-      mostrarPainel();
+mostrarPainel();
 
-      carregarDadosRestaurante();
+carregarDadosRestaurante();
 
-      if(!painelIniciado){
+if(!painelIniciado){
 
-        painelIniciado=true;
+painelIniciado=true;
 
-        iniciarDadosPainel();
+iniciarDadosPainel();
 
-      }
+}
 
-    }else{
+}else{
 
-      mostrarLogin();
+mostrarLogin();
 
-      painelIniciado=false;
+painelIniciado=false;
 
-    }
+}
 
-  }
+}
 );
 
 </script>
