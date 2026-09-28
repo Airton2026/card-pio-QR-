@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Painel do Proprietário — Sabor da Casa</title>
+<title>Painel do Proprietário — Sofetget-IA</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 75% 0%,#082b66 0%,#03152f 38%,#020a1b 100%);color:#fff;min-height:100vh;padding-bottom:35px}
@@ -124,7 +124,7 @@ box-shadow:0 0 22px #ff304433
 }
 .bloqueio-box h1{font-size:25px;margin-bottom:10px}
 .bloqueio-box p{color:#ffcdd2;line-height:1.5;margin-bottom:18px}
-.bloqueio-nome{font-weight:bold;font-size:18px;color:#fff;margin-bottom:22px}
+.bloqueio-nome{font-weight:bold;font-size:18px;color:#fff;margin-bottom:6px}.bloqueio-sistema{font-size:12px;color:#f4b7ff;margin-bottom:22px;letter-spacing:.4px}
 .bloqueio-box button{width:100%}
 
 @media(max-width:950px){.mesas{grid-template-columns:repeat(4,1fr)}.resumo{grid-template-columns:repeat(3,1fr)}}
@@ -138,7 +138,7 @@ box-shadow:0 0 22px #ff304433
 <div id="loginScreen" class="login-screen">
 <div class="login-box">
 <div class="login-logo">🍔</div>
-<h1>Sabor da Casa</h1>
+<h1 id="loginNome">Sofetget-IA</h1>
 <p id="loginDescricao">Acesso ao painel do estabelecimento</p>
 <form onsubmit="entrarPainel(event)">
 <label id="loginCampoLabel" for="loginEmail">E-mail administrativo</label>
@@ -164,6 +164,7 @@ Este estabelecimento está temporariamente bloqueado.
 Entre em contato com o administrador.
 </p>
 <div id="bloqueioNome" class="bloqueio-nome"></div>
+<div class="bloqueio-sistema">Sofetget-IA</div>
 <button class="btn vermelho" onclick="voltarLoginBloqueio()">
 ↩️ Voltar para o login
 </button>
@@ -174,7 +175,7 @@ Entre em contato com o administrador.
 <aside class="sidebar">
 <div class="brand">
 <div class="brand-logo">🍔</div>
-<strong id="brandNome">Sabor <span>da Casa</span></strong>
+<strong id="brandNome">Sofetget-IA</strong>
 <small>PAINEL DO PROPRIETÁRIO</small>
 </div>
 <div class="nav">
@@ -193,7 +194,7 @@ Entre em contato com o administrador.
 <div class="main-area">
 <header class="topbar-neon">
 <div>
-<h1 id="tituloPainel">🍔 Sabor da Casa — Painel do Proprietário</h1>
+<h1 id="tituloPainel">🤖 Sofetget-IA — Painel Administrativo</h1>
 <p id="subtituloPainel">Controle do salão, pedidos, produtos e financeiro</p>
 </div>
 <div class="top-actions">
@@ -382,6 +383,12 @@ const parametros=new URLSearchParams(window.location.search);
 const idInformado=(parametros.get("restaurante")||"sabor-da-casa").trim().toLowerCase();
 const RESTAURANTE_ID=/^[a-z0-9-]+$/.test(idInformado)?idInformado:"sabor-da-casa";
 const EH_SABOR_DA_CASA=RESTAURANTE_ID==="sabor-da-casa";
+const NOME_SISTEMA="Sofetget-IA";
+
+function nomeInicialRestaurante(){
+const partes=RESTAURANTE_ID.split("-").filter(Boolean);
+return partes.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join(" ")||"Estabelecimento";
+}
 
 function colecaoRestaurante(nome){return collection(db,"restaurantes",RESTAURANTE_ID,nome)}
 function documentoRestaurante(nome,id){return doc(db,"restaurantes",RESTAURANTE_ID,nome,id)}
@@ -529,6 +536,9 @@ const label=el("loginCampoLabel");
 const campo=el("loginEmail");
 if(label)label.textContent=EH_SABOR_DA_CASA?"E-mail administrativo":"Usuário do estabelecimento";
 if(campo){campo.type="text";campo.placeholder=EH_SABOR_DA_CASA?"Seu e-mail":"Ex.: Ponto 63"}
+const loginNome=el("loginNome");
+if(loginNome)loginNome.textContent=EH_SABOR_DA_CASA?NOME_SISTEMA:(config.nome||nomeInicialRestaurante());
+if(EH_SABOR_DA_CASA)document.title=`Painel Administrativo — ${NOME_SISTEMA}`;
 }
 
 function mostrarPainel(){
@@ -543,7 +553,7 @@ loginScreen.style.display="none";
 appShell.style.display="none";
 const tela=el("bloqueioScreen");
 const nome=el("bloqueioNome");
-if(nome)nome.textContent=config.nome||RESTAURANTE_ID;
+if(nome)nome.textContent=config.nome||nomeInicialRestaurante();
 if(tela)tela.style.display="flex";
 }
 
@@ -944,10 +954,13 @@ try{
 const r=await getDoc(doc(db,"restaurantes",RESTAURANTE_ID));
 if(r.exists()){
 const d=r.data(),nome=d.nome||RESTAURANTE_ID,end=d.endereco||"";
-el("tituloPainel").textContent=`🍔 ${nome} — Painel do Proprietário`;
-document.title=`Painel do Proprietário — ${nome}`;
-el("brandNome").textContent=nome;
-el("loginScreen").querySelector("h1").textContent=nome;
+const nomeExibicao=EH_SABOR_DA_CASA?NOME_SISTEMA:nome;
+el("tituloPainel").textContent=EH_SABOR_DA_CASA?`🤖 ${NOME_SISTEMA} — Painel Administrativo`:`🍔 ${nome} — Painel do Proprietário`;
+document.title=EH_SABOR_DA_CASA?`Painel Administrativo — ${NOME_SISTEMA}`:`Painel do Proprietário — ${nome}`;
+el("brandNome").textContent=nomeExibicao;
+el("loginScreen").querySelector("h1").textContent=nomeExibicao;
+const bloqueioNome=el("bloqueioNome");
+if(bloqueioNome&&!EH_SABOR_DA_CASA)bloqueioNome.textContent=nome;
 el("loginDescricao").textContent=EH_SABOR_DA_CASA?"Acesso administrativo":"Acesso do estabelecimento";
 el("subtituloPainel").textContent=(d.subtitulo||"Painel do Proprietário")+(end?` • ${end}`:"");
 }
@@ -1101,9 +1114,12 @@ painelIniciado=false;
 usuarioAtual=null;
 acessoAtual=null;
 
-if(!EH_SABOR_DA_CASA&&localStorage.getItem(chaveBloqueio)==="1"){
+if(!EH_SABOR_DA_CASA){
+await carregarDadosRestaurante();
+if(localStorage.getItem(chaveBloqueio)==="1"){
 mostrarAcessoBloqueado();
 return;
+}
 }
 
 mostrarLogin();
@@ -1127,6 +1143,7 @@ if(dados.restauranteId!==RESTAURANTE_ID)throw new Error("Este acesso não perten
 if(dados.ativo===false){
 localStorage.setItem(chaveBloqueio,"1");
 acessoAtual=dados;
+await carregarDadosRestaurante();
 mostrarAcessoBloqueado();
 try{await signOut(auth)}catch(err){console.error(err)}
 return;
@@ -1143,6 +1160,7 @@ if(dadosAtual.ativo===false){
 localStorage.setItem(chaveBloqueio,"1");
 pararDadosPainel();
 pararAlarme();
+carregarDadosRestaurante().finally(()=>{});
 if(el("modal"))el("modal").style.display="none";
 if(el("modalProd"))el("modalProd").style.display="none";
 mostrarAcessoBloqueado();
