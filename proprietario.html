@@ -18,8 +18,6 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:li
 .sidebar .nav button{width:100%;text-align:left;padding:13px 14px;background:transparent;color:#cfe5ff;border:1px solid transparent;border-radius:12px;box-shadow:none;font-size:14px}
 .sidebar .nav button:hover{border-color:#00eaff55;background:#06306488}
 .sidebar .nav button.ativo{background:linear-gradient(90deg,#073d86,#0751a8);border-color:#00eaff;box-shadow:0 0 16px #00eaff44;color:#fff}
-.sidebar-status{position:absolute;left:16px;right:16px;bottom:22px;padding:13px;border:1px solid #00eaff99;border-radius:14px;background:#041632;box-shadow:0 0 18px #00eaff22}
-.sidebar-status .dot{color:#19ff9a}.sidebar-status small{display:block;color:#9fc5ff;margin-top:5px}
 .main-area{width:calc(100% - 245px);margin-left:245px;min-width:0}
 .topbar-neon{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 28px;background:linear-gradient(135deg,#06245aee,#073b91ee 55%,#06275fee);border-bottom:1px solid #00eaff66;box-shadow:0 4px 24px #0008,0 0 25px #006dff22}
 .topbar-neon h1{font-size:26px;margin-bottom:5px}.topbar-neon p{color:#c9dcff;font-size:14px}
@@ -69,7 +67,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:li
 .login-box button{width:100%;margin-top:16px}.login-erro{display:none;margin-top:12px;padding:10px;border-radius:9px;background:#7f1d1d;color:#ffd7d7;font-size:13px}.logout-btn{background:#7f1d1d!important;border-color:#ff5c5c!important}
 @media(max-width:950px){.mesas{grid-template-columns:repeat(4,1fr)}.resumo{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:850px){.sidebar{width:190px}.main-area{width:calc(100% - 190px);margin-left:190px}.topbar-neon{padding:15px 18px}.main-content{padding:20px 18px}.sidebar .nav button{font-size:13px;padding:11px 10px}.pedidos-kanban{grid-template-columns:1fr}.coluna-pedidos{min-height:0}}
-@media(max-width:650px){.site-shell{display:block}.sidebar{position:relative;width:100%;height:auto;padding:12px}.brand{display:flex;align-items:center;gap:12px;padding:5px 8px 12px;margin-bottom:10px}.brand-logo{width:42px;height:42px;font-size:24px;margin:0}.sidebar .nav{display:flex;overflow-x:auto;padding-bottom:3px}.sidebar .nav button{white-space:nowrap;width:auto}.sidebar-status{display:none}.main-area{width:100%;margin-left:0}.topbar-neon{position:relative;display:block}.top-actions{margin-top:12px}.main-content{padding:18px 14px}.resumo{grid-template-columns:repeat(2,1fr)}.financeiro{grid-template-columns:1fr 1fr}.login-box{padding:22px}}
+@media(max-width:650px){.site-shell{display:block}.sidebar{position:relative;width:100%;height:auto;padding:12px}.brand{display:flex;align-items:center;gap:12px;padding:5px 8px 12px;margin-bottom:10px}.brand-logo{width:42px;height:42px;font-size:24px;margin:0}.sidebar .nav{display:flex;overflow-x:auto;padding-bottom:3px}.sidebar .nav button{white-space:nowrap;width:auto}.main-area{width:100%;margin-left:0}.topbar-neon{position:relative;display:block}.top-actions{margin-top:12px}.main-content{padding:18px 14px}.resumo{grid-template-columns:repeat(2,1fr)}.financeiro{grid-template-columns:1fr 1fr}.login-box{padding:22px}}
 @media(max-width:430px){.financeiro{grid-template-columns:1fr}.sidebar .nav button{padding:9px 10px;font-size:12px}}
 </style>
 </head>
@@ -79,10 +77,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:li
 <div class="login-box">
 <div class="login-logo">🍔</div>
 <h1>Sabor da Casa</h1>
-<p>Acesso exclusivo ao Painel do Proprietário</p>
+<p id="loginDescricao">Acesso ao painel do estabelecimento</p>
 <form onsubmit="entrarPainel(event)">
-<label for="loginEmail">E-mail</label>
-<input id="loginEmail" type="email" autocomplete="username" required placeholder="Seu e-mail">
+<label id="loginCampoLabel" for="loginEmail">E-mail administrativo</label>
+<input id="loginEmail" type="text" autocomplete="username" required placeholder="Seu e-mail ou usuário">
 <label for="loginSenha">Senha</label>
 <input id="loginSenha" type="password" autocomplete="current-password" required placeholder="Sua senha">
 <button id="loginBtn" class="btn azul" type="submit">🔐 Entrar no painel</button>
@@ -105,13 +103,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:li
 <button onclick="sec('financeiro',this)">💰 Financeiro</button>
 <button onclick="sec('historico',this)">📜 Histórico</button>
 <button onclick="sec('config',this)">⚙️ Configurações</button>
+<button id="btnAcessos" style="display:none" onclick="sec('acessos',this)">🔐 Acessos</button>
 <button id="btnNovoRestaurante" style="display:none" onclick="sec('novoRestaurante',this)">🏪 Novo estabelecimento</button>
 </div>
-<div class="sidebar-status">
-<div class="dot">● Conectado</div>
-<small>Firebase online</small>
-<small id="sidebarPedidos">Aguardando dados...</small>
-</div>
+
 </aside>
 
 <div class="main-area">
@@ -122,13 +117,11 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:li
 </div>
 <div class="top-actions">
 <div class="top-pill online">● Online</div>
-<div class="top-pill" id="topConexao">Firebase...</div>
 <button class="btn azul" onclick="ativarSom()">🔊 Som</button>
 <button class="btn logout-btn" onclick="sairPainel()">🚪 Sair</button>
 </div>
 </header>
 
-<div id="conexao" class="conexao"></div>
 <div id="erro" class="erro"></div>
 <div id="alerta" class="alerta" onclick="sec('pedidos')">🔔 NOVO PEDIDO RECEBIDO</div>
 
@@ -196,24 +189,33 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:li
 <section id="novoRestaurante" class="secao">
 <div class="section-title">
 <h2>🏪 Novo estabelecimento</h2>
-<div class="top-pill">Cadastro SoftGet IA</div>
+<div class="top-pill">Somente administração</div>
 </div>
 <div class="card" style="max-width:760px">
-<p style="color:#a9c9ff;margin-bottom:16px">
-Cadastre um novo estabelecimento. Ele será criado vazio para você depois cadastrar os produtos.
-</p>
+<p style="color:#a9c9ff;margin-bottom:16px">Cadastre um estabelecimento e já deixe o acesso pronto para o proprietário.</p>
 <div class="campo"><label>Nome do estabelecimento</label><input id="novoNome" placeholder="Ex.: Pizzaria Central"></div>
-<div class="campo">
-<label>ID do restaurante (slug)</label>
-<input id="novoId" placeholder="ex.: pizzaria-central">
-<small style="display:block;color:#a9c9ff;margin-top:6px">Use somente letras minúsculas, números e hífen.</small>
-</div>
+<div class="campo"><label>ID do restaurante (slug)</label><input id="novoId" placeholder="ex.: pizzaria-central"><small style="display:block;color:#a9c9ff;margin-top:6px">Use somente letras minúsculas, números e hífen.</small></div>
+<div class="campo"><label>Usuário de acesso</label><input id="novoUsuario" placeholder="Ex.: Ponto 63"><small style="display:block;color:#a9c9ff;margin-top:6px">Será o usuário que o proprietário digitará no login.</small></div>
+<div class="campo"><label>Senha de acesso</label><input id="novoSenha" type="password" minlength="6" placeholder="Crie uma senha com pelo menos 6 caracteres"><small style="display:block;color:#a9c9ff;margin-top:6px">Você entrega essa senha ao proprietário. O sistema não salva a senha em texto.</small></div>
 <div class="campo"><label>Subtítulo</label><input id="novoSub" value="Cardápio Digital"></div>
 <div class="campo"><label>Endereço</label><input id="novoEnd" placeholder="Chapecó / SC"></div>
 <div class="campo"><label>Quantidade de mesas</label><input id="novoMesas" type="number" min="1" max="100" value="20"></div>
-<div class="botoes"><button class="btn verde" onclick="criarRestaurante()">🏪 Criar estabelecimento</button></div>
+<div class="botoes"><button id="btnCriarRestaurante" class="btn verde" onclick="criarRestaurante()">🏪 Criar estabelecimento e acesso</button></div>
 <div id="novoResultado" style="margin-top:14px;color:#9fc5ff"></div>
 </div>
+</section>
+
+<section id="acessos" class="secao">
+<div class="section-title"><h2>🔐 Acessos dos estabelecimentos</h2><div class="top-pill">Controle administrativo</div></div>
+<div class="card" style="max-width:760px">
+<p style="color:#a9c9ff;margin-bottom:16px">Aqui você cadastra o acesso de um estabelecimento já existente, como o Ponto 63, e pode bloquear ou liberar o acesso sem apagar os dados.</p>
+<div class="campo"><label>Estabelecimento</label><select id="acessoRestauranteId"></select></div>
+<div class="campo"><label>Usuário de acesso</label><input id="acessoUsuario" placeholder="Ex.: Ponto 63"></div>
+<div class="campo"><label>Senha inicial</label><input id="acessoSenha" type="password" minlength="6" placeholder="Mínimo de 6 caracteres"></div>
+<div class="botoes"><button id="btnCriarAcesso" class="btn azul" onclick="criarAcessoRestaurante()">🔐 Criar acesso</button></div>
+<div id="acessoResultado" style="margin-top:14px;color:#9fc5ff"></div>
+</div>
+<div id="listaAcessos" style="margin-top:16px"></div>
 </section>
 
 </div>
@@ -269,7 +271,7 @@ Cadastre um novo estabelecimento. Ele será criado vazio para você depois cadas
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,createUserWithEmailAndPassword}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import{initializeFirestore,collection,doc,addDoc,setDoc,updateDoc,deleteDoc,getDoc,onSnapshot,writeBatch,getDocs}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const cfg={
@@ -283,6 +285,8 @@ appId:"1:783545984661:web:5d0945907ad9db3990dd9c"
 
 const app=initializeApp(cfg);
 const auth=getAuth(app);
+const appCadastro=initializeApp(cfg,"cadastro-restaurantes");
+const authCadastro=getAuth(appCadastro);
 const db=initializeFirestore(app,{},"default");
 
 const parametros=new URLSearchParams(window.location.search);
@@ -296,7 +300,10 @@ function documentoRestaurante(nome,id){return doc(db,"restaurantes",RESTAURANTE_
 let pedidos=[],hist=[],produtos=[],config={},mesas=20,comanda=null,audio=null;
 let som=localStorage.getItem("somPainelAtivado")==="1";
 let pedidosInicializados=false,painelIniciado=false;
-let salvandoProduto=false, criandoRestaurante=false;
+let salvandoProduto=false, criandoRestaurante=false, criandoAcesso=false;
+let usuarioAtual=null, acessoAtual=null;
+let canceladoresDados=[];
+let canceladorAcesso=null;
 
 const el=id=>document.getElementById(id);
 const loginScreen=el("loginScreen"),appShell=el("appShell"),loginErro=el("loginErro"),loginBtn=el("loginBtn");
@@ -365,10 +372,27 @@ catch(e){console.warn("Categoria não corrigida:",p.id,e)}
 }
 }
 
-function configurarBotaoNovoRestaurante(){
-const b=el("btnNovoRestaurante");
-if(b)b.style.display=EH_SABOR_DA_CASA?"block":"none";
+function normalizarUsuario(valor){
+return String(valor||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
 }
+
+/*
+  O Firebase Authentication trabalha com e-mail/senha.
+  Para os restaurantes usamos um e-mail interno, invisível para o proprietário.
+  Ex.: usuário "Ponto 63" -> ponto-63@acesso-restaurante.local
+*/
+function emailInternoRestaurante(usuarioKey){
+return `${usuarioKey}@acesso-restaurante.local`;
+}
+
+function configurarBotoesAdministracao(){
+const admin=EH_SABOR_DA_CASA;
+const bNovo=el("btnNovoRestaurante"),bAcessos=el("btnAcessos");
+if(bNovo)bNovo.style.display=admin?"block":"none";
+if(bAcessos)bAcessos.style.display=admin?"block":"none";
+}
+
+function configurarBotaoNovoRestaurante(){configurarBotoesAdministracao()}
 
 window.entrarPainel=async e=>{
 e.preventDefault();
@@ -376,11 +400,25 @@ loginErro.style.display="none";
 loginBtn.disabled=true;
 loginBtn.textContent="⏳ Entrando...";
 try{
-await signInWithEmailAndPassword(auth,el("loginEmail").value.trim(),el("loginSenha").value);
+const entrada=el("loginEmail").value.trim();
+const senha=el("loginSenha").value;
+if(!entrada||!senha)throw new Error("Informe usuário e senha.");
+
+if(EH_SABOR_DA_CASA){
+if(!entrada.includes("@"))throw new Error("No Sabor da Casa, use o seu e-mail administrativo.");
+await signInWithEmailAndPassword(auth,entrada,senha);
+}else{
+const usuarioKey=normalizarUsuario(entrada);
+if(!usuarioKey)throw new Error("Informe um usuário válido.");
+const emailInterno=emailInternoRestaurante(usuarioKey);
+/* Não precisamos consultar o Firestore antes do login. O próprio Firebase Authentication valida usuário e senha. */
+await signInWithEmailAndPassword(auth,emailInterno,senha);
+}
+
 el("loginSenha").value="";
 }catch(err){
 console.error(err);
-loginErro.textContent="E-mail ou senha incorretos. Verifique os dados e tente novamente.";
+loginErro.textContent=err.message||"E-mail, usuário ou senha incorretos.";
 loginErro.style.display="block";
 }finally{
 loginBtn.disabled=false;
@@ -392,7 +430,15 @@ window.sairPainel=async()=>{
 try{await signOut(auth)}catch(e){console.error(e);alert("Não foi possível sair.\n\n"+e.message)}
 };
 
-function mostrarLogin(){loginScreen.style.display="flex";appShell.style.display="none"}
+function mostrarLogin(){
+if(canceladorAcesso){try{canceladorAcesso()}catch(e){};canceladorAcesso=null}
+loginScreen.style.display="flex";
+appShell.style.display="none";
+const label=el("loginCampoLabel");
+const campo=el("loginEmail");
+if(label)label.textContent=EH_SABOR_DA_CASA?"E-mail administrativo":"Usuário do estabelecimento";
+if(campo){campo.type="text";campo.placeholder=EH_SABOR_DA_CASA?"Seu e-mail":"Ex.: Ponto 63"}
+}
 function mostrarPainel(){loginScreen.style.display="none";appShell.style.display="flex"}
 
 function badge(s){
@@ -403,7 +449,7 @@ s==="Pronto"?'<span class="badge b-pronto">🔵 Pronto</span>':
 }
 
 window.sec=(n,b)=>{
-if(n==="novoRestaurante"&&!EH_SABOR_DA_CASA)return;
+if((n==="novoRestaurante"||n==="acessos")&&!EH_SABOR_DA_CASA)return;
 const alvo=el(n);
 if(!alvo)return;
 document.querySelectorAll(".secao").forEach(x=>x.classList.remove("ativa"));
@@ -776,9 +822,6 @@ el("alerta").style.display=n?"block":"none";
 el("alerta").textContent=`🔔 ${n} NOVO${n>1?"S":""} PEDIDO${n>1?"S":""} RECEBIDO${n>1?"S":""} — clique para abrir`;
 if(novos.length&&som)iniciarAlarme();
 atualizarAlarmeSom();
-el("conexao").textContent=`● Firebase conectado — ${pedidos.length} pedido(s) lido(s)`;
-el("topConexao").textContent=`${pedidos.length} pedido(s) lido(s)`;
-el("sidebarPedidos").textContent=`${pedidos.length} pedido(s) lido(s)`;
 el("erro").style.display="none";
 }
 
@@ -791,97 +834,196 @@ el("tituloPainel").textContent=`🍔 ${nome} — Painel do Proprietário`;
 document.title=`Painel do Proprietário — ${nome}`;
 el("brandNome").textContent=nome;
 el("loginScreen").querySelector("h1").textContent=nome;
+el("loginDescricao").textContent=EH_SABOR_DA_CASA?"Acesso administrativo":"Acesso do estabelecimento";
 el("subtituloPainel").textContent=(d.subtitulo||"Painel do Proprietário")+(end?` • ${end}`:"");
 }
 }catch(e){console.error("Restaurante:",e)}
 }
 
 /* NOVO RESTAURANTE — somente Sabor da Casa */
+async function criarContaInterna(usuario,senha,restauranteId){
+const usuarioKey=normalizarUsuario(usuario);
+if(!usuarioKey)throw new Error("Usuário inválido.");
+if(!senha||senha.length<6)throw new Error("A senha precisa ter pelo menos 6 caracteres.");
+const loginRef=doc(db,"loginUsuarios",usuarioKey);
+const existente=await getDoc(loginRef);
+if(existente.exists())throw new Error("Esse usuário de acesso já está cadastrado.");
+const emailInterno=emailInternoRestaurante(usuarioKey);
+const cred=await createUserWithEmailAndPassword(authCadastro,emailInterno,senha);
+await setDoc(doc(db,"acessosRestaurantes",cred.user.uid),{
+uid:cred.user.uid,usuario,usuarioKey,restauranteId,emailInterno,ativo:true,criadoEm:new Date().toISOString()
+});
+await setDoc(loginRef,{uid:cred.user.uid,usuario,usuarioKey,restauranteId,emailInterno,ativo:true,criadoEm:new Date().toISOString()});
+await signOut(authCadastro);
+return {uid:cred.user.uid,usuarioKey,emailInterno};
+}
+
 window.criarRestaurante=async()=>{
 if(!EH_SABOR_DA_CASA){alert("Apenas o painel do Sabor da Casa pode cadastrar novos estabelecimentos.");return}
 if(criandoRestaurante)return;
 criandoRestaurante=true;
-const out=el("novoResultado"),botao=document.querySelector('#novoRestaurante button[onclick="criarRestaurante()"]');
+const out=el("novoResultado"),botao=el("btnCriarRestaurante");
 if(botao){botao.disabled=true;botao.textContent="⏳ Criando...";}
 try{
 const nome=el("novoNome").value.trim();
 const id=el("novoId").value.trim().toLowerCase();
+const usuario=el("novoUsuario").value.trim();
+const senha=el("novoSenha").value;
 const sub=el("novoSub").value.trim()||"Cardápio Digital";
 const end=el("novoEnd").value.trim();
 const qtd=Math.max(1,Math.min(100,Number(el("novoMesas").value||20)));
-
-if(!nome||!/^[a-z0-9-]+$/.test(id)){
-out.textContent="⚠️ Informe um nome e um ID válido: somente letras minúsculas, números e hífen.";
-return;
-}
-
-if(id==="sabor-da-casa"){
-out.textContent="⚠️ Esse ID é reservado para o Sabor da Casa.";
-return;
-}
-
+if(!nome||!/^[a-z0-9-]+$/.test(id)){out.textContent="⚠️ Informe um nome e um ID válido: somente letras minúsculas, números e hífen.";return}
+if(id==="sabor-da-casa"){out.textContent="⚠️ Esse ID é reservado para o Sabor da Casa.";return}
+if(!usuario||!normalizarUsuario(usuario)){out.textContent="⚠️ Informe o usuário de acesso.";return}
+if(!senha||senha.length<6){out.textContent="⚠️ A senha precisa ter pelo menos 6 caracteres.";return}
 const existente=await getDoc(doc(db,"restaurantes",id));
-if(existente.exists()){
-out.textContent="⚠️ Esse ID já existe. Escolha outro ID para não alterar um restaurante existente.";
-return;
-}
-
-await setDoc(doc(db,"restaurantes",id),{
-nome,slug:id,subtitulo:sub,endereco:end,ativo:true,criadoEm:new Date().toISOString()
-});
-
-await setDoc(doc(db,"restaurantes",id,"configuracaoRestaurante","principal"),{
-nome,slug:id,subtitulo:sub,endereco:end,emoji:"🍔",logo:"",quantidadeMesas:qtd
-});
-
+if(existente.exists()){out.textContent="⚠️ Esse ID já existe. Para ele, use a área 🔐 Acessos.";return}
+await setDoc(doc(db,"restaurantes",id),{nome,slug:id,subtitulo:sub,endereco:end,ativo:true,criadoEm:new Date().toISOString()});
+await setDoc(doc(db,"restaurantes",id,"configuracaoRestaurante","principal"),{nome,slug:id,subtitulo:sub,endereco:end,emoji:"🍔",logo:"",quantidadeMesas:qtd});
+const acesso=await criarContaInterna(usuario,senha,id);
 const url=`${window.location.origin}${window.location.pathname}?restaurante=${encodeURIComponent(id)}`;
-out.innerHTML=`✅ <strong>${esc(nome)}</strong> criado com sucesso.<br><br>🔗 Abra o painel:<br><code style="word-break:break-all">${esc(url)}</code>`;
-el("novoNome").value="";el("novoId").value="";el("novoEnd").value="";
-}catch(e){
-console.error(e);
-out.textContent="❌ Erro ao criar: "+e.message;
-}finally{
-criandoRestaurante=false;
-if(botao){botao.disabled=false;botao.textContent="🏪 Criar estabelecimento";}
+out.innerHTML=`✅ <strong>${esc(nome)}</strong> criado com sucesso.<br><br>👤 Usuário: <strong>${esc(usuario)}</strong><br>🔐 Senha definida por você.<br><br>🔗 <code style="word-break:break-all">${esc(url)}</code>`;
+["novoNome","novoId","novoUsuario","novoSenha","novoEnd"].forEach(x=>el(x).value="");
+el("acessoUsuario").value=usuario;
+carregarAcessosAdmin();
+}catch(e){console.error(e);out.textContent="❌ Erro ao criar: "+e.message}
+finally{criandoRestaurante=false;if(botao){botao.disabled=false;botao.textContent="🏪 Criar estabelecimento e acesso";}}
+};
+
+window.criarAcessoRestaurante=async()=>{
+if(!EH_SABOR_DA_CASA||criandoAcesso)return;
+criandoAcesso=true;
+const out=el("acessoResultado"),botao=el("btnCriarAcesso");
+if(botao){botao.disabled=true;botao.textContent="⏳ Criando...";}
+try{
+const restauranteId=el("acessoRestauranteId").value;
+const usuario=el("acessoUsuario").value.trim();
+const senha=el("acessoSenha").value;
+if(!restauranteId||!usuario||!senha)throw new Error("Preencha estabelecimento, usuário e senha.");
+if(senha.length<6)throw new Error("A senha precisa ter pelo menos 6 caracteres.");
+const r=await getDoc(doc(db,"restaurantes",restauranteId));
+if(!r.exists())throw new Error("Estabelecimento não encontrado.");
+await criarContaInterna(usuario,senha,restauranteId);
+out.textContent=`✅ Acesso criado para ${usuario}.`;
+el("acessoSenha").value="";
+await carregarAcessosAdmin();
+}catch(e){console.error(e);out.textContent="❌ "+e.message}
+finally{criandoAcesso=false;if(botao){botao.disabled=false;botao.textContent="🔐 Criar acesso";}}
+};
+
+async function carregarAcessosAdmin(){
+if(!EH_SABOR_DA_CASA)return;
+try{
+const [restSnap,loginSnap,acessoSnap]=await Promise.all([getDocs(collection(db,"restaurantes")),getDocs(collection(db,"loginUsuarios")),getDocs(collection(db,"acessosRestaurantes"))]);
+const restaurantes=restSnap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.id!=="sabor-da-casa").sort((a,b)=>String(a.nome||a.id).localeCompare(String(b.nome||b.id)));
+const logins={};loginSnap.forEach(d=>logins[d.id]={id:d.id,...d.data()});
+const acessos={};acessoSnap.forEach(d=>acessos[d.id]={id:d.id,...d.data()});
+const select=el("acessoRestauranteId");
+if(select){const atual=select.value;select.innerHTML='<option value="">Selecione...</option>'+restaurantes.map(r=>`<option value="${esc(r.id)}">${esc(r.nome||r.id)}</option>`).join("");if(atual&&restaurantes.some(r=>r.id===atual))select.value=atual;}
+const lista=el("listaAcessos");
+if(!restaurantes.length){lista.innerHTML='<div class="vazio">Nenhum estabelecimento cadastrado além do Sabor da Casa.</div>';return}
+lista.innerHTML=restaurantes.map(r=>{
+const login=Object.values(logins).find(x=>x.restauranteId===r.id);
+const acesso=login?acessos[login.uid]:null;
+const ativoAcesso=login&&login.ativo!==false&&acesso?.ativo!==false;
+return `<div class="card" style="margin-bottom:10px"><div class="top"><div><strong>🏪 ${esc(r.nome||r.id)}</strong><br><small style="color:#9fc5ff">ID: ${esc(r.id)}</small>${login?`<br><small style="color:#9fc5ff">👤 ${esc(login.usuario)}</small>`:'<br><small style="color:#ffd27a">⚠️ Sem acesso cadastrado</small>'}</div><strong style="color:${ativoAcesso?'#19ff9a':'#ff7777'}">${ativoAcesso?'🟢 ATIVO':'🔴 BLOQUEADO'}</strong></div>${login?`<div class="acoes" style="margin-top:12px"><button class="btn ${ativoAcesso?'vermelho':'verde'}" onclick="alternarAcesso('${esc(login.uid)}',${ativoAcesso})">${ativoAcesso?'🔴 Bloquear acesso':'🟢 Liberar acesso'}</button></div>`:'<div style="margin-top:10px;color:#a9c9ff">Selecione este estabelecimento acima e cadastre o acesso.</div>'}</div>`;
+}).join("");
+}catch(e){console.error(e);el("listaAcessos").innerHTML=`<div class="erro" style="display:block">❌ Não foi possível carregar os acessos: ${esc(e.message)}</div>`}
 }
+
+window.alternarAcesso=async(uid,estaAtivo)=>{
+if(!EH_SABOR_DA_CASA)return;
+try{
+const novo=!estaAtivo;
+await updateDoc(doc(db,"acessosRestaurantes",uid),{ativo:novo});
+const a=await getDoc(doc(db,"acessosRestaurantes",uid));
+if(a.exists()){const d=a.data();await updateDoc(doc(db,"loginUsuarios",d.usuarioKey),{ativo:novo});}
+await carregarAcessosAdmin();
+}catch(e){alert("❌ Não foi possível alterar o acesso.\n\n"+e.message)}
 };
 
 /* DADOS */
+function pararDadosPainel(){
+canceladoresDados.forEach(fn=>{try{fn()}catch(e){console.warn("Listener:",e)}});
+canceladoresDados=[];
+}
+
 function iniciarDadosPainel(){
-onSnapshot(colecaoRestaurante("pedidos"),pedidosSnap,e=>{
-console.error(e);el("conexao").textContent="● Erro na conexão com pedidos";el("erro").style.display="block";el("erro").textContent="🔴 ERRO AO LER pedidos: "+(e.message||e);
-});
-onSnapshot(colecaoRestaurante("historicoComandas"),s=>{
+pararDadosPainel();
+canceladoresDados.push(onSnapshot(colecaoRestaurante("pedidos"),pedidosSnap,e=>{
+console.error(e);el("erro").style.display="block";el("erro").textContent="🔴 ERRO AO LER pedidos: "+(e.message||e);
+}));
+canceladoresDados.push(onSnapshot(colecaoRestaurante("historicoComandas"),s=>{
 hist=s.docs.map(d=>({id:d.id,...d.data()}));renderHist();renderFin();
-},e=>console.error(e));
-onSnapshot(colecaoRestaurante("produtos"),async s=>{
+},e=>console.error(e)));
+canceladoresDados.push(onSnapshot(colecaoRestaurante("produtos"),async s=>{
 const lista=s.docs.map(d=>({id:d.id,...d.data()}));
 produtos=lista;
 renderProdutos();preencherCategorias();
 await corrigirCategoriasExistentes(lista);
-},e=>console.error(e));
-onSnapshot(colecaoRestaurante("configuracaoRestaurante"),s=>{
+},e=>console.error(e)));
+canceladoresDados.push(onSnapshot(colecaoRestaurante("configuracaoRestaurante"),s=>{
 config={};s.forEach(d=>config={...config,...d.data()});
 const qtd=Number(config.quantidadeMesas);
 if(Number.isFinite(qtd)&&qtd>=1)mesas=Math.min(100,qtd);
 preencher();renderMesas();
-},e=>console.error(e));
+},e=>console.error(e)));
 
 renderMesas();renderPedidos();renderProdutos();renderHist();renderFin();
 if(som)document.querySelectorAll('button[onclick="ativarSom()"]').forEach(b=>b.textContent="🔊 Som ativado");
 }
 
+
 configurarBotaoNovoRestaurante();
 
-onAuthStateChanged(auth,user=>{
-if(user){
-mostrarPainel();
-configurarBotaoNovoRestaurante();
-carregarDadosRestaurante();
-if(!painelIniciado){painelIniciado=true;iniciarDadosPainel();}
-}else{
+onAuthStateChanged(auth,async user=>{
+if(!user){
+pararDadosPainel();
+if(canceladorAcesso){try{canceladorAcesso()}catch(e){};canceladorAcesso=null}
 mostrarLogin();
 painelIniciado=false;
+usuarioAtual=null;
+acessoAtual=null;
+return;
+}
+
+try{
+usuarioAtual=user;
+
+if(EH_SABOR_DA_CASA){
+const email=(user.email||"").toLowerCase();
+if(!email.includes("@"))throw new Error("Acesso administrativo inválido.");
+acessoAtual={administrador:true,restauranteId:"sabor-da-casa",ativo:true};
+}else{
+const aRef=doc(db,"acessosRestaurantes",user.uid);
+const a=await getDoc(aRef);
+if(!a.exists())throw new Error("Este usuário não possui acesso de restaurante cadastrado.");
+const dados=a.data();
+if(dados.restauranteId!==RESTAURANTE_ID)throw new Error("Este acesso não pertence a este estabelecimento.");
+if(dados.ativo===false)throw new Error("Acesso bloqueado pelo administrador.");
+acessoAtual=dados;
+
+/* Se o administrador bloquear enquanto o restaurante estiver logado, a sessão é encerrada. */
+if(canceladorAcesso){try{canceladorAcesso()}catch(e){}}
+canceladorAcesso=onSnapshot(aRef,snap=>{
+if(!snap.exists()||snap.data().ativo===false){
+alert("🔴 Seu acesso foi bloqueado pelo administrador.");
+signOut(auth);
+}
+},err=>console.error("Acesso:",err));
+}
+
+mostrarPainel();
+configurarBotoesAdministracao();
+carregarDadosRestaurante();
+if(EH_SABOR_DA_CASA)carregarAcessosAdmin();
+if(!painelIniciado){painelIniciado=true;iniciarDadosPainel();}
+}catch(e){
+console.error(e);
+await signOut(auth);
+loginErro.textContent=e.message||"Acesso não autorizado.";
+loginErro.style.display="block";
+mostrarLogin();
 }
 });
 </script>
