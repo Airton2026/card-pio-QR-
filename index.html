@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sabor da Casa — Cardápio Digital</title>
+<title>Cardápio Digital</title>
 
 <style>
 *{
@@ -651,6 +651,7 @@ text-align:center;
 /* =========================
    SOFTGET IA — RODAPÉ
 ========================= */
+
 .softget-bottom{
 max-width:1200px;
 margin:0 auto 22px;
@@ -710,20 +711,25 @@ border-radius:3px;
 }
 
 @media(max-width:520px){
+
 .softget-bottom{
 margin:0 12px 18px;
 padding:12px 8px;
 }
+
 .softget-bottom-info strong{
 font-size:12px;
 }
+
 .softget-bottom-info a{
 font-size:9px;
 }
+
 .softget-bottom-qr{
 width:44px;
 height:44px;
 }
+
 }
 </style>
 </head>
@@ -750,67 +756,108 @@ Boa comida, bons momentos!
 
 </header>
 
+
 <div class="container">
 
 <div id="statusUltimo" class="status-ultimo" onclick="abrirAcompanhamento()">
+
 <strong>📋 Acompanhar pedido</strong>
+
 <div id="resumoUltimoPedido" style="margin-top:5px"></div>
+
 </div>
 
+
 <div class="pesquisa">
+
 <input
 id="campoPesquisa"
 type="search"
 placeholder="🔎 Procurar produto..."
-oninput="mostrarProdutos()">
+oninput="mostrarProdutos">
+
 </div>
+
 
 <div class="categorias" id="areaCategorias"></div>
 
+
 <div id="listaProdutos">
+
 <div class="aviso-carregamento">
 Carregando cardápio...
 </div>
+
 </div>
 
 </div>
+
 
 <div class="rodape">
+
 <div>
-<strong>Sabor da Casa</strong> — Chapecó / SC
+<strong id="rodapeNome">Sabor da Casa</strong> — <span id="rodapeEndereco">Chapecó / SC</span>
 </div>
 
 <div>
 Obrigado pela preferência! <span class="coracao">❤️</span>
 </div>
+
 </div>
+
 
 <div class="softget-bottom">
-  <div class="softget-bottom-info">
-    <strong>SOFTGET <span>IA</span></strong>
-    <a href="https://wa.me/5549988901433" target="_blank" rel="noopener">
-      WhatsApp: (49) 98890-1433
-    </a>
-  </div>
-  <a class="softget-bottom-qr"
-     href="https://wa.me/5549988901433"
-     target="_blank"
-     rel="noopener"
-     title="Falar com a SoftGet IA pelo WhatsApp">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEXUlEQVR4nO3dS44bORAFwNHA979ye88F9RLJXxsRW0lV1dYDkabI5Ofn5+c/CPx/+wH4NWSFlKyQkhVSskJKVkjJCilZISUrpP7MX/58PmeeYz59PDzG8Ob5q/NLlR5j4VOVHuORb8G4QkpWSMkKKVkh9aW2HSxcwNCp1zpF5fzNC4vouVufHZS+BeMKKVkhJSukZIVUrbYdlCqjhVOincfozNt2isqFdfH8ynOd+xpXSMkKKVkhJSukWrXtMaWp2LnOz/376uJ9le9CxhVSskJKVkjJCqnfUdvOLVyO2qleF66UeJNxhZSskJIVUrJCqlXb3qrIHtk89siljn0LxhVSskJKVkjJCqlabXtsw/6gtJCg06CgVDV3dprtWxqxj3GFlKyQkhVSskLq8+av4fv2ki1c97qwxnzzWxgYV0jJCilZISUrpL7Utp050JJ9Jee+ZrhzC1dKPFJEG1dIyQopWSElK6Ra87adAu3YlOigUzbeOjNiXyFc+vaNK6RkhZSskJIVUiv7JNxanVoqDG/tQ+t89tg89ZxxhZSskJIVUrJCauOahM4ZtPvmMY8t3e14ZOHEwLhCSlZIyQopWSHV6pOwbz3DwvsunC+eP1VHqd3tsYnagXGFlKyQkhVSskJqY5+EfecglO57bJfawjcPjq3Gnd/IuEJKVkjJCilZIfVl3vZWNVd6qsHC2eSFxzGUziWbrxGe23fug3GFlKyQkhVSskLqS217rBnVwn4FHQu3h+07jqFUCC883Ne4QkpWSMkKKVkhtXHetvTqwnJ1Yal7bFHw3CNb+IwrpGSFlKyQkhVSrT4JK5/j1NliC9czLDzY4thnzdtygqyQkhVSskKqVtsObvXT2neyw6AzBzq/1ODNxR4D4wopWSElK6RkhVStT8Kx1gedX9Jvtcga7JuJ7rAmgRNkhZSskJIVUrX+tqU5wYU/2c/dOuJsfuXSfR9ZkjFnXCElK6RkhZSskPqV55KV3Fp+O3esUZm9ZFwgK6RkhZSskNq4l+zWettHTqO41Zls3z+7cYWUrJCSFVKyQmplbbvvMLF9HQlKjzF/c8exv6hzKeMKKVkhJSukZIVUbb3t3LHpxWN7yTrVa+nKx/r5dopo4wopWSElK6RkhVStT8Ixx9b5LnyMY+teO1ceWJPAFrJCSlZIyQqp2rlk+yw8GvZYf4ZjM8ILN9o5u4ETZIWUrJCSFVLXziW7NSU62Nf0q+TYnr2BeVu2kBVSskJKVki11tu+2fVqft/SQtdHVuN2LCzAjSukZIWUrJCSFVIr95LdcqxRwLHZ5M5TzXX+l2BcISUrpGSFlKyQ+hdq24WNAualX6fG3NfkrDOLXWJcISUrpGSFlKyQatW2+3os3Oo50LnvIz15S58tMa6QkhVSskJKVkjVattjbRNunea7sM/s/Ead6eOFf5E1CWwhK6RkhZSskHq0vy0PMq6QkhVSskJKVkjJCilZISUrpGSFlKyQ+gsWTB96egBkfgAAAABJRU5ErkJggg==" alt="QR Code WhatsApp SoftGet IA">
-  </a>
+
+<div class="softget-bottom-info">
+
+<strong>SOFTGET <span>IA</span></strong>
+
+<a
+href="https://wa.me/5549988901433"
+target="_blank"
+rel="noopener">
+
+WhatsApp: (49) 98890-1433
+
+</a>
+
 </div>
 
 
-<!-- CARRINHO -->
+<a
+class="softget-bottom-qr"
+href="https://wa.me/5549988901433"
+target="_blank"
+rel="noopener"
+title="Falar com a SoftGet IA pelo WhatsApp">
+
+<img
+src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEXUlEQVR4nO3dS44bORAFwNHA979ye88F9RLJXxsRW0lV1dYDkabI5Ofn5+c/CPx/+wH4NWSFlKyQkhVSskJKVkjJCilZISUrpP7MX/58PmeeYz59PDzG8Ob5q/NLlR5j4VOVHuORb8G4QkpWSMkKKVkh9aW2HSxcwNCp1zpF5fzNC4vouVufHZS+BeMKKVkhJSukZIVUrbYdlCqjhVOincfozNt2isqFdfH8ynOd+xpXSMkKKVkhJSukWrXtMaWp2LnOz/376uJ9le9CxhVSskJKVkjJCqlabXtsw/6gtJCg06CgVDV3dprtWxqxj3GFlKyQkhVSskLq8+av4fv2ki1c97qwxnzzWxgYV0jJCilZISUrpL7Utp050JJ9Jee+ZrhzC1dKPFJEG1dIyQopWSElK6Ra87adAu3YlOigUzbeOjNiXyFc+vaNK6RkhZSskJIVUiv7JNxanVoqDG/tQ+t89tg89ZxxhZSskJIVUrJCauOahM4ZtPvmMY8t3e14ZOHEwLhCSlZIyQopWSHV6pOwbz3DwvsunC+eP1VHqd3tsYnagXGFlKyQkhVSskJqY5+EfecglO57bJfawjcPjq3Gnd/IuEJKVkjJCilZIfVl3vZWNVd6qsHC2eSFxzGUziWbrxGe23fug3GFlKyQkhVSskLqS217rBnVwn4FHQu3h+07jqFUCC883Ne4QkpWSMkKKVkhtXHetvTqwnJ1Yal7bFHw3CNb+IwrpGSFlKyQkhVSrT4JK5/j1NliC9czLDzY4thnzdtygqyQkhVSskKqVtsObvXT2neyw6AzBzq/1ODNxR4D4wopWSElK6RkhVStT8Kx1gedX9Jvtcga7JuJ7rAmgRNkhZSskJIVUrX+tqU5wYU/2c/dOuJsfuXSfR9ZkjFnXCElK6RkhZSskPqV55KV3Fp+O3esUZm9ZFwgK6RkhZSskNq4l+zWettHTqO41Zls3z+7cYWUrJCSFVKyQmplbbvvMLF9HQlKjzF/c8exv6hzKeMKKVkhJSukZIVUbb3t3LHpxWN7yTrVa+nKx/r5dopo4wopWSElK6RkhVStT8Ixx9b5LnyMY+teO1ceWJPAFrJCSlZIyQqp2rlk+yw8GvZYf4ZjM8ILN9o5u4ETZIWUrJCSFVLXziW7NSU62Nf0q+TYnr2BeVu2kBVSskJKVki11tu+2fVqft/SQtdHVuN2LCzAjSukZIWUrJCSFVIr95LdcqxRwLHZ5M5TzXX+l2BcISUrpGSFlKyQ+hdq24WNAualX6fG3NfkrDOLXWJcISUrpGSFlKyQatW2+3os3Oo50LnvIz15S58tMa6QkhVSskJKVkjVattjbRNunea7sM/s/Ead6eOFf5E1CWwhK6RkhZSskHq0vy0PMq6QkhVSskJKVkjJCilZISUrpGSFlKyQ+gsWTB96egBkfgAAAABJRU5ErkJggg=="
+alt="QR Code WhatsApp SoftGet IA">
+
+</a>
+
+</div>
+
+
+<!-- =========================
+     CARRINHO
+========================= -->
 
 <div class="barra-carrinho" onclick="abrirCarrinho()">
+
 <strong>🛒 Carrinho</strong>
-<strong id="totalBarra">R$ 0,00</strong>
+
+<strong id="totalBarra">
+R$ 0,00
+</strong>
+
 </div>
 
 
-<!-- MODAL CARRINHO -->
+<!-- =========================
+     MODAL CARRINHO
+========================= -->
 
 <div class="modal-fundo" id="modalCarrinho">
 
@@ -820,49 +867,83 @@ Obrigado pela preferência! <span class="coracao">❤️</span>
 
 <div id="listaCarrinho"></div>
 
+
 <div class="campo">
+
 <label>Número da mesa</label>
-<input type="text" id="mesa" placeholder="Ex.: 5">
+
+<input
+type="text"
+id="mesa"
+placeholder="Ex.: 5">
+
 </div>
 
+
 <div class="campo">
+
 <label>Responsável pelo pedido</label>
-<input type="text" id="responsavel" placeholder="Nome">
+
+<input
+type="text"
+id="responsavel"
+placeholder="Nome">
+
 </div>
 
+
 <div class="campo">
+
 <label>Observação geral</label>
+
 <textarea
 id="observacaoGeral"
-placeholder="Alguma observação para o pedido?"></textarea>
+placeholder="Alguma observação para o pedido?">
+</textarea>
+
 </div>
 
+
 <div class="total">
-Total: <span id="totalModal">R$ 0,00</span>
+
+Total:
+<span id="totalModal">
+R$ 0,00
+</span>
+
 </div>
+
 
 <div class="botoes-modal">
 
 <button
 class="btn btn-fechar"
 onclick="fecharCarrinho()">
+
 Fechar
+
 </button>
+
 
 <button
 class="btn btn-enviar"
 id="btnEnviar"
 onclick="enviarPedido()">
+
 ✅ Confirmar pedido
+
 </button>
 
 </div>
 
 </div>
+
 </div>
 
 
-<!-- MODAL ACOMPANHAMENTO -->
+<!-- =========================
+     MODAL ACOMPANHAMENTO
+========================= -->
 
 <div class="modal-fundo" id="modalAcompanhamento">
 
@@ -877,22 +958,28 @@ id="resumoComandaCliente"
 style="font-size:18px;font-weight:bold;color:#39ff14;margin-bottom:16px">
 </div>
 
+
 <div id="listaAcompanhamento"></div>
+
 
 <div
 id="mensagemAcompanhamento"
 style="font-size:18px;font-weight:bold;color:#39ff14;margin:18px 0">
 </div>
 
+
 <button
 class="btn btn-fechar"
 onclick="fecharAcompanhamento()">
+
 Fechar
+
 </button>
 
 </div>
 
 </div>
+
 </div>
 
 
@@ -916,20 +1003,59 @@ doc
 ========================= */
 
 const firebaseConfig={
+
 apiKey:"AIzaSyArqDgHaf0l4yNNEAXeEBACMG4clfoHTfw",
+
 authDomain:"sistema-digital-f9df1.firebaseapp.com",
+
 projectId:"sistema-digital-f9df1",
+
 storageBucket:"sistema-digital-f9df1.firebasestorage.app",
+
 messagingSenderId:"783545984661",
+
 appId:"1:783545984661:web:5d0945907ad9db3990dd9c"
+
 };
 
+
 const app=initializeApp(firebaseConfig);
+
 
 const db=initializeFirestore(
 app,
 {},
 "default"
+);
+
+
+/* =========================
+   RESTAURANTE DINÂMICO
+========================= */
+
+/*
+   Lê o restaurante diretamente da URL.
+
+   Exemplo:
+
+   index.html?restaurante=ponto-63
+
+   Se não existir restaurante na URL,
+   usa Sabor da Casa como padrão.
+*/
+
+const parametrosURL=
+new URLSearchParams(window.location.search);
+
+
+const RESTAURANTE_ID=
+parametrosURL.get("restaurante") ||
+"sabor-da-casa";
+
+
+console.log(
+"Restaurante atual:",
+RESTAURANTE_ID
 );
 
 
@@ -1099,6 +1225,7 @@ descricao:"Chopp gelado.",
 ativo:true,
 promocaoAtiva:false
 }
+
 ];
 
 
@@ -1107,15 +1234,21 @@ promocaoAtiva:false
 ========================= */
 
 let produtos=[];
+
 let carrinho=[];
+
 let categorias=[];
+
 let categoriaAtual="Todos";
 
 let configuracao={};
 
 let pedidosAcompanhamento=[];
+
 let comandaAtualId=null;
+
 let mesaAtual=null;
+
 const listenersPedidos=new Map();
 
 
@@ -1124,6 +1257,7 @@ const listenersPedidos=new Map();
 ========================= */
 
 function dinheiro(v){
+
 return Number(v||0).toLocaleString(
 "pt-BR",
 {
@@ -1131,6 +1265,7 @@ style:"currency",
 currency:"BRL"
 }
 );
+
 }
 
 
@@ -1139,9 +1274,13 @@ function precoAtual(p){
 return p.promocaoAtiva &&
 Number(p.precoPromocional)>0
 
-?Number(p.precoPromocional)
+?
 
-:Number(p.preco||0);
+Number(p.precoPromocional)
+
+:
+
+Number(p.preco||0);
 
 }
 
@@ -1150,13 +1289,17 @@ function escapar(v){
 
 return String(v??"").replace(
 /[&<>"']/g,
+
 m=>({
+
 "&":"&amp;",
 "<":"&lt;",
 ">":"&gt;",
 '"':"&quot;",
 "'":"&#39;"
+
 }[m])
+
 );
 
 }
@@ -1169,12 +1312,19 @@ m=>({
 function iconeCategoria(cat){
 
 const mapa={
+
 "Lanches":"🍔",
+
 "Porções":"🍟",
+
 "Bebidas":"🥤",
+
 "Pizzas":"🍕",
+
 "Frangos":"🍗",
+
 "Sobremesas":"🍨"
+
 };
 
 return mapa[cat]||"🍽️";
@@ -1184,33 +1334,60 @@ return mapa[cat]||"🍽️";
 
 function iconeProduto(p){
 
-const nome=String(p.nome||"").toLowerCase();
-const cat=String(p.categoria||"").toLowerCase();
+const nome=
+String(p.nome||"").toLowerCase();
+
+const cat=
+String(p.categoria||"").toLowerCase();
 
 
-if(nome.includes("pizza")) return "🍕";
+if(nome.includes("pizza"))
+return "🍕";
 
-if(nome.includes("batata")) return "🍟";
 
-if(nome.includes("tilápia")) return "🐟";
+if(nome.includes("batata"))
+return "🍟";
 
-if(nome.includes("mandioca")) return "🥔";
 
-if(nome.includes("coca")) return "🥤";
+if(nome.includes("tilápia"))
+return "🐟";
 
-if(nome.includes("pepsi")) return "🥤";
 
-if(nome.includes("cerveja")) return "🍺";
+if(nome.includes("mandioca"))
+return "🥔";
 
-if(nome.includes("chopp")) return "🍺";
 
-if(cat==="lanches") return "🍔";
+if(nome.includes("coca"))
+return "🥤";
 
-if(cat==="porções") return "🍟";
 
-if(cat==="bebidas") return "🥤";
+if(nome.includes("pepsi"))
+return "🥤";
 
-if(cat==="pizzas") return "🍕";
+
+if(nome.includes("cerveja"))
+return "🍺";
+
+
+if(nome.includes("chopp"))
+return "🍺";
+
+
+if(cat==="lanches")
+return "🍔";
+
+
+if(cat==="porções")
+return "🍟";
+
+
+if(cat==="bebidas")
+return "🥤";
+
+
+if(cat==="pizzas")
+return "🍕";
+
 
 return "🍽️";
 
@@ -1223,20 +1400,36 @@ return "🍽️";
 
 function mostrarCategorias(){
 
-const area=document.getElementById("areaCategorias");
+const area=
+document.getElementById(
+"areaCategorias"
+);
 
 area.innerHTML="";
 
-["Todos",...categorias.filter(c=>c!=="Todos")].forEach(cat=>{
 
-const b=document.createElement("button");
+[
+"Todos",
+...categorias.filter(
+c=>c!=="Todos"
+)
+]
+.forEach(cat=>{
+
+const b=
+document.createElement("button");
 
 b.className=
 "categoria"+
-(cat===categoriaAtual?" ativa":"");
+(
+cat===categoriaAtual
+?" ativa"
+:""
+);
 
 b.textContent=
 `${cat==="Todos"?"🍽️":iconeCategoria(cat)} ${cat}`;
+
 
 b.onclick=()=>{
 
@@ -1247,6 +1440,7 @@ mostrarCategorias();
 mostrarProdutos();
 
 };
+
 
 area.appendChild(b);
 
@@ -1261,19 +1455,28 @@ area.appendChild(b);
 
 function mostrarProdutos(){
 
+const campo=
+document.getElementById(
+"campoPesquisa"
+);
+
 const busca=
-document.getElementById("campoPesquisa")
+campo
 .value
 .trim()
 .toLowerCase();
 
+
 const lista=
-document.getElementById("listaProdutos");
+document.getElementById(
+"listaProdutos"
+);
 
 lista.innerHTML="";
 
 
-const filtrados=produtos.filter(p=>
+const filtrados=
+produtos.filter(p=>
 
 p.ativo!==false &&
 
@@ -1307,7 +1510,8 @@ return;
 
 filtrados.forEach(p=>{
 
-const div=document.createElement("div");
+const div=
+document.createElement("div");
 
 div.className="produto";
 
@@ -1317,17 +1521,9 @@ p.promocaoAtiva &&
 Number(p.precoPromocional)>0;
 
 
-/* =========================
-   FOTO DO PRODUTO
-========================= */
+const desenho=
+iconeProduto(p);
 
-const desenho=iconeProduto(p);
-
-
-/*
-   Aceita vários nomes de campo
-   para facilitar a leitura do Firebase.
-*/
 
 const imagemProduto=
 p.foto||
@@ -1365,8 +1561,11 @@ visualProduto=desenho;
 div.innerHTML=`
 
 <div class="produto-visual">
+
 ${visualProduto}
+
 </div>
+
 
 <div class="produto-info">
 
@@ -1374,16 +1573,20 @@ ${
 promo
 ?
 '<div class="promocao">🔥 PROMOÇÃO</div>'
-:""
+:
+""
 }
+
 
 <h3>
 ${escapar(p.nome)}
 </h3>
 
+
 <div class="descricao">
 ${escapar(p.descricao||"")}
 </div>
+
 
 <div class="preco">
 
@@ -1393,7 +1596,8 @@ promo
 `<span class="preco-antigo">
 ${dinheiro(p.preco)}
 </span>`
-:""
+:
+""
 }
 
 ${dinheiro(precoAtual(p))}
@@ -1401,6 +1605,7 @@ ${dinheiro(precoAtual(p))}
 </div>
 
 </div>
+
 
 <button
 class="btn-adicionar"
@@ -1411,6 +1616,7 @@ onclick="adicionarProduto('${p.id}')">
 </button>
 
 `;
+
 
 lista.appendChild(div);
 
@@ -1425,12 +1631,19 @@ lista.appendChild(div);
 
 window.adicionarProduto=id=>{
 
-const p=produtos.find(x=>x.id===id);
+const p=
+produtos.find(
+x=>x.id===id
+);
 
 if(!p)return;
 
+
 const item=
-carrinho.find(x=>x.id===id);
+carrinho.find(
+x=>x.id===id
+);
+
 
 if(item){
 
@@ -1439,14 +1652,21 @@ item.quantidade++;
 }else{
 
 carrinho.push({
+
 id:p.id,
+
 nome:p.nome,
+
 preco:precoAtual(p),
+
 quantidade:1,
+
 observacao:""
+
 });
 
 }
+
 
 atualizarCarrinho();
 
@@ -1456,18 +1676,26 @@ atualizarCarrinho();
 window.alterarQuantidade=(id,q)=>{
 
 const i=
-carrinho.find(x=>x.id===id);
+carrinho.find(
+x=>x.id===id
+);
 
 if(!i)return;
 
-i.quantidade=Number(q);
+
+i.quantidade=
+Number(q);
+
 
 if(i.quantidade<=0){
 
 carrinho=
-carrinho.filter(x=>x.id!==id);
+carrinho.filter(
+x=>x.id!==id
+);
 
 }
+
 
 atualizarCarrinho();
 
@@ -1477,9 +1705,12 @@ atualizarCarrinho();
 window.alterarObservacao=(id,v)=>{
 
 const i=
-carrinho.find(x=>x.id===id);
+carrinho.find(
+x=>x.id===id
+);
 
-if(i)i.observacao=v;
+if(i)
+i.observacao=v;
 
 };
 
@@ -1487,7 +1718,8 @@ if(i)i.observacao=v;
 function total(){
 
 return carrinho.reduce(
-(s,i)=>s+i.preco*i.quantidade,
+(s,i)=>
+s+i.preco*i.quantidade,
 0
 );
 
@@ -1496,19 +1728,25 @@ return carrinho.reduce(
 
 function atualizarCarrinho(){
 
-document.getElementById("totalBarra").textContent=
+document.getElementById(
+"totalBarra"
+).textContent=
 dinheiro(total());
 
 
 const qtd=
 carrinho.reduce(
-(s,i)=>s+Number(i.quantidade||0),
+(s,i)=>
+s+Number(i.quantidade||0),
 0
 );
 
 
 const qtdTopo=
-document.getElementById("qtdCarrinho");
+document.getElementById(
+"qtdCarrinho"
+);
+
 
 if(qtdTopo){
 
@@ -1518,7 +1756,9 @@ qtdTopo.textContent=qtd;
 
 
 const lista=
-document.getElementById("listaCarrinho");
+document.getElementById(
+"listaCarrinho"
+);
 
 lista.innerHTML="";
 
@@ -1528,8 +1768,10 @@ if(!carrinho.length){
 lista.innerHTML=
 '<div class="vazio">Seu carrinho está vazio.</div>';
 
-document.getElementById("totalModal")
-.textContent=dinheiro(0);
+document.getElementById(
+"totalModal"
+).textContent=
+dinheiro(0);
 
 return;
 
@@ -1538,7 +1780,8 @@ return;
 
 carrinho.forEach(i=>{
 
-const d=document.createElement("div");
+const d=
+document.createElement("div");
 
 d.className="item-carrinho";
 
@@ -1557,6 +1800,7 @@ ${dinheiro(i.preco*i.quantidade)}
 
 </div>
 
+
 <div class="item-controles">
 
 <button
@@ -1567,9 +1811,11 @@ ${i.quantidade-1}
 −
 </button>
 
+
 <strong>
 ${i.quantidade}
 </strong>
+
 
 <button
 onclick="alterarQuantidade(
@@ -1580,6 +1826,7 @@ ${i.quantidade+1}
 </button>
 
 </div>
+
 
 <input
 class="item-observacao"
@@ -1592,13 +1839,16 @@ this.value
 
 `;
 
+
 lista.appendChild(d);
 
 });
 
 
-document.getElementById("totalModal")
-.textContent=dinheiro(total());
+document.getElementById(
+"totalModal"
+).textContent=
+dinheiro(total());
 
 }
 
@@ -1609,7 +1859,8 @@ atualizarCarrinho();
 
 document.getElementById(
 "modalCarrinho"
-).style.display="block";
+).style.display=
+"block";
 
 };
 
@@ -1618,7 +1869,8 @@ window.fecharCarrinho=()=>{
 
 document.getElementById(
 "modalCarrinho"
-).style.display="none";
+).style.display=
+"none";
 
 };
 
@@ -1631,7 +1883,13 @@ function aplicarConfiguracao(){
 
 const nome=
 configuracao.nome||
-"Sabor da Casa";
+(
+RESTAURANTE_ID==="sabor-da-casa"
+?
+"Sabor da Casa"
+:
+RESTAURANTE_ID
+);
 
 
 document.getElementById(
@@ -1647,11 +1905,15 @@ configuracao.subtitulo||
 "Cardápio Digital";
 
 
+const endereco=
+configuracao.endereco||
+"Chapecó / Santa Catarina";
+
+
 document.getElementById(
 "localRestaurante"
 ).textContent=
-`📍 ${configuracao.endereco||
-"Chapecó / Santa Catarina"}`;
+`📍 ${endereco}`;
 
 
 const logo=
@@ -1662,15 +1924,30 @@ document.getElementById(
 
 if(configuracao.logo){
 
-logo.src=configuracao.logo;
+logo.src=
+configuracao.logo;
 
-logo.style.display="inline-block";
+logo.style.display=
+"inline-block";
 
 }else{
 
-logo.style.display="none";
+logo.style.display=
+"none";
 
 }
+
+
+document.getElementById(
+"rodapeNome"
+).textContent=
+nome;
+
+
+document.getElementById(
+"rodapeEndereco"
+).textContent=
+endereco;
 
 
 document.title=
@@ -1687,9 +1964,17 @@ function gerarNumeroPedido(){
 
 const d=new Date();
 
-return String(d.getHours()).padStart(2,"0")+
-String(d.getMinutes()).padStart(2,"0")+
-String(d.getSeconds()).padStart(2,"0");
+return String(
+d.getHours()
+).padStart(2,"0")+
+
+String(
+d.getMinutes()
+).padStart(2,"0")+
+
+String(
+d.getSeconds()
+).padStart(2,"0");
 
 }
 
@@ -1699,7 +1984,9 @@ function gerarComandaId(){
 return "comanda-"+
 Date.now()+
 "-"+
-Math.random().toString(36).slice(2,10);
+Math.random()
+.toString(36)
+.slice(2,10);
 
 }
 
@@ -1711,28 +1998,40 @@ Math.random().toString(36).slice(2,10);
 function aplicarDadosCliente(){
 
 const mesaSalva=
-localStorage.getItem("mesaCliente")||"";
+localStorage.getItem(
+"mesaCliente"
+)||"";
+
 
 const nomeSalvo=
-localStorage.getItem("nomeCliente")||"";
+localStorage.getItem(
+"nomeCliente"
+)||"";
 
 
 const mesa=
-document.getElementById("mesa");
+document.getElementById(
+"mesa"
+);
 
 const nome=
-document.getElementById("responsavel");
+document.getElementById(
+"responsavel"
+);
 
 
 if(mesaSalva){
 
-mesa.value=mesaSalva;
+mesa.value=
+mesaSalva;
 
 mesa.readOnly=true;
 
-mesa.style.background="#eeeeee";
+mesa.style.background=
+"#eeeeee";
 
-mesa.style.color="#666";
+mesa.style.color=
+"#666";
 
 mesa.title=
 "Mesa vinculada a esta comanda";
@@ -1742,13 +2041,16 @@ mesa.title=
 
 if(nomeSalvo){
 
-nome.value=nomeSalvo;
+nome.value=
+nomeSalvo;
 
 nome.readOnly=true;
 
-nome.style.background="#eeeeee";
+nome.style.background=
+"#eeeeee";
 
-nome.style.color="#666";
+nome.style.color=
+"#666";
 
 nome.title=
 "Nome vinculado a esta comanda";
@@ -1758,7 +2060,10 @@ nome.title=
 }
 
 
-function salvarDadosCliente(mesa,nome){
+function salvarDadosCliente(
+mesa,
+nome
+){
 
 localStorage.setItem(
 "mesaCliente",
@@ -1777,16 +2082,24 @@ aplicarDadosCliente();
 
 function liberarDadosCliente(){
 
-localStorage.removeItem("mesaCliente");
+localStorage.removeItem(
+"mesaCliente"
+);
 
-localStorage.removeItem("nomeCliente");
+localStorage.removeItem(
+"nomeCliente"
+);
 
 
 const mesa=
-document.getElementById("mesa");
+document.getElementById(
+"mesa"
+);
 
 const nome=
-document.getElementById("responsavel");
+document.getElementById(
+"responsavel"
+);
 
 
 mesa.value="";
@@ -1818,122 +2131,231 @@ window.enviarPedido=async()=>{
 
 if(!carrinho.length){
 
-alert("🛒 Seu carrinho está vazio.");
+alert(
+"🛒 Seu carrinho está vazio."
+);
 
 return;
 
 }
 
+
 const mesa=
-document.getElementById("mesa")
-.value.trim();
+document.getElementById(
+"mesa"
+).value.trim();
+
 
 const responsavel=
-document.getElementById("responsavel")
-.value.trim();
+document.getElementById(
+"responsavel"
+).value.trim();
+
 
 const observacaoGeral=
-document.getElementById("observacaoGeral")
-.value.trim();
+document.getElementById(
+"observacaoGeral"
+).value.trim();
+
 
 if(!mesa){
 
-alert("⚠️ Informe o número da mesa.");
+alert(
+"⚠️ Informe o número da mesa."
+);
 
 return;
 
 }
 
-salvarDadosCliente(mesa,responsavel);
 
-const btn=document.getElementById("btnEnviar");
+salvarDadosCliente(
+mesa,
+responsavel
+);
+
+
+const btn=
+document.getElementById(
+"btnEnviar"
+);
+
 btn.disabled=true;
-btn.textContent="⏳ Registrando...";
+
+btn.textContent=
+"⏳ Registrando...";
+
 
 try{
 
-/*
-   O cliente não consulta mais a coleção inteira de pedidos.
-   Isso evita expor pedidos de outras mesas.
-   A comanda é mantida pelo localStorage e cada pedido é
-   acompanhado individualmente pelo seu ID.
-*/
 const comandaId=
-comandaAtualId||gerarComandaId();
+comandaAtualId||
+gerarComandaId();
 
-const numeroPedido=gerarNumeroPedido();
 
-const itens=carrinho.map(i=>({
-  id:i.id,
-  nome:i.nome,
-  preco:i.preco,
-  quantidade:i.quantidade,
-  observacao:i.observacao||""
+const numeroPedido=
+gerarNumeroPedido();
+
+
+const itens=
+carrinho.map(i=>({
+
+id:i.id,
+
+nome:i.nome,
+
+preco:i.preco,
+
+quantidade:i.quantidade,
+
+observacao:i.observacao||""
+
 }));
 
+
 const pedido={
-  numeroPedido,
-  mesa,
-  responsavel,
-  observacaoGeral,
-  itens,
-  total:total(),
-  status:"Recebido",
-  data:new Date().toISOString(),
-  comandaId
+
+numeroPedido,
+
+mesa,
+
+responsavel,
+
+observacaoGeral,
+
+itens,
+
+total:total(),
+
+status:"Recebido",
+
+data:new Date().toISOString(),
+
+comandaId
+
 };
 
-const pedidoRef=await addDoc(
-  collection(db,"restaurantes","sabor-da-casa","pedidos"),
-  pedido
+
+const pedidoRef=
+await addDoc(
+
+collection(
+db,
+"restaurantes",
+RESTAURANTE_ID,
+"pedidos"
+),
+
+pedido
+
 );
 
-comandaAtualId=comandaId;
-mesaAtual=mesa;
 
-const item={id:pedidoRef.id,...pedido};
+comandaAtualId=
+comandaId;
+
+mesaAtual=
+mesa;
+
+
+const item={
+id:pedidoRef.id,
+...pedido
+};
+
+
 pedidosAcompanhamento=[
-  ...pedidosAcompanhamento.filter(p=>p.id!==pedidoRef.id),
-  item
+
+...pedidosAcompanhamento
+.filter(
+p=>p.id!==pedidoRef.id
+),
+
+item
+
 ];
 
-const ids=pedidosAcompanhamento
-  .filter(p=>p.status!=="Finalizado")
-  .map(p=>p.id);
 
-localStorage.setItem(
-  "comandaAcompanhamento",
-  JSON.stringify({comandaId,mesa,pedidoIds:ids})
+const ids=
+pedidosAcompanhamento
+.filter(
+p=>p.status!=="Finalizado"
+)
+.map(
+p=>p.id
 );
 
-monitorarPedido(pedidoRef.id);
+
+localStorage.setItem(
+
+"comandaAcompanhamento",
+
+JSON.stringify({
+
+comandaId,
+
+mesa,
+
+pedidoIds:ids
+
+})
+
+);
+
+
+monitorarPedido(
+pedidoRef.id
+);
+
 
 mostrarStatusUltimo();
 
+
 carrinho=[];
-document.getElementById("observacaoGeral").value="";
+
+
+document.getElementById(
+"observacaoGeral"
+).value="";
+
+
 atualizarCarrinho();
+
 fecharCarrinho();
 
+
 alert(
-`✅ Pedido registrado com sucesso!\n\nNúmero do pedido: #${numeroPedido}\n\nVocê poderá acompanhar todos os pedidos desta mesa.`
+
+`✅ Pedido registrado com sucesso!
+
+Número do pedido: #${numeroPedido}
+
+Você poderá acompanhar todos os pedidos desta mesa.`
+
 );
 
+
 abrirAcompanhamento();
+
 
 }catch(e){
 
 console.error(e);
 
+
 alert(
+
 "🔴 NÃO FOI POSSÍVEL REGISTRAR O PEDIDO.\n\n"+
 (e.message||e)
+
 );
 
 }finally{
 
 btn.disabled=false;
-btn.textContent="✅ Confirmar pedido";
+
+btn.textContent=
+"✅ Confirmar pedido";
 
 }
 
@@ -1946,100 +2368,244 @@ btn.textContent="✅ Confirmar pedido";
 
 function monitorarPedido(id){
 
-if(!id || listenersPedidos.has(id))return;
+if(
+!id ||
+listenersPedidos.has(id)
+)
+return;
 
-const ref=doc(
-  db,
-  "restaurantes",
-  "sabor-da-casa",
-  "pedidos",
-  id
+
+const ref=
+doc(
+
+db,
+
+"restaurantes",
+
+RESTAURANTE_ID,
+
+"pedidos",
+
+id
+
 );
 
-const unsubscribe=onSnapshot(
-  ref,
-  snap=>{
 
-    if(!snap.exists()){
-      listenersPedidos.get(id)?.();
-      listenersPedidos.delete(id);
-      pedidosAcompanhamento=pedidosAcompanhamento.filter(p=>p.id!==id);
-      salvarAcompanhamentoLocal();
-      atualizarAcompanhamento();
-      return;
-    }
+const unsubscribe=
+onSnapshot(
 
-    const atualizado={id:snap.id,...snap.data()};
-    const idx=pedidosAcompanhamento.findIndex(p=>p.id===id);
+ref,
 
-    if(idx>=0){
-      pedidosAcompanhamento[idx]=atualizado;
-    }else{
-      pedidosAcompanhamento.push(atualizado);
-    }
+snap=>{
 
-    pedidosAcompanhamento.sort((a,b)=>
-      String(a.data||"").localeCompare(String(b.data||""))
-    );
+if(!snap.exists()){
 
-    if(atualizado.status==="Finalizado"){
-      pedidosAcompanhamento=pedidosAcompanhamento.filter(
-        p=>p.status!=="Finalizado"
-      );
+listenersPedidos
+.get(id)?.();
 
-      const parar=listenersPedidos.get(id);
-      if(parar) parar();
-      listenersPedidos.delete(id);
-    }
+listenersPedidos
+.delete(id);
 
-    salvarAcompanhamentoLocal();
-    atualizarAcompanhamento();
-  },
-  err=>{
-    console.warn("Acompanhamento do pedido indisponível:",err);
-  }
+pedidosAcompanhamento=
+pedidosAcompanhamento
+.filter(
+p=>p.id!==id
 );
 
-listenersPedidos.set(id,unsubscribe);
+salvarAcompanhamentoLocal();
+
+atualizarAcompanhamento();
+
+return;
+
 }
+
+
+const atualizado={
+id:snap.id,
+...snap.data()
+};
+
+
+const idx=
+pedidosAcompanhamento
+.findIndex(
+p=>p.id===id
+);
+
+
+if(idx>=0){
+
+pedidosAcompanhamento[idx]=
+atualizado;
+
+}else{
+
+pedidosAcompanhamento.push(
+atualizado
+);
+
+}
+
+
+pedidosAcompanhamento.sort(
+(a,b)=>
+String(a.data||"")
+.localeCompare(
+String(b.data||"")
+)
+);
+
+
+if(
+atualizado.status===
+"Finalizado"
+){
+
+pedidosAcompanhamento=
+pedidosAcompanhamento
+.filter(
+p=>p.status!=="Finalizado"
+);
+
+
+const parar=
+listenersPedidos.get(id);
+
+if(parar)
+parar();
+
+listenersPedidos.delete(id);
+
+}
+
+
+salvarAcompanhamentoLocal();
+
+atualizarAcompanhamento();
+
+},
+
+err=>{
+
+console.warn(
+"Acompanhamento do pedido indisponível:",
+err
+);
+
+}
+
+);
+
+
+listenersPedidos.set(
+id,
+unsubscribe
+);
+
+}
+
 
 function salvarAcompanhamentoLocal(){
 
-if(!comandaAtualId || !mesaAtual)return;
+if(
+!comandaAtualId ||
+!mesaAtual
+)
+return;
 
-const ids=pedidosAcompanhamento
-  .filter(p=>p.status!=="Finalizado")
-  .map(p=>p.id);
+
+const ids=
+pedidosAcompanhamento
+.filter(
+p=>p.status!=="Finalizado"
+)
+.map(
+p=>p.id
+);
+
 
 if(ids.length){
-  localStorage.setItem(
-    "comandaAcompanhamento",
-    JSON.stringify({comandaId:comandaAtualId,mesa:mesaAtual,pedidoIds:ids})
-  );
+
+localStorage.setItem(
+
+"comandaAcompanhamento",
+
+JSON.stringify({
+
+comandaId:
+comandaAtualId,
+
+mesa:
+mesaAtual,
+
+pedidoIds:
+ids
+
+})
+
+);
+
 }else{
-  localStorage.removeItem("comandaAcompanhamento");
+
+localStorage.removeItem(
+"comandaAcompanhamento"
+);
+
 }
+
 }
+
 
 function atualizarAcompanhamento(){
 
-if(!pedidosAcompanhamento.length){
-  comandaAtualId=null;
-  mesaAtual=null;
-  localStorage.removeItem("comandaAcompanhamento");
-  liberarDadosCliente();
-  mostrarStatusUltimo();
-  if(document.getElementById("modalAcompanhamento").style.display==="block"){
-    fecharAcompanhamento();
-  }
-  return;
-}
+if(
+!pedidosAcompanhamento.length
+){
+
+comandaAtualId=null;
+
+mesaAtual=null;
+
+localStorage.removeItem(
+"comandaAcompanhamento"
+);
+
+liberarDadosCliente();
 
 mostrarStatusUltimo();
 
-if(document.getElementById("modalAcompanhamento").style.display==="block"){
-  renderAcompanhamento();
+
+if(
+document.getElementById(
+"modalAcompanhamento"
+).style.display===
+"block"
+){
+
+fecharAcompanhamento();
+
 }
+
+return;
+
+}
+
+
+mostrarStatusUltimo();
+
+
+if(
+document.getElementById(
+"modalAcompanhamento"
+).style.display===
+"block"
+){
+
+renderAcompanhamento();
+
+}
+
 }
 
 
@@ -2057,14 +2623,16 @@ document.getElementById(
 
 if(!comandaAtualId){
 
-el.style.display="none";
+el.style.display=
+"none";
 
 return;
 
 }
 
 
-el.style.display="block";
+el.style.display=
+"block";
 
 
 const qtd=
@@ -2078,6 +2646,7 @@ p=>p.status!=="Finalizado"
 el.querySelector(
 "#resumoUltimoPedido"
 ).textContent=
+
 `Mesa ${mesaAtual||""} • ${qtd} pedido${qtd===1?"":"s"} ativo${qtd===1?"":"s"}`;
 
 }
@@ -2102,7 +2671,8 @@ return;
 
 document.getElementById(
 "modalAcompanhamento"
-).style.display="block";
+).style.display=
+"block";
 
 
 renderAcompanhamento();
@@ -2114,7 +2684,8 @@ window.fecharAcompanhamento=()=>{
 
 document.getElementById(
 "modalAcompanhamento"
-).style.display="none";
+).style.display=
+"none";
 
 };
 
@@ -2127,10 +2698,15 @@ ativo
 ){
 
 return `
+
 <div class="${ativo?"ativo-neon":""}">
+
 ${icone}<br>
+
 <b>${rotulo}</b>
+
 </div>
+
 `;
 
 }
@@ -2156,9 +2732,11 @@ if(!ativos.length){
 lista.innerHTML=
 '<div style="padding:20px;color:#777">A comanda foi encerrada.</div>';
 
+
 document.getElementById(
 "resumoComandaCliente"
 ).textContent="";
+
 
 return;
 
@@ -2168,10 +2746,12 @@ return;
 document.getElementById(
 "resumoComandaCliente"
 ).textContent=
+
 `🪑 Mesa ${mesaAtual} • ${ativos.length} pedido${ativos.length===1?"":"s"} em aberto`;
 
 
 lista.innerHTML=
+
 ativos.map(p=>{
 
 const s=p.status;
@@ -2189,6 +2769,7 @@ s==="Pronto";
 return `
 
 <div class="acomp-pedido">
+
 
 <div class="acomp-pedido-titulo">
 
@@ -2212,12 +2793,14 @@ ${caixaStatus(
 rec
 )}
 
+
 ${caixaStatus(
 "p",
 "Em preparo",
 "🟠",
 prep
 )}
+
 
 ${caixaStatus(
 "f",
@@ -2236,15 +2819,18 @@ font-weight:bold">
 
 ${
 rec
-?"🔴 Pedido recebido!"
+?
+"🔴 Pedido recebido!"
 :
 prep
-?"🟠 Seu pedido está em preparo!"
+?
+"🟠 Seu pedido está em preparo!"
 :
 "🔵 Seu pedido está pronto!"
 }
 
 </div>
+
 
 </div>
 
@@ -2267,21 +2853,50 @@ document.getElementById(
 
 try{
 
-const salvo=JSON.parse(
-  localStorage.getItem("comandaAcompanhamento")||"null"
+const salvo=
+JSON.parse(
+
+localStorage.getItem(
+"comandaAcompanhamento"
+)||"null"
+
 );
 
+
 if(salvo){
-  comandaAtualId=salvo.comandaId||null;
-  mesaAtual=salvo.mesa||null;
 
-  const ids=Array.isArray(salvo.pedidoIds)?salvo.pedidoIds:[];
+comandaAtualId=
+salvo.comandaId||
+null;
 
-  ids.forEach(monitorarPedido);
+mesaAtual=
+salvo.mesa||
+null;
+
+
+const ids=
+Array.isArray(
+salvo.pedidoIds
+)
+?
+salvo.pedidoIds
+:
+[];
+
+
+ids.forEach(
+monitorarPedido
+);
+
 }
 
 }catch(e){
-  console.warn("Não foi possível recuperar a comanda:",e);
+
+console.warn(
+"Não foi possível recuperar a comanda:",
+e
+);
+
 }
 
 
@@ -2290,34 +2905,71 @@ if(salvo){
 ========================= */
 
 onSnapshot(
-collection(db,"restaurantes","sabor-da-casa","produtos"),
+
+collection(
+db,
+"restaurantes",
+RESTAURANTE_ID,
+"produtos"
+),
+
 snap=>{
 
 produtos=
+
 snap.docs
 .map(d=>({
+
 id:d.id,
+
 ...d.data()
+
 }))
 .filter(
 p=>p.ativo!==false
 );
 
 
+/*
+   SOMENTE o Sabor da Casa
+   recebe os produtos iniciais.
+
+   Um restaurante novo,
+   como Ponto 63,
+   começa vazio até ter
+   seus próprios produtos.
+*/
+
 if(!produtos.length){
+
+if(
+RESTAURANTE_ID===
+"sabor-da-casa"
+){
 
 produtos=
 produtosIniciais;
+
+}else{
+
+produtos=[];
+
+}
 
 }
 
 
 categorias=
+
 [
 ...new Set(
+
 produtos
-.map(p=>p.categoria)
+.map(
+p=>p.categoria
+)
 .filter(Boolean)
+
 )
 ];
 
@@ -2327,6 +2979,7 @@ mostrarCategorias();
 mostrarProdutos();
 
 },
+
 err=>{
 
 console.warn(
@@ -2335,17 +2988,42 @@ err
 );
 
 
+/*
+   Se for Sabor da Casa,
+   mantém os produtos iniciais.
+
+   Se for outro restaurante,
+   não mostra produtos
+   de outro restaurante.
+*/
+
+if(
+RESTAURANTE_ID===
+"sabor-da-casa"
+){
+
 produtos=
 produtosIniciais;
 
+}else{
+
+produtos=[];
+
+}
+
 
 categorias=
+
 [
 ...new Set(
-produtos.map(
+
+produtos
+.map(
 p=>p.categoria
 )
+
 )
+
 ];
 
 
@@ -2354,6 +3032,7 @@ mostrarCategorias();
 mostrarProdutos();
 
 }
+
 );
 
 
@@ -2362,27 +3041,45 @@ mostrarProdutos();
 ========================= */
 
 onSnapshot(
-collection(db,"restaurantes","sabor-da-casa","configuracaoRestaurante"),
+
+collection(
+
+db,
+
+"restaurantes",
+
+RESTAURANTE_ID,
+
+"configuracaoRestaurante"
+
+),
+
 snap=>{
 
 configuracao={};
 
+
 snap.forEach(
+
 d=>
 configuracao={
 ...d.data()
 }
+
 );
 
 
 aplicarConfiguracao();
 
 },
+
 err=>
+
 console.warn(
 "Configuração indisponível:",
 err
 )
+
 );
 
 
@@ -2391,8 +3088,11 @@ err
 ========================= */
 
 /*
-   Não fazemos mais onSnapshot da coleção inteira de pedidos.
-   O cliente acompanha somente os IDs dos próprios pedidos.
+   O cliente acompanha somente
+   os pedidos da própria comanda.
+
+   A coleção também é dinâmica
+   conforme o restaurante da URL.
 */
 
 
@@ -2403,6 +3103,8 @@ err
 aplicarDadosCliente();
 
 atualizarCarrinho();
+
+aplicarConfiguracao();
 
 </script>
 
