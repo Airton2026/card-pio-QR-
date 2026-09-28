@@ -207,7 +207,7 @@ transform:translateY(-2px);
 /* desenho/foto do produto */
 .produto-visual{
 width:100%;
-height:175px;
+height:160px;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -228,21 +228,21 @@ display:block;
 }
 
 .produto-info{
-padding:13px 14px 8px;
+padding:11px 12px 7px;
 min-width:0;
 }
 
 .produto h3{
 color:#fff;
 margin-bottom:6px;
-font-size:19px;
+font-size:18px;
 }
 
 .produto .descricao{
 color:#aaa;
-font-size:13px;
-line-height:1.35;
-margin-bottom:8px;
+font-size:12px;
+line-height:1.3;
+margin-bottom:7px;
 min-height:18px;
 }
 
@@ -273,16 +273,16 @@ margin-bottom:5px;
 
 /* botão */
 .btn-adicionar{
-margin:0 14px 14px;
+margin:0 12px 12px;
 background:#080808;
 color:#39ff14;
 border:2px solid #39ff14;
 border-radius:10px;
-padding:11px 14px;
+padding:10px 12px;
 font-weight:bold;
 cursor:pointer;
 white-space:nowrap;
-font-size:14px;
+font-size:13px;
 box-shadow:0 0 8px rgba(57,255,20,.12);
 transition:.2s;
 }
@@ -556,16 +556,16 @@ gap:10px;
 }
 
 .produto-visual{
-height:145px;
-font-size:75px;
+height:135px;
+font-size:70px;
 }
 
 .produto h3{
-font-size:17px;
+font-size:16px;
 }
 
 .produto .descricao{
-font-size:12px;
+font-size:11px;
 }
 
 .btn-adicionar{
@@ -610,30 +610,30 @@ gap:9px;
 }
 
 .produto-visual{
-height:125px;
-font-size:64px;
+height:115px;
+font-size:60px;
 }
 
 .produto-info{
-padding:10px;
+padding:9px;
 }
 
 .produto h3{
-font-size:15px;
+font-size:14px;
 }
 
 .produto .descricao{
-font-size:11px;
+font-size:10px;
 }
 
 .preco{
-font-size:17px;
+font-size:16px;
 }
 
 .btn-adicionar{
-margin:0 10px 10px;
-padding:9px 7px;
-font-size:11px;
+margin:0 9px 9px;
+padding:8px 6px;
+font-size:10px;
 }
 
 .categoria{
@@ -660,7 +660,6 @@ border-top:1px solid #252525;
 display:flex;
 justify-content:center;
 align-items:center;
-gap:12px;
 color:#777;
 font-size:12px;
 }
@@ -668,14 +667,15 @@ font-size:12px;
 .softget-bottom-info{
 display:flex;
 flex-direction:column;
-align-items:flex-end;
-gap:3px;
+align-items:center;
+gap:5px;
+text-align:center;
 }
 
 .softget-bottom-info strong{
 color:#fff;
-font-size:13px;
-letter-spacing:.8px;
+font-size:14px;
+letter-spacing:1px;
 }
 
 .softget-bottom-info strong span{
@@ -685,29 +685,12 @@ color:#39ff14;
 .softget-bottom-info a{
 color:#bfffdc;
 text-decoration:none;
-font-size:10px;
+font-size:14px;
 font-weight:bold;
 }
 
 .softget-bottom-info a:hover{
 color:#39ff14;
-}
-
-.softget-bottom-qr{
-width:48px;
-height:48px;
-padding:3px;
-background:#fff;
-border:1px solid #39ff14;
-border-radius:7px;
-box-shadow:0 0 10px rgba(57,255,20,.28);
-}
-
-.softget-bottom-qr img{
-width:100%;
-height:100%;
-display:block;
-border-radius:3px;
 }
 
 @media(max-width:520px){
@@ -718,16 +701,11 @@ padding:12px 8px;
 }
 
 .softget-bottom-info strong{
-font-size:12px;
+font-size:13px;
 }
 
 .softget-bottom-info a{
-font-size:9px;
-}
-
-.softget-bottom-qr{
-width:44px;
-height:44px;
+font-size:13px;
 }
 
 }
@@ -822,20 +800,6 @@ WhatsApp: (49) 98890-1433
 </a>
 
 </div>
-
-
-<a
-class="softget-bottom-qr"
-href="https://wa.me/5549988901433"
-target="_blank"
-rel="noopener"
-title="Falar com a SoftGet IA pelo WhatsApp">
-
-<img
-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEXUlEQVR4nO3dS44bORAFwNHA979ye88F9RLJXxsRW0lV1dYDkabI5Ofn5+c/CPx/+wH4NWSFlKyQkhVSskJKVkjJCilZISUrpP7MX/58PmeeYz59PDzG8Ob5q/NLlR5j4VOVHuORb8G4QkpWSMkKKVkh9aW2HSxcwNCp1zpF5fzNC4vouVufHZS+BeMKKVkhJSukZIVUrbYdlCqjhVOincfozNt2isqFdfH8ynOd+xpXSMkKKVkhJSukWrXtMaWp2LnOz/376uJ9le9CxhVSskJKVkjJCqlabXtsw/6gtJCg06CgVDV3dprtWxqxj3GFlKyQkhVSskLq8+av4fv2ki1c97qwxnzzWxgYV0jJCilZISUrpL7Utp050JJ9Jee+ZrhzC1dKPFJEG1dIyQopWSElK6Ra87adAu3YlOigUzbeOjNiXyFc+vaNK6RkhZSskJIVUiv7JNxanVoqDG/tQ+t89tg89ZxxhZSskJIVUrJCauOahM4ZtPvmMY8t3e14ZOHEwLhCSlZIyQopWSHV6pOwbz3DwvsunC+eP1VHqd3tsYnagXGFlKyQkhVSskJqY5+EfecglO57bJfawjcPjq3Gnd/IuEJKVkjJCilZIfVl3vZWNVd6qsHC2eSFxzGUziWbrxGe23fug3GFlKyQkhVSskLqS217rBnVwn4FHQu3h+07jqFUCC883Ne4QkpWSMkKKVkhtXHetvTqwnJ1Yal7bFHw3CNb+IwrpGSFlKyQkhVSrT4JK5/j1NliC9czLDzY4thnzdtygqyQkhVSskKqVtsObvXT2neyw6AzBzq/1ODNxR4D4wopWSElK6RkhVStT8Kx1gedX9Jvtcga7JuJ7rAmgRNkhZSskJIVUrX+tqU5wYU/2c/dOuJsfuXSfR9ZkjFnXCElK6RkhZSskPqV55KV3Fp+O3esUZm9ZFwgK6RkhZSskNq4l+zWettHTqO41Zls3z+7cYWUrJCSFVKyQmplbbvvMLF9HQlKjzF/c8exv6hzKeMKKVkhJSukZIVUbb3t3LHpxWN7yTrVa+nKx/r5dopo4wopWSElK6RkhVStT8Ixx9b5LnyMY+teO1ceWJPAFrJCSlZIyQqp2rlk+yw8GvZYf4ZjM8ILN9o5u4ETZIWUrJCSFVLXziW7NSU62Nf0q+TYnr2BeVu2kBVSskJKVki11tu+2fVqft/SQtdHVuN2LCzAjSukZIWUrJCSFVIr95LdcqxRwLHZ5M5TzXX+l2BcISUrpGSFlKyQ+hdq24WNAualX6fG3NfkrDOLXWJcISUrpGSFlKyQatW2+3os3Oo50LnvIz15S58tMa6QkhVSskJKVkjVattjbRNunea7sM/s/Ead6eOFf5E1CWwhK6RkhZSskHq0vy0PMq6QkhVSskJKVkjJCilZISUrpGSFlKyQ+gsWTB96egBkfgAAAABJRU5ErkJggg=="
-alt="QR Code WhatsApp SoftGet IA">
-
-</a>
 
 </div>
 
